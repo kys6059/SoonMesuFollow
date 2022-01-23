@@ -28,7 +28,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1116, 935)
+        Me.ClientSize = New System.Drawing.Size(2362, 956)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
