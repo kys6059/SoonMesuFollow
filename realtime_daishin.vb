@@ -32,6 +32,7 @@ Module realtime_daishin
         ret = True
 
 
+
         fMst.BlockRequest()
 
         ''MsgBox("사이보스에 접속되지 않은 상태입니다")
