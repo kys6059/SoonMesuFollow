@@ -71,7 +71,6 @@ Module realtime_daishin
             putCode = callputobj.GetDataValue(10, i)
 
             If (callPrice > LowerLimt And callPrice < UpperLimit) Or (putPrice > LowerLimt And putPrice < UpperLimit) Then     '콜이나 풋 둘 중 하나가 0.2 ~6.0 사이에 있는 것만 등록한다 -> 전부가져오는걸로 변경했더니 가져오는 시간이 너무 오래 걸려서 다시 변경 (44종목 가져오는데 16초걸림)
-                Data(validCount).index = i
                 Data(validCount).HangSaGa = Mid(HangSaGa, 1, 3)
                 Data(validCount).Code(0) = callCode
                 Data(validCount).Code(1) = putCode
@@ -138,7 +137,7 @@ Module realtime_daishin
 
                 TimeLocalCount = chartobj.GetHeaderValue(3) '이 종목에 해당하는 오늘 날짜 데이터가 몇개인지 가져온다 이게 풋이랑 다를 수 있으니 각각 받아야 한다
                 If timeIndex < TimeLocalCount Then
-                    timeIndex = TimeLocalCount - 1
+                    timeIndex = TimeLocalCount
                     currentIndex = timeIndex
                 End If
 
