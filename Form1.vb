@@ -75,11 +75,14 @@ Public Class Form1
                 cmb_selectedJongmokIndex_1.Items.Add(str)
             Next
 
-            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0)
+
             cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1)
+            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0)
 
             InitDrawSelectedGird()
             DrawSelectedData()
+
+
 
             'grid1.Visible = True
         End If
@@ -90,6 +93,10 @@ Public Class Form1
     Private Sub InitDrawSelectedGird()
         Dim jongMok As String
         Dim i, j As Integer
+
+        grd_selected.Columns.Clear()
+        grd_selected.Rows.Clear()
+
 
         '전체 크기 지정
         grd_selected.ColumnCount = 12
@@ -170,9 +177,10 @@ Public Class Form1
             End If
             '합계 계산
             If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
-                grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 3) + Data(selectedPutIndex).price(1, j, 3)
+                If Data(selectedCallIndex).price(0, j, 3) > 0 And Data(selectedPutIndex).price(1, j, 3) > 0 Then
+                    grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 3) + Data(selectedPutIndex).price(1, j, 3)
+                End If
             End If
-
         Next
 
     End Sub
@@ -286,5 +294,18 @@ Public Class Form1
         Next
     End Sub
 
+    Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
 
+        selectedJongmokIndex(0) = cmb_selectedJongmokIndex_0.SelectedIndex
+        InitDrawSelectedGird()
+        DrawSelectedData()
+
+    End Sub
+
+    Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
+
+        selectedJongmokIndex(1) = cmb_selectedJongmokIndex_1.SelectedIndex
+        InitDrawSelectedGird()
+        DrawSelectedData()
+    End Sub
 End Class
