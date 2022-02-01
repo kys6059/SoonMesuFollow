@@ -19,7 +19,7 @@ Structure DataSet
         ReDim Code(1)
         ReDim 증거금(1)
         ReDim ctime(100) '
-        ReDim price(1, 100, 3)
+        ReDim price(1, 100, 3)  '콜풋, 시간, 시고저종
         ReDim Big(1, 3) '시고저종을 기록해야해서 4개
         ReDim Small(1, 3) '시고저종을 기록해야해서 4개
         ReDim 거래량(1, 100) '시간대별 거래량을 기록해야 해서 100개가 필요함
@@ -98,4 +98,69 @@ Module Module_common
 
     End Function
 
+    '일단 최고만 구현됨
+    Public Sub CalcColorData()
+        Dim i, j, k, callput As Integer
+        Dim min, max, secondmin As Single
+
+        For callput = 0 To 1 '콜 풋 루프
+
+            For i = 0 To TotalCount - 1 '종목루프
+
+                min = 1000
+                max = 0
+
+                For j = 0 To 3 ' 시고저종 루프
+
+                    For k = 0 To currentIndex - 1 '시간 루프
+
+                        '최고값 계산
+                        If Data(i).price(callput, k, j) > max And Data(i).price(callput, k, j) > 0 Then
+                            max = Data(i).price(callput, k, j)
+                        End If
+
+                    Next
+
+                    '최고값 입력
+                    Data(i).Big(callput, j) = max
+
+                Next
+
+            Next
+
+        Next
+
+    End Sub
+
+    '칼러를 반환하는 함수
+    '칼라 0번은 빨강색
+    '칼라 1번은 파란색 Chk_Display_Blue
+    '칼라 2번은 까만색
+    '칼라 3번은 하늘색
+    '칼라 4번은 그냥 흰색
+    '칼라 5번은 오렌지색
+    '칼라 6번은 분홍색
+    '칼라 7번은 녹색 Chk_Display_Green
+    Public Function ItsColor(ByVal jongMok As Integer, ByVal iFlag As Integer, ByVal iIndex As Integer, ByVal sigojuejong As Integer) As Integer
+
+        Dim SkyBlueValue As Single
+        Dim color As Integer
+
+        color = 4 '아래 조건에 아무데도 안걸리면 흰색
+
+        If (Data(jongMok).price(iFlag, iIndex, sigojuejong) > 0) Then
+
+            '최고가
+            If (Math.Abs(Data(jongMok).price(iFlag, iIndex, sigojuejong) - Data(jongMok).Big(iFlag, sigojuejong)) < 0.005) Then
+                color = 0
+            End If
+
+
+
+        End If
+
+
+        Return color
+
+    End Function
 End Module

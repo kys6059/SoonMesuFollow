@@ -57,6 +57,11 @@ Public Class Form1
         selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
         selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
 
+        '최대최소 계산
+        CalcColorData()
+
+
+
     End Sub
 
     Private Sub RedrawAll()
@@ -82,12 +87,53 @@ Public Class Form1
             InitDrawSelectedGird()
             DrawSelectedData()
 
-
+            '색깔 실제로 grid에 입히기
+            DrawColorAll()
 
             'grid1.Visible = True
         End If
 
     End Sub
+
+    Private Sub DrawColorAll()
+        Dim i, j, k, callput As Integer
+        Dim color As Integer
+        Dim point As Integer
+
+        For callput = 0 To 1
+            For i = 0 To TotalCount - 1
+                For k = 0 To 3
+                    For j = 0 To currentIndex - 1
+
+
+                        color = ItsColor(i, callput, j, k)
+                        If callput = 0 Then
+                            point = 1
+                        Else
+                            point = 6
+                        End If
+
+                        DrawColorOne(j, i * 10 + point + k, color)
+
+                    Next
+                Next
+            Next
+        Next
+    End Sub
+
+    Private Sub DrawColorOne(i As Integer, j As Integer, colorNum As Integer)
+
+        Select Case colorNum
+
+            Case 0 '빨강 - 최대값
+                grid1.Rows(i).Cells(j).Style.BackColor = Color.Red
+                grid1.Rows(i).Cells(j).Style.ForeColor = Color.White
+
+        End Select
+
+    End Sub
+
+
 
     'selectedgrid 초기화
     Private Sub InitDrawSelectedGird()
@@ -102,19 +148,21 @@ Public Class Form1
         grd_selected.ColumnCount = 12
         grd_selected.RowCount = timeIndex + 3
 
-        grd_selected.Columns(0).HeaderText = "시간"
-        grd_selected.Columns(0).Width = 40
-
+        grd_selected.Columns(0).HeaderText = "No"
+        grd_selected.Columns(0).Width = 30
+        grd_selected.RowHeadersWidth = 70
 
         grd_selected.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-
-
-        '0번 컬럼에 시간을 넣는다
+        'Row HeaderCell에 시간을 넣는다
         For j = 0 To timeIndex + 1
+            grd_selected.Rows(j).HeaderCell.Value = Data(0).ctime(j)
             grd_selected.Rows(j).Height = 21 '전체 Row 높이 지정
-            grd_selected.Rows(j).Cells(0).Value = Data(0).ctime(j)
+
+            grd_selected.Rows(j).Cells(0).Value = j
         Next
+        grd_selected.RowHeadersDefaultCellStyle.BackColor = Color.Yellow
+        grd_selected.RowHeadersDefaultCellStyle.ForeColor = Color.Black
 
         grd_selected.Columns(1).HeaderText = "시"
         grd_selected.Columns(2).HeaderText = "고"
@@ -167,7 +215,7 @@ Public Class Form1
             End If
 
             If Val(Data(selectedPutIndex).ctime(j)) > 0 Then
-                If Data(selectedPutIndex).price(1, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 콜
+                If Data(selectedPutIndex).price(1, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 풋
                     grd_selected.Rows(j).Cells(6).Value = Data(selectedPutIndex).price(1, j, 0)
                     grd_selected.Rows(j).Cells(7).Value = Data(selectedPutIndex).price(1, j, 1)
                     grd_selected.Rows(j).Cells(8).Value = Data(selectedPutIndex).price(1, j, 2)
@@ -193,20 +241,28 @@ Public Class Form1
         grid1.ColumnCount = TotalCount * 10 + 1
         grid1.RowCount = timeIndex + 3
 
-        grid1.Columns(0).HeaderText = "시간"
+        grid1.Columns(0).HeaderText = "No"
         grid1.Columns(TotalCount * 10).HeaderText = "시간"
         grid1.Columns(0).Width = 40
         grid1.Columns(TotalCount * 10).Width = 40
 
+        grid1.Columns(0).HeaderText = "No"
+        grid1.Columns(0).Width = 30
+        grid1.RowHeadersWidth = 70
+
         grid1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-        '0번 컬럼과 마지막 컬럼에 시간을 넣고 5번열에는 종목행사가를 넣는다
-        For j = 0 To timeIndex + 1
-            grid1.Rows(j).Height = 21 '전체 Row 높이 지정
-            grid1.Rows(j).Cells(0).Value = Data(0).ctime(j)
-            grid1.Rows(j).Cells(TotalCount * 10).Value = Data(0).ctime(j)
 
+        'Row HeaderCell에 시간을 넣는다
+        For j = 0 To timeIndex + 1
+            grid1.Rows(j).HeaderCell.Value = Data(0).ctime(j)
+            grid1.Rows(j).Height = 21 '전체 Row 높이 지정
+
+            grid1.Rows(j).Cells(0).Value = j
+
+            grid1.Rows(j).Cells(TotalCount * 10).Value = Data(0).ctime(j)
         Next
+
 
         For i = 0 To TotalCount - 1
             jongMok = Data(i).HangSaGa
