@@ -57,7 +57,7 @@ Public Class Form1
         selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
         selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
 
-        '최대최소 계산
+        '최대최소,제2저가 계산
         CalcColorData()
 
 
@@ -89,9 +89,39 @@ Public Class Form1
 
             '색깔 실제로 grid에 입히기
             DrawColorAll()
+            DrawColor_Selected()
 
             'grid1.Visible = True
         End If
+
+    End Sub
+
+    Private Sub DrawColor_Selected()
+
+        Dim i, j, k, callput As Integer
+        Dim color As Integer
+        Dim point As Integer
+
+        For callput = 0 To 1
+
+            i = selectedJongmokIndex(callput)
+
+            For k = 0 To 3
+
+                For j = 0 To currentIndex - 1
+
+                    color = ItsColor(i, callput, j, k)
+                    If callput = 0 Then
+                        point = 1
+                    Else
+                        point = 6
+                    End If
+
+                    DrawColorOne(j, point + k, color, grd_selected)
+
+                Next
+            Next
+        Next
 
     End Sub
 
@@ -113,7 +143,7 @@ Public Class Form1
                             point = 6
                         End If
 
-                        DrawColorOne(j, i * 10 + point + k, color)
+                        DrawColorOne(j, i * 10 + point + k, color, grid1)
 
                     Next
                 Next
@@ -121,13 +151,19 @@ Public Class Form1
         Next
     End Sub
 
-    Private Sub DrawColorOne(i As Integer, j As Integer, colorNum As Integer)
+    Private Sub DrawColorOne(i As Integer, j As Integer, colorNum As Integer, ByRef grd As DataGridView)
 
         Select Case colorNum
 
             Case 0 '빨강 - 최대값
-                grid1.Rows(i).Cells(j).Style.BackColor = Color.DarkRed
-                grid1.Rows(i).Cells(j).Style.ForeColor = Color.LightYellow
+                grd.Rows(i).Cells(j).Style.BackColor = Color.DarkRed
+                grd.Rows(i).Cells(j).Style.ForeColor = Color.LightYellow
+            Case 1 '파랑 - 최저값
+                grd.Rows(i).Cells(j).Style.BackColor = Color.DarkBlue
+                grd.Rows(i).Cells(j).Style.ForeColor = Color.LightYellow
+            Case 3 '하늘색 - 제2저가
+                grd.Rows(i).Cells(j).Style.BackColor = Color.LightBlue
+                grd.Rows(i).Cells(j).Style.ForeColor = Color.Black
 
         End Select
 
@@ -190,8 +226,8 @@ Public Class Form1
         grd_selected.Columns(10).Width = defaultWidth + 15
         grd_selected.Columns(11).Width = defaultWidth + 20
 
-        grd_selected.Columns(4).DefaultCellStyle.BackColor = Color.Yellow
-        grd_selected.Columns(9).DefaultCellStyle.BackColor = Color.Yellow
+        grd_selected.Columns(5).DefaultCellStyle.BackColor = Color.Yellow
+        grd_selected.Columns(10).DefaultCellStyle.BackColor = Color.Yellow
 
 
         grd_selected.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -370,5 +406,11 @@ Public Class Form1
         selectedJongmokIndex(1) = cmb_selectedJongmokIndex_1.SelectedIndex
         InitDrawSelectedGird()
         DrawSelectedData()
+    End Sub
+
+    Private Sub grid1_Scroll(sender As Object, e As ScrollEventArgs) Handles grid1.Scroll
+
+        '현재 스크롤 위치 가져오는 기능을 찾지 못함
+
     End Sub
 End Class

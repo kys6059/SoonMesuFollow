@@ -11,6 +11,7 @@ Structure DataSet
     Dim Big(,) As Single '콜풋 시고저종
     Dim Small(,) As Single '콜풋 시고저종
     Dim 거래량(,) As Long '콜풋 100개
+    Dim secondMin() As Single '콜풋
 
     Dim 증거금() As Long
 
@@ -23,7 +24,7 @@ Structure DataSet
         ReDim Big(1, 3) '시고저종을 기록해야해서 4개
         ReDim Small(1, 3) '시고저종을 기록해야해서 4개
         ReDim 거래량(1, 100) '시간대별 거래량을 기록해야 해서 100개가 필요함
-
+        ReDim secondMin(1) '시고저종 관계없이 저가에서만 제2저가를 구함
 
     End Sub
 
@@ -107,6 +108,8 @@ Module Module_common
 
             For i = 0 To TotalCount - 1 '종목루프
 
+                secondmin = 1000
+
                 For j = 0 To 3 ' 시고저종 루프
 
                     min = 1000
@@ -119,10 +122,24 @@ Module Module_common
                             max = Data(i).price(callput, k, j)
                         End If
 
+                        '최저값 계산
+                        If Data(i).price(callput, k, j) < min And Data(i).price(callput, k, j) > 0 Then
+                            min = Data(i).price(callput, k, j)
+                        End If
+
+                        '제2저가 계산
+                        If j = 2 Then
+                            If Data(i).price(callput, k, j) < secondmin And Data(i).price(callput, k, j) > min Then
+                                secondmin = Data(i).price(callput, k, j)
+                            End If
+                        End If
+
                     Next
 
-                    '최고값 입력
+                    '최고,최저값 입력
                     Data(i).Big(callput, j) = max
+                    Data(i).Small(callput, j) = min
+                    Data(i).secondMin(callput) = secondmin
 
                 Next
 
@@ -136,7 +153,7 @@ Module Module_common
     '칼라 0번은 빨강색
     '칼라 1번은 파란색 Chk_Display_Blue
     '칼라 2번은 까만색
-    '칼라 3번은 하늘색
+    '칼라 3번은 하늘색 - 제2저가
     '칼라 4번은 그냥 흰색
     '칼라 5번은 오렌지색
     '칼라 6번은 분홍색
@@ -150,12 +167,20 @@ Module Module_common
 
         If (Data(jongMok).price(iFlag, iIndex, sigojuejong) > 0) Then
 
+            '제2저가 - 하늘색
+            If (Data(jongMok).price(iFlag, iIndex, sigojuejong) > (Data(jongMok).secondMin(iFlag) + 0.005)) Then
+                color = 3
+            End If
+
             '최고가
             If (Math.Abs(Data(jongMok).price(iFlag, iIndex, sigojuejong) - Data(jongMok).Big(iFlag, sigojuejong)) < 0.005) Then
                 color = 0
             End If
 
-
+            '최저가
+            If (Math.Abs(Data(jongMok).price(iFlag, iIndex, sigojuejong) - Data(jongMok).Small(iFlag, sigojuejong)) < 0.005) Then
+                color = 1
+            End If
 
         End If
 
