@@ -107,10 +107,10 @@ Module Module_common
 
             For i = 0 To TotalCount - 1 '종목루프
 
-                min = 1000
-                max = 0
-
                 For j = 0 To 3 ' 시고저종 루프
+
+                    min = 1000
+                    max = 0
 
                     For k = 0 To currentIndex - 1 '시간 루프
 

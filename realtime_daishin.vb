@@ -138,7 +138,7 @@ Module realtime_daishin
                 TimeLocalCount = chartobj.GetHeaderValue(3) '이 종목에 해당하는 오늘 날짜 데이터가 몇개인지 가져온다 이게 풋이랑 다를 수 있으니 각각 받아야 한다
                 If timeIndex < TimeLocalCount Then
                     timeIndex = TimeLocalCount
-                    currentIndex = timeIndex
+                    currentIndex = timeIndex - 1 '현재 인덱스는 전체 갯수에서 -1 한 값이 된다
                 End If
 
                 For j = 0 To TimeLocalCount - 1

@@ -126,8 +126,8 @@ Public Class Form1
         Select Case colorNum
 
             Case 0 '빨강 - 최대값
-                grid1.Rows(i).Cells(j).Style.BackColor = Color.Red
-                grid1.Rows(i).Cells(j).Style.ForeColor = Color.White
+                grid1.Rows(i).Cells(j).Style.BackColor = Color.DarkRed
+                grid1.Rows(i).Cells(j).Style.ForeColor = Color.LightYellow
 
         End Select
 
@@ -137,8 +137,10 @@ Public Class Form1
 
     'selectedgrid 초기화
     Private Sub InitDrawSelectedGird()
-        Dim jongMok As String
+        Dim defaultWidth As Integer
         Dim i, j As Integer
+
+        defaultWidth = 45
 
         grd_selected.Columns.Clear()
         grd_selected.Rows.Clear()
@@ -146,7 +148,7 @@ Public Class Form1
 
         '전체 크기 지정
         grd_selected.ColumnCount = 12
-        grd_selected.RowCount = timeIndex + 3
+        grd_selected.RowCount = timeIndex
 
         grd_selected.Columns(0).HeaderText = "No"
         grd_selected.Columns(0).Width = 30
@@ -155,7 +157,7 @@ Public Class Form1
         grd_selected.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
         'Row HeaderCell에 시간을 넣는다
-        For j = 0 To timeIndex + 1
+        For j = 0 To timeIndex - 1
             grd_selected.Rows(j).HeaderCell.Value = Data(0).ctime(j)
             grd_selected.Rows(j).Height = 21 '전체 Row 높이 지정
 
@@ -176,17 +178,21 @@ Public Class Form1
         grd_selected.Columns(10).HeaderText = "거래량"
         grd_selected.Columns(11).HeaderText = "종가합계"
 
-        grd_selected.Columns(1).Width = 50
-        grd_selected.Columns(2).Width = 50
-        grd_selected.Columns(3).Width = 50
-        grd_selected.Columns(4).Width = 50
-        grd_selected.Columns(5).Width = 70
-        grd_selected.Columns(6).Width = 50
-        grd_selected.Columns(7).Width = 50
-        grd_selected.Columns(8).Width = 50
-        grd_selected.Columns(9).Width = 50
-        grd_selected.Columns(10).Width = 70
-        grd_selected.Columns(11).Width = 80
+        grd_selected.Columns(1).Width = defaultWidth
+        grd_selected.Columns(2).Width = defaultWidth
+        grd_selected.Columns(3).Width = defaultWidth
+        grd_selected.Columns(4).Width = defaultWidth
+        grd_selected.Columns(5).Width = defaultWidth + 15
+        grd_selected.Columns(6).Width = defaultWidth
+        grd_selected.Columns(7).Width = defaultWidth
+        grd_selected.Columns(8).Width = defaultWidth
+        grd_selected.Columns(9).Width = defaultWidth
+        grd_selected.Columns(10).Width = defaultWidth + 15
+        grd_selected.Columns(11).Width = defaultWidth + 20
+
+        grd_selected.Columns(4).DefaultCellStyle.BackColor = Color.Yellow
+        grd_selected.Columns(9).DefaultCellStyle.BackColor = Color.Yellow
+
 
         grd_selected.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
         For i = 0 To 11   '헤더 가운데 정렬
@@ -237,12 +243,16 @@ Public Class Form1
         Dim jongMok As String
         Dim i, j As Integer
 
+        grid1.Columns.Clear()
+        grid1.Rows.Clear()
+
         '전체 크기 지정
         grid1.ColumnCount = TotalCount * 10 + 1
-        grid1.RowCount = timeIndex + 3
+        grid1.RowCount = timeIndex
 
         grid1.Columns(0).HeaderText = "No"
         grid1.Columns(TotalCount * 10).HeaderText = "시간"
+
         grid1.Columns(0).Width = 40
         grid1.Columns(TotalCount * 10).Width = 40
 
@@ -252,9 +262,8 @@ Public Class Form1
 
         grid1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-
         'Row HeaderCell에 시간을 넣는다
-        For j = 0 To timeIndex + 1
+        For j = 0 To timeIndex - 1 '-1을 하면 currentIndex와 같아진다
             grid1.Rows(j).HeaderCell.Value = Data(0).ctime(j)
             grid1.Rows(j).Height = 21 '전체 Row 높이 지정
 
@@ -272,6 +281,7 @@ Public Class Form1
             grid1.Columns(i * 10 + 3).HeaderText = "저"
             grid1.Columns(i * 10 + 4).HeaderText = "종"
             grid1.Columns(i * 10 + 5).HeaderText = jongMok
+            grid1.Columns(i * 10 + 5).DefaultCellStyle.BackColor = Color.Yellow
             grid1.Columns(i * 10 + 6).HeaderText = "시"
             grid1.Columns(i * 10 + 7).HeaderText = "고"
             grid1.Columns(i * 10 + 8).HeaderText = "저"
@@ -308,16 +318,13 @@ Public Class Form1
             grid1.Columns(i * 10 + 7).SortMode = DataGridViewColumnSortMode.NotSortable
             grid1.Columns(i * 10 + 8).SortMode = DataGridViewColumnSortMode.NotSortable
             grid1.Columns(i * 10 + 9).SortMode = DataGridViewColumnSortMode.NotSortable
-
-
-
         Next
 
         For i = 0 To TotalCount - 2
             grid1.Columns(i * 10 + 10).Width = 10
         Next
 
-        grid1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
     End Sub
 
     Private Sub DrawGrid1Data()

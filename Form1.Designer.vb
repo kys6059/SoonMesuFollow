@@ -26,10 +26,10 @@ Partial Class Form1
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.cmb_selectedJongmokIndex_1 = New System.Windows.Forms.ComboBox()
         Me.lbl_1 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmb_selectedJongmokIndex_0 = New System.Windows.Forms.ComboBox()
-        Me.cmb_selectedJongmokIndex_1 = New System.Windows.Forms.ComboBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -37,9 +37,9 @@ Partial Class Form1
         '
         'btn_RealTimeStart
         '
-        Me.btn_RealTimeStart.Location = New System.Drawing.Point(86, 36)
+        Me.btn_RealTimeStart.Location = New System.Drawing.Point(74, 39)
         Me.btn_RealTimeStart.Name = "btn_RealTimeStart"
-        Me.btn_RealTimeStart.Size = New System.Drawing.Size(87, 21)
+        Me.btn_RealTimeStart.Size = New System.Drawing.Size(75, 23)
         Me.btn_RealTimeStart.TabIndex = 0
         Me.btn_RealTimeStart.Text = "대신 연결"
         Me.btn_RealTimeStart.UseVisualStyleBackColor = True
@@ -47,21 +47,21 @@ Partial Class Form1
         'grid1
         '
         Me.grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.grid1.Location = New System.Drawing.Point(12, 150)
+        Me.grid1.Location = New System.Drawing.Point(10, 162)
         Me.grid1.Margin = New System.Windows.Forms.Padding(1)
         Me.grid1.Name = "grid1"
         Me.grid1.ReadOnly = True
         Me.grid1.RowTemplate.Height = 23
-        Me.grid1.Size = New System.Drawing.Size(1221, 836)
+        Me.grid1.Size = New System.Drawing.Size(1047, 906)
         Me.grid1.TabIndex = 1
         '
         'grd_selected
         '
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.grd_selected.Location = New System.Drawing.Point(1262, 150)
+        Me.grd_selected.Location = New System.Drawing.Point(1082, 162)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.RowTemplate.Height = 23
-        Me.grd_selected.Size = New System.Drawing.Size(714, 836)
+        Me.grd_selected.Size = New System.Drawing.Size(646, 906)
         Me.grd_selected.TabIndex = 2
         '
         'TableLayoutPanel1
@@ -75,12 +75,22 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1262, 111)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1082, 120)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(714, 33)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(646, 36)
         Me.TableLayoutPanel1.TabIndex = 3
+        '
+        'cmb_selectedJongmokIndex_1
+        '
+        Me.cmb_selectedJongmokIndex_1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmb_selectedJongmokIndex_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.cmb_selectedJongmokIndex_1.FormattingEnabled = True
+        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(486, 3)
+        Me.cmb_selectedJongmokIndex_1.Name = "cmb_selectedJongmokIndex_1"
+        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(157, 23)
+        Me.cmb_selectedJongmokIndex_1.TabIndex = 3
         '
         'lbl_1
         '
@@ -91,7 +101,7 @@ Partial Class Form1
         Me.lbl_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lbl_1.Location = New System.Drawing.Point(3, 0)
         Me.lbl_1.Name = "lbl_1"
-        Me.lbl_1.Size = New System.Drawing.Size(172, 33)
+        Me.lbl_1.Size = New System.Drawing.Size(155, 36)
         Me.lbl_1.TabIndex = 0
         Me.lbl_1.Text = "Call 선택"
         Me.lbl_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -103,9 +113,9 @@ Partial Class Form1
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label1.Location = New System.Drawing.Point(359, 0)
+        Me.Label1.Location = New System.Drawing.Point(325, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(172, 33)
+        Me.Label1.Size = New System.Drawing.Size(155, 36)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Put 선택"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -115,26 +125,16 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_0.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_0.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_0.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(181, 3)
+        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(164, 3)
         Me.cmb_selectedJongmokIndex_0.Name = "cmb_selectedJongmokIndex_0"
-        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(172, 23)
+        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(155, 23)
         Me.cmb_selectedJongmokIndex_0.TabIndex = 2
-        '
-        'cmb_selectedJongmokIndex_1
-        '
-        Me.cmb_selectedJongmokIndex_1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmb_selectedJongmokIndex_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.cmb_selectedJongmokIndex_1.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(537, 3)
-        Me.cmb_selectedJongmokIndex_1.Name = "cmb_selectedJongmokIndex_1"
-        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(174, 23)
-        Me.cmb_selectedJongmokIndex_1.TabIndex = 3
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(2362, 1035)
+        Me.ClientSize = New System.Drawing.Size(2025, 1121)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.grd_selected)
         Me.Controls.Add(Me.grid1)
