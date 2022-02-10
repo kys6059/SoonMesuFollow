@@ -61,7 +61,7 @@ Partial Class Form1
         Me.grd_selected.Location = New System.Drawing.Point(1082, 162)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.RowTemplate.Height = 23
-        Me.grd_selected.Size = New System.Drawing.Size(646, 906)
+        Me.grd_selected.Size = New System.Drawing.Size(594, 906)
         Me.grd_selected.TabIndex = 2
         '
         'TableLayoutPanel1
@@ -79,7 +79,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(646, 36)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(594, 36)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'cmb_selectedJongmokIndex_1
@@ -87,9 +87,9 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_1.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(486, 3)
+        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(447, 3)
         Me.cmb_selectedJongmokIndex_1.Name = "cmb_selectedJongmokIndex_1"
-        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(157, 23)
+        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(144, 23)
         Me.cmb_selectedJongmokIndex_1.TabIndex = 3
         '
         'lbl_1
@@ -101,7 +101,7 @@ Partial Class Form1
         Me.lbl_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lbl_1.Location = New System.Drawing.Point(3, 0)
         Me.lbl_1.Name = "lbl_1"
-        Me.lbl_1.Size = New System.Drawing.Size(155, 36)
+        Me.lbl_1.Size = New System.Drawing.Size(142, 36)
         Me.lbl_1.TabIndex = 0
         Me.lbl_1.Text = "Call 선택"
         Me.lbl_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -113,9 +113,9 @@ Partial Class Form1
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label1.Location = New System.Drawing.Point(325, 0)
+        Me.Label1.Location = New System.Drawing.Point(299, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(155, 36)
+        Me.Label1.Size = New System.Drawing.Size(142, 36)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Put 선택"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -125,16 +125,16 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_0.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_0.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_0.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(164, 3)
+        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(151, 3)
         Me.cmb_selectedJongmokIndex_0.Name = "cmb_selectedJongmokIndex_0"
-        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(155, 23)
+        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(142, 23)
         Me.cmb_selectedJongmokIndex_0.TabIndex = 2
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(2025, 1121)
+        Me.ClientSize = New System.Drawing.Size(2484, 1121)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.grd_selected)
         Me.Controls.Add(Me.grid1)
