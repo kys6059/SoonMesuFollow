@@ -27,7 +27,7 @@ Public Class Form1
             TotalCount = GetTotalJongmokCount()
 
             Do While TotalCount > 28                  '15초당 60개 TR 제한을 고려하여 최대 각 28개만 받아온다
-                UpperLimit = UpperLimit - 0.15
+                UpperLimit = UpperLimit - 0.2
                 LowerLimt = LowerLimt + 0.05
 
                 TotalCount = GetTotalJongmokCount()
