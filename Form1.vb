@@ -416,5 +416,40 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
+        timerCount = timerCount + 1
+        label_timerCounter.Text = timerCount.ToString()
+
+        If timerCount >= timerMaxInterval Then
+
+            timerCount = 0
+
+            '계좌정보 가져오기
+
+            '옵션 정보 가져와서 화면 표시
+            GetAllData()
+            Clac_DisplayAllGrid()
+            RedrawAll()
+
+            'DB에 자동 저장 기능 추가 필요
+
+        End If
+
+
+    End Sub
+
+    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
+
+        If btn_TimerStart.Text = "START" Then
+            Timer1.Interval = 1000
+            Timer1.Enabled = True
+            btn_TimerStart.Text = "STOP"
+            timerCount = 0
+        Else
+            Timer1.Enabled = False
+            btn_TimerStart.Text = "START"
+            label_timerCounter.Text = "---"
+        End If
+    End Sub
 End Class

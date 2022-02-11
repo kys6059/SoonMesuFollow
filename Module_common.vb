@@ -35,11 +35,11 @@ End Structure
 
 '그래프 그리기
 '설정 - 입력 항목들 만들기  ------------------------------- 완료
-'실시간 타이머 넣기
+'실시간 타이머 넣기 --------------------------------------- 완료 (화면 그리는데 시간이 많이 걸려서 좀 느림)
 'DB에 저장, 불러오기
 '신호 넣기
 '특정 날짜 Data 가져오기 기능 추가 ------------------------ 월물이 바뀔 때 안되는 것 확인함. 나머지는 나중에 추가검증해야 함
-
+'일정 시간 후 자동 저장 기능 ---- Timer에 구현함
 
 
 
@@ -59,6 +59,8 @@ Module Module_common
     Public currentIndex As Integer '시뮬레이션할 때 현재커서 위치를 나타냄
     Public selectedJongmokIndex(1) As Integer
     Public JongmokTargetPrice As Single  '기준이 되는 targetprice - default 2.0
+    Public timerCount As Integer
+    Public timerMaxInterval As Integer
 
 
 
@@ -78,6 +80,8 @@ Module Module_common
         UpperLimit = Val(Form1.txt_UpperLimit.Text)
         LowerLimt = Val(Form1.txt_LowerLimit.Text)
         timeIndex = 0
+        timerCount = 0 '16초마다 돌아가는 타이머 주기
+        timerMaxInterval = 16 '16초보다 크면 실행함
 
         JongmokTargetPrice = 2.0
         selectedJongmokIndex(0) = 0

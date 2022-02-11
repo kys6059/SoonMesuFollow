@@ -22,6 +22,7 @@ Partial Class Form1
     '코드 편집기에서는 수정하지 마세요.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -41,6 +42,9 @@ Partial Class Form1
         Me.txt_Interval = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txt_TargetDate = New System.Windows.Forms.TextBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.btn_TimerStart = New System.Windows.Forms.Button()
+        Me.label_timerCounter = New System.Windows.Forms.Label()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -285,11 +289,36 @@ Partial Class Form1
         Me.txt_TargetDate.TabIndex = 1
         Me.txt_TargetDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
+        'Timer1
+        '
+        Me.Timer1.Interval = 1000
+        '
+        'btn_TimerStart
+        '
+        Me.btn_TimerStart.Location = New System.Drawing.Point(168, 39)
+        Me.btn_TimerStart.Name = "btn_TimerStart"
+        Me.btn_TimerStart.Size = New System.Drawing.Size(75, 23)
+        Me.btn_TimerStart.TabIndex = 5
+        Me.btn_TimerStart.Text = "START"
+        Me.btn_TimerStart.UseVisualStyleBackColor = True
+        '
+        'label_timerCounter
+        '
+        Me.label_timerCounter.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.label_timerCounter.Location = New System.Drawing.Point(178, 65)
+        Me.label_timerCounter.Name = "label_timerCounter"
+        Me.label_timerCounter.Size = New System.Drawing.Size(62, 23)
+        Me.label_timerCounter.TabIndex = 6
+        Me.label_timerCounter.Text = "0"
+        Me.label_timerCounter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(2025, 1405)
+        Me.Controls.Add(Me.label_timerCounter)
+        Me.Controls.Add(Me.btn_TimerStart)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.grd_selected)
         Me.Controls.Add(Me.grid1)
@@ -326,4 +355,7 @@ Partial Class Form1
     Friend WithEvents txt_Interval As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents txt_TargetDate As TextBox
+    Friend WithEvents Timer1 As Timer
+    Friend WithEvents btn_TimerStart As Button
+    Friend WithEvents label_timerCounter As Label
 End Class
