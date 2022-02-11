@@ -31,6 +31,16 @@ Structure DataSet
 End Structure
 
 
+'해야할 일 정리 ------------------- 20220211
+
+'그래프 그리기
+'설정 - 입력 항목들 만들기  ------------------------------- 완료
+'실시간 타이머 넣기
+'DB에 저장, 불러오기
+'신호 넣기
+'특정 날짜 Data 가져오기 기능 추가 ------------------------ 월물이 바뀔 때 안되는 것 확인함. 나머지는 나중에 추가검증해야 함
+
+
 
 
 Module Module_common
@@ -63,10 +73,10 @@ Module Module_common
 
         TargetDate = 0
         sMonth = "0"
-        Interval = 5
+        Interval = Val(Form1.txt_Interval.Text)
         TotalJongMokCount = 0
-        UpperLimit = 4.0
-        LowerLimt = 0.4
+        UpperLimit = Val(Form1.txt_UpperLimit.Text)
+        LowerLimt = Val(Form1.txt_LowerLimit.Text)
         timeIndex = 0
 
         JongmokTargetPrice = 2.0

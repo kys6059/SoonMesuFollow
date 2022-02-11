@@ -42,6 +42,8 @@ Public Class Form1
                 Clac_DisplayAllGrid()
 
                 RedrawAll()
+            Else
+                MsgBox("가져올 수 있는 종목이 없습니다")
             End If
 
 

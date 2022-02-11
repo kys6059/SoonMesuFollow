@@ -12,7 +12,7 @@ Module realtime_daishin
     Dim chartobj As New FutOptChart
 
 
-    Public Sub InitObject()
+    Public Sub InitObject() '날짜는 바꿀 수 있지만 월을 바꾸면 이미 지나간 월이되어 가져올 수 있는 Data 건수가 0이된다. 따라서 월물이 바뀔 때는 예전 날짜 data를 가져올 수 없다
 
         sMonth = optcodeobj.GetData(3, 0)
         Form1.Text = sMonth
@@ -22,6 +22,7 @@ Module realtime_daishin
     Public Function FindTargetDate() As Boolean
         Dim futureCode As String
         Dim ret As Boolean
+        Dim tempTargetDateFromCybos, tempTargetDateFromForm As String
 
         Dim futurelist As New CpFutureCode  '선물
         Dim fMst As New FutureMst
@@ -40,7 +41,21 @@ Module realtime_daishin
 
         If ret = True Then
             CurrentTime = fMst.GetHeaderValue(82) '체결시간
-            TargetDate = fMst.GetHeaderValue(31) '입회일자
+            tempTargetDateFromCybos = fMst.GetHeaderValue(31) '입회일자
+            tempTargetDateFromForm = Form1.txt_TargetDate.Text
+
+            If tempTargetDateFromForm <> "" Then 'Form의 값이 null이 아니면 Form의 값을 우선한다
+
+                TargetDate = tempTargetDateFromForm
+
+            Else 'form의 값이 null이라면 그대로 cybos거를 넣는다
+
+                TargetDate = tempTargetDateFromCybos
+                Form1.txt_TargetDate.Text = TargetDate
+
+            End If
+
+
         End If
 
         Return ret
