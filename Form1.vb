@@ -41,17 +41,22 @@ Public Class Form1
 
                 Clac_DisplayAllGrid()
 
-                RedrawAll()
+                RedrawAll() 'Grid 그리기
+
+                DrawGraph() '그래프 그리기
+
+
             Else
                 MsgBox("가져올 수 있는 종목이 없습니다")
             End If
-
 
         End If
 
         Return False
 
     End Function
+
+
 
     Private Sub Clac_DisplayAllGrid()
 
@@ -68,20 +73,27 @@ Public Class Form1
 
     Private Sub RedrawAll()
 
+        Dim tempIndex As Integer
+
         If currentIndex > 0 Then
             'grid1.Visible = False
             InitFirstGrid()
             DrawGrid1Data()
 
             'grd_selected 조절하기
-            'combo에 전체 종목을 Add한다
+            'combo에 전체 종목을 Add한다 인덱스, 행사가, 현재가격
+            cmb_selectedJongmokIndex_0.Items.Clear()
+            cmb_selectedJongmokIndex_1.Items.Clear()
+
+            tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+
             For i As Integer = 0 To TotalCount - 1
                 Dim str As String
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")"
                 cmb_selectedJongmokIndex_0.Items.Add(str)
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")"
                 cmb_selectedJongmokIndex_1.Items.Add(str)
             Next
-
 
             cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1)
             cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0)
@@ -94,6 +106,45 @@ Public Class Form1
             DrawColor_Selected()
 
             'grid1.Visible = True
+        End If
+
+    End Sub
+
+
+    '차트 관련 Reference
+    'https://msdn.Microsoft.com/en-us/library/dd456671.aspx
+
+    Private Sub DrawGraph()
+        Dim i, callput, tempIndex, retIndex As Integer
+
+        If currentIndex > 0 Then
+
+            Chart1.Series(0).Points.Clear()
+            Chart1.Series(1).Points.Clear()
+            sumChart.Series(0).Points.Clear()
+
+            tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+            For callput = 0 To 1
+
+                For i = 0 To tempIndex
+                    retIndex = Chart1.Series(callput).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
+                    Chart1.Series(callput).Points(retIndex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
+                    Chart1.Series(callput).Points(retIndex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
+                    Chart1.Series(callput).Points(retIndex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
+
+                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 현재가가 크면 
+                        Chart1.Series(callput).Points(retIndex).Color = Color.Red
+                        Chart1.Series(callput).Points(retIndex).BorderColor = Color.Red
+                    End If
+
+                    Dim str As String = "시간:" & Data(0).ctime(i) & " 종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
+
+                Next
+
+                Chart1.Series(callput).ToolTip = "고가:" & "#VALY1{G4}"
+
+            Next
+
         End If
 
     End Sub
@@ -452,4 +503,12 @@ Public Class Form1
             label_timerCounter.Text = "---"
         End If
     End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+        Chart1.Series(1).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+
+    End Sub
+
 End Class

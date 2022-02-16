@@ -92,15 +92,16 @@ Module Module_common
 
     Public Function CalcTargetJonhmokIndex(ByVal callput As Integer) As Integer
 
-        Dim temptarget, i As Integer
+        Dim temptarget, i, tempIndex As Integer
         Dim mingap, gap As Single
 
         mingap = 1000.0
+        tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
 
         For i = 0 To TotalCount
 
-            If Data(i).price(callput, currentIndex, 3) > 0 Then
-                gap = Math.Abs(Data(i).price(callput, currentIndex, 3) - JongmokTargetPrice)
+            If Data(i).price(callput, tempIndex, 3) > 0 Then
+                gap = Math.Abs(Data(i).price(callput, tempIndex, 3) - JongmokTargetPrice)
                 If gap < mingap Then
                     mingap = gap
                     temptarget = i
@@ -200,6 +201,21 @@ Module Module_common
 
 
         Return color
+
+    End Function
+
+    '마지막에 currentIndex에서는 0 값이 들어와서 마지막 조건일 때는 그 앞에걸로 하는 걸로 바꾼다
+    Public Function GetMaxIndex() As Integer
+
+        Dim ret As Integer
+
+        If currentIndex > 78 Then
+            ret = 78
+        Else
+            ret = currentIndex
+        End If
+
+        Return ret
 
     End Function
 End Module
