@@ -157,6 +157,7 @@ Public Class Form1
 
         For callput = 0 To 1
 
+
             i = selectedJongmokIndex(callput)
 
             For k = 0 To 3
