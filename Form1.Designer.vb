@@ -63,9 +63,9 @@ Partial Class Form1
         '
         'btn_RealTimeStart
         '
-        Me.btn_RealTimeStart.Location = New System.Drawing.Point(86, 36)
+        Me.btn_RealTimeStart.Location = New System.Drawing.Point(74, 39)
         Me.btn_RealTimeStart.Name = "btn_RealTimeStart"
-        Me.btn_RealTimeStart.Size = New System.Drawing.Size(87, 21)
+        Me.btn_RealTimeStart.Size = New System.Drawing.Size(75, 23)
         Me.btn_RealTimeStart.TabIndex = 0
         Me.btn_RealTimeStart.Text = "대신 연결"
         Me.btn_RealTimeStart.UseVisualStyleBackColor = True
@@ -73,21 +73,21 @@ Partial Class Form1
         'grid1
         '
         Me.grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.grid1.Location = New System.Drawing.Point(12, 150)
+        Me.grid1.Location = New System.Drawing.Point(10, 162)
         Me.grid1.Margin = New System.Windows.Forms.Padding(1)
         Me.grid1.Name = "grid1"
         Me.grid1.ReadOnly = True
         Me.grid1.RowTemplate.Height = 23
-        Me.grid1.Size = New System.Drawing.Size(1221, 836)
+        Me.grid1.Size = New System.Drawing.Size(1047, 906)
         Me.grid1.TabIndex = 1
         '
         'grd_selected
         '
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.grd_selected.Location = New System.Drawing.Point(1247, 150)
+        Me.grd_selected.Location = New System.Drawing.Point(1069, 162)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.RowTemplate.Height = 23
-        Me.grd_selected.Size = New System.Drawing.Size(666, 836)
+        Me.grd_selected.Size = New System.Drawing.Size(571, 906)
         Me.grd_selected.TabIndex = 2
         '
         'TableLayoutPanel1
@@ -101,12 +101,12 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1247, 111)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1069, 120)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(666, 33)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(571, 36)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'cmb_selectedJongmokIndex_1
@@ -114,9 +114,9 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_1.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(459, 3)
+        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(395, 3)
         Me.cmb_selectedJongmokIndex_1.Name = "cmb_selectedJongmokIndex_1"
-        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(204, 23)
+        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(173, 23)
         Me.cmb_selectedJongmokIndex_1.TabIndex = 3
         '
         'lbl_1
@@ -128,7 +128,7 @@ Partial Class Form1
         Me.lbl_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lbl_1.Location = New System.Drawing.Point(3, 0)
         Me.lbl_1.Name = "lbl_1"
-        Me.lbl_1.Size = New System.Drawing.Size(118, 15)
+        Me.lbl_1.Size = New System.Drawing.Size(101, 36)
         Me.lbl_1.TabIndex = 0
         Me.lbl_1.Text = "Call 선택"
         Me.lbl_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -140,9 +140,9 @@ Partial Class Form1
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label1.Location = New System.Drawing.Point(335, 0)
+        Me.Label1.Location = New System.Drawing.Point(288, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(118, 15)
+        Me.Label1.Size = New System.Drawing.Size(101, 36)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Put 선택"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -152,9 +152,9 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_0.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_0.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_0.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(127, 3)
+        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(110, 3)
         Me.cmb_selectedJongmokIndex_0.Name = "cmb_selectedJongmokIndex_0"
-        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(202, 23)
+        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(172, 23)
         Me.cmb_selectedJongmokIndex_0.TabIndex = 2
         '
         'TableLayoutPanel2
@@ -173,7 +173,7 @@ Partial Class Form1
         Me.TableLayoutPanel2.Controls.Add(Me.txt_Interval, 1, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetDate, 1, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(14, 1002)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(12, 1086)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 5
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
@@ -181,8 +181,8 @@ Partial Class Form1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(386, 176)
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(331, 191)
         Me.TableLayoutPanel2.TabIndex = 4
         '
         'Label6
@@ -190,9 +190,9 @@ Partial Class Form1
         Me.Label6.AutoSize = True
         Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(4, 141)
+        Me.Label6.Location = New System.Drawing.Point(4, 153)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(185, 34)
+        Me.Label6.Size = New System.Drawing.Size(158, 37)
         Me.Label6.TabIndex = 8
         Me.Label6.Text = "기준가"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -201,9 +201,9 @@ Partial Class Form1
         '
         Me.txt_JongmokTargetPrice.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_JongmokTargetPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_JongmokTargetPrice.Location = New System.Drawing.Point(197, 146)
+        Me.txt_JongmokTargetPrice.Location = New System.Drawing.Point(169, 159)
         Me.txt_JongmokTargetPrice.Name = "txt_JongmokTargetPrice"
-        Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(184, 24)
+        Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(158, 24)
         Me.txt_JongmokTargetPrice.TabIndex = 9
         Me.txt_JongmokTargetPrice.Text = "2.0"
         Me.txt_JongmokTargetPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -213,9 +213,9 @@ Partial Class Form1
         Me.Label5.AutoSize = True
         Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(4, 106)
+        Me.Label5.Location = New System.Drawing.Point(4, 115)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(185, 34)
+        Me.Label5.Size = New System.Drawing.Size(158, 37)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "가격 하한"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -224,9 +224,9 @@ Partial Class Form1
         '
         Me.txt_LowerLimit.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_LowerLimit.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_LowerLimit.Location = New System.Drawing.Point(197, 111)
+        Me.txt_LowerLimit.Location = New System.Drawing.Point(169, 121)
         Me.txt_LowerLimit.Name = "txt_LowerLimit"
-        Me.txt_LowerLimit.Size = New System.Drawing.Size(184, 24)
+        Me.txt_LowerLimit.Size = New System.Drawing.Size(158, 24)
         Me.txt_LowerLimit.TabIndex = 7
         Me.txt_LowerLimit.Text = "0.4"
         Me.txt_LowerLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -236,9 +236,9 @@ Partial Class Form1
         Me.Label4.AutoSize = True
         Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(4, 71)
+        Me.Label4.Location = New System.Drawing.Point(4, 77)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(185, 34)
+        Me.Label4.Size = New System.Drawing.Size(158, 37)
         Me.Label4.TabIndex = 4
         Me.Label4.Text = "가격 상한"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -247,9 +247,9 @@ Partial Class Form1
         '
         Me.txt_UpperLimit.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_UpperLimit.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_UpperLimit.Location = New System.Drawing.Point(197, 76)
+        Me.txt_UpperLimit.Location = New System.Drawing.Point(169, 83)
         Me.txt_UpperLimit.Name = "txt_UpperLimit"
-        Me.txt_UpperLimit.Size = New System.Drawing.Size(184, 24)
+        Me.txt_UpperLimit.Size = New System.Drawing.Size(158, 24)
         Me.txt_UpperLimit.TabIndex = 5
         Me.txt_UpperLimit.Text = "4.0"
         Me.txt_UpperLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -259,9 +259,9 @@ Partial Class Form1
         Me.Label3.AutoSize = True
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(4, 36)
+        Me.Label3.Location = New System.Drawing.Point(4, 39)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(185, 34)
+        Me.Label3.Size = New System.Drawing.Size(158, 37)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Interval"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -270,9 +270,9 @@ Partial Class Form1
         '
         Me.txt_Interval.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_Interval.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_Interval.Location = New System.Drawing.Point(197, 41)
+        Me.txt_Interval.Location = New System.Drawing.Point(169, 45)
         Me.txt_Interval.Name = "txt_Interval"
-        Me.txt_Interval.Size = New System.Drawing.Size(184, 24)
+        Me.txt_Interval.Size = New System.Drawing.Size(158, 24)
         Me.txt_Interval.TabIndex = 3
         Me.txt_Interval.Text = "5"
         Me.txt_Interval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -284,7 +284,7 @@ Partial Class Form1
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(4, 1)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(185, 34)
+        Me.Label2.Size = New System.Drawing.Size(158, 37)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "목표날짜"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -293,9 +293,9 @@ Partial Class Form1
         '
         Me.txt_TargetDate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_TargetDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_TargetDate.Location = New System.Drawing.Point(196, 4)
+        Me.txt_TargetDate.Location = New System.Drawing.Point(169, 4)
         Me.txt_TargetDate.Name = "txt_TargetDate"
-        Me.txt_TargetDate.Size = New System.Drawing.Size(186, 24)
+        Me.txt_TargetDate.Size = New System.Drawing.Size(158, 24)
         Me.txt_TargetDate.TabIndex = 1
         Me.txt_TargetDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -305,9 +305,9 @@ Partial Class Form1
         '
         'btn_TimerStart
         '
-        Me.btn_TimerStart.Location = New System.Drawing.Point(196, 36)
+        Me.btn_TimerStart.Location = New System.Drawing.Point(168, 39)
         Me.btn_TimerStart.Name = "btn_TimerStart"
-        Me.btn_TimerStart.Size = New System.Drawing.Size(87, 21)
+        Me.btn_TimerStart.Size = New System.Drawing.Size(75, 23)
         Me.btn_TimerStart.TabIndex = 5
         Me.btn_TimerStart.Text = "START"
         Me.btn_TimerStart.UseVisualStyleBackColor = True
@@ -315,9 +315,9 @@ Partial Class Form1
         'label_timerCounter
         '
         Me.label_timerCounter.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label_timerCounter.Location = New System.Drawing.Point(208, 60)
+        Me.label_timerCounter.Location = New System.Drawing.Point(178, 65)
         Me.label_timerCounter.Name = "label_timerCounter"
-        Me.label_timerCounter.Size = New System.Drawing.Size(72, 21)
+        Me.label_timerCounter.Size = New System.Drawing.Size(62, 23)
         Me.label_timerCounter.TabIndex = 6
         Me.label_timerCounter.Text = "0"
         Me.label_timerCounter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -332,7 +332,7 @@ Partial Class Form1
         ChartArea2.Name = "ChartArea2"
         Me.Chart1.ChartAreas.Add(ChartArea1)
         Me.Chart1.ChartAreas.Add(ChartArea2)
-        Me.Chart1.Location = New System.Drawing.Point(1929, 150)
+        Me.Chart1.Location = New System.Drawing.Point(1653, 162)
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
@@ -346,7 +346,7 @@ Partial Class Form1
         Series2.YValuesPerPoint = 4
         Me.Chart1.Series.Add(Series1)
         Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Size = New System.Drawing.Size(934, 836)
+        Me.Chart1.Size = New System.Drawing.Size(801, 744)
         Me.Chart1.TabIndex = 7
         Me.Chart1.Text = "Chart1"
         '
@@ -354,21 +354,21 @@ Partial Class Form1
         '
         ChartArea3.Name = "ChartArea1"
         Me.sumChart.ChartAreas.Add(ChartArea3)
-        Me.sumChart.Location = New System.Drawing.Point(1929, 992)
+        Me.sumChart.Location = New System.Drawing.Point(1653, 912)
         Me.sumChart.Name = "sumChart"
         Series3.ChartArea = "ChartArea1"
         Series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
         Series3.Name = "Series1"
         Me.sumChart.Series.Add(Series3)
-        Me.sumChart.Size = New System.Drawing.Size(934, 165)
+        Me.sumChart.Size = New System.Drawing.Size(801, 156)
         Me.sumChart.TabIndex = 8
         Me.sumChart.Text = "SumChart"
         '
         'Form1
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(2984, 1297)
+        Me.ClientSize = New System.Drawing.Size(2184, 1405)
         Me.Controls.Add(Me.sumChart)
         Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.label_timerCounter)
