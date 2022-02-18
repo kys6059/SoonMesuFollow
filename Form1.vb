@@ -18,6 +18,8 @@ Public Class Form1
         InitDataStructure()
         InitObject()
 
+        UIVisible(False)
+
         isRealFlag = True '실시간 로직임을 기억한다
 
         Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
@@ -51,6 +53,8 @@ Public Class Form1
             End If
 
         End If
+
+        UIVisible(True)
 
         Return False
 
@@ -119,29 +123,48 @@ Public Class Form1
 
         If currentIndex > 0 Then
 
-            Chart1.Series(0).Points.Clear()
-            Chart1.Series(1).Points.Clear()
-            sumChart.Series(0).Points.Clear()
+            For i = 0 To Chart1.Series.Count - 1
+                Chart1.Series(i).Points.Clear()
+            Next
 
             tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+
             For callput = 0 To 1
+                Dim offset As Integer
 
                 For i = 0 To tempIndex
-                    retIndex = Chart1.Series(callput).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
-                    Chart1.Series(callput).Points(retIndex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
-                    Chart1.Series(callput).Points(retIndex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
-                    Chart1.Series(callput).Points(retIndex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
+
+                    If callput = 0 Then
+                        offset = 0
+                    Else
+                        offset = 2
+                    End If
+
+                    'Main Series 입력
+                    retIndex = Chart1.Series(callput + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
+                    Chart1.Series(callput + offset).Points(retIndex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
+                    Chart1.Series(callput + offset).Points(retIndex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
+                    Chart1.Series(callput + offset).Points(retIndex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
 
                     If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 현재가가 크면 
-                        Chart1.Series(callput).Points(retIndex).Color = Color.Red
-                        Chart1.Series(callput).Points(retIndex).BorderColor = Color.Red
+                        Chart1.Series(callput + offset).Points(retIndex).Color = Color.Red
+                        Chart1.Series(callput + offset).Points(retIndex).BorderColor = Color.Red
                     End If
 
                     Dim str As String = "시간:" & Data(0).ctime(i) & " 종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
 
+                    'HIGH Line 입력
+                    Chart1.Series(callput + 1 + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
+                    'Low Line 입력
+                    Chart1.Series(callput + 2 + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
+
                 Next
 
-                Chart1.Series(callput).ToolTip = "고가:" & "#VALY1{G4}"
+                Chart1.Series(callput + offset).ToolTip = "고가:" & "#VALY1{G4}"
+                Chart1.ChartAreas(callput).AxisY.Minimum = Data(selectedJongmokIndex(callput)).Small(callput, 2) - 0.1
+                Chart1.ChartAreas(callput).AxisY.Maximum = Data(selectedJongmokIndex(callput)).Big(callput, 1) + 0.1
+
+                'Chart1.ChartAreas(callput).AxisX.LabelStyle.Format = "{0.0}" 테스트해봐도 동작 안함
 
             Next
 
@@ -508,7 +531,8 @@ Public Class Form1
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-        Chart1.Series(1).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+        Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+
 
     End Sub
 
