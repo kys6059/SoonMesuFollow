@@ -218,4 +218,23 @@ Module Module_common
         Return ret
 
     End Function
+
+    Public Sub UIVisible(ByVal flag As Boolean)
+
+        If flag = True Then
+
+            Form1.grd_selected.Visible = True
+            Form1.grid1.Visible = True
+            Form1.Chart1.Visible = True
+
+        Else
+            Form1.grd_selected.Visible = False
+            Form1.grid1.Visible = False
+            Form1.Chart1.Visible = False
+
+        End If
+
+    End Sub
+
+
 End Module
