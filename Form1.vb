@@ -47,11 +47,11 @@ Public Class Form1
 
                 DrawGraph() '그래프 그리기
 
-
             Else
                 MsgBox("가져올 수 있는 종목이 없습니다")
             End If
-
+        Else
+            MsgBox("사이보스에 연결되지 않았습니다")
         End If
 
         UIVisible(True)
@@ -146,9 +146,12 @@ Public Class Form1
                     Chart1.Series(callput + offset).Points(retIndex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
                     Chart1.Series(callput + offset).Points(retIndex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
 
-                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 현재가가 크면 
+                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 종가가 크면 
                         Chart1.Series(callput + offset).Points(retIndex).Color = Color.Red
                         Chart1.Series(callput + offset).Points(retIndex).BorderColor = Color.Red
+                    ElseIf Data(selectedJongmokIndex(callput)).price(callput, i, 0) > Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then
+                        Chart1.Series(callput + offset).Points(retIndex).Color = Color.Blue
+                        Chart1.Series(callput + offset).Points(retIndex).BorderColor = Color.Blue
                     End If
 
                     Dim str As String = "시간:" & Data(0).ctime(i) & " 종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
@@ -160,9 +163,11 @@ Public Class Form1
 
                 Next
 
-                Chart1.Series(callput + offset).ToolTip = "고가:" & "#VALY1{G4}"
-                Chart1.ChartAreas(callput).AxisY.Minimum = Data(selectedJongmokIndex(callput)).Small(callput, 2) - 0.1
-                Chart1.ChartAreas(callput).AxisY.Maximum = Data(selectedJongmokIndex(callput)).Big(callput, 1) + 0.1
+
+
+                Chart1.Series(callput + offset).ToolTip = "고가:" & "#VALY1{G4}" & " X: " & "#VALX"
+                Chart1.ChartAreas(callput).AxisY.Minimum = Data(selectedJongmokIndex(callput)).Small(callput, 2) - 0.01
+                Chart1.ChartAreas(callput).AxisY.Maximum = Data(selectedJongmokIndex(callput)).Big(callput, 1) + 0.01
 
                 'Chart1.ChartAreas(callput).AxisX.LabelStyle.Format = "{0.0}" 테스트해봐도 동작 안함
 
