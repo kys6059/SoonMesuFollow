@@ -537,8 +537,11 @@ Public Class Form1
 
         Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
         Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-
+        txt_TableName.Text = "kys1-244000.option5.option"
 
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+    End Sub
 End Class
