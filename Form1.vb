@@ -110,6 +110,10 @@ Public Class Form1
             DrawColor_Selected()
 
             'grid1.Visible = True
+
+            '오늘날짜를 DBDate 텍스트박스에 넣기
+            txt_DBDate.Text = TargetDate
+
         End If
 
     End Sub
@@ -541,7 +545,13 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
+        Dim tempTargetDate As Integer = Val(txt_DBDate.Text)
+        Dim rowCount As Integer
 
+
+        If tempTargetDate > 0 Then
+            rowCount = GetRowCount(tempTargetDate)
+        End If
     End Sub
 End Class

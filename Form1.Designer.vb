@@ -23,16 +23,16 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim CustomLabel3 As System.Windows.Forms.DataVisualization.Charting.CustomLabel = New System.Windows.Forms.DataVisualization.Charting.CustomLabel()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim ChartArea9 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Series13 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series14 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series15 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series16 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series17 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series18 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim CustomLabel1 As System.Windows.Forms.DataVisualization.Charting.CustomLabel = New System.Windows.Forms.DataVisualization.Charting.CustomLabel()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -57,12 +57,12 @@ Partial Class Form1
         Me.label_timerCounter = New System.Windows.Forms.Label()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.txt_DBDate = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button6 = New System.Windows.Forms.Button()
-        Me.txt_TableName = New System.Windows.Forms.TextBox()
-        Me.chk_AutoSave = New System.Windows.Forms.CheckBox()
         Me.chk_AutoTurnOff = New System.Windows.Forms.CheckBox()
+        Me.txt_TableName = New System.Windows.Forms.TextBox()
+        Me.btn_SelectDB = New System.Windows.Forms.Button()
+        Me.txt_DBDate = New System.Windows.Forms.TextBox()
+        Me.btn_InsertDB = New System.Windows.Forms.Button()
+        Me.chk_AutoSave = New System.Windows.Forms.CheckBox()
         Me.lbl_DBDateInfo = New System.Windows.Forms.Label()
         Me.DBDate_HScrollBar = New System.Windows.Forms.HScrollBar()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -337,77 +337,77 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea7.AxisY.CustomLabels.Add(CustomLabel3)
-        ChartArea7.AxisY.IsStartedFromZero = False
-        ChartArea7.AxisY.LineColor = System.Drawing.Color.WhiteSmoke
-        ChartArea7.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet
-        ChartArea7.AxisY.MaximumAutoSize = 10.0!
-        ChartArea7.Name = "ChartArea1"
-        ChartArea7.Position.Auto = False
-        ChartArea7.Position.Height = 37.0!
-        ChartArea7.Position.Width = 94.0!
-        ChartArea7.Position.X = 3.0!
-        ChartArea7.Position.Y = 3.0!
-        ChartArea8.AlignWithChartArea = "ChartArea1"
-        ChartArea8.AxisX.IsStartedFromZero = False
-        ChartArea8.AxisY.IsLabelAutoFit = False
-        ChartArea8.AxisY.IsStartedFromZero = False
-        ChartArea8.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
-        ChartArea8.AxisY.MaximumAutoSize = 10.0!
-        ChartArea8.Name = "ChartArea2"
-        ChartArea8.Position.Auto = False
-        ChartArea8.Position.Height = 37.0!
-        ChartArea8.Position.Width = 94.0!
-        ChartArea8.Position.X = 3.0!
-        ChartArea8.Position.Y = 40.0!
-        ChartArea9.Name = "ChartArea3"
-        ChartArea9.Position.Auto = False
-        ChartArea9.Position.Height = 23.0!
-        ChartArea9.Position.Width = 94.0!
-        ChartArea9.Position.X = 3.0!
-        ChartArea9.Position.Y = 77.0!
-        Me.Chart1.ChartAreas.Add(ChartArea7)
-        Me.Chart1.ChartAreas.Add(ChartArea8)
-        Me.Chart1.ChartAreas.Add(ChartArea9)
+        ChartArea1.AxisY.CustomLabels.Add(CustomLabel1)
+        ChartArea1.AxisY.IsStartedFromZero = False
+        ChartArea1.AxisY.LineColor = System.Drawing.Color.WhiteSmoke
+        ChartArea1.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet
+        ChartArea1.AxisY.MaximumAutoSize = 10.0!
+        ChartArea1.Name = "ChartArea1"
+        ChartArea1.Position.Auto = False
+        ChartArea1.Position.Height = 37.0!
+        ChartArea1.Position.Width = 94.0!
+        ChartArea1.Position.X = 3.0!
+        ChartArea1.Position.Y = 3.0!
+        ChartArea2.AlignWithChartArea = "ChartArea1"
+        ChartArea2.AxisX.IsStartedFromZero = False
+        ChartArea2.AxisY.IsLabelAutoFit = False
+        ChartArea2.AxisY.IsStartedFromZero = False
+        ChartArea2.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
+        ChartArea2.AxisY.MaximumAutoSize = 10.0!
+        ChartArea2.Name = "ChartArea2"
+        ChartArea2.Position.Auto = False
+        ChartArea2.Position.Height = 37.0!
+        ChartArea2.Position.Width = 94.0!
+        ChartArea2.Position.X = 3.0!
+        ChartArea2.Position.Y = 40.0!
+        ChartArea3.Name = "ChartArea3"
+        ChartArea3.Position.Auto = False
+        ChartArea3.Position.Height = 23.0!
+        ChartArea3.Position.Width = 94.0!
+        ChartArea3.Position.X = 3.0!
+        ChartArea3.Position.Y = 77.0!
+        Me.Chart1.ChartAreas.Add(ChartArea1)
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Me.Chart1.ChartAreas.Add(ChartArea3)
         Me.Chart1.Location = New System.Drawing.Point(1810, 150)
         Me.Chart1.Name = "Chart1"
-        Series13.ChartArea = "ChartArea1"
-        Series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series13.Name = "CALL_MAIN"
-        Series13.ToolTip = "#VALY1{G4}"
-        Series13.YValuesPerPoint = 4
-        Series14.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series14.ChartArea = "ChartArea1"
-        Series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series14.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series14.Name = "CALL_HIGH"
-        Series14.ToolTip = "#VALY1{G4}"
-        Series14.YValuesPerPoint = 4
-        Series15.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series15.ChartArea = "ChartArea1"
-        Series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series15.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series15.Name = "CALL_LOW"
-        Series16.ChartArea = "ChartArea2"
-        Series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series16.Name = "PUT_MAIN"
-        Series16.YValuesPerPoint = 4
-        Series17.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series17.ChartArea = "ChartArea2"
-        Series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series17.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series17.Name = "PUT_HIGH"
-        Series18.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series18.ChartArea = "ChartArea2"
-        Series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series18.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series18.Name = "PUT_LOW"
-        Me.Chart1.Series.Add(Series13)
-        Me.Chart1.Series.Add(Series14)
-        Me.Chart1.Series.Add(Series15)
-        Me.Chart1.Series.Add(Series16)
-        Me.Chart1.Series.Add(Series17)
-        Me.Chart1.Series.Add(Series18)
+        Series1.ChartArea = "ChartArea1"
+        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
+        Series1.Name = "CALL_MAIN"
+        Series1.ToolTip = "#VALY1{G4}"
+        Series1.YValuesPerPoint = 4
+        Series2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series2.ChartArea = "ChartArea1"
+        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series2.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Series2.Name = "CALL_HIGH"
+        Series2.ToolTip = "#VALY1{G4}"
+        Series2.YValuesPerPoint = 4
+        Series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series3.ChartArea = "ChartArea1"
+        Series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series3.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Series3.Name = "CALL_LOW"
+        Series4.ChartArea = "ChartArea2"
+        Series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
+        Series4.Name = "PUT_MAIN"
+        Series4.YValuesPerPoint = 4
+        Series5.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series5.ChartArea = "ChartArea2"
+        Series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series5.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Series5.Name = "PUT_HIGH"
+        Series6.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series6.ChartArea = "ChartArea2"
+        Series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series6.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Series6.Name = "PUT_LOW"
+        Me.Chart1.Series.Add(Series1)
+        Me.Chart1.Series.Add(Series2)
+        Me.Chart1.Series.Add(Series3)
+        Me.Chart1.Series.Add(Series4)
+        Me.Chart1.Series.Add(Series5)
+        Me.Chart1.Series.Add(Series6)
         Me.Chart1.Size = New System.Drawing.Size(801, 906)
         Me.Chart1.TabIndex = 7
         Me.Chart1.Text = "Chart1"
@@ -422,9 +422,9 @@ Partial Class Form1
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.36364!))
         Me.TableLayoutPanel3.Controls.Add(Me.chk_AutoTurnOff, 0, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.txt_TableName, 2, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Button6, 2, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.btn_SelectDB, 2, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.txt_DBDate, 1, 0)
-        Me.TableLayoutPanel3.Controls.Add(Me.Button1, 1, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.btn_InsertDB, 1, 1)
         Me.TableLayoutPanel3.Controls.Add(Me.chk_AutoSave, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.lbl_DBDateInfo, 3, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.DBDate_HScrollBar, 3, 1)
@@ -436,36 +436,16 @@ Partial Class Form1
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(644, 100)
         Me.TableLayoutPanel3.TabIndex = 8
         '
-        'txt_DBDate
+        'chk_AutoTurnOff
         '
-        Me.txt_DBDate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_DBDate.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_DBDate.Location = New System.Drawing.Point(121, 4)
-        Me.txt_DBDate.Name = "txt_DBDate"
-        Me.txt_DBDate.Size = New System.Drawing.Size(110, 25)
-        Me.txt_DBDate.TabIndex = 0
-        '
-        'Button1
-        '
-        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Button1.Location = New System.Drawing.Point(121, 44)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(110, 52)
-        Me.Button1.TabIndex = 1
-        Me.Button1.Text = "DB에 입력"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'Button6
-        '
-        Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button6.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Button6.Location = New System.Drawing.Point(238, 44)
-        Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(168, 52)
-        Me.Button6.TabIndex = 6
-        Me.Button6.Text = "가져오기"
-        Me.Button6.UseVisualStyleBackColor = True
+        Me.chk_AutoTurnOff.AutoSize = True
+        Me.chk_AutoTurnOff.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_AutoTurnOff.Location = New System.Drawing.Point(4, 44)
+        Me.chk_AutoTurnOff.Name = "chk_AutoTurnOff"
+        Me.chk_AutoTurnOff.Size = New System.Drawing.Size(110, 52)
+        Me.chk_AutoTurnOff.TabIndex = 11
+        Me.chk_AutoTurnOff.Text = "자동PC끄기"
+        Me.chk_AutoTurnOff.UseVisualStyleBackColor = True
         '
         'txt_TableName
         '
@@ -475,6 +455,37 @@ Partial Class Form1
         Me.txt_TableName.Name = "txt_TableName"
         Me.txt_TableName.Size = New System.Drawing.Size(168, 21)
         Me.txt_TableName.TabIndex = 8
+        '
+        'btn_SelectDB
+        '
+        Me.btn_SelectDB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_SelectDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_SelectDB.Location = New System.Drawing.Point(238, 44)
+        Me.btn_SelectDB.Name = "btn_SelectDB"
+        Me.btn_SelectDB.Size = New System.Drawing.Size(168, 52)
+        Me.btn_SelectDB.TabIndex = 6
+        Me.btn_SelectDB.Text = "가져오기"
+        Me.btn_SelectDB.UseVisualStyleBackColor = True
+        '
+        'txt_DBDate
+        '
+        Me.txt_DBDate.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_DBDate.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_DBDate.Location = New System.Drawing.Point(121, 4)
+        Me.txt_DBDate.Name = "txt_DBDate"
+        Me.txt_DBDate.Size = New System.Drawing.Size(110, 25)
+        Me.txt_DBDate.TabIndex = 0
+        '
+        'btn_InsertDB
+        '
+        Me.btn_InsertDB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_InsertDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_InsertDB.Location = New System.Drawing.Point(121, 44)
+        Me.btn_InsertDB.Name = "btn_InsertDB"
+        Me.btn_InsertDB.Size = New System.Drawing.Size(110, 52)
+        Me.btn_InsertDB.TabIndex = 1
+        Me.btn_InsertDB.Text = "DB에 입력"
+        Me.btn_InsertDB.UseVisualStyleBackColor = True
         '
         'chk_AutoSave
         '
@@ -486,17 +497,6 @@ Partial Class Form1
         Me.chk_AutoSave.TabIndex = 9
         Me.chk_AutoSave.Text = "자동저장(1530)"
         Me.chk_AutoSave.UseVisualStyleBackColor = True
-        '
-        'chk_AutoTurnOff
-        '
-        Me.chk_AutoTurnOff.AutoSize = True
-        Me.chk_AutoTurnOff.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_AutoTurnOff.Location = New System.Drawing.Point(4, 44)
-        Me.chk_AutoTurnOff.Name = "chk_AutoTurnOff"
-        Me.chk_AutoTurnOff.Size = New System.Drawing.Size(110, 52)
-        Me.chk_AutoTurnOff.TabIndex = 11
-        Me.chk_AutoTurnOff.Text = "자동PC끄기"
-        Me.chk_AutoTurnOff.UseVisualStyleBackColor = True
         '
         'lbl_DBDateInfo
         '
@@ -573,9 +573,9 @@ Partial Class Form1
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents chk_AutoTurnOff As CheckBox
     Friend WithEvents txt_TableName As TextBox
-    Friend WithEvents Button6 As Button
+    Friend WithEvents btn_SelectDB As Button
     Friend WithEvents txt_DBDate As TextBox
-    Friend WithEvents Button1 As Button
+    Friend WithEvents btn_InsertDB As Button
     Friend WithEvents chk_AutoSave As CheckBox
     Friend WithEvents lbl_DBDateInfo As Label
     Friend WithEvents DBDate_HScrollBar As HScrollBar
