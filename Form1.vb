@@ -566,5 +566,33 @@ Public Class Form1
 
     Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
 
+        Dim dateCount As Integer
+        Dim rawCount, targetDateRawCount As Integer
+
+
+        dateCount = GetDateList()
+
+        TargetDateIndex = dateCount - 2
+
+        rawCount = GetRawData() '전체 raw data를 받아와서 카운터를 리턴한다
+
+        If rawCount > 0 Then
+
+            '마지막날짜의 data를 화면에 표시한다
+            TargetDate = DBDateList(TargetDateIndex)
+            txt_DBDate.Text = TargetDate.ToString()
+
+            'data를 가져와서 화면에 표시한다 (firstDate)
+            targetDateRawCount = GetDataFromDBHandler(TargetDate)
+            If targetDateRawCount > 0 Then
+
+                '화면에 표시기능 추가
+
+            End If
+
+        Else
+            MsgBox("DB에 데이터가 없습니다")
+        End If
+
     End Sub
 End Class

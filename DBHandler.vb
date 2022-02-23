@@ -3,8 +3,12 @@ Imports Google.Cloud.BigQuery.V2
 
 Module DBHandler
 
-    Dim projectID As String = "kys1-244000"
-    Dim tableName As String = "kys1-244000.option5.option"
+    Public projectID As String = "kys1-244000"
+    Public tableName As String = "kys1-244000.option5.option"
+    Public DBTotalDateCount As Integer
+    Public DBDateList() As Integer
+    Public DBTotalRawDataList As Collections.Generic.List(Of BigQueryRow)
+    Public TargetDateIndex As Integer
 
     '그날 데이터를 입력하기 전에 해당 날짜에 이미 Data가 있는지 확인하기 위해 그 날짜 Data 건수를 가져온다
     Public Function GetRowCount(ByVal iDate As Integer) As Integer
@@ -12,10 +16,10 @@ Module DBHandler
         Dim client As BigQueryClient
         Dim query As String = "select count(*) as cnt from " + tableName + " Where cdate = " + iDate.ToString()
         Dim cnt As Integer = -1
-
+        Dim job As BigQueryJob
         Try
             client = BigQueryClient.Create(projectID)
-            Dim job As BigQueryJob = client.CreateQueryJob(query, Nothing)
+            job = client.CreateQueryJob(query, Nothing)
 
             'wait for the job to complete
             job.PollUntilCompleted()
@@ -90,6 +94,82 @@ Module DBHandler
         Console.WriteLine("등록 완료 at " + Now.ToString)
 
         Return retCount
+    End Function
+
+
+
+    Public Function GetDateList() As Integer
+
+        Dim client As BigQueryClient
+        Dim job As BigQueryJob
+        Dim query As String = "select distinct(cdate) as cdate from " + tableName + " order by cdate "
+
+        Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
+
+        Try
+            client = BigQueryClient.Create(projectID)
+            job = client.CreateQueryJob(query, Nothing)
+
+            job.PollUntilCompleted()
+
+            For Each row In client.GetQueryResults(job.Reference)
+                Dim iDate As Integer = Val(row("cdate"))
+                Console.WriteLine(iDate.ToString())
+                datelist.Add(iDate)
+            Next
+
+        Catch ex As Exception
+            MsgBox("빅쿼리 DB용 인증서가 없습니다")
+        End Try
+
+        DBTotalDateCount = datelist.Count
+
+        DBDateList = datelist.ToArray()
+
+        Return DBTotalDateCount
+
+    End Function
+
+    '빅쿼리 DB에 들어있는 전체 data를 가져온다
+    '왜냐하면 하루씩 가져오면 너무 느려진다
+    Public Function GetRawData() As Integer
+
+        Dim client As BigQueryClient
+        Dim job As BigQueryJob
+        Dim query As String = "select * from " + tableName + " order by iFlag, cdate, `index`, ctime "
+        Dim cnt As Integer = 0
+
+        If DBTotalRawDataList Is Nothing Then
+            DBTotalRawDataList = New Collections.Generic.List(Of BigQueryRow)
+        Else
+            DBTotalRawDataList.Clear()
+        End If
+
+        Try
+            client = BigQueryClient.Create(projectID)
+            job = client.CreateQueryJob(query, Nothing)
+
+            job.PollUntilCompleted()
+
+            For Each row In client.GetQueryResults(job.Reference)
+                DBTotalRawDataList.Add(row)
+                cnt += 1
+            Next
+
+        Catch ex As Exception
+            MsgBox("빅쿼리 DB용 인증서가 없습니다")
+        End Try
+
+        Return cnt
+
+    End Function
+
+    '인수로 받은 날의 데이터를 자료구조로 올린다
+    Public Function GetDataFromDBHandler(ByVal iDate As Integer) As Integer
+
+
+
+        Return 0
     End Function
 
 End Module
