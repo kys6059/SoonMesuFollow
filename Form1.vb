@@ -549,9 +549,22 @@ Public Class Form1
         Dim tempTargetDate As Integer = Val(txt_DBDate.Text)
         Dim rowCount As Integer
 
-
         If tempTargetDate > 0 Then
             rowCount = GetRowCount(tempTargetDate)
         End If
+
+        If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
+
+            InsertTargetDateData(tempTargetDate)
+
+        Else
+            MsgBox(tempTargetDate.ToString() + " 날에는 이미 등록되어 있습니다")
+            'InsertTargetDateData(tempTargetDate)
+        End If
+
+    End Sub
+
+    Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
+
     End Sub
 End Class
