@@ -7,7 +7,7 @@ Module DBHandler
     Public tableName As String = "kys1-244000.option5.option"
     Public DBTotalDateCount As Integer
     Public DBDateList() As Integer
-    Public DBTotalRawDataList As Collections.Generic.List(Of BigQueryRow)
+    Public DBTotalRawDataList As Dictionary(Of Integer, DataSet())
     Public TargetDateIndex As Integer
 
     '그날 데이터를 입력하기 전에 해당 날짜에 이미 Data가 있는지 확인하기 위해 그 날짜 Data 건수를 가져온다
@@ -130,17 +130,27 @@ Module DBHandler
 
     End Function
 
+    Public Function GetDailyRawData(ByVal iDate As Integer) As Integer
+
+
+        Return 0
+    End Function
+
     '빅쿼리 DB에 들어있는 전체 data를 가져온다
     '왜냐하면 하루씩 가져오면 너무 느려진다
     Public Function GetRawData() As Integer
 
         Dim client As BigQueryClient
         Dim job As BigQueryJob
-        Dim query As String = "select * from " + tableName + " order by iFlag, cdate, `index`, ctime "
+        Dim query As String = "select * from " + tableName + " order by cdate, iFlag, `index`, ctime "
         Dim cnt As Integer = 0
+        Dim tempDate As Integer
+
+        Dim prevDate As Integer = 0
+        Dim i As Integer
 
         If DBTotalRawDataList Is Nothing Then
-            DBTotalRawDataList = New Collections.Generic.List(Of BigQueryRow)
+            DBTotalRawDataList = New Dictionary(Of Integer, DataSet())
         Else
             DBTotalRawDataList.Clear()
         End If
@@ -151,13 +161,36 @@ Module DBHandler
 
             job.PollUntilCompleted()
 
-            For Each row In client.GetQueryResults(job.Reference)
-                DBTotalRawDataList.Add(row)
+            Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
+
+            For i = 0 To row_cnt - 1
+
+                Dim row As BigQueryResults = client.GetQueryResults(job.Reference)
+
+                tempDate = Val(row("cdate"))
+
+                If tempDate <> prevDate And prevDate <> 0 Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
+
+
+
+                End If
+
+
+                '중간에는 Data()에 모아놓는다
+
+
+
+                'Data의 끝이라면 dic에 넣는다
+
+
+
+
+                'DBTotalRawDataList.Add(row)
                 cnt += 1
             Next
 
         Catch ex As Exception
-            MsgBox("빅쿼리 DB용 인증서가 없습니다")
+            MsgBox(ex.Message)
         End Try
 
         Return cnt
