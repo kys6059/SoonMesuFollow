@@ -51,7 +51,6 @@ Module realtime_daishin
             Else 'form의 값이 null이라면 그대로 cybos거를 넣는다
 
                 TargetDate = tempTargetDateFromCybos
-                Form1.txt_TargetDate.Text = TargetDate
 
             End If
 

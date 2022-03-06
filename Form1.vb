@@ -111,6 +111,7 @@ Public Class Form1
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
+            txt_TargetDate.Text = TargetDate
 
         End If
 
@@ -482,7 +483,8 @@ Public Class Form1
         selectedJongmokIndex(0) = cmb_selectedJongmokIndex_0.SelectedIndex
         InitDrawSelectedGird()
         DrawSelectedData()
-
+        DrawColor_Selected()
+        DrawGraph() '그래프 그리기
     End Sub
 
     Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
@@ -490,6 +492,8 @@ Public Class Form1
         selectedJongmokIndex(1) = cmb_selectedJongmokIndex_1.SelectedIndex
         InitDrawSelectedGird()
         DrawSelectedData()
+        DrawColor_Selected()
+        DrawGraph() '그래프 그리기
     End Sub
 
     Private Sub grid1_Scroll(sender As Object, e As ScrollEventArgs) Handles grid1.Scroll
@@ -545,6 +549,11 @@ Public Class Form1
 
     Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
         Dim tempTargetDate As Integer = Val(txt_DBDate.Text)
+
+        If tempTargetDate > 20000000 Then
+            tempTargetDate = tempTargetDate Mod 20000000
+        End If
+
         Dim rowCount As Integer
 
         If tempTargetDate > 0 Then
@@ -565,8 +574,6 @@ Public Class Form1
     Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
 
         Dim dateCount As Integer
-        Dim rawCount, targetDateRawCount As Integer
-
 
         dateCount = GetDateList() '이걸하면 DBDateList() 배열에 전역변수 DateList를 입력한다
 

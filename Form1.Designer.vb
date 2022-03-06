@@ -23,16 +23,16 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea13 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim CustomLabel5 As System.Windows.Forms.DataVisualization.Charting.CustomLabel = New System.Windows.Forms.DataVisualization.Charting.CustomLabel()
-        Dim ChartArea14 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim ChartArea15 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Series25 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series26 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series27 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series28 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series29 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series30 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea31 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim CustomLabel11 As System.Windows.Forms.DataVisualization.Charting.CustomLabel = New System.Windows.Forms.DataVisualization.Charting.CustomLabel()
+        Dim ChartArea32 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim ChartArea33 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Series61 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series62 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series63 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series64 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series65 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim Series66 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -337,77 +337,77 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea13.AxisY.CustomLabels.Add(CustomLabel5)
-        ChartArea13.AxisY.IsStartedFromZero = False
-        ChartArea13.AxisY.LineColor = System.Drawing.Color.WhiteSmoke
-        ChartArea13.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet
-        ChartArea13.AxisY.MaximumAutoSize = 10.0!
-        ChartArea13.Name = "ChartArea1"
-        ChartArea13.Position.Auto = False
-        ChartArea13.Position.Height = 37.0!
-        ChartArea13.Position.Width = 94.0!
-        ChartArea13.Position.X = 3.0!
-        ChartArea13.Position.Y = 3.0!
-        ChartArea14.AlignWithChartArea = "ChartArea1"
-        ChartArea14.AxisX.IsStartedFromZero = False
-        ChartArea14.AxisY.IsLabelAutoFit = False
-        ChartArea14.AxisY.IsStartedFromZero = False
-        ChartArea14.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
-        ChartArea14.AxisY.MaximumAutoSize = 10.0!
-        ChartArea14.Name = "ChartArea2"
-        ChartArea14.Position.Auto = False
-        ChartArea14.Position.Height = 37.0!
-        ChartArea14.Position.Width = 94.0!
-        ChartArea14.Position.X = 3.0!
-        ChartArea14.Position.Y = 40.0!
-        ChartArea15.Name = "ChartArea3"
-        ChartArea15.Position.Auto = False
-        ChartArea15.Position.Height = 23.0!
-        ChartArea15.Position.Width = 94.0!
-        ChartArea15.Position.X = 3.0!
-        ChartArea15.Position.Y = 77.0!
-        Me.Chart1.ChartAreas.Add(ChartArea13)
-        Me.Chart1.ChartAreas.Add(ChartArea14)
-        Me.Chart1.ChartAreas.Add(ChartArea15)
+        ChartArea31.AxisY.CustomLabels.Add(CustomLabel11)
+        ChartArea31.AxisY.IsStartedFromZero = False
+        ChartArea31.AxisY.LineColor = System.Drawing.Color.WhiteSmoke
+        ChartArea31.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet
+        ChartArea31.AxisY.MaximumAutoSize = 10.0!
+        ChartArea31.Name = "ChartArea1"
+        ChartArea31.Position.Auto = False
+        ChartArea31.Position.Height = 37.0!
+        ChartArea31.Position.Width = 94.0!
+        ChartArea31.Position.X = 3.0!
+        ChartArea31.Position.Y = 3.0!
+        ChartArea32.AlignWithChartArea = "ChartArea1"
+        ChartArea32.AxisX.IsStartedFromZero = False
+        ChartArea32.AxisY.IsLabelAutoFit = False
+        ChartArea32.AxisY.IsStartedFromZero = False
+        ChartArea32.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
+        ChartArea32.AxisY.MaximumAutoSize = 10.0!
+        ChartArea32.Name = "ChartArea2"
+        ChartArea32.Position.Auto = False
+        ChartArea32.Position.Height = 37.0!
+        ChartArea32.Position.Width = 94.0!
+        ChartArea32.Position.X = 3.0!
+        ChartArea32.Position.Y = 40.0!
+        ChartArea33.Name = "ChartArea3"
+        ChartArea33.Position.Auto = False
+        ChartArea33.Position.Height = 23.0!
+        ChartArea33.Position.Width = 94.0!
+        ChartArea33.Position.X = 3.0!
+        ChartArea33.Position.Y = 77.0!
+        Me.Chart1.ChartAreas.Add(ChartArea31)
+        Me.Chart1.ChartAreas.Add(ChartArea32)
+        Me.Chart1.ChartAreas.Add(ChartArea33)
         Me.Chart1.Location = New System.Drawing.Point(1810, 150)
         Me.Chart1.Name = "Chart1"
-        Series25.ChartArea = "ChartArea1"
-        Series25.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series25.Name = "CALL_MAIN"
-        Series25.ToolTip = "#VALY1{G4}"
-        Series25.YValuesPerPoint = 4
-        Series26.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series26.ChartArea = "ChartArea1"
-        Series26.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series26.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series26.Name = "CALL_HIGH"
-        Series26.ToolTip = "#VALY1{G4}"
-        Series26.YValuesPerPoint = 4
-        Series27.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series27.ChartArea = "ChartArea1"
-        Series27.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series27.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series27.Name = "CALL_LOW"
-        Series28.ChartArea = "ChartArea2"
-        Series28.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series28.Name = "PUT_MAIN"
-        Series28.YValuesPerPoint = 4
-        Series29.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series29.ChartArea = "ChartArea2"
-        Series29.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series29.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series29.Name = "PUT_HIGH"
-        Series30.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series30.ChartArea = "ChartArea2"
-        Series30.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series30.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series30.Name = "PUT_LOW"
-        Me.Chart1.Series.Add(Series25)
-        Me.Chart1.Series.Add(Series26)
-        Me.Chart1.Series.Add(Series27)
-        Me.Chart1.Series.Add(Series28)
-        Me.Chart1.Series.Add(Series29)
-        Me.Chart1.Series.Add(Series30)
+        Series61.ChartArea = "ChartArea1"
+        Series61.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
+        Series61.Name = "CALL_MAIN"
+        Series61.ToolTip = "#VALY1{G4}"
+        Series61.YValuesPerPoint = 4
+        Series62.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series62.ChartArea = "ChartArea1"
+        Series62.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series62.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Series62.Name = "CALL_HIGH"
+        Series62.ToolTip = "#VALY1{G4}"
+        Series62.YValuesPerPoint = 4
+        Series63.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series63.ChartArea = "ChartArea1"
+        Series63.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series63.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Series63.Name = "CALL_LOW"
+        Series64.ChartArea = "ChartArea2"
+        Series64.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
+        Series64.Name = "PUT_MAIN"
+        Series64.YValuesPerPoint = 4
+        Series65.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series65.ChartArea = "ChartArea2"
+        Series65.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series65.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Series65.Name = "PUT_HIGH"
+        Series66.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
+        Series66.ChartArea = "ChartArea2"
+        Series66.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
+        Series66.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Series66.Name = "PUT_LOW"
+        Me.Chart1.Series.Add(Series61)
+        Me.Chart1.Series.Add(Series62)
+        Me.Chart1.Series.Add(Series63)
+        Me.Chart1.Series.Add(Series64)
+        Me.Chart1.Series.Add(Series65)
+        Me.Chart1.Series.Add(Series66)
         Me.Chart1.Size = New System.Drawing.Size(801, 906)
         Me.Chart1.TabIndex = 7
         Me.Chart1.Text = "Chart1"
