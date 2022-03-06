@@ -497,9 +497,11 @@ Public Class Form1
     End Sub
 
     Private Sub grid1_Scroll(sender As Object, e As ScrollEventArgs) Handles grid1.Scroll
+        grd_selected.FirstDisplayedScrollingRowIndex = grid1.FirstDisplayedScrollingRowIndex
+    End Sub
 
-        '현재 스크롤 위치 가져오는 기능을 찾지 못함
-
+    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
+        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
