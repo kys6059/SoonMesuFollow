@@ -4,16 +4,30 @@ Imports Google.Cloud.BigQuery.V2
 Module DBHandler
 
     Public projectID As String = "kys1-244000"
-    Public tableName As String = "kys1-244000.option5.option"
+    Public DataSetName As String = "kys1-244000.option5."
+    Public tableName As String = ""
+
     Public DBTotalDateCount As Integer
     Public DBDateList() As Integer
     Public DBTotalRawDataList As Dictionary(Of Integer, DataSet())
     Public gTargetDateIndex As Integer
 
+    Public Function MakeTableName() As String
+
+        Dim str As String
+        str = DataSetName + Form1.txt_TableName.Text + " "
+
+        Return str
+
+    End Function
+
     '그날 데이터를 입력하기 전에 해당 날짜에 이미 Data가 있는지 확인하기 위해 그 날짜 Data 건수를 가져온다
     Public Function GetRowCount(ByVal iDate As Integer) As Integer
 
         Dim client As BigQueryClient
+
+        tableName = MakeTableName()
+
         Dim query As String = "select count(*) as cnt from " + tableName + " Where cdate = " + iDate.ToString()
         Dim cnt As Integer = -1
         Dim job As BigQueryJob
@@ -44,7 +58,7 @@ Module DBHandler
         Dim client As BigQueryClient = BigQueryClient.Create(projectID)
         Dim 영보다큰갯수 As Integer = 0
         Dim dateaset_id = "option5"
-        Dim table_id = "option"
+        Dim table_id = Form1.txt_TableName.Text
 
 
         For callput = 0 To 1
@@ -102,6 +116,8 @@ Module DBHandler
 
         Dim client As BigQueryClient
         Dim job As BigQueryJob
+
+        tableName = MakeTableName()
         Dim query As String = "select distinct(cdate) as cdate from " + tableName + " order by cdate "
 
         Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
@@ -136,6 +152,7 @@ Module DBHandler
 
         Dim client As BigQueryClient
         Dim job As BigQueryJob
+        tableName = MakeTableName()
         Dim query As String = "select * from " + tableName + " where cdate = " + iDate.ToString() + " order by cdate, iFlag, `index`, ctime"
         Dim cnt As Integer = 0
         Dim jongmokIndex As Integer = -1

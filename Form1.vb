@@ -11,6 +11,8 @@ Public Class Form1
             ' MsgBox("실시간 연결 종목이 없습니다")
         End If
 
+        txt_TargetDate.Text = TargetDate
+
     End Sub
 
     Private Function realTime_Start() As Boolean
@@ -20,9 +22,11 @@ Public Class Form1
 
         UIVisible(False)
 
+        Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
+
         isRealFlag = True '실시간 로직임을 기억한다
 
-        Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
+
 
         If ConnectionState = True Then
 
@@ -35,7 +39,12 @@ Public Class Form1
                 TotalCount = GetTotalJongmokCount()
             Loop
 
-            If TotalCount > 0 Then
+            Dim tempMonth As Integer
+            tempMonth = TargetDate Mod 20000000
+            tempMonth = tempMonth / 100
+
+
+            If TotalCount > 0 And (sMonth - tempMonth) <= 1 Then
 
                 SetTimeDataForData(Data) '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
 
@@ -44,6 +53,7 @@ Public Class Form1
                 Clac_DisplayAllGrid()
                 RedrawAll() 'Grid 그리기
                 DrawGraph() '그래프 그리기
+                DrawScrollData() 'Scroll 및 기타 DB 관련 UI 표시하기
 
             Else
                 MsgBox("가져올 수 있는 종목이 없습니다")
@@ -57,6 +67,18 @@ Public Class Form1
         Return False
 
     End Function
+
+    Public Sub DrawScrollData()
+
+        If DBTotalDateCount > 1 Then
+            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + gTargetDateIndex.ToString() + " 번째"
+
+            DBDate_HScrollBar.Maximum = DBTotalDateCount - 1
+            DBDate_HScrollBar.Refresh()
+
+        End If
+
+    End Sub
 
 
 
@@ -111,7 +133,7 @@ Public Class Form1
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
-            txt_TargetDate.Text = TargetDate
+
 
         End If
 
@@ -545,7 +567,7 @@ Public Class Form1
 
         Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
         Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-        txt_TableName.Text = "kys1-244000.option5.option"
+        txt_TableName.Text = "option_190628"
 
     End Sub
 
@@ -584,15 +606,17 @@ Public Class Form1
             InitDataStructure()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
 
-            gTargetDateIndex = dateCount - 1 '이것도 전역변수
+            gTargetDateIndex = 0 '이것도 전역변수
             TargetDate = DBDateList(gTargetDateIndex)
 
             TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣는다
 
             If TotalCount > 0 Then
+
                 Clac_DisplayAllGrid()
                 RedrawAll() 'Grid 그리기
                 DrawGraph() '그래프 그리기
+                DrawScrollData()
             End If
 
         Else
@@ -600,4 +624,25 @@ Public Class Form1
         End If
 
     End Sub
+
+    Private Sub DBDate_HScrollBar_ValueChanged(sender As Object, e As EventArgs) Handles DBDate_HScrollBar.ValueChanged
+        InitDataStructure()
+        isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+
+        gTargetDateIndex = DBDate_HScrollBar.Value
+
+        TargetDate = DBDateList(gTargetDateIndex)
+
+        TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣는다
+
+        If TotalCount > 0 Then
+
+            Clac_DisplayAllGrid()
+            RedrawAll() 'Grid 그리기
+            DrawGraph() '그래프 그리기
+            DrawScrollData()
+        End If
+
+    End Sub
+
 End Class
