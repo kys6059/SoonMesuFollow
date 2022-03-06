@@ -8,7 +8,7 @@ Module DBHandler
     Public DBTotalDateCount As Integer
     Public DBDateList() As Integer
     Public DBTotalRawDataList As Dictionary(Of Integer, DataSet())
-    Public TargetDateIndex As Integer
+    Public gTargetDateIndex As Integer
 
     '그날 데이터를 입력하기 전에 해당 날짜에 이미 Data가 있는지 확인하기 위해 그 날짜 Data 건수를 가져온다
     Public Function GetRowCount(ByVal iDate As Integer) As Integer
@@ -130,14 +130,110 @@ Module DBHandler
 
     End Function
 
+
+    '날짜를 입력받아 Data구조체에다가 입력하는 함수
     Public Function GetDailyRawData(ByVal iDate As Integer) As Integer
 
+        Dim client As BigQueryClient
+        Dim job As BigQueryJob
+        Dim query As String = "select * from " + tableName + " where cdate = " + iDate.ToString() + " order by cdate, iFlag, `index`, ctime"
+        Dim cnt As Integer = 0
+        Dim jongmokIndex As Integer = -1
 
-        Return 0
+        Console.WriteLine("query = " + query)
+
+        Try
+            client = BigQueryClient.Create(projectID)
+            job = client.CreateQueryJob(query, Nothing)
+
+            job.PollUntilCompleted()
+
+            Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
+
+            For Each row In client.GetQueryResults(job.Reference)
+
+                '값을 읽어온다
+                Dim tempDate As Integer = Val(row("cdate"))
+                Dim index As Integer = Val(row("index"))
+                Dim hangsaga As Integer = Val(row("hangsaga"))
+                Dim iFlag As Integer = Val(row("iFlag"))
+                Dim ctime As Integer = Val(row("ctime"))
+                Dim interval As Integer = Val(row("interval"))
+                Dim si As Single = Val(row("si"))
+                Dim go As Single = Val(row("go"))
+                Dim jue As Single = Val(row("jue"))
+                Dim jong As Single = Val(row("jong"))
+                Dim volume As Integer = Val(row("volume"))
+
+                Dim callput As Integer
+                If iFlag = 1 Then
+                    callput = 0
+                ElseIf iFlag = 6 Then
+                    callput = 1
+                Else
+                    Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
+                    callput = 0
+                End If
+
+                If index <> jongmokIndex Then
+                    jongmokIndex = index
+                    '시간입력
+                    SetTimeDataForDataForDBData(Data, jongmokIndex)
+                    Data(jongmokIndex).HangSaGa = hangsaga
+                End If
+
+                Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
+                currentIndex = Math.Max(currentIndex, iIndex)
+                timeIndex = Math.Max(timeIndex, currentIndex + 1)
+
+                Data(jongmokIndex).price(callput, iIndex, 0) = si
+                Data(jongmokIndex).price(callput, iIndex, 1) = go
+                Data(jongmokIndex).price(callput, iIndex, 2) = jue
+                Data(jongmokIndex).price(callput, iIndex, 3) = jong
+                Data(jongmokIndex).거래량(callput, iIndex) = volume
+
+                cnt += 1
+            Next
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        Console.WriteLine("Row 개수는 " + cnt.ToString())
+
+
+        Return jongmokIndex + 1
+
     End Function
 
-    '빅쿼리 DB에 들어있는 전체 data를 가져온다
-    '왜냐하면 하루씩 가져오면 너무 느려진다
+    '대신에서 가져오면 옵션 종목수를 미리 알고 있어서 TotalCount 만큼 For문 돌리면 되지만
+    'DB에서 가져오면 종목수를 알 수 없기 때문에 종목이 추가될 때마다 시간을 Data 구조체에 입력하는 방식으로 처리한다
+    Public Sub SetTimeDataForDataForDBData(ByRef tempData() As DataSet, ByVal jongmokIndex As Integer)
+        Dim si, bun As Integer
+        Dim strTemp As String
+        Dim totalTimeCount, num As Integer
+
+        totalTimeCount = Int(420 / Interval)
+
+        For num = 1 To totalTimeCount
+
+            If Interval = 1 Then
+                si = Int(num / 60) + 9
+                bun = Int(num Mod 60)
+            ElseIf Interval = 5 Then
+                si = Int(num / 12) + 9
+                bun = Int((num Mod 12) * 5)
+            End If
+
+            si = si * 100 + bun
+            strTemp = Str(si)
+            tempData(jongmokIndex).ctime(num - 1) = strTemp '그리드 왼쪽 기준 시간의 값을 입력한다. 이건 나중에 SearchLine에서 쓰인다
+        Next
+
+    End Sub
+
+    '빅쿼리 DB에 들어있는 전체 data를 가져온다  -------------- 일단 너무 복잡해지니 사용하지 않고 하루하루치 Data를 가져오는 걸 먼저 구현한다
+    '왜냐하면 하루씩 가져오면 너무 느려진다 
     Public Function GetRawData() As Integer
 
         Dim client As BigQueryClient

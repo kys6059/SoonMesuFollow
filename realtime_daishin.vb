@@ -96,7 +96,7 @@ Module realtime_daishin
         Return validCount
     End Function
 
-    Public Sub SetTimeDataForData()
+    Public Sub SetTimeDataForData(ByRef tempData() As DataSet)
         Dim si, bun As Integer
         Dim strTemp As String
         Dim i, totalTimeCount, num As Integer
@@ -116,7 +116,7 @@ Module realtime_daishin
 
                 si = si * 100 + bun
                 strTemp = Str(si)
-                Data(i).ctime(num - 1) = strTemp '그리드 왼쪽 기준 시간의 값을 입력한다. 이건 나중에 SearchLine에서 쓰인다
+                tempData(i).ctime(num - 1) = strTemp '그리드 왼쪽 기준 시간의 값을 입력한다. 이건 나중에 SearchLine에서 쓰인다
             Next
         Next
     End Sub
@@ -148,7 +148,7 @@ Module realtime_daishin
                 chartobj.SetInputValue(5, Items)
                 chartobj.SetInputValue(6, Asc("m"))
                 chartobj.SetInputValue(7, Interval)
-                chartobj.BlockRequest()
+                chartobj.BlockRequest()  '------------------------------------ 여기서 요청을 하고 이 뒤에서 응답받은 Data를 Data구조체에 집어넣는다
 
                 TimeLocalCount = chartobj.GetHeaderValue(3) '이 종목에 해당하는 오늘 날짜 데이터가 몇개인지 가져온다 이게 풋이랑 다를 수 있으니 각각 받아야 한다
                 If timeIndex < TimeLocalCount Then
@@ -158,7 +158,7 @@ Module realtime_daishin
 
                 For j = 0 To TimeLocalCount - 1
                     strCurrentTime = chartobj.GetDataValue(1, j)
-                    iIndex = FindIndexFormTime(strCurrentTime)
+                    iIndex = FindIndexFormTime(strCurrentTime) '해당 시간이 몇번째 인덱스인지 찾아온다
                     Data(i).price(callput, iIndex, 0) = chartobj.GetDataValue(2, j)
                     Data(i).price(callput, iIndex, 1) = chartobj.GetDataValue(3, j)
                     Data(i).price(callput, iIndex, 2) = chartobj.GetDataValue(4, j)

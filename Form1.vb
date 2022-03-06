@@ -37,14 +37,12 @@ Public Class Form1
 
             If TotalCount > 0 Then
 
-                SetTimeDataForData() '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
+                SetTimeDataForData(Data) '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
 
-                GetAllData()
+                GetAllData() '대신으로부터 Data 가져오기
 
                 Clac_DisplayAllGrid()
-
                 RedrawAll() 'Grid 그리기
-
                 DrawGraph() '그래프 그리기
 
             Else
@@ -570,24 +568,22 @@ Public Class Form1
         Dim rawCount, targetDateRawCount As Integer
 
 
-        dateCount = GetDateList()
+        dateCount = GetDateList() '이걸하면 DBDateList() 배열에 전역변수 DateList를 입력한다
 
-        TargetDateIndex = dateCount - 2
+        If dateCount > 0 Then
 
-        rawCount = GetRawData() '전체 raw data를 받아와서 카운터를 리턴한다
+            InitDataStructure()
+            isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
 
-        If rawCount > 0 Then
+            gTargetDateIndex = dateCount - 1 '이것도 전역변수
+            TargetDate = DBDateList(gTargetDateIndex)
 
-            '마지막날짜의 data를 화면에 표시한다
-            TargetDate = DBDateList(TargetDateIndex)
-            txt_DBDate.Text = TargetDate.ToString()
+            TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣는다
 
-            'data를 가져와서 화면에 표시한다 (firstDate)
-            targetDateRawCount = GetDataFromDBHandler(TargetDate)
-            If targetDateRawCount > 0 Then
-
-                '화면에 표시기능 추가
-
+            If TotalCount > 0 Then
+                Clac_DisplayAllGrid()
+                RedrawAll() 'Grid 그리기
+                DrawGraph() '그래프 그리기
             End If
 
         Else
