@@ -245,5 +245,17 @@ Module Module_common
 
     End Sub
 
+    Public Sub Add_Log(ByVal str1 As String, ByVal str2 As String)
+
+        Dim tDate As String
+        tDate = Format(Now(), "MM-dd hh:mm:ss")
+
+        If currentIndex > 0 Then
+            Form1.txt_Log.Text = Form1.txt_Log.Text & vbCrLf & tDate & Data(0).ctime(currentIndex) & " " & str1 & " : " & str2
+        Else
+            Form1.txt_Log.Text = Form1.txt_Log.Text & vbCrLf & tDate & " " & str1 & " : " & str2
+        End If
+
+    End Sub
 
 End Module

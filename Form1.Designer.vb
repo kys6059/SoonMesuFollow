@@ -65,6 +65,7 @@ Partial Class Form1
         Me.chk_AutoSave = New System.Windows.Forms.CheckBox()
         Me.lbl_DBDateInfo = New System.Windows.Forms.Label()
         Me.DBDate_HScrollBar = New System.Windows.Forms.HScrollBar()
+        Me.txt_Log = New System.Windows.Forms.TextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -519,11 +520,23 @@ Partial Class Form1
         Me.DBDate_HScrollBar.Size = New System.Drawing.Size(233, 58)
         Me.DBDate_HScrollBar.TabIndex = 13
         '
+        'txt_Log
+        '
+        Me.txt_Log.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.txt_Log.Location = New System.Drawing.Point(1094, 1080)
+        Me.txt_Log.Multiline = True
+        Me.txt_Log.Name = "txt_Log"
+        Me.txt_Log.ReadOnly = True
+        Me.txt_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txt_Log.Size = New System.Drawing.Size(663, 159)
+        Me.txt_Log.TabIndex = 9
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(2738, 1405)
+        Me.Controls.Add(Me.txt_Log)
         Me.Controls.Add(Me.TableLayoutPanel3)
         Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.label_timerCounter)
@@ -545,6 +558,7 @@ Partial Class Form1
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -580,4 +594,5 @@ Partial Class Form1
     Friend WithEvents chk_AutoSave As CheckBox
     Friend WithEvents lbl_DBDateInfo As Label
     Friend WithEvents DBDate_HScrollBar As HScrollBar
+    Friend WithEvents txt_Log As TextBox
 End Class

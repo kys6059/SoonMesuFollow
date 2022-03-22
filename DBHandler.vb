@@ -40,7 +40,9 @@ Module DBHandler
 
             For Each row In client.GetQueryResults(job.Reference)
                 cnt = Val(row("cnt"))
-                Console.WriteLine(cnt.ToString())
+                Dim str As String = iDate.ToString() & " Data Count = " & cnt.ToString() + "개"
+                Console.WriteLine(str)
+                Add_Log("일반", str)
             Next
 
         Catch ex As Exception

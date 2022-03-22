@@ -518,13 +518,7 @@ Public Class Form1
         DrawGraph() '그래프 그리기
     End Sub
 
-    Private Sub grid1_Scroll(sender As Object, e As ScrollEventArgs) Handles grid1.Scroll
-        grd_selected.FirstDisplayedScrollingRowIndex = grid1.FirstDisplayedScrollingRowIndex
-    End Sub
 
-    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
-        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
-    End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
@@ -644,5 +638,7 @@ Public Class Form1
         End If
 
     End Sub
+
+
 
 End Class
