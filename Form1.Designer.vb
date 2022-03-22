@@ -515,6 +515,7 @@ Partial Class Form1
         'DBDate_HScrollBar
         '
         Me.DBDate_HScrollBar.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DBDate_HScrollBar.LargeChange = 1
         Me.DBDate_HScrollBar.Location = New System.Drawing.Point(410, 41)
         Me.DBDate_HScrollBar.Name = "DBDate_HScrollBar"
         Me.DBDate_HScrollBar.Size = New System.Drawing.Size(233, 58)

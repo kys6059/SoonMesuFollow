@@ -71,10 +71,11 @@ Public Class Form1
     Public Sub DrawScrollData()
 
         If DBTotalDateCount > 1 Then
-            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + gTargetDateIndex.ToString() + " 번째"
+            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + gTargetDateIndex.ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
 
-            DBDate_HScrollBar.Maximum = DBTotalDateCount - 1
-            DBDate_HScrollBar.Refresh()
+
+
+
 
         End If
 
@@ -595,7 +596,13 @@ Public Class Form1
 
         dateCount = GetDateList() '이걸하면 DBDateList() 배열에 전역변수 DateList를 입력한다
 
+        Add_Log("", "DB 전체 일 수는 " + dateCount.ToString() + " 일")
+
         If dateCount > 0 Then
+            DBDate_HScrollBar.Maximum = dateCount - 1
+            DBDate_HScrollBar.LargeChange = 1
+
+            DBDate_HScrollBar.Refresh()
 
             InitDataStructure()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
@@ -619,26 +626,32 @@ Public Class Form1
 
     End Sub
 
-    Private Sub DBDate_HScrollBar_ValueChanged(sender As Object, e As EventArgs) Handles DBDate_HScrollBar.ValueChanged
-        InitDataStructure()
-        isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+    Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
 
-        gTargetDateIndex = DBDate_HScrollBar.Value
 
-        TargetDate = DBDateList(gTargetDateIndex)
 
-        TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣는다
+        If gTargetDateIndex <> e.NewValue Then
 
-        If TotalCount > 0 Then
+            Add_Log("일반", "DBDate_HScrollBar_ValueChanged 호출됨 " + e.NewValue.ToString())
+            InitDataStructure()
+            isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
 
-            Clac_DisplayAllGrid()
-            RedrawAll() 'Grid 그리기
-            DrawGraph() '그래프 그리기
-            DrawScrollData()
+            gTargetDateIndex = e.NewValue
+
+            TargetDate = DBDateList(gTargetDateIndex)
+            TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣고 종목의 Count를 리턴한다
+            If TotalCount > 0 Then
+
+                Clac_DisplayAllGrid()
+                RedrawAll() 'Grid 그리기
+                DrawGraph() '그래프 그리기
+                DrawScrollData()
+            End If
+
         End If
 
-    End Sub
 
+    End Sub
 
 
 End Class
