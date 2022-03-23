@@ -71,11 +71,8 @@ Public Class Form1
     Public Sub DrawScrollData()
 
         If DBTotalDateCount > 1 Then
+
             lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + gTargetDateIndex.ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
-
-
-
-
 
         End If
 
@@ -101,7 +98,10 @@ Public Class Form1
         Dim tempIndex As Integer
 
         If currentIndex > 0 Then
-            'grid1.Visible = False
+
+            grid1.Visible = False
+            grd_selected.Visible = False
+
             InitFirstGrid()
             DrawGrid1Data()
 
@@ -130,7 +130,8 @@ Public Class Form1
             DrawColorAll()
             DrawColor_Selected()
 
-            'grid1.Visible = True
+            grid1.Visible = True
+            grd_selected.Visible = True
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
@@ -387,6 +388,9 @@ Public Class Form1
         Dim jongMok As String
         Dim i, j As Integer
 
+
+        grid1.Enabled = False
+
         grid1.Columns.Clear()
         grid1.Rows.Clear()
 
@@ -564,6 +568,11 @@ Public Class Form1
         Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
         txt_TableName.Text = "option_190628"
 
+
+        Dim dt As Date = Now.AddDays(-30)
+        Dim strdt As String = Format(dt, "yyMM01")
+        txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
+
     End Sub
 
     Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
@@ -590,8 +599,8 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
-
+    '하루씩 DB에서 읽어오는 방식 샘플  -- 현재는 사용하지 않고 전체를 딕셔너리에 넣는 방식을 적용함
+    Private Sub sample_btn_SelectDB_Click()
         Dim dateCount As Integer
 
         dateCount = GetDateList() '이걸하면 DBDateList() 배열에 전역변수 DateList를 입력한다
@@ -623,6 +632,46 @@ Public Class Form1
         Else
             MsgBox("DB에 데이터가 없습니다")
         End If
+    End Sub
+
+    Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
+        Dim dateCount As Integer
+
+        Add_Log("일반", "전체 Data 취합 Click")
+
+        dateCount = GetRawData(txt_DB_Date_Limit.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
+        Add_Log("일반", "전체 Data 취합 끝. 날짜수는 " + dateCount.ToString())
+
+        Add_Log("", "DB 전체 일 수는 " + dateCount.ToString() + " 일")
+
+        If dateCount > 0 Then
+            DBDate_HScrollBar.Maximum = dateCount - 1
+            DBDate_HScrollBar.LargeChange = 1
+
+            DBDate_HScrollBar.Refresh()
+
+            InitDataStructure()
+            isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+
+            gTargetDateIndex = 0 '이것도 전역변수
+            TargetDate = DBDateList(gTargetDateIndex)
+
+            TotalCount = GetDataFromDBHandler(TargetDate)
+
+
+            If TotalCount > 0 Then
+
+                Clac_DisplayAllGrid()
+                RedrawAll() 'Grid 그리기
+                DrawGraph() '그래프 그리기
+                DrawScrollData()
+            End If
+
+        Else
+            MsgBox("DB에 데이터가 없습니다")
+        End If
+
+
 
     End Sub
 
@@ -639,7 +688,10 @@ Public Class Form1
             gTargetDateIndex = e.NewValue
 
             TargetDate = DBDateList(gTargetDateIndex)
-            TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣고 종목의 Count를 리턴한다
+            'TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣고 종목의 Count를 리턴한다
+
+            TotalCount = GetDataFromDBHandler(TargetDate) '이걸하면 딕셔너리의 data에서 해당 날짜의 Data를 가져온다
+
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()

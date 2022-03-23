@@ -9,7 +9,7 @@ Module DBHandler
 
     Public DBTotalDateCount As Integer
     Public DBDateList() As Integer
-    Public DBTotalRawDataList As Dictionary(Of Integer, DataSet())
+    Public DBTotalRawDataList As Dictionary(Of Integer, List(Of BigQueryRow))
     Public gTargetDateIndex As Integer
 
     Public Function MakeTableName() As String
@@ -253,71 +253,135 @@ Module DBHandler
 
     '빅쿼리 DB에 들어있는 전체 data를 가져온다  -------------- 일단 너무 복잡해지니 사용하지 않고 하루하루치 Data를 가져오는 걸 먼저 구현한다
     '왜냐하면 하루씩 가져오면 너무 느려진다 
-    Public Function GetRawData() As Integer
+    Public Function GetRawData(ByVal dateLimitText As String) As Integer
 
         Dim client As BigQueryClient
         Dim job As BigQueryJob
-        Dim query As String = "select * from " + tableName + " order by cdate, iFlag, `index`, ctime "
+        tableName = MakeTableName()
+        Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate, iFlag, `index`, ctime  "
         Dim cnt As Integer = 0
-        Dim tempDate As Integer
+        Dim dateCount As Integer = 0
 
         Dim prevDate As Integer = 0
-        Dim i As Integer
 
         If DBTotalRawDataList Is Nothing Then
-            DBTotalRawDataList = New Dictionary(Of Integer, DataSet())
+            DBTotalRawDataList = New Dictionary(Of Integer, List(Of BigQueryRow))
         Else
             DBTotalRawDataList.Clear()
         End If
+        Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
 
         Try
             client = BigQueryClient.Create(projectID)
             job = client.CreateQueryJob(query, Nothing)
 
             job.PollUntilCompleted()
-
+            Add_Log("SQL = ", query)
             Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
 
-            For i = 0 To row_cnt - 1
+            Dim list = New List(Of BigQueryRow)
 
-                Dim row As BigQueryResults = client.GetQueryResults(job.Reference)
+            For Each row In client.GetQueryResults(job.Reference)
 
-                tempDate = Val(row("cdate"))
+                '값을 읽어온다
+                Dim tempDate As Integer = Val(row("cdate"))
 
-                If tempDate <> prevDate And prevDate <> 0 Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
+                If tempDate <> prevDate Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
 
+                    If prevDate <> 0 Then
 
+                        dateCount += 1
+
+                        DBTotalRawDataList.Add(prevDate, list)
+                        datelist.Add(prevDate)
+
+                        list = Nothing
+                        list = New List(Of BigQueryRow)
+                    End If
+
+                    prevDate = tempDate
 
                 End If
 
 
                 '중간에는 Data()에 모아놓는다
-
-
-
-                'Data의 끝이라면 dic에 넣는다
-
-
-
-
-                'DBTotalRawDataList.Add(row)
+                list.Add(row)
                 cnt += 1
             Next
+
+            If dateCount > 0 Then '마지막 날짜까지 가져온다
+
+                dateCount += 1
+
+                DBTotalRawDataList.Add(prevDate, list)
+                datelist.Add(prevDate)
+
+            End If
 
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
 
-        Return cnt
+        DBDateList = datelist.ToArray()
+        DBTotalDateCount = dateCount
+        Return dateCount
 
     End Function
 
     '인수로 받은 날의 데이터를 자료구조로 올린다
     Public Function GetDataFromDBHandler(ByVal iDate As Integer) As Integer
 
+        Dim cnt As Integer = 0
+        Dim jongmokIndex As Integer = -1
 
+        Dim iList = DBTotalRawDataList.Item(iDate)
 
-        Return 0
+        For Each row In iList
+
+            '값을 읽어온다
+            Dim tempDate As Integer = Val(row("cdate"))
+            Dim index As Integer = Val(row("index"))
+            Dim hangsaga As Integer = Val(row("hangsaga"))
+            Dim iFlag As Integer = Val(row("iFlag"))
+            Dim ctime As Integer = Val(row("ctime"))
+            Dim interval As Integer = Val(row("interval"))
+            Dim si As Single = Val(row("si"))
+            Dim go As Single = Val(row("go"))
+            Dim jue As Single = Val(row("jue"))
+            Dim jong As Single = Val(row("jong"))
+            Dim volume As Integer = Val(row("volume"))
+
+            Dim callput As Integer
+            If iFlag = 1 Then
+                callput = 0
+            ElseIf iFlag = 6 Then
+                callput = 1
+            Else
+                Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
+                callput = 0
+            End If
+
+            If index <> jongmokIndex Then
+                jongmokIndex = index
+                '시간입력
+                SetTimeDataForDataForDBData(Data, jongmokIndex)
+                Data(jongmokIndex).HangSaGa = hangsaga
+            End If
+
+            Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
+            currentIndex = Math.Max(currentIndex, iIndex)
+            timeIndex = Math.Max(timeIndex, currentIndex + 1)
+
+            Data(jongmokIndex).price(callput, iIndex, 0) = si
+            Data(jongmokIndex).price(callput, iIndex, 1) = go
+            Data(jongmokIndex).price(callput, iIndex, 2) = jue
+            Data(jongmokIndex).price(callput, iIndex, 3) = jong
+            Data(jongmokIndex).거래량(callput, iIndex) = volume
+
+            cnt += 1
+        Next
+
+        Return jongmokIndex + 1
     End Function
 
 End Module

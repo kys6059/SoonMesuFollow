@@ -96,6 +96,8 @@ Module Module_common
         selectedJongmokIndex(0) = 0
         selectedJongmokIndex(1) = 0
 
+
+
     End Sub
 
 
