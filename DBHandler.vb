@@ -40,7 +40,7 @@ Module DBHandler
 
             For Each row In client.GetQueryResults(job.Reference)
                 cnt = Val(row("cnt"))
-                Dim str As String = iDate.ToString() & " Data Count = " & cnt.ToString() + "개"
+                Dim str As String = iDate.ToString() & " 해당 날짜 Data Count = " & cnt.ToString() + "개가 이미 등록되어 있습니다"
                 Console.WriteLine(str)
                 Add_Log("일반", str)
             Next
@@ -105,9 +105,12 @@ Module DBHandler
                 Next
             Next
         Next
-        Console.WriteLine(retCount.ToString() + "개의 row가 등록예정 at " + Now.ToString)
+
         client.InsertRows(dateaset_id, table_id, rows)
-        Console.WriteLine("등록 완료 at " + Now.ToString)
+
+        Dim str As String = iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+        Console.WriteLine(str)
+        Add_Log("일반", str)
 
         Return retCount
     End Function
