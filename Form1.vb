@@ -142,10 +142,18 @@ Public Class Form1
     End Sub
 
 
+
+    'HippoGraph 관련 도움말 http://hippochart.com/hippo/intro4.aspx
+    Private Sub DrawHippoGraph()
+
+
+
+    End Sub
+
+
     '차트 관련 Reference
     'https://msdn.Microsoft.com/en-us/library/dd456671.aspx
-
-    Private Sub DrawGraph()
+    Private Sub DrawOldGrahp()
         Dim i, callput, tempIndex, retIndex As Integer
 
         If currentIndex > 0 Then
@@ -201,6 +209,12 @@ Public Class Form1
             Next
 
         End If
+    End Sub
+
+
+    Private Sub DrawGraph()
+
+        DrawHippoGraph()
 
     End Sub
 
