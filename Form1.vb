@@ -569,7 +569,7 @@ Public Class Form1
         txt_TableName.Text = "option_190628"
 
 
-        Dim dt As Date = Now.AddDays(-30)
+        Dim dt As Date = Now.AddDays(-3)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
@@ -704,6 +704,5 @@ Public Class Form1
 
 
     End Sub
-
 
 End Class
