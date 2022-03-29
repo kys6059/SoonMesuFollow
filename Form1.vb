@@ -1,5 +1,8 @@
 ﻿Option Explicit On
 
+Imports Hippo
+Imports Hippo.WindowsForm4
+
 Public Class Form1
 
     Private Sub btn_RealTimeStart_Click(sender As Object, e As EventArgs) Handles btn_RealTimeStart.Click
@@ -719,4 +722,7 @@ Public Class Form1
 
     End Sub
 
+    Private Sub HHippoChart1_ChartSizeChanged(sender As Object, e As EventArgs) Handles HHippoChart1.ChartSizeChanged
+        HHippoChart1.DrawChart()
+    End Sub
 End Class
