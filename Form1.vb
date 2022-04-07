@@ -55,7 +55,7 @@ Public Class Form1
 
                 Clac_DisplayAllGrid()
                 RedrawAll() 'Grid 그리기
-                DrawGraph() '그래프 그리기
+                'DrawGraph() '그래프 그리기
                 DrawScrollData() 'Scroll 및 기타 DB 관련 UI 표시하기
 
             Else
@@ -144,13 +144,71 @@ Public Class Form1
 
     End Sub
 
+    ' 총 데이터 수
+    Private hippototalCount As Integer = 1000
+
+    ' 차트 한 화면에 보여줄 개수
+    Private counts As Integer = 100
 
 
     'HippoGraph 관련 도움말 http://hippochart.com/hippo/intro4.aspx
     Private Sub DrawHippoGraph()
 
+        Dim i, callput, tempIndex As Integer
+
+        HHippoChart1.SeriesListDictionary.Clear()
 
 
+
+        If currentIndex > 0 Then
+            Dim sList(2) As SeriesList
+            For callput = 0 To 1
+                sList(callput) = New SeriesList()
+                sList(callput).ChartType = ChartType.CandleStick
+
+                tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+
+                Dim sr As New Series()
+
+                For i = 1 To tempIndex
+
+                    Dim item As New SeriesItem()
+                    item.XValue = i
+                    item.Name = i.ToString()
+                    item.YStartValue = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
+                    item.HighValue = Data(selectedJongmokIndex(callput)).price(callput, i, 1) '고가
+                    item.LowValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
+                    item.YValue = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
+
+                    sr.items.Add(item)
+                Next
+
+
+                sList(callput).SeriesCollection.Add(sr)
+
+
+
+
+                'sList.AxisFactor.YAxis.Direction = AxisDirection.Right
+                'sList.AxisFactor.YAxis.AxisMagin = 80
+                'sList.AxisFactor.YAxis.IsZeroStartScale = False 'Y축이 무조건 0부터 시작할 것인지 설정 
+
+                'sList.AxisFactor.XAxis.DataType = AxisDataType.Number
+                'sList.AxisFactor.XAxis.IsShowTick = True
+                'sList.AxisFactor.XAxis.IsVisibleFigures = True
+                'sList.GraphArea.Grid.IsBackGridColor = True
+                'sList.AxisFactor.XAxis.Interval = tempIndex / 10 ' 축 눈금 설정
+
+                'HHippoChart1.Designer.InnerBackColor = Color.FromArgb(214, 226, 239)
+                'HHippoChart1.LegendBox.Visible = False
+                'HHippoChart1.SeriesListDictionary.Clear()
+
+                HHippoChart1.SeriesListDictionary.Add(sList(callput))
+            Next
+
+            HHippoChart1.DrawChart()
+
+        End If
     End Sub
 
 
@@ -524,20 +582,31 @@ Public Class Form1
 
     Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
 
-        selectedJongmokIndex(0) = cmb_selectedJongmokIndex_0.SelectedIndex
-        InitDrawSelectedGird()
-        DrawSelectedData()
-        DrawColor_Selected()
-        DrawGraph() '그래프 그리기
+        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
+
+        If selectedIndex > 0 Then
+            selectedJongmokIndex(0) = selectedIndex
+            InitDrawSelectedGird()
+            DrawSelectedData()
+            DrawColor_Selected()
+            DrawGraph() '그래프 그리기
+        End If
     End Sub
 
     Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
 
-        selectedJongmokIndex(1) = cmb_selectedJongmokIndex_1.SelectedIndex
-        InitDrawSelectedGird()
-        DrawSelectedData()
-        DrawColor_Selected()
-        DrawGraph() '그래프 그리기
+        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
+
+        If selectedIndex > 0 Then
+
+            selectedJongmokIndex(1) = selectedIndex
+            InitDrawSelectedGird()
+            DrawSelectedData()
+            DrawColor_Selected()
+            DrawGraph() '그래프 그리기
+
+        End If
+
     End Sub
 
 
@@ -590,171 +659,8 @@ Public Class Form1
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
-        hippochart_test()
+        'hippochart_test()
 
-    End Sub
-
-    Private sList As SeriesList
-    Private sList2 As SeriesList
-
-    Private items As SeriesItem()
-    Private items2 As SeriesItem()
-
-    ' 총 데이터 수
-    Private totalCount As Integer = 1000
-
-    ' 차트 한 화면에 보여줄 개수
-    Private counts As Integer = 100
-
-    Private Sub hippochart_test()
-        sList = New SeriesList()
-        sList2 = New SeriesList()
-
-        sList.SeriesCollection.Add(New Series())
-        sList2.SeriesCollection.Add(New Series())
-
-        items = New SeriesItem(TotalCount - 1) {}
-        items2 = New SeriesItem(TotalCount - 1) {}
-
-        Dim R As New Random()
-
-        For i As Integer = 1 To TotalCount
-            Dim item As New SeriesItem()
-            Dim item2 As New SeriesItem()
-
-            item.XDateTimeValue = DateTime.Parse("2013-01-01").AddDays(i)
-            item2.XDateTimeValue = DateTime.Parse("2013-01-01").AddDays(i)
-
-            item.YStartValue = R.[Next](1000, 1050) * i - 11 * i
-            ' 시가
-            item.LowValue = R.[Next](1000, 1050) * i - 12 * i
-            ' 저가
-            item.YValue = R.[Next](1000, 1050) * i - 15 * i
-            ' 종가
-            item.HighValue = R.[Next](1000, 1050) * i - 10 * i
-            ' 고가
-            If i > 950 AndAlso i < 990 Then
-                item.YStartValue = R.[Next](950, 1000) * i - 33 * i
-                ' 시가
-                item.LowValue = R.[Next](950, 1000) * i - 22 * i
-                ' 저가
-                item.YValue = R.[Next](950, 1000) * i - 30 * i
-                ' 종가
-                ' 고가
-                item.HighValue = R.[Next](950, 1000) * i - 14 * i
-            End If
-
-            If i > 200 AndAlso i < 600 Then
-                item.YStartValue = R.[Next](1100, 1200) * i - 40 * i
-                ' 시가
-                item.LowValue = R.[Next](1100, 1200) * i - 60 * i
-                ' 저가
-                item.YValue = R.[Next](1100, 1200) * i - 30 * i
-                ' 종가
-                ' 고가
-                item.HighValue = R.[Next](1100, 1200) * i - 10 * i
-            End If
-
-
-            item2.YValue = R.[Next](10000, 20000)
-
-            items.SetValue(item, i - 1)
-            items2.SetValue(item2, i - 1)
-        Next
-
-
-        ' 가장 뒤에 100 개를 먼저 그린다.
-
-        For i As Integer = TotalCount - 1 To TotalCount - 1 - counts + 1 Step -1
-            sList.SeriesCollection(0).items.Add(items(i))
-            sList2.SeriesCollection(0).items.Add(items2(i))
-        Next
-
-
-
-        sList.ChartType = ChartType.CandleStick
-        sList.AxisFactor.YAxis.Direction = AxisDirection.Right '''''''''''''''''''''''''''''''''' Y축을 오른쪽에
-        sList.AxisFactor.XAxis.DataType = AxisDataType.DateTime '''''''''''''''''''''''''''''''''' X축의 DateType
-        sList.AxisFactor.XAxis.DateTimeLabelType = DateTimeLabelType.Day '''''''''''''''''''''''''' DateTime Label Type
-        sList.AxisFactor.XAxis.DateTimeFormat = "dd"  '''''''''''''''''''''''''''''''''''''''''''''X축 DateTime Fromat
-
-        sList.AxisFactor.XAxis.IsShowTick = False ''''''''''''''''''''''''''''''''''''''' 눈금을 보여줄지 설정
-        sList.AxisFactor.XAxis.IsVisibleFigures = False ''''''''''''''''''''''''''''''''' 축의 치수를 보여줄지 설정
-        sList.GraphArea.Grid.IsBackGridColor = True  '''''''''''''''''''''''''''''''''''' 지그재그 색상 설정
-        sList.AxisFactor.YAxis.AxisMagin = 50 ''''''''''''''''''''''''''''''''''''''''''' 축이 그려지는 공간의 넓이 없으면 자동
-
-        sList.AxisFactor.YAxis.IsZeroStartScale = False 'Y축이 무조건 0부터 시작할 것인지 설정 
-
-
-        sList.AxisFactor.XAxis.Interval = counts / 10 ' 축 눈금 설정
-        sList2.AxisFactor.XAxis.Interval = counts / 10
-
-        sList2.ChartType = ChartType.Column ' 컬럼타입
-
-        sList2.SeriesCollection(0).SeriesColor = Color.YellowGreen '컬럼 색상
-
-        sList2.AxisFactor.XAxis.DataType = AxisDataType.DateTime
-        sList2.AxisFactor.YAxis.Direction = AxisDirection.Right
-        sList2.AxisFactor.XAxis.DateTimeLabelType = DateTimeLabelType.Day
-        sList2.AxisFactor.XAxis.DateTimeFormat = "yy-MM-dd"
-
-        sList2.AxisFactor.YAxis.IsZeroStartScale = True
-        sList2.GraphArea.Grid.IsBackGridColor = False
-        sList2.AxisFactor.YAxis.AxisMagin = 50
-
-
-
-        Me.HHippoChart1.SeriesAreaRate = "6:2"
-        Me.HHippoChart1.Designer.InnerBackColor = Color.FromArgb(214, 226, 239)
-        Me.HHippoChart1.LegendBox.Visible = False
-        Me.HHippoChart1.SeriesListDictionary.Add(sList)
-        Me.HHippoChart1.SeriesListDictionary.Add(sList2)
-        Me.HHippoChart1.DrawChart()
-
-        Dim tk As New AxisTick(sList.SeriesCollection(0).items(sList.SeriesCollection(0).items.Count - 1).YValue)
-        tk.Label.Text = sList.SeriesCollection(0).items(sList.SeriesCollection(0).items.Count - 1).YValue.ToString() + vbCr & vbLf & "3.86%"
-        tk.BackColor = Color.Red
-        tk.Label.ForeColor = Color.White
-        sList.AxisFactor.YAxis.ExtraTicks.Add(tk)
-
-        Dim tkMax As New AxisTick(sList.AxisFactor.YAxis.AnalysisItems(AnalysisCategory.Max).Value)
-        tkMax.Label.Text = sList.AxisFactor.YAxis.AnalysisItems(AnalysisCategory.Max).Value.ToString()
-        tkMax.IsShowGridLine = True
-        tkMax.GridLine.LineColor = Color.Red
-        tkMax.GridLine.LineWidth = 1
-        tkMax.GridLine.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-        sList.AxisFactor.YAxis.ExtraTicks.Add(tkMax)
-
-        Dim tkMin As New AxisTick(sList.AxisFactor.YAxis.AnalysisItems(AnalysisCategory.Min).Value)
-        tkMin.Label.Text = sList.AxisFactor.YAxis.AnalysisItems(AnalysisCategory.Min).Value.ToString()
-        tkMin.Label.ForeColor = Color.Blue
-        tkMin.IsShowGridLine = True
-        tkMin.GridLine.LineColor = Color.Blue
-        tkMin.GridLine.LineWidth = 1
-        tkMin.GridLine.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-        sList.AxisFactor.YAxis.ExtraTicks.Add(tkMin)
-
-        'Dim tk2 = New AxisTick(New PointF(0, this.hHippoChart1.SeriesListDictionary[0].AxisFactor.Zero.Y));
-        'tk2.IsShowGridLine = True;
-        'tk2.GridLine.LineColor = Color.Gray;
-        'tk2.GridLine.LineWidth = 1;
-        'sList.AxisFactor.XAxis.ExtraTicks.Add(tk2);
-
-        'AxisTick tk1 = New AxisTick(New PointF(this.hHippoChart1.SeriesListDictionary[0].AxisFactor.Zero.X, 0));
-        'tk1.IsShowGridLine = true;
-        'tk1.GridLine.LineColor = Color.Gray;
-        'tk1.GridLine.LineWidth = 1;
-        'sList.AxisFactor.YAxis.ExtraTicks.Add(tk1);
-
-
-        Dim tk33 As New AxisTick(sList2.SeriesCollection(0).items(sList2.SeriesCollection(0).items.Count - 1).YValue)
-        tk33.Label.Text = sList2.SeriesCollection(0).items(sList2.SeriesCollection(0).items.Count - 1).YValue.ToString()
-        tk33.BackColor = Color.Green
-        tk33.Label.ForeColor = Color.White
-        sList2.AxisFactor.YAxis.ExtraTicks.Add(tk33)
-
-
-        Me.HHippoChart1.DrawChart()
     End Sub
 
     Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
