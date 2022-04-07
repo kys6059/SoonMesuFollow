@@ -589,7 +589,7 @@ Partial Class Form1
         Me.HHippoChart1.Layout = CType(resources.GetObject("HHippoChart1.Layout"), Hippo.Layout)
         Me.HHippoChart1.Left = 0!
         Me.HHippoChart1.LegendBox = CType(resources.GetObject("HHippoChart1.LegendBox"), Hippo.LegendBox)
-        Me.HHippoChart1.Location = New System.Drawing.Point(1816, 575)
+        Me.HHippoChart1.Location = New System.Drawing.Point(1787, 150)
         Me.HHippoChart1.Logo = CType(resources.GetObject("HHippoChart1.Logo"), Hippo.Logo)
         Me.HHippoChart1.MinimumSize = New System.Drawing.Size(200, 140)
         Me.HHippoChart1.Name = "HHippoChart1"
@@ -597,10 +597,10 @@ Partial Class Form1
         Me.HHippoChart1.ProcessorType = "64"
         Me.HHippoChart1.SeriesAreaRate = Nothing
         Me.HHippoChart1.SeriesListDictionary = CType(resources.GetObject("HHippoChart1.SeriesListDictionary"), Hippo.SeriesListDictionary)
-        Me.HHippoChart1.Size = New System.Drawing.Size(610, 367)
+        Me.HHippoChart1.Size = New System.Drawing.Size(910, 906)
         Me.HHippoChart1.TabIndex = 12
         Me.HHippoChart1.Titles = CType(resources.GetObject("HHippoChart1.Titles"), Hippo.Title)
-        Me.HHippoChart1.Top = 0!
+        Me.HHippoChart1.Top = 150.0!
         Me.HHippoChart1.Width2 = 400.0!
         '
         'Form1

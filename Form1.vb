@@ -161,7 +161,9 @@ Public Class Form1
 
 
         If currentIndex > 0 Then
+
             Dim sList(2) As SeriesList
+
             For callput = 0 To 1
                 sList(callput) = New SeriesList()
                 sList(callput).ChartType = ChartType.CandleStick
@@ -170,7 +172,7 @@ Public Class Form1
 
                 Dim sr As New Series()
 
-                For i = 1 To tempIndex
+                For i = 0 To tempIndex
 
                     Dim item As New SeriesItem()
                     item.XValue = i
@@ -189,10 +191,12 @@ Public Class Form1
 
 
 
-                'sList.AxisFactor.YAxis.Direction = AxisDirection.Right
-                'sList.AxisFactor.YAxis.AxisMagin = 80
-                'sList.AxisFactor.YAxis.IsZeroStartScale = False 'Y축이 무조건 0부터 시작할 것인지 설정 
-
+                sList(callput).AxisFactor.YAxis.Direction = AxisDirection.Right
+                sList(callput).AxisFactor.YAxis.AxisMagin = 80
+                sList(callput).AxisFactor.YAxis.IsZeroStartScale = False 'Y축이 무조건 0부터 시작할 것인지 설정 
+                sList(callput).AxisFactor.YAxis.Decimalpoint = 1
+                sList(callput).SeriesCollection(0).SeriesMinusCandleColor = Color.Blue
+                sList(callput).SeriesCollection(0).SeriesPlusCandleColor = Color.Red
                 'sList.AxisFactor.XAxis.DataType = AxisDataType.Number
                 'sList.AxisFactor.XAxis.IsShowTick = True
                 'sList.AxisFactor.XAxis.IsVisibleFigures = True
@@ -205,7 +209,6 @@ Public Class Form1
 
                 HHippoChart1.SeriesListDictionary.Add(sList(callput))
             Next
-
             HHippoChart1.DrawChart()
 
         End If
