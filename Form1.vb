@@ -134,6 +134,7 @@ Public Class Form1
             DrawColor_Selected()
 
             grid1.Visible = True
+            grid1.Enabled = True
             grd_selected.Visible = True
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
@@ -164,6 +165,9 @@ Public Class Form1
 
             Dim sList(2) As SeriesList
 
+            '공통축 고/저가
+            Dim maxValue As Single = Math.Max(Data(selectedJongmokIndex(0)).Big(0, 1), Data(selectedJongmokIndex(1)).Big(1, 1))
+            Dim minValue As Single = Math.Min(Data(selectedJongmokIndex(0)).Small(0, 2), Data(selectedJongmokIndex(1)).Small(1, 2))
             For callput = 0 To 1
                 sList(callput) = New SeriesList()
                 sList(callput).ChartType = ChartType.CandleStick
@@ -182,31 +186,69 @@ Public Class Form1
                     item.LowValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
                     item.YValue = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
 
+                    '풍선도움말 - 고가저가
+                    If Data(selectedJongmokIndex(callput)).price(callput, i, 1) = Data(selectedJongmokIndex(callput)).Small(callput, 1) Then
+                        item.Balloon = New Balloon()
+                        item.Balloon.Label.Text = "고가저가:" & Data(selectedJongmokIndex(callput)).Small(callput, 1).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
+                        item.Balloon.HeightType = HeightType.Bottom
+                        item.Balloon.BalloonType = BalloonType.Rectangle
+                    End If
+                    '풍선도움말 - 저가고가
+                    If Data(selectedJongmokIndex(callput)).price(callput, i, 2) = Data(selectedJongmokIndex(callput)).Big(callput, 2) Then
+                        item.Balloon = New Balloon()
+                        item.Balloon.Label.Text = "저가고가:" & Data(selectedJongmokIndex(callput)).Big(callput, 2).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
+                        item.Balloon.HeightType = HeightType.Top
+                        item.Balloon.BalloonType = BalloonType.Rectangle
+                    End If
+
+
                     sr.items.Add(item)
                 Next
 
 
                 sList(callput).SeriesCollection.Add(sr)
 
-
-
-
-                sList(callput).AxisFactor.YAxis.Direction = AxisDirection.Right
-                sList(callput).AxisFactor.YAxis.AxisMagin = 80
+                sList(callput).AxisFactor.YAxis.Direction = AxisDirection.Left
+                sList(callput).AxisFactor.YAxis.AxisMagin = 60
                 sList(callput).AxisFactor.YAxis.IsZeroStartScale = False 'Y축이 무조건 0부터 시작할 것인지 설정 
                 sList(callput).AxisFactor.YAxis.Decimalpoint = 1
                 sList(callput).SeriesCollection(0).SeriesMinusCandleColor = Color.Blue
                 sList(callput).SeriesCollection(0).SeriesPlusCandleColor = Color.Red
-                'sList.AxisFactor.XAxis.DataType = AxisDataType.Number
-                'sList.AxisFactor.XAxis.IsShowTick = True
-                'sList.AxisFactor.XAxis.IsVisibleFigures = True
-                'sList.GraphArea.Grid.IsBackGridColor = True
-                'sList.AxisFactor.XAxis.Interval = tempIndex / 10 ' 축 눈금 설정
+                sList(callput).AxisFactor.YAxis.SetAxisStep(minValue - 0.2, maxValue + 0.2, 0.5)
+                If callput = 0 Then
+                    sList(callput).AxisFactor.YAxis.TitleLabel.Text = "콜"
+                Else
+                    sList(callput).AxisFactor.YAxis.TitleLabel.Text = "풋"
+                End If
+                sList(callput).AxisFactor.XAxis.Interval = tempIndex / 6 ' 축 눈금 설정
+                sList(callput).GraphArea.Grid.IsBackGridColor = True
 
-                'HHippoChart1.Designer.InnerBackColor = Color.FromArgb(214, 226, 239)
-                'HHippoChart1.LegendBox.Visible = False
-                'HHippoChart1.SeriesListDictionary.Clear()
 
+
+                Dim mk1 As New AxisTick(Data(selectedJongmokIndex(callput)).Big(callput, 2))
+                mk1.Label.Text = "저가고가"
+                mk1.BackColor = Color.Blue
+                mk1.Label.ForeColor = Color.Yellow
+                mk1.GridLine.LineColor = Color.Blue
+                mk1.IsShowGridLine = True
+                sList(callput).AxisFactor.YAxis.ExtraTicks.Add(mk1)
+
+                Dim mk2 As New AxisTick(Data(selectedJongmokIndex(callput)).Small(callput, 1))
+                mk2.Label.Text = "고가저가"
+                mk2.BackColor = Color.Red
+                mk2.Label.ForeColor = Color.Yellow
+                mk2.GridLine.LineColor = Color.Red
+                mk2.IsShowGridLine = True
+                sList(callput).AxisFactor.YAxis.ExtraTicks.Add(mk2)
+
+                '그래프 위에 그려지는 라인 마커 샘플
+                'Dim mk2 As New AxisMarker("고가저가", Data(selectedJongmokIndex(callput)).Small(callput, 1))
+                'mk2.Line.LineColor = Color.Red
+                'mk2.Label.ForeColor = Color.Red
+                'mk2.TextFormat.Alignment = StringAlignment.Center
+                'sList(callput).AxisFactor.YAxis.Markers.Add(mk2)
+
+                HHippoChart1.SeriesAreaRate = "5:5" '두개의 그래프 높이 비율
                 HHippoChart1.SeriesListDictionary.Add(sList(callput))
             Next
             HHippoChart1.DrawChart()
@@ -215,65 +257,67 @@ Public Class Form1
     End Sub
 
 
+
+
     '차트 관련 Reference
-    'https://msdn.Microsoft.com/en-us/library/dd456671.aspx
-    Private Sub DrawOldGrahp()
-        Dim i, callput, tempIndex, retIndex As Integer
+    'https://msdn.microsoft.com/en-us/library/dd456671.aspx
+    '    Private Sub drawoldgrahp()
+    '        Dim i, callput, tempindex, retindex As Integer'
+    '
+    '        If currentIndex > 0 Then
+    '
+    '            For i = 0 To chart1.series.count - 1
+    '                chart1.series(i).points.clear()
+    '            Next
+    '
+    '            tempindex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+    '
+    '            For callput = 0 To 1
+    '                Dim offset As Integer
 
-        If currentIndex > 0 Then
+    '               For i = 0 To tempindex
 
-            For i = 0 To Chart1.Series.Count - 1
-                Chart1.Series(i).Points.Clear()
-            Next
+    '                    If callput = 0 Then
+    '                        offset = 0
+    '                    Else
+    '                        offset = 2
+    '                    End If
 
-            tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+    '                    main Series 입력
+    '                    retindex = chart1.series(callput + offset).points.addxy(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
+    '                    chart1.series(callput + offset).points(retindex).yvalues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
+    '                    chart1.series(callput + offset).points(retindex).yvalues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
+    '                    chart1.series(callput + offset).points(retindex).yvalues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
 
-            For callput = 0 To 1
-                Dim offset As Integer
+    '                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 종가가 크면 
+    '                        chart1.series(callput + offset).points(retindex).color = Color.Red
+    '                        chart1.series(callput + offset).points(retindex).bordercolor = Color.Red
+    '                    ElseIf Data(selectedJongmokIndex(callput)).price(callput, i, 0) > Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then
+    '                        chart1.series(callput + offset).points(retindex).color = Color.Blue
+    '                        chart1.series(callput + offset).points(retindex).bordercolor = Color.Blue
+    '                    End If
 
-                For i = 0 To tempIndex
+    '                    Dim str As String = "시간:" & Data(0).ctime(i) & " 종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
 
-                    If callput = 0 Then
-                        offset = 0
-                    Else
-                        offset = 2
-                    End If
+    '                    high Line 입력
+    '                    chart1.series(callput + 1 + offset).points.addxy(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
+    '                    low Line 입력
+    '                    chart1.series(callput + 2 + offset).points.addxy(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
 
-                    'Main Series 입력
-                    retIndex = Chart1.Series(callput + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
-                    Chart1.Series(callput + offset).Points(retIndex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
-                    Chart1.Series(callput + offset).Points(retIndex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
-                    Chart1.Series(callput + offset).Points(retIndex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
-
-                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 종가가 크면 
-                        Chart1.Series(callput + offset).Points(retIndex).Color = Color.Red
-                        Chart1.Series(callput + offset).Points(retIndex).BorderColor = Color.Red
-                    ElseIf Data(selectedJongmokIndex(callput)).price(callput, i, 0) > Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then
-                        Chart1.Series(callput + offset).Points(retIndex).Color = Color.Blue
-                        Chart1.Series(callput + offset).Points(retIndex).BorderColor = Color.Blue
-                    End If
-
-                    Dim str As String = "시간:" & Data(0).ctime(i) & " 종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
-
-                    'HIGH Line 입력
-                    Chart1.Series(callput + 1 + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
-                    'Low Line 입력
-                    Chart1.Series(callput + 2 + offset).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
-
-                Next
+    '                Next
 
 
 
-                Chart1.Series(callput + offset).ToolTip = "고가:" & "#VALY1{G4}" & " X: " & "#VALX"
-                Chart1.ChartAreas(callput).AxisY.Minimum = Data(selectedJongmokIndex(callput)).Small(callput, 2) - 0.01
-                Chart1.ChartAreas(callput).AxisY.Maximum = Data(selectedJongmokIndex(callput)).Big(callput, 1) + 0.01
+    '                chart1.series(callput + offset).tooltip = "고가:" & "#valy1{g4}" & " x: " & "#valx"
+    '                chart1.chartareas(callput).axisy.minimum = Data(selectedJongmokIndex(callput)).Small(callput, 2) - 0.01
+    '                chart1.chartareas(callput).axisy.maximum = Data(selectedJongmokIndex(callput)).Big(callput, 1) + 0.01
 
-                'Chart1.ChartAreas(callput).AxisX.LabelStyle.Format = "{0.0}" 테스트해봐도 동작 안함
+    '                chart1.chartareas(callput).axisx.labelstyle.format = "{0.0}" 테스트해봐도 동작 안함
 
-            Next
+    '            Next
 
-        End If
-    End Sub
+    '        End If
+    '    End Sub
 
 
     Private Sub DrawGraph()
@@ -598,7 +642,7 @@ Public Class Form1
 
     Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
 
-        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
+        Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
 
         If selectedIndex > 0 Then
 
@@ -653,8 +697,8 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-        Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+        'Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+        'Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
         txt_TableName.Text = "option_190628"
 
 
@@ -796,5 +840,52 @@ Public Class Form1
 
     End Sub
 
+    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
+        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
+    End Sub
+
+
+    '그래프에 Baloon을 띄워주는 코드 
+    '   Private Sub HHippoChart1_ChartMouseMove(sender As Object, e As MouseEventArgs) Handles HHippoChart1.ChartMouseMove
+
+    '    If HHippoChart1.SeriesListDictionary.Count > 0 Then
+    '    Dim cnt As Integer = HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items.Count - 1
+
+    'For i As Integer = 0 To cnt
+
+    'Dim pwidth As Single = HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Points.Width
+
+    'Dim firstpoint As New PointF(HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).FigurePoint.X - pwidth * 2, HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).FigurePoint.Y - pwidth)
+
+    'Dim lastpoX As Single = CSng(firstpoint.X + pwidth * 4)
+    'Dim lastpoY As Single = CSng(firstpoint.Y + pwidth * 3)
+    '
+    'Dim lastpoint As New PointF(lastpoX, lastpoY)
+
+    'If e.X >= firstpoint.X AndAlso e.X <= lastpoint.X Then ' AndAlso e.Y >= firstpoint.Y AndAlso e.Y <= lastpoint.Y Then
+    'If HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon Is Nothing Then
+    '                   HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon = New Balloon()
+    '                    HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon.Label.Text = Data(selectedJongmokIndex(0)).price(0, i, 3).ToString() & vbCrLf & Data(0).ctime(i) '종가
+    '                    HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon = New Balloon()
+    '                    HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon.Label.Text = Data(selectedJongmokIndex(1)).price(1, i, 3).ToString() & vbCrLf & Data(0).ctime(i) '종가
+    'End If
+    '                HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon.Visible = True
+    '                HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon.Visible = True
+    ' Else
+    ' If HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon Is Nothing Then
+    '                    HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon = New Balloon()
+    '                    HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon.Label.Text = Data(selectedJongmokIndex(0)).price(0, i, 3).ToString() & vbCrLf & Data(0).ctime(i) '종가
+    '                    HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon = New Balloon()
+    '                    HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon.Label.Text = Data(selectedJongmokIndex(1)).price(1, i, 3).ToString() & vbCrLf & Data(0).ctime(i) '종가
+    'End If
+    '                HHippoChart1.SeriesListDictionary(0).SeriesCollection(0).items(i).Balloon.Visible = False
+    '                HHippoChart1.SeriesListDictionary(1).SeriesCollection(0).items(i).Balloon.Visible = False
+    'End If
+    'Next
+
+    '       HHippoChart1.DrawChart()
+    ' End If
+
+    ' End Sub
 
 End Class

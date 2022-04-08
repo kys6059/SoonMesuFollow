@@ -23,16 +23,6 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim CustomLabel1 As System.Windows.Forms.DataVisualization.Charting.CustomLabel = New System.Windows.Forms.DataVisualization.Charting.CustomLabel()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
@@ -56,7 +46,6 @@ Partial Class Form1
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.btn_TimerStart = New System.Windows.Forms.Button()
         Me.label_timerCounter = New System.Windows.Forms.Label()
-        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_AutoTurnOff = New System.Windows.Forms.CheckBox()
         Me.txt_TableName = New System.Windows.Forms.TextBox()
@@ -73,7 +62,6 @@ Partial Class Form1
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -89,6 +77,7 @@ Partial Class Form1
         'grid1
         '
         Me.grid1.AllowUserToAddRows = False
+        Me.grid1.AllowUserToDeleteRows = False
         Me.grid1.AllowUserToResizeColumns = False
         Me.grid1.AllowUserToResizeRows = False
         Me.grid1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
@@ -97,7 +86,7 @@ Partial Class Form1
         Me.grid1.Margin = New System.Windows.Forms.Padding(1)
         Me.grid1.Name = "grid1"
         Me.grid1.ReadOnly = True
-        Me.grid1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders
+        Me.grid1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.grid1.RowTemplate.Height = 23
         Me.grid1.ShowCellErrors = False
         Me.grid1.ShowCellToolTips = False
@@ -114,10 +103,9 @@ Partial Class Form1
         Me.grd_selected.AllowUserToResizeRows = False
         Me.grd_selected.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grd_selected.Enabled = False
         Me.grd_selected.Location = New System.Drawing.Point(1094, 150)
-        Me.grd_selected.MultiSelect = False
         Me.grd_selected.Name = "grd_selected"
+        Me.grd_selected.ReadOnly = True
         Me.grd_selected.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.grd_selected.RowTemplate.Height = 23
         Me.grd_selected.ShowCellErrors = False
@@ -126,6 +114,7 @@ Partial Class Form1
         Me.grd_selected.ShowRowErrors = False
         Me.grd_selected.Size = New System.Drawing.Size(666, 906)
         Me.grd_selected.TabIndex = 2
+        Me.grd_selected.TabStop = False
         '
         'TableLayoutPanel1
         '
@@ -359,91 +348,6 @@ Partial Class Form1
         Me.label_timerCounter.Text = "0"
         Me.label_timerCounter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Chart1
-        '
-        ChartArea1.AxisY.CustomLabels.Add(CustomLabel1)
-        ChartArea1.AxisY.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number
-        ChartArea1.AxisY.IsLabelAutoFit = False
-        ChartArea1.AxisY.IsStartedFromZero = False
-        ChartArea1.AxisY.LineColor = System.Drawing.Color.WhiteSmoke
-        ChartArea1.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.NotSet
-        ChartArea1.AxisY.MaximumAutoSize = 10.0!
-        ChartArea1.Name = "ChartArea1"
-        ChartArea1.Position.Auto = False
-        ChartArea1.Position.Height = 37.0!
-        ChartArea1.Position.Width = 94.0!
-        ChartArea1.Position.X = 3.0!
-        ChartArea1.Position.Y = 3.0!
-        ChartArea2.AlignWithChartArea = "ChartArea1"
-        ChartArea2.AxisX.IsStartedFromZero = False
-        ChartArea2.AxisY.IsLabelAutoFit = False
-        ChartArea2.AxisY.IsStartedFromZero = False
-        ChartArea2.AxisY.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash
-        ChartArea2.AxisY.MaximumAutoSize = 10.0!
-        ChartArea2.Name = "ChartArea2"
-        ChartArea2.Position.Auto = False
-        ChartArea2.Position.Height = 37.0!
-        ChartArea2.Position.Width = 94.0!
-        ChartArea2.Position.X = 3.0!
-        ChartArea2.Position.Y = 40.0!
-        ChartArea3.Name = "ChartArea3"
-        ChartArea3.Position.Auto = False
-        ChartArea3.Position.Height = 23.0!
-        ChartArea3.Position.Width = 94.0!
-        ChartArea3.Position.X = 3.0!
-        ChartArea3.Position.Y = 77.0!
-        Me.Chart1.ChartAreas.Add(ChartArea1)
-        Me.Chart1.ChartAreas.Add(ChartArea2)
-        Me.Chart1.ChartAreas.Add(ChartArea3)
-        Me.Chart1.Location = New System.Drawing.Point(1857, 1194)
-        Me.Chart1.Name = "Chart1"
-        Series1.ChartArea = "ChartArea1"
-        Series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series1.Legend = "Legend1"
-        Series1.Name = "CALL_MAIN"
-        Series1.ToolTip = "#VALY1{G4}"
-        Series1.YValuesPerPoint = 4
-        Series2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series2.ChartArea = "ChartArea1"
-        Series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series2.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series2.Legend = "Legend1"
-        Series2.Name = "CALL_HIGH"
-        Series2.ToolTip = "#VALY1{G4}"
-        Series2.YValuesPerPoint = 4
-        Series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series3.ChartArea = "ChartArea1"
-        Series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series3.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series3.Legend = "Legend1"
-        Series3.Name = "CALL_LOW"
-        Series4.ChartArea = "ChartArea2"
-        Series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick
-        Series4.Legend = "Legend1"
-        Series4.Name = "PUT_MAIN"
-        Series4.YValuesPerPoint = 4
-        Series5.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series5.ChartArea = "ChartArea2"
-        Series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series5.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
-        Series5.Legend = "Legend1"
-        Series5.Name = "PUT_HIGH"
-        Series6.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot
-        Series6.ChartArea = "ChartArea2"
-        Series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line
-        Series6.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
-        Series6.Legend = "Legend1"
-        Series6.Name = "PUT_LOW"
-        Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Series.Add(Series3)
-        Me.Chart1.Series.Add(Series4)
-        Me.Chart1.Series.Add(Series5)
-        Me.Chart1.Series.Add(Series6)
-        Me.Chart1.Size = New System.Drawing.Size(597, 185)
-        Me.Chart1.TabIndex = 7
-        Me.Chart1.Text = "Chart1"
-        '
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
@@ -612,7 +516,6 @@ Partial Class Form1
         Me.Controls.Add(Me.txt_DB_Date_Limit)
         Me.Controls.Add(Me.txt_Log)
         Me.Controls.Add(Me.TableLayoutPanel3)
-        Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.label_timerCounter)
         Me.Controls.Add(Me.btn_TimerStart)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -628,7 +531,6 @@ Partial Class Form1
         Me.TableLayoutPanel1.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
-        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
@@ -658,7 +560,6 @@ Partial Class Form1
     Friend WithEvents Timer1 As Timer
     Friend WithEvents btn_TimerStart As Button
     Friend WithEvents label_timerCounter As Label
-    Friend WithEvents Chart1 As DataVisualization.Charting.Chart
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents chk_AutoTurnOff As CheckBox
     Friend WithEvents txt_TableName As TextBox
