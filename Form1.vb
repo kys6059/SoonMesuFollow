@@ -86,9 +86,11 @@ Public Class Form1
     Private Sub Clac_DisplayAllGrid()
 
         'selectedJongmokIndex 계산
-        selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
-        selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
 
+        If selectedJongmokIndex(0) < 0 Then
+            selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
+            selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
+        End If
         '최대최소,제2저가 계산
         CalcColorData()
 
@@ -102,8 +104,10 @@ Public Class Form1
 
         If currentIndex > 0 Then
 
-            grid1.Visible = False
-            grd_selected.Visible = False
+            UIVisible(False)
+
+            'grid1.Visible = False
+            'grd_selected.Visible = False
 
             InitFirstGrid()
             DrawGrid1Data()
@@ -135,13 +139,14 @@ Public Class Form1
             DrawColorAll()
             DrawColor_Selected()
 
-            grid1.Visible = True
+
             grid1.Enabled = True
-            grd_selected.Visible = True
+
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
 
+            UIVisible(True)
 
         End If
 

@@ -93,8 +93,8 @@ Module Module_common
         timerMaxInterval = 16 '16초보다 크면 실행함
 
         JongmokTargetPrice = 2.0
-        selectedJongmokIndex(0) = 0
-        selectedJongmokIndex(1) = 0
+        selectedJongmokIndex(0) = -1
+        selectedJongmokIndex(1) = -1
 
 
 

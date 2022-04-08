@@ -135,7 +135,7 @@ Module realtime_daishin
 
         'self.objFutureChart.SetInputValue(5, [0, 1, 2, 3, 4, 5, 8])  # 요청항목 - 날짜, 시간,시가,고가,저가,종가,거래량
 
-        Add_Log("일반", TargetDate.ToString() + "일 종목 Count = " & TotalCount.ToString() + " 최소 " + Data(0).Code(0) + " 최대 " + Data(TotalCount - 1).Code(1))
+        'Add_Log("일반", TargetDate.ToString() + "일 종목 Count = " & TotalCount.ToString() + " 최소 " + Data(0).Code(0) + " 최대 " + Data(TotalCount - 1).Code(1))
 
         tempdate1 = TargetDate
         For callput = 0 To 1
