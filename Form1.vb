@@ -115,6 +115,8 @@ Public Class Form1
 
             tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
 
+            cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
+            cmb_selectedJongmokIndex_1.Items.Add(" ")
             For i As Integer = 0 To TotalCount - 1
                 Dim str As String
                 str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")"
@@ -123,8 +125,8 @@ Public Class Form1
                 cmb_selectedJongmokIndex_1.Items.Add(str)
             Next
 
-            cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1)
-            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0)
+            cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
+            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
 
             InitDrawSelectedGird()
             DrawSelectedData()
@@ -200,6 +202,13 @@ Public Class Form1
                         item.Balloon.HeightType = HeightType.Top
                         item.Balloon.BalloonType = BalloonType.Rectangle
                     End If
+
+                    'If i = tempIndex Then '마지막거에 종가를 표시한다
+                    'item.Balloon = New Balloon()
+                    ' item.Balloon.Label.Text = Data(selectedJongmokIndex(callput)).price(callput, i, 3).ToString() & vbCr & vbLf & Data(0).ctime(i)
+                    ' item.Balloon.HeightType = HeightType.Top
+                    ' item.Balloon.BalloonType = BalloonType.Rectangle
+                    ' End If
 
 
                     sr.items.Add(item)
@@ -632,7 +641,7 @@ Public Class Form1
         Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
 
         If selectedIndex > 0 Then
-            selectedJongmokIndex(0) = selectedIndex
+            selectedJongmokIndex(0) = selectedIndex - 1
             InitDrawSelectedGird()
             DrawSelectedData()
             DrawColor_Selected()
@@ -646,7 +655,7 @@ Public Class Form1
 
         If selectedIndex > 0 Then
 
-            selectedJongmokIndex(1) = selectedIndex
+            selectedJongmokIndex(1) = selectedIndex - 1
             InitDrawSelectedGird()
             DrawSelectedData()
             DrawColor_Selected()
@@ -702,7 +711,7 @@ Public Class Form1
         txt_TableName.Text = "option_190628"
 
 
-        Dim dt As Date = Now.AddDays(-3)  '여기 원래 -30을 넣어야 함
+        Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 

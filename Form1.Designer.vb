@@ -470,9 +470,9 @@ Partial Class Form1
         '
         'txt_DB_Date_Limit
         '
-        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(662, 127)
+        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(545, 127)
         Me.txt_DB_Date_Limit.Name = "txt_DB_Date_Limit"
-        Me.txt_DB_Date_Limit.Size = New System.Drawing.Size(192, 21)
+        Me.txt_DB_Date_Limit.Size = New System.Drawing.Size(309, 21)
         Me.txt_DB_Date_Limit.TabIndex = 11
         Me.txt_DB_Date_Limit.Text = " where cdate > 220301"
         '
