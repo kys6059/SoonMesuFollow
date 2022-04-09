@@ -140,14 +140,14 @@ Public Class Form1
             DrawColor_Selected()
 
 
-            grid1.Enabled = True
+
 
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
 
             UIVisible(True)
-
+            grid1.Enabled = True
         End If
 
     End Sub
@@ -523,9 +523,6 @@ Public Class Form1
     Private Sub InitFirstGrid()
         Dim jongMok As String
         Dim i, j As Integer
-
-
-        grid1.Enabled = False
 
         grid1.Columns.Clear()
         grid1.Rows.Clear()
