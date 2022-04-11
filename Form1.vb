@@ -75,7 +75,7 @@ Public Class Form1
 
         If DBTotalDateCount > 1 Then
 
-            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + gTargetDateIndex.ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
+            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + (gTargetDateIndex + 1).ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
 
         End If
 
@@ -87,7 +87,7 @@ Public Class Form1
 
         'selectedJongmokIndex 계산
 
-        If selectedJongmokIndex(0) < 0 Then
+        If selectedJongmokIndex(0) < 0 Or chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
             selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
             selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
         End If
@@ -186,8 +186,14 @@ Public Class Form1
                 For i = 0 To tempIndex
 
                     Dim item As New SeriesItem()
-                    item.XValue = Data(0).ctime(i)
-                    item.Name = Data(0).ctime(i).ToString()
+
+                    If Data(0).ctime(i) IsNot Nothing Then 'DB 입력 잘못으로 Ctime이 nothing인 경우가 가끔 있어서 이거 예외처리함
+                        item.XValue = Data(0).ctime(i)
+                        item.Name = Data(0).ctime(i).ToString()
+                    Else
+                        item.XValue = i
+                        item.Name = i.ToString()
+                    End If
                     item.YStartValue = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
                     item.HighValue = Data(selectedJongmokIndex(callput)).price(callput, i, 1) '고가
                     item.LowValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
