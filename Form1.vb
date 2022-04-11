@@ -186,8 +186,8 @@ Public Class Form1
                 For i = 0 To tempIndex
 
                     Dim item As New SeriesItem()
-                    item.XValue = i
-                    item.Name = i.ToString()
+                    item.XValue = Data(0).ctime(i)
+                    item.Name = Data(0).ctime(i).ToString()
                     item.YStartValue = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
                     item.HighValue = Data(selectedJongmokIndex(callput)).price(callput, i, 1) '고가
                     item.LowValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
@@ -234,7 +234,8 @@ Public Class Form1
                 Else
                     sList(callput).AxisFactor.YAxis.TitleLabel.Text = "풋"
                 End If
-                sList(callput).AxisFactor.XAxis.Interval = tempIndex / 6 ' 축 눈금 설정
+
+                sList(callput).AxisFactor.XAxis.Interval = tempIndex / 12 ' 축 눈금 설정
                 sList(callput).GraphArea.Grid.IsBackGridColor = True
 
 
