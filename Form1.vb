@@ -717,14 +717,15 @@ Public Class Form1
 
         'Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
         'Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+
         txt_TableName.Text = "option_190628"
 
 
         Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
-
-        'hippochart_test()
+        Dim str As String = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()
+        txt_programversion.Text = str
 
     End Sub
 
@@ -861,6 +862,8 @@ Public Class Form1
     Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
         grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
     End Sub
+
+
 
 
     '그래프에 Baloon을 띄워주는 코드 

@@ -33,6 +33,8 @@ Partial Class Form1
         Me.Label1 = New System.Windows.Forms.Label()
         Me.cmb_selectedJongmokIndex_0 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txt_JongmokTargetPrice = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -43,6 +45,7 @@ Partial Class Form1
         Me.txt_Interval = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txt_TargetDate = New System.Windows.Forms.TextBox()
+        Me.chk_ChangeTargetIndex = New System.Windows.Forms.CheckBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.btn_TimerStart = New System.Windows.Forms.Button()
         Me.label_timerCounter = New System.Windows.Forms.Label()
@@ -58,8 +61,7 @@ Partial Class Form1
         Me.txt_Log = New System.Windows.Forms.TextBox()
         Me.txt_DB_Date_Limit = New System.Windows.Forms.TextBox()
         Me.HHippoChart1 = New Hippo.WindowsForm4.hHippoChart()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.chk_ChangeTargetIndex = New System.Windows.Forms.CheckBox()
+        Me.txt_programversion = New System.Windows.Forms.TextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -191,6 +193,7 @@ Partial Class Form1
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label7, 0, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 4)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_JongmokTargetPrice, 1, 4)
@@ -203,17 +206,43 @@ Partial Class Form1
         Me.TableLayoutPanel2.Controls.Add(Me.Label2, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetDate, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.chk_ChangeTargetIndex, 1, 5)
+        Me.TableLayoutPanel2.Controls.Add(Me.txt_programversion, 1, 6)
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(21, 1063)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 6
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(386, 215)
+        Me.TableLayoutPanel2.RowCount = 7
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28816!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(386, 251)
         Me.TableLayoutPanel2.TabIndex = 4
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(4, 211)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(185, 39)
+        Me.Label8.TabIndex = 12
+        Me.Label8.Text = "프로그램 버전"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(4, 176)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(185, 34)
+        Me.Label7.TabIndex = 10
+        Me.Label7.Text = "기준종목 자동 변경"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label6
         '
@@ -328,6 +357,20 @@ Partial Class Form1
         Me.txt_TargetDate.Size = New System.Drawing.Size(186, 24)
         Me.txt_TargetDate.TabIndex = 1
         Me.txt_TargetDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'chk_ChangeTargetIndex
+        '
+        Me.chk_ChangeTargetIndex.AutoSize = True
+        Me.chk_ChangeTargetIndex.Checked = True
+        Me.chk_ChangeTargetIndex.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_ChangeTargetIndex.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_ChangeTargetIndex.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_ChangeTargetIndex.Location = New System.Drawing.Point(196, 179)
+        Me.chk_ChangeTargetIndex.Name = "chk_ChangeTargetIndex"
+        Me.chk_ChangeTargetIndex.Size = New System.Drawing.Size(186, 28)
+        Me.chk_ChangeTargetIndex.TabIndex = 11
+        Me.chk_ChangeTargetIndex.Text = "자동변경 허용"
+        Me.chk_ChangeTargetIndex.UseVisualStyleBackColor = True
         '
         'Timer1
         '
@@ -511,31 +554,16 @@ Partial Class Form1
         Me.HHippoChart1.Top = 150.0!
         Me.HHippoChart1.Width2 = 400.0!
         '
-        'Label7
+        'txt_programversion
         '
-        Me.Label7.AutoSize = True
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(4, 176)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(185, 38)
-        Me.Label7.TabIndex = 10
-        Me.Label7.Text = "기준종목 자동 변경"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'chk_ChangeTargetIndex
-        '
-        Me.chk_ChangeTargetIndex.AutoSize = True
-        Me.chk_ChangeTargetIndex.Checked = True
-        Me.chk_ChangeTargetIndex.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_ChangeTargetIndex.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_ChangeTargetIndex.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_ChangeTargetIndex.Location = New System.Drawing.Point(196, 179)
-        Me.chk_ChangeTargetIndex.Name = "chk_ChangeTargetIndex"
-        Me.chk_ChangeTargetIndex.Size = New System.Drawing.Size(186, 32)
-        Me.chk_ChangeTargetIndex.TabIndex = 11
-        Me.chk_ChangeTargetIndex.Text = "자동변경 허용"
-        Me.chk_ChangeTargetIndex.UseVisualStyleBackColor = True
+        Me.txt_programversion.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.txt_programversion.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_programversion.Location = New System.Drawing.Point(197, 218)
+        Me.txt_programversion.Name = "txt_programversion"
+        Me.txt_programversion.Size = New System.Drawing.Size(184, 24)
+        Me.txt_programversion.TabIndex = 13
+        Me.txt_programversion.Text = "2.0"
+        Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Form1
         '
@@ -604,5 +632,7 @@ Partial Class Form1
     Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
     Friend WithEvents Label7 As Label
     Friend WithEvents chk_ChangeTargetIndex As CheckBox
+    Friend WithEvents Label8 As Label
+    Friend WithEvents txt_programversion As TextBox
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class
