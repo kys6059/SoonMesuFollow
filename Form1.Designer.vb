@@ -23,7 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -46,6 +48,7 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txt_TargetDate = New System.Windows.Forms.TextBox()
         Me.chk_ChangeTargetIndex = New System.Windows.Forms.CheckBox()
+        Me.txt_programversion = New System.Windows.Forms.TextBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.btn_TimerStart = New System.Windows.Forms.Button()
         Me.label_timerCounter = New System.Windows.Forms.Label()
@@ -60,13 +63,13 @@ Partial Class Form1
         Me.DBDate_HScrollBar = New System.Windows.Forms.HScrollBar()
         Me.txt_Log = New System.Windows.Forms.TextBox()
         Me.txt_DB_Date_Limit = New System.Windows.Forms.TextBox()
-        Me.HHippoChart1 = New Hippo.WindowsForm4.hHippoChart()
-        Me.txt_programversion = New System.Windows.Forms.TextBox()
+        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn_RealTimeStart
@@ -372,6 +375,17 @@ Partial Class Form1
         Me.chk_ChangeTargetIndex.Text = "자동변경 허용"
         Me.chk_ChangeTargetIndex.UseVisualStyleBackColor = True
         '
+        'txt_programversion
+        '
+        Me.txt_programversion.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.txt_programversion.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_programversion.Location = New System.Drawing.Point(197, 218)
+        Me.txt_programversion.Name = "txt_programversion"
+        Me.txt_programversion.Size = New System.Drawing.Size(184, 24)
+        Me.txt_programversion.TabIndex = 13
+        Me.txt_programversion.Text = "2.0"
+        Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'Timer1
         '
         Me.Timer1.Interval = 1000
@@ -523,54 +537,28 @@ Partial Class Form1
         Me.txt_DB_Date_Limit.TabIndex = 11
         Me.txt_DB_Date_Limit.Text = " where cdate > 220301"
         '
-        'HHippoChart1
+        'Chart1
         '
-        Me.HHippoChart1.BackColor = System.Drawing.Color.Transparent
-        Me.HHippoChart1.ChartGraphic = Nothing
-        Me.HHippoChart1.ChartID = Nothing
-        Me.HHippoChart1.ChartImage = Nothing
-        Me.HHippoChart1.ChartRectangle = CType(resources.GetObject("HHippoChart1.ChartRectangle"), System.Drawing.RectangleF)
-        Me.HHippoChart1.Designer = CType(resources.GetObject("HHippoChart1.Designer"), Hippo.ChartDesigner)
-        Me.HHippoChart1.DesignType = Hippo.ChartDesignType.None
-        Me.HHippoChart1.Direction = Hippo.GraphAreaLocation.Vertical
-        Me.HHippoChart1.Height2 = 270.0!
-        Me.HHippoChart1.IsDrag = False
-        Me.HHippoChart1.IsEmptyanalysis = True
-        Me.HHippoChart1.IsUseContextMenu = True
-        Me.HHippoChart1.Layout = CType(resources.GetObject("HHippoChart1.Layout"), Hippo.Layout)
-        Me.HHippoChart1.Left = 0!
-        Me.HHippoChart1.LegendBox = CType(resources.GetObject("HHippoChart1.LegendBox"), Hippo.LegendBox)
-        Me.HHippoChart1.Location = New System.Drawing.Point(1787, 150)
-        Me.HHippoChart1.Logo = CType(resources.GetObject("HHippoChart1.Logo"), Hippo.Logo)
-        Me.HHippoChart1.MinimumSize = New System.Drawing.Size(200, 140)
-        Me.HHippoChart1.Name = "HHippoChart1"
-        Me.HHippoChart1.PaletteType = Hippo.PaletteType.[Default]
-        Me.HHippoChart1.ProcessorType = "64"
-        Me.HHippoChart1.SeriesAreaRate = Nothing
-        Me.HHippoChart1.SeriesListDictionary = CType(resources.GetObject("HHippoChart1.SeriesListDictionary"), Hippo.SeriesListDictionary)
-        Me.HHippoChart1.Size = New System.Drawing.Size(910, 906)
-        Me.HHippoChart1.TabIndex = 12
-        Me.HHippoChart1.Titles = CType(resources.GetObject("HHippoChart1.Titles"), Hippo.Title)
-        Me.HHippoChart1.Top = 150.0!
-        Me.HHippoChart1.Width2 = 400.0!
-        '
-        'txt_programversion
-        '
-        Me.txt_programversion.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.txt_programversion.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_programversion.Location = New System.Drawing.Point(197, 218)
-        Me.txt_programversion.Name = "txt_programversion"
-        Me.txt_programversion.Size = New System.Drawing.Size(184, 24)
-        Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "2.0"
-        Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        ChartArea1.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend1)
+        Me.Chart1.Location = New System.Drawing.Point(1780, 150)
+        Me.Chart1.Name = "Chart1"
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.Chart1.Series.Add(Series1)
+        Me.Chart1.Size = New System.Drawing.Size(946, 906)
+        Me.Chart1.TabIndex = 13
+        Me.Chart1.Text = "Chart1"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(2738, 1405)
-        Me.Controls.Add(Me.HHippoChart1)
+        Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.txt_DB_Date_Limit)
         Me.Controls.Add(Me.txt_Log)
         Me.Controls.Add(Me.TableLayoutPanel3)
@@ -591,6 +579,7 @@ Partial Class Form1
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
+        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -629,10 +618,10 @@ Partial Class Form1
     Friend WithEvents DBDate_HScrollBar As HScrollBar
     Friend WithEvents txt_Log As TextBox
     Friend WithEvents txt_DB_Date_Limit As TextBox
-    Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
     Friend WithEvents Label7 As Label
     Friend WithEvents chk_ChangeTargetIndex As CheckBox
     Friend WithEvents Label8 As Label
     Friend WithEvents txt_programversion As TextBox
+    Friend WithEvents Chart1 As DataVisualization.Charting.Chart
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class
