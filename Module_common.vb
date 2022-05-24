@@ -92,7 +92,7 @@ Module Module_common
         timerCount = 0 '16초마다 돌아가는 타이머 주기
         timerMaxInterval = 16 '16초보다 크면 실행함
 
-        JongmokTargetPrice = 2.0
+        JongmokTargetPrice = Val(Form1.txt_JongmokTargetPrice.Text)
         selectedJongmokIndex(0) = -1
         selectedJongmokIndex(1) = -1
 
@@ -109,10 +109,12 @@ Module Module_common
         mingap = 1000.0
         tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
 
+
+        '장이 끝나는 시간 기준이 아니라 장 시작시간 기준으로 변경함
         For i = 0 To TotalCount
 
-            If Data(i).price(callput, tempIndex, 3) > 0 Then
-                gap = Math.Abs(Data(i).price(callput, tempIndex, 3) - JongmokTargetPrice)
+            If Data(i).price(callput, 0, 0) > 0 And Data(i).price(callput, 0, 0) < 3.0 Then
+                gap = Math.Abs(Data(i).price(callput, 0, 3) - JongmokTargetPrice)
                 If gap < mingap Then
                     mingap = gap
                     temptarget = i

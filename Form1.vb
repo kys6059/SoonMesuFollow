@@ -333,6 +333,26 @@ Public Class Form1
             Next
         Next
 
+        Dim max As Single = Single.MinValue
+        Dim min As Single = Single.MaxValue
+
+        For j = 0 To currentIndex - 1
+
+            Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
+            If max < 시가합계 Then max = 시가합계
+            If min > 시가합계 Then min = 시가합계
+
+        Next
+
+        For j = 0 To currentIndex - 1
+
+            Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
+            If max = 시가합계 Then DrawColorOne(j, 11, 0, grd_selected)
+            If min = 시가합계 Then DrawColorOne(j, 11, 1, grd_selected)
+
+        Next
+
+
     End Sub
 
     Private Sub DrawColorAll()
@@ -422,7 +442,7 @@ Public Class Form1
         grd_selected.Columns(8).HeaderText = "저"
         grd_selected.Columns(9).HeaderText = "종"
         grd_selected.Columns(10).HeaderText = "거래량"
-        grd_selected.Columns(11).HeaderText = "종가합계"
+        grd_selected.Columns(11).HeaderText = "시가합계"
 
         grd_selected.Columns(1).Width = defaultWidth
         grd_selected.Columns(2).Width = defaultWidth
@@ -477,8 +497,8 @@ Public Class Form1
             End If
             '합계 계산
             If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
-                If Data(selectedCallIndex).price(0, j, 3) > 0 And Data(selectedPutIndex).price(1, j, 3) > 0 Then
-                    grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 3) + Data(selectedPutIndex).price(1, j, 3)
+                If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedPutIndex).price(1, j, 0) > 0 Then
+                    grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 0) + Data(selectedPutIndex).price(1, j, 0)
                 End If
             End If
         Next

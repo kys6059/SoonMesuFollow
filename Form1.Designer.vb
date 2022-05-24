@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -267,7 +267,7 @@ Partial Class Form1
         Me.txt_JongmokTargetPrice.Name = "txt_JongmokTargetPrice"
         Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(184, 24)
         Me.txt_JongmokTargetPrice.TabIndex = 9
-        Me.txt_JongmokTargetPrice.Text = "2.0"
+        Me.txt_JongmokTargetPrice.Text = "2.3"
         Me.txt_JongmokTargetPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label5
@@ -290,7 +290,7 @@ Partial Class Form1
         Me.txt_LowerLimit.Name = "txt_LowerLimit"
         Me.txt_LowerLimit.Size = New System.Drawing.Size(184, 24)
         Me.txt_LowerLimit.TabIndex = 7
-        Me.txt_LowerLimit.Text = "0.4"
+        Me.txt_LowerLimit.Text = "0.1"
         Me.txt_LowerLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label4
@@ -313,7 +313,7 @@ Partial Class Form1
         Me.txt_UpperLimit.Name = "txt_UpperLimit"
         Me.txt_UpperLimit.Size = New System.Drawing.Size(184, 24)
         Me.txt_UpperLimit.TabIndex = 5
-        Me.txt_UpperLimit.Text = "4.0"
+        Me.txt_UpperLimit.Text = "5.0"
         Me.txt_UpperLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label3
@@ -539,16 +539,16 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend1)
+        ChartArea3.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend3)
         Me.Chart1.Location = New System.Drawing.Point(1780, 150)
         Me.Chart1.Name = "Chart1"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.Chart1.Series.Add(Series1)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.Chart1.Series.Add(Series3)
         Me.Chart1.Size = New System.Drawing.Size(946, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
