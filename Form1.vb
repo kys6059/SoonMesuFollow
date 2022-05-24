@@ -335,12 +335,18 @@ Public Class Form1
 
         Dim max As Single = Single.MinValue
         Dim min As Single = Single.MaxValue
+        Dim 종가max As Single = Single.MinValue
+        Dim 종가min As Single = Single.MaxValue
 
         For j = 0 To currentIndex - 1
 
             Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
             If max < 시가합계 Then max = 시가합계
             If min > 시가합계 Then min = 시가합계
+
+            Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
+            If 종가max < 종가합계 Then 종가max = 종가합계
+            If 종가min > 종가합계 Then 종가min = 종가합계
 
         Next
 
@@ -350,8 +356,11 @@ Public Class Form1
             If max = 시가합계 Then DrawColorOne(j, 11, 0, grd_selected)
             If min = 시가합계 Then DrawColorOne(j, 11, 1, grd_selected)
 
-        Next
+            Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
+            If 종가max = 종가합계 Then DrawColorOne(j, 12, 0, grd_selected)
+            If 종가min = 종가합계 Then DrawColorOne(j, 12, 1, grd_selected)
 
+        Next
 
     End Sub
 
@@ -413,7 +422,7 @@ Public Class Form1
 
 
         '전체 크기 지정
-        grd_selected.ColumnCount = 12
+        grd_selected.ColumnCount = 13
         grd_selected.RowCount = timeIndex
 
         grd_selected.Columns(0).HeaderText = "No"
@@ -443,6 +452,7 @@ Public Class Form1
         grd_selected.Columns(9).HeaderText = "종"
         grd_selected.Columns(10).HeaderText = "거래량"
         grd_selected.Columns(11).HeaderText = "시가합계"
+        grd_selected.Columns(12).HeaderText = "종가합계"
 
         grd_selected.Columns(1).Width = defaultWidth
         grd_selected.Columns(2).Width = defaultWidth
@@ -455,6 +465,7 @@ Public Class Form1
         grd_selected.Columns(9).Width = defaultWidth
         grd_selected.Columns(10).Width = defaultWidth + 15
         grd_selected.Columns(11).Width = defaultWidth + 20
+        grd_selected.Columns(12).Width = defaultWidth + 20
 
         grd_selected.Columns(5).DefaultCellStyle.BackColor = Color.Yellow
         grd_selected.Columns(10).DefaultCellStyle.BackColor = Color.Yellow
@@ -499,6 +510,7 @@ Public Class Form1
             If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
                 If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedPutIndex).price(1, j, 0) > 0 Then
                     grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 0) + Data(selectedPutIndex).price(1, j, 0)
+                    grd_selected.Rows(j).Cells(12).Value = Data(selectedCallIndex).price(0, j, 3) + Data(selectedPutIndex).price(1, j, 3)
                 End If
             End If
         Next
@@ -790,7 +802,6 @@ Public Class Form1
 
             TotalCount = GetDataFromDBHandler(TargetDate)
 
-
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()
@@ -808,8 +819,6 @@ Public Class Form1
     End Sub
 
     Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
-
-
 
         If gTargetDateIndex <> e.NewValue Then
 

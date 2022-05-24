@@ -119,7 +119,7 @@ Partial Class Form1
         Me.grd_selected.ShowCellToolTips = False
         Me.grd_selected.ShowEditingIcon = False
         Me.grd_selected.ShowRowErrors = False
-        Me.grd_selected.Size = New System.Drawing.Size(666, 906)
+        Me.grd_selected.Size = New System.Drawing.Size(740, 906)
         Me.grd_selected.TabIndex = 2
         Me.grd_selected.TabStop = False
         '
@@ -543,13 +543,13 @@ Partial Class Form1
         Me.Chart1.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(1780, 150)
+        Me.Chart1.Location = New System.Drawing.Point(1856, 150)
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(946, 906)
+        Me.Chart1.Size = New System.Drawing.Size(1106, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
         '
@@ -557,7 +557,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(2738, 1405)
+        Me.ClientSize = New System.Drawing.Size(2984, 1422)
         Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.txt_DB_Date_Limit)
         Me.Controls.Add(Me.txt_Log)
