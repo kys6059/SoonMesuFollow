@@ -2,17 +2,12 @@
 
 Imports System.Windows.Forms.DataVisualization.Charting
 
-
 Public Class Form1
 
     Private Sub btn_RealTimeStart_Click(sender As Object, e As EventArgs) Handles btn_RealTimeStart.Click
         Dim ret As Boolean
 
         ret = realTime_Start()
-
-        If ret = False Then
-            ' MsgBox("실시간 연결 종목이 없습니다")
-        End If
 
         txt_TargetDate.Text = TargetDate
 
@@ -28,8 +23,6 @@ Public Class Form1
         Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
 
         isRealFlag = True '실시간 로직임을 기억한다
-
-
 
         If ConnectionState = True Then
 
@@ -83,18 +76,15 @@ Public Class Form1
 
 
 
-    Private Sub Clac_DisplayAllGrid()
-
-        'selectedJongmokIndex 계산
+    Private Sub Clac_DisplayAllGrid()         'selectedJongmokIndex 계산
 
         If selectedJongmokIndex(0) < 0 Or chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
             selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
             selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
         End If
+
         '최대최소,제2저가 계산
         CalcColorData()
-
-
 
     End Sub
 
@@ -106,8 +96,8 @@ Public Class Form1
 
             UIVisible(False)
 
-            'grid1.Visible = False
-            'grd_selected.Visible = False
+            grid1.Visible = False
+            grd_selected.Visible = False
 
             InitFirstGrid()
             DrawGrid1Data()
@@ -138,10 +128,6 @@ Public Class Form1
             '색깔 실제로 grid에 입히기
             DrawColorAll()
             DrawColor_Selected()
-
-
-
-
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
@@ -705,16 +691,14 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        'Chart1.Series(0).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-        'Chart1.Series(3).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
-
         txt_TableName.Text = "option_190628"
-
 
         Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
-        Dim str As String = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()
+
+        Dim str As String = "1.0.1_20220524"
+
         txt_programversion.Text = str
 
     End Sub
@@ -814,8 +798,6 @@ Public Class Form1
             MsgBox("DB에 데이터가 없습니다")
         End If
 
-
-
     End Sub
 
     Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
@@ -849,10 +831,6 @@ Public Class Form1
     Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
         grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
     End Sub
-
-
-
-
 
 
 End Class
