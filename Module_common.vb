@@ -30,6 +30,24 @@ Structure DataSet
 
 End Structure
 
+Structure SumDatSetType
+    Dim siSum() As Single
+    Dim jongSum() As Single
+    Dim siMax As Single
+    Dim siMin As Single
+    Dim jongMax As Single
+    Dim jongmin As Single
+
+    Public Sub Initialze()
+        ReDim siSum(100)
+        ReDim jongSum(100)
+        siMax = Single.MinValue
+        jongMax = Single.MinValue
+        siMin = Single.MaxValue
+        jongmin = Single.MaxValue
+    End Sub
+End Structure
+
 
 '해야할 일 정리 ------------------- 20220211
 
@@ -56,6 +74,7 @@ Module Module_common
 
     '전역변수 선언
     Public Data() As DataSet  '-------------------- 전체가 들어있는 자료형
+    Public SumDataSet As SumDatSetType
     Public TargetDate As Integer
     Public sMonth As String
     Public Interval As Integer
@@ -71,16 +90,14 @@ Module Module_common
     Public timerCount As Integer
     Public timerMaxInterval As Integer
 
-
-
-
-
     Public Sub InitDataStructure()
 
         ReDim Data(100) '최대 100개지만 실제로는 28개까지만 지원한다 - 콜풋 각각
         For i As Integer = 0 To 100
             Data(i).Initialize()
         Next
+
+        SumDataSet.Initialze() '콜풋 합계 data를 위한 dataset
 
         TargetDate = 0
         sMonth = "0"
@@ -127,7 +144,38 @@ Module Module_common
 
     End Function
 
-    '일단 최고만 구현됨
+    Public Sub CalcSumPrice()
+
+        Dim selectedCallIndex As Integer = selectedJongmokIndex(0)
+        Dim selectedputIndex As Integer = selectedJongmokIndex(1)
+
+
+        For j As Integer = 0 To currentIndex
+
+            '합계 계산
+            If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
+                If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedPutIndex).price(1, j, 0) > 0 Then
+                    SumDataSet.siSum(j) = Data(selectedCallIndex).price(0, j, 0) + Data(selectedputIndex).price(1, j, 0)
+                    SumDataSet.jongSum(j) = Data(selectedCallIndex).price(0, j, 3) + Data(selectedputIndex).price(1, j, 3)
+                End If
+            End If
+
+        Next
+
+        For j = 0 To currentIndex - 1
+
+            If SumDataSet.siMax < SumDataSet.siSum(j) Then SumDataSet.siMax = SumDataSet.siSum(j)
+            If SumDataSet.siMin > SumDataSet.siSum(j) Then SumDataSet.siMin = SumDataSet.siSum(j)
+
+            If SumDataSet.jongMax < SumDataSet.jongSum(j) Then SumDataSet.jongMax = SumDataSet.jongSum(j)
+            If SumDataSet.jongmin > SumDataSet.jongSum(j) Then SumDataSet.jongmin = SumDataSet.jongSum(j)
+
+        Next
+
+    End Sub
+
+
+    '최고, 최저, 제2저가 계산
     Public Sub CalcColorData()
         Dim i, j, k, callput As Integer
         Dim min, max, secondmin As Single

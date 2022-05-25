@@ -45,8 +45,12 @@ Public Class Form1
                 SetTimeDataForData(Data) '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
 
                 GetAllData() '대신으로부터 Data 가져오기
-
                 Clac_DisplayAllGrid()
+
+
+                '신호 만들고 해제 판단하기
+
+
                 RedrawAll() 'Grid 그리기
                 'DrawGraph() '그래프 그리기
                 DrawScrollData() 'Scroll 및 기타 DB 관련 UI 표시하기
@@ -83,6 +87,8 @@ Public Class Form1
             selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
         End If
 
+        CalcSumPrice() '콜풋 시가종가의 합계를 구한다
+
         '최대최소,제2저가 계산
         CalcColorData()
 
@@ -95,9 +101,6 @@ Public Class Form1
         If currentIndex > 0 Then
 
             UIVisible(False)
-
-            grid1.Visible = False
-            grd_selected.Visible = False
 
             InitFirstGrid()
             DrawGrid1Data()
@@ -319,33 +322,29 @@ Public Class Form1
             Next
         Next
 
-        Dim max As Single = Single.MinValue
-        Dim min As Single = Single.MaxValue
-        Dim 종가max As Single = Single.MinValue
-        Dim 종가min As Single = Single.MaxValue
+        'Dim max As Single = Single.MinValue
+        'Dim min As Single = Single.MaxValue
+        'Dim 종가max As Single = Single.MinValue
+        'Dim 종가min As Single = Single.MaxValue
+
+        'For j = 0 To currentIndex - 1
+
+        '    Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
+        '    If max < 시가합계 Then max = 시가합계
+        '    If min > 시가합계 Then min = 시가합계
+
+        '    Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
+        '    If 종가max < 종가합계 Then 종가max = 종가합계
+        '    If 종가min > 종가합계 Then 종가min = 종가합계
+
+        'Next
 
         For j = 0 To currentIndex - 1
+            If SumDataSet.siMax = SumDataSet.siSum(j) Then DrawColorOne(j, 11, 0, grd_selected)
+            If SumDataSet.siMin = SumDataSet.siSum(j) Then DrawColorOne(j, 11, 1, grd_selected)
 
-            Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
-            If max < 시가합계 Then max = 시가합계
-            If min > 시가합계 Then min = 시가합계
-
-            Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
-            If 종가max < 종가합계 Then 종가max = 종가합계
-            If 종가min > 종가합계 Then 종가min = 종가합계
-
-        Next
-
-        For j = 0 To currentIndex - 1
-
-            Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
-            If max = 시가합계 Then DrawColorOne(j, 11, 0, grd_selected)
-            If min = 시가합계 Then DrawColorOne(j, 11, 1, grd_selected)
-
-            Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
-            If 종가max = 종가합계 Then DrawColorOne(j, 12, 0, grd_selected)
-            If 종가min = 종가합계 Then DrawColorOne(j, 12, 1, grd_selected)
-
+            If SumDataSet.jongMax = SumDataSet.jongSum(j) Then DrawColorOne(j, 12, 0, grd_selected)
+            If SumDataSet.jongmin = SumDataSet.jongSum(j) Then DrawColorOne(j, 12, 1, grd_selected)
         Next
 
     End Sub
@@ -492,11 +491,12 @@ Public Class Form1
                     grd_selected.Rows(j).Cells(10).Value = Data(selectedPutIndex).거래량(1, j).ToString()
                 End If
             End If
-            '합계 계산
+
+            '시가 종가 합계 적용
             If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
-                If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedPutIndex).price(1, j, 0) > 0 Then
-                    grd_selected.Rows(j).Cells(11).Value = Data(selectedCallIndex).price(0, j, 0) + Data(selectedPutIndex).price(1, j, 0)
-                    grd_selected.Rows(j).Cells(12).Value = Data(selectedCallIndex).price(0, j, 3) + Data(selectedPutIndex).price(1, j, 3)
+                If SumDataSet.siSum(j) > 0 Then
+                    grd_selected.Rows(j).Cells(11).Value = SumDataSet.siSum(j)
+                    grd_selected.Rows(j).Cells(12).Value = SumDataSet.jongSum(j)
                 End If
             End If
         Next
