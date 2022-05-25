@@ -49,6 +49,10 @@ Public Class Form1
 
 
                 '신호 만들고 해제 판단하기
+                Dim 신호발생flag As Boolean = CalcAlrotithmAll()
+                If 신호발생flag = True Then
+                    chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
+                End If
 
 
                 RedrawAll() 'Grid 그리기

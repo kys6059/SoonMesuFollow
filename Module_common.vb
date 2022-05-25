@@ -113,6 +113,12 @@ Module Module_common
         selectedJongmokIndex(0) = -1
         selectedJongmokIndex(1) = -1
 
+        If ShinhoList Is Nothing Then
+            ShinhoList = New List(Of ShinhoType)
+        Else
+            ShinhoList.Clear()
+        End If
+
 
 
     End Sub
@@ -299,6 +305,55 @@ Module Module_common
         End If
 
     End Sub
+
+    Public Function getRemainDate(ByVal 월물 As String, ByVal idate As Long) As String
+
+        Dim yearof월물, monthof월물, i, 목요일count As Integer
+        Dim tempdate, 만기일, tempToday As Date
+
+        yearof월물 = Int(Val(월물) / 100) + 2000
+        monthof월물 = Int(Val(월물) Mod 100)
+        목요일count = 0
+
+        For i = 1 To 14
+            tempdate = DateSerial(yearof월물, monthof월물, i)
+
+            If Weekday(tempdate) = 5 Then
+                목요일count = 목요일count + 1
+            End If
+
+            If 목요일count >= 2 Then '이날이 만기일임
+
+                만기일 = tempdate
+                Exit For
+            End If
+
+        Next
+
+        tempToday = makeDate(idate)
+
+        Return DateDiff("d", tempToday, 만기일)
+
+    End Function
+
+    Public Function makeDate(ByVal idate As Long) As Date
+
+        Dim year, mon, dt As Integer
+        Dim tempdate As Date
+
+        '먼저 현재 행의 날짜 만들기
+        If idate < 20000101 Then
+            year = (idate / 10000) + 2000
+        Else
+            year = (idate / 10000)
+        End If
+        mon = (idate / 100) Mod 100
+        dt = idate Mod 100
+        tempdate = DateSerial(year, mon, dt)
+
+        makeDate = tempdate
+
+    End Function
 
     Public Sub Add_Log(ByVal str1 As String, ByVal str2 As String)
 
