@@ -131,6 +131,7 @@ Public Class Form1
 
             InitDrawSelectedGird()
             DrawSelectedData()
+            DrawShinhoGridData() '신호를 추가한다
 
             '색깔 실제로 grid에 입히기
             DrawColorAll()
@@ -397,6 +398,72 @@ Public Class Form1
 
     End Sub
 
+    '신호그리드 초기화
+    Private Sub InitShinHoGird()
+
+        Dim rowCount As Integer = 38
+
+        grd_ShinHo.Columns.Clear()
+        grd_ShinHo.Rows.Clear()
+
+        grd_ShinHo.ColumnCount = 2
+        grd_ShinHo.RowCount = rowCount
+        grd_ShinHo.Columns(0).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+        grd_ShinHo.Columns(1).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+        grd_ShinHo.Columns(0).HeaderText = "항목"
+        grd_ShinHo.Columns(1).HeaderText = "내용"
+        grd_ShinHo.Columns(0).Width = 150
+        grd_ShinHo.Columns(1).Width = 150
+
+        grd_ShinHo.RowHeadersWidth = 30
+        grd_ShinHo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        grd_ShinHo.RowHeadersVisible = False
+        grd_ShinHo.RowHeadersDefaultCellStyle.BackColor = Color.Yellow
+        grd_ShinHo.RowHeadersDefaultCellStyle.ForeColor = Color.Black
+
+        For i As Integer = 0 To rowCount - 1
+            grd_ShinHo.Rows(i).Height = 23 '전체 Row 높이 지정
+        Next
+
+        grd_ShinHo.Rows(0).Cells(0).Value = "A00_월물"
+        grd_ShinHo.Rows(1).Cells(0).Value = "A01_날짜"
+        grd_ShinHo.Rows(2).Cells(0).Value = "A02_interval"
+        grd_ShinHo.Rows(3).Cells(0).Value = "A03_남은날짜"
+        grd_ShinHo.Rows(4).Cells(0).Value = "A04_발생Index"
+        grd_ShinHo.Rows(5).Cells(0).Value = "A05_발생시간"
+        grd_ShinHo.Rows(6).Cells(0).Value = "A06_신호ID"
+        grd_ShinHo.Rows(7).Cells(0).Value = "A07신호차수"
+        grd_ShinHo.Rows(8).Cells(0).Value = "A11_콜인덱스"
+        grd_ShinHo.Rows(9).Cells(0).Value = "A12_콜행사가"
+        grd_ShinHo.Rows(10).Cells(0).Value = "A13_콜신호발생가격"
+        grd_ShinHo.Rows(11).Cells(0).Value = "A14_콜매수가격"
+        grd_ShinHo.Rows(12).Cells(0).Value = "A15_콜주문번호"
+        grd_ShinHo.Rows(13).Cells(0).Value = "A16_콜종목코드"
+        grd_ShinHo.Rows(14).Cells(0).Value = "A17_콜체결상태"
+        grd_ShinHo.Rows(15).Cells(0).Value = "A21_풋인덱스"
+        grd_ShinHo.Rows(16).Cells(0).Value = "A22_풋행사가"
+        grd_ShinHo.Rows(17).Cells(0).Value = "A23_풋신호발생가격"
+        grd_ShinHo.Rows(18).Cells(0).Value = "A24_풋매수가격"
+        grd_ShinHo.Rows(19).Cells(0).Value = "A25_풋주문번호"
+        grd_ShinHo.Rows(20).Cells(0).Value = "A26_풋종목코드"
+        grd_ShinHo.Rows(21).Cells(0).Value = "A27_풋체결상태"
+        grd_ShinHo.Rows(22).Cells(0).Value = "A31_신호합계가격"
+        grd_ShinHo.Rows(23).Cells(0).Value = "A32_현재합계가격"
+        grd_ShinHo.Rows(24).Cells(0).Value = "A33_현재상태"
+        grd_ShinHo.Rows(25).Cells(0).Value = "A34_이익률"
+        grd_ShinHo.Rows(26).Cells(0).Value = "A35_손절기준가격"
+        grd_ShinHo.Rows(27).Cells(0).Value = "A36_익절기준가격"
+        grd_ShinHo.Rows(28).Cells(0).Value = "A37_손절기준비율"
+        grd_ShinHo.Rows(29).Cells(0).Value = "A38_익절기준비율"
+        grd_ShinHo.Rows(30).Cells(0).Value = "A39_중간매도Flag"
+        grd_ShinHo.Rows(31).Cells(0).Value = "A40_TimeoutTime"
+        grd_ShinHo.Rows(32).Cells(0).Value = "A41_매도시간"
+        grd_ShinHo.Rows(33).Cells(0).Value = "A42_매도Index"
+        grd_ShinHo.Rows(34).Cells(0).Value = "A43_매도사유"
+        grd_ShinHo.Rows(35).Cells(0).Value = "A44_메모"
+        grd_ShinHo.Rows(36).Cells(0).Value = "A45_기준가격"
+        grd_ShinHo.Rows(37).Cells(0).Value = "A46_신호Timeout"
+    End Sub
 
 
     'selectedgrid 초기화
@@ -465,6 +532,72 @@ Public Class Form1
             grd_selected.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
             grd_selected.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
         Next
+    End Sub
+
+    Private Sub DrawShinhoGridData()
+
+        Dim selectedShinhoIndex As Integer = 0
+
+        If ShinhoList Is Nothing Then Return
+
+        Dim shinho As ShinhoType = ShinhoList(selectedShinhoIndex)
+
+        grd_ShinHo.Rows(0).Cells(1).Value = shinho.A00_월물
+        grd_ShinHo.Rows(1).Cells(1).Value = shinho.A01_날짜
+        grd_ShinHo.Rows(2).Cells(1).Value = shinho.A02_interval
+        grd_ShinHo.Rows(3).Cells(1).Value = shinho.A03_남은날짜
+        grd_ShinHo.Rows(4).Cells(1).Value = shinho.A04_발생Index
+        grd_ShinHo.Rows(5).Cells(1).Value = shinho.A05_발생시간
+        grd_ShinHo.Rows(6).Cells(1).Value = shinho.A06_신호ID
+        grd_ShinHo.Rows(7).Cells(1).Value = shinho.A07신호차수
+        grd_ShinHo.Rows(8).Cells(1).Value = shinho.A11_콜인덱스
+        grd_ShinHo.Rows(9).Cells(1).Value = shinho.A12_콜행사가
+        grd_ShinHo.Rows(10).Cells(1).Value = Format(shinho.A13_콜신호발생가격, "##0.00")
+        grd_ShinHo.Rows(11).Cells(1).Value = Format(shinho.A14_콜매수가격, "##0.00")
+        grd_ShinHo.Rows(12).Cells(1).Value = shinho.A15_콜주문번호
+        grd_ShinHo.Rows(13).Cells(1).Value = shinho.A16_콜종목코드
+        grd_ShinHo.Rows(14).Cells(1).Value = shinho.A17_콜체결상태
+        grd_ShinHo.Rows(15).Cells(1).Value = shinho.A21_풋인덱스
+        grd_ShinHo.Rows(16).Cells(1).Value = shinho.A22_풋행사가
+        grd_ShinHo.Rows(17).Cells(1).Value = Format(shinho.A23_풋신호발생가격, "##0.00")
+        grd_ShinHo.Rows(18).Cells(1).Value = Format(shinho.A24_풋매수가격, "##0.00")
+        grd_ShinHo.Rows(19).Cells(1).Value = shinho.A25_풋주문번호
+        grd_ShinHo.Rows(20).Cells(1).Value = shinho.A26_풋종목코드
+        grd_ShinHo.Rows(21).Cells(1).Value = shinho.A27_풋체결상태
+        grd_ShinHo.Rows(22).Cells(1).Value = Format(shinho.A31_신호합계가격, "##0.00")
+        grd_ShinHo.Rows(23).Cells(1).Value = Format(shinho.A32_현재합계가격, "##0.00")
+        grd_ShinHo.Rows(24).Cells(1).Value = shinho.A33_현재상태
+
+        grd_ShinHo.Rows(25).Cells(1).Value = Format(shinho.A34_이익률, "##0.00#")
+        grd_ShinHo.Rows(26).Cells(1).Value = Format(shinho.A35_손절기준가격, "##0.000")
+        grd_ShinHo.Rows(27).Cells(1).Value = Format(shinho.A36_익절기준가격, "##0.000")
+        grd_ShinHo.Rows(28).Cells(1).Value = shinho.A37_손절기준비율
+        grd_ShinHo.Rows(29).Cells(1).Value = shinho.A38_익절기준비율
+        grd_ShinHo.Rows(30).Cells(1).Value = shinho.A39_중간매도Flag
+        grd_ShinHo.Rows(31).Cells(1).Value = shinho.A40_TimeoutTime
+        grd_ShinHo.Rows(32).Cells(1).Value = shinho.A41_매도시간
+        grd_ShinHo.Rows(33).Cells(1).Value = shinho.A42_매도Index
+        grd_ShinHo.Rows(34).Cells(1).Value = shinho.A43_매도사유
+        grd_ShinHo.Rows(35).Cells(1).Value = shinho.A44_메모
+        grd_ShinHo.Rows(36).Cells(1).Value = shinho.A45_기준가격
+        grd_ShinHo.Rows(37).Cells(1).Value = shinho.A46_신호Timeout
+
+        If shinho.A33_현재상태 = 1 Then
+            grd_ShinHo.Rows(24).Cells(1).Style.BackColor = Color.Yellow
+            grd_ShinHo.Rows(24).Cells(1).Style.ForeColor = Color.Red
+        Else
+            grd_ShinHo.Rows(24).Cells(1).Style.BackColor = Color.LightGreen
+            grd_ShinHo.Rows(24).Cells(1).Style.ForeColor = Color.Black
+        End If
+
+        If shinho.A34_이익률 > 1 Then
+            grd_ShinHo.Rows(25).Cells(1).Style.BackColor = Color.Yellow
+            grd_ShinHo.Rows(25).Cells(1).Style.ForeColor = Color.Red
+        Else
+            grd_ShinHo.Rows(25).Cells(1).Style.BackColor = Color.LightGreen
+            grd_ShinHo.Rows(25).Cells(1).Style.ForeColor = Color.Black
+        End If
+
     End Sub
 
     Private Sub DrawSelectedData()
@@ -704,6 +837,8 @@ Public Class Form1
         Dim str As String = "1.0.1_20220524"
 
         txt_programversion.Text = str
+
+        InitShinHoGird()
 
     End Sub
 

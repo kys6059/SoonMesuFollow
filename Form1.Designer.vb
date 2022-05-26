@@ -76,6 +76,7 @@ Partial Class Form1
         Me.txt_익절목표 = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txt_손절매비율 = New System.Windows.Forms.TextBox()
+        Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -83,6 +84,7 @@ Partial Class Form1
         Me.TableLayoutPanel3.SuspendLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel4.SuspendLayout()
+        CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn_RealTimeStart
@@ -112,7 +114,7 @@ Partial Class Form1
         Me.grid1.ShowCellToolTips = False
         Me.grid1.ShowEditingIcon = False
         Me.grid1.ShowRowErrors = False
-        Me.grid1.Size = New System.Drawing.Size(1047, 906)
+        Me.grid1.Size = New System.Drawing.Size(913, 906)
         Me.grid1.TabIndex = 1
         '
         'grd_selected
@@ -123,7 +125,7 @@ Partial Class Form1
         Me.grd_selected.AllowUserToResizeRows = False
         Me.grd_selected.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grd_selected.Location = New System.Drawing.Point(1094, 150)
+        Me.grd_selected.Location = New System.Drawing.Point(949, 150)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.ReadOnly = True
         Me.grd_selected.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -147,7 +149,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1094, 108)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(949, 108)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -439,7 +441,7 @@ Partial Class Form1
         Me.TableLayoutPanel3.Controls.Add(Me.chk_AutoSave, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.lbl_DBDateInfo, 3, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.DBDate_HScrollBar, 3, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(424, 21)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(233, 21)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.29851!))
@@ -535,17 +537,17 @@ Partial Class Form1
         'txt_Log
         '
         Me.txt_Log.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.txt_Log.Location = New System.Drawing.Point(1094, 1080)
+        Me.txt_Log.Location = New System.Drawing.Point(949, 1079)
         Me.txt_Log.Multiline = True
         Me.txt_Log.Name = "txt_Log"
         Me.txt_Log.ReadOnly = True
         Me.txt_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txt_Log.Size = New System.Drawing.Size(663, 159)
+        Me.txt_Log.Size = New System.Drawing.Size(740, 159)
         Me.txt_Log.TabIndex = 9
         '
         'txt_DB_Date_Limit
         '
-        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(545, 127)
+        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(354, 125)
         Me.txt_DB_Date_Limit.Name = "txt_DB_Date_Limit"
         Me.txt_DB_Date_Limit.Size = New System.Drawing.Size(309, 21)
         Me.txt_DB_Date_Limit.TabIndex = 11
@@ -557,13 +559,13 @@ Partial Class Form1
         Me.Chart1.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
         Me.Chart1.Legends.Add(Legend1)
-        Me.Chart1.Location = New System.Drawing.Point(1856, 150)
+        Me.Chart1.Location = New System.Drawing.Point(2033, 150)
         Me.Chart1.Name = "Chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
         Me.Chart1.Series.Add(Series1)
-        Me.Chart1.Size = New System.Drawing.Size(1106, 906)
+        Me.Chart1.Size = New System.Drawing.Size(1182, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
         '
@@ -725,11 +727,33 @@ Partial Class Form1
         Me.txt_손절매비율.Text = "1.1"
         Me.txt_손절매비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
+        'grd_ShinHo
+        '
+        Me.grd_ShinHo.AllowUserToAddRows = False
+        Me.grd_ShinHo.AllowUserToDeleteRows = False
+        Me.grd_ShinHo.AllowUserToResizeColumns = False
+        Me.grd_ShinHo.AllowUserToResizeRows = False
+        Me.grd_ShinHo.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
+        Me.grd_ShinHo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.grd_ShinHo.Location = New System.Drawing.Point(1704, 150)
+        Me.grd_ShinHo.Name = "grd_ShinHo"
+        Me.grd_ShinHo.ReadOnly = True
+        Me.grd_ShinHo.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.grd_ShinHo.RowTemplate.Height = 23
+        Me.grd_ShinHo.ShowCellErrors = False
+        Me.grd_ShinHo.ShowCellToolTips = False
+        Me.grd_ShinHo.ShowEditingIcon = False
+        Me.grd_ShinHo.ShowRowErrors = False
+        Me.grd_ShinHo.Size = New System.Drawing.Size(312, 906)
+        Me.grd_ShinHo.TabIndex = 15
+        Me.grd_ShinHo.TabStop = False
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(2984, 1422)
+        Me.ClientSize = New System.Drawing.Size(3284, 1322)
+        Me.Controls.Add(Me.grd_ShinHo)
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.txt_DB_Date_Limit)
@@ -742,7 +766,9 @@ Partial Class Form1
         Me.Controls.Add(Me.grid1)
         Me.Controls.Add(Me.btn_RealTimeStart)
         Me.Controls.Add(Me.TableLayoutPanel2)
+        Me.Location = New System.Drawing.Point(20, 30)
         Me.Name = "Form1"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Form1"
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).EndInit()
@@ -755,6 +781,7 @@ Partial Class Form1
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
+        CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -810,5 +837,6 @@ Partial Class Form1
     Friend WithEvents txt_익절목표 As TextBox
     Friend WithEvents Label15 As Label
     Friend WithEvents txt_손절매비율 As TextBox
+    Friend WithEvents grd_ShinHo As DataGridView
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class

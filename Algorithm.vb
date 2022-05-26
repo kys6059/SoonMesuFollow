@@ -6,13 +6,10 @@ Structure ShinhoType
     Dim A01_날짜 As String
     Dim A02_interval As Integer
     Dim A03_남은날짜 As Single
-
     Dim A04_발생Index As Integer
     Dim A05_발생시간 As String
-
     Dim A06_신호ID As String
     Dim A07신호차수 As Single
-
     Dim A11_콜인덱스 As Integer
     Dim A12_콜행사가 As String
     Dim A13_콜신호발생가격 As Single
@@ -20,7 +17,6 @@ Structure ShinhoType
     Dim A15_콜주문번호 As String
     Dim A16_콜종목코드 As String
     Dim A17_콜체결상태 As Integer
-
     Dim A21_풋인덱스 As Integer
     Dim A22_풋행사가 As String
     Dim A23_풋신호발생가격 As Single
@@ -28,25 +24,22 @@ Structure ShinhoType
     Dim A25_풋주문번호 As String
     Dim A26_풋종목코드 As String
     Dim A27_풋체결상태 As Integer
-
     Dim A31_신호합계가격 As Single
     Dim A32_현재합계가격 As Single
-
     Dim A33_현재상태 As String
     Dim A34_이익률 As Single
-
     Dim A35_손절기준가격 As Single
     Dim A36_익절기준가격 As Single
     Dim A37_손절기준비율 As String
     Dim A38_익절기준비율 As String
     Dim A39_중간매도Flag As Integer
     Dim A40_TimeoutTime As String
-
     Dim A41_매도시간 As String
     Dim A42_매도Index As Integer
     Dim A43_매도사유 As String  '익절, 손절, TimeOver 구분
     Dim A44_메모 As String
-
+    Dim A45_기준가격 As Single
+    Dim A46_신호Timeout As String
 End Structure
 
 Enum occurType
@@ -159,7 +152,8 @@ Module Algorithm
         shinho.A38_익절기준비율 = 익절기준비율
         'shinho.A39_중간매도Flag
         shinho.A40_TimeoutTime = Form1.txt_신호TimeOut시간.Text
-
+        shinho.A45_기준가격 = Val(Form1.txt_JongmokTargetPrice.Text)
+        shinho.A46_신호Timeout = Val(Form1.txt_신호TimeOut시간.Text)
         Return shinho
 
     End Function
