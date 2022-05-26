@@ -538,7 +538,7 @@ Public Class Form1
 
         Dim selectedShinhoIndex As Integer = 0
 
-        If ShinhoList Is Nothing Then Return
+        If ShinhoList Is Nothing Or ShinhoList.Count = 0 Then Return
 
         Dim shinho As ShinhoType = ShinhoList(selectedShinhoIndex)
 

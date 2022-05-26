@@ -85,7 +85,7 @@ Module Algorithm
 
         Dim tempIndex = GetMaxIndex() 'curreuntIndex가 79일 때 0이어서 이상동작하는 거 방지하는 코드
 
-        'If tempIndex <> 양매도TargetIndex Then Return False '양매도는 정해진 시간에 수행하고 시간이 아니라면 아래를 수행하지 않는다
+        If tempIndex <> 양매도TargetIndex Then Return False '양매도는 정해진 시간에 수행하고 시간이 아니라면 아래를 수행하지 않는다
         If AlreadyOccured("S", occurType.oneShot) = True Then Return False  '한번이라도 이미 발생했다면 다시 발생하지 않는다
 
         '타겟시간 시가가 0보다 크면 무조건 양매도를 친다
