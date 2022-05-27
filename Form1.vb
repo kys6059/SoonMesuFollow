@@ -764,6 +764,9 @@ Public Class Form1
 
         If selectedIndex > 0 Then
             selectedJongmokIndex(0) = selectedIndex - 1
+
+            '여기에 합산 Data 계산하는 로직 추가해야 함
+            CalcSumPrice() '콜풋 시가종가의 합계를 구한다
             InitDrawSelectedGird()
             DrawSelectedData()
             DrawColor_Selected()
@@ -778,6 +781,7 @@ Public Class Form1
         If selectedIndex > 0 Then
 
             selectedJongmokIndex(1) = selectedIndex - 1
+            CalcSumPrice() '콜풋 시가종가의 합계를 구한다
             InitDrawSelectedGird()
             DrawSelectedData()
             DrawColor_Selected()

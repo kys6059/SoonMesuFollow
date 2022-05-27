@@ -155,7 +155,7 @@ Module Module_common
         Dim selectedCallIndex As Integer = selectedJongmokIndex(0)
         Dim selectedputIndex As Integer = selectedJongmokIndex(1)
 
-
+        SumDataSet.Initialze()
         For j As Integer = 0 To currentIndex
 
             '합계 계산
