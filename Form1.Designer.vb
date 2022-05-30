@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -77,6 +77,9 @@ Partial Class Form1
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txt_손절매비율 = New System.Windows.Forms.TextBox()
         Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
+        Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
+        Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_ScrolValue = New System.Windows.Forms.Label()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -85,6 +88,7 @@ Partial Class Form1
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel4.SuspendLayout()
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel5.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_RealTimeStart
@@ -555,16 +559,16 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend1)
+        ChartArea8.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea8)
+        Legend8.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend8)
         Me.Chart1.Location = New System.Drawing.Point(2033, 150)
         Me.Chart1.Name = "Chart1"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.Chart1.Series.Add(Series1)
+        Series8.ChartArea = "ChartArea1"
+        Series8.Legend = "Legend1"
+        Series8.Name = "Series1"
+        Me.Chart1.Series.Add(Series8)
         Me.Chart1.Size = New System.Drawing.Size(1182, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
@@ -748,11 +752,47 @@ Partial Class Form1
         Me.grd_ShinHo.TabIndex = 15
         Me.grd_ShinHo.TabStop = False
         '
+        'Hscroll_1
+        '
+        Me.Hscroll_1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Hscroll_1.LargeChange = 1
+        Me.Hscroll_1.Location = New System.Drawing.Point(0, 0)
+        Me.Hscroll_1.Name = "Hscroll_1"
+        Me.Hscroll_1.Size = New System.Drawing.Size(312, 43)
+        Me.Hscroll_1.TabIndex = 16
+        '
+        'TableLayoutPanel5
+        '
+        Me.TableLayoutPanel5.ColumnCount = 1
+        Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel5.Controls.Add(Me.Hscroll_1, 0, 0)
+        Me.TableLayoutPanel5.Controls.Add(Me.lbl_ScrolValue, 0, 1)
+        Me.TableLayoutPanel5.Location = New System.Drawing.Point(1704, 65)
+        Me.TableLayoutPanel5.Name = "TableLayoutPanel5"
+        Me.TableLayoutPanel5.RowCount = 2
+        Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
+        Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
+        Me.TableLayoutPanel5.Size = New System.Drawing.Size(312, 79)
+        Me.TableLayoutPanel5.TabIndex = 17
+        '
+        'lbl_ScrolValue
+        '
+        Me.lbl_ScrolValue.AutoSize = True
+        Me.lbl_ScrolValue.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.lbl_ScrolValue.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ScrolValue.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.lbl_ScrolValue.Location = New System.Drawing.Point(3, 43)
+        Me.lbl_ScrolValue.Name = "lbl_ScrolValue"
+        Me.lbl_ScrolValue.Size = New System.Drawing.Size(306, 36)
+        Me.lbl_ScrolValue.TabIndex = 17
+        Me.lbl_ScrolValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3284, 1322)
+        Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.grd_ShinHo)
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Controls.Add(Me.Chart1)
@@ -782,6 +822,8 @@ Partial Class Form1
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel5.ResumeLayout(False)
+        Me.TableLayoutPanel5.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -838,5 +880,8 @@ Partial Class Form1
     Friend WithEvents Label15 As Label
     Friend WithEvents txt_손절매비율 As TextBox
     Friend WithEvents grd_ShinHo As DataGridView
+    Friend WithEvents Hscroll_1 As HScrollBar
+    Friend WithEvents TableLayoutPanel5 As TableLayoutPanel
+    Friend WithEvents lbl_ScrolValue As Label
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class

@@ -47,14 +47,6 @@ Public Class Form1
                 GetAllData() '대신으로부터 Data 가져오기
                 Clac_DisplayAllGrid()
 
-
-
-
-
-                RedrawAll() 'Grid 그리기
-                'DrawGraph() '그래프 그리기
-                DrawScrollData() 'Scroll 및 기타 DB 관련 UI 표시하기
-
             Else
                 MsgBox("가져올 수 있는 종목이 없습니다")
             End If
@@ -87,6 +79,8 @@ Public Class Form1
             selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
         End If
 
+        SetScrolData() '타임 스크롤의 최대최소값을 지정한다
+
         CalcSumPrice() '콜풋 시가종가의 합계를 구한다
 
         '최대최소,제2저가 계산
@@ -98,6 +92,19 @@ Public Class Form1
         If 신호발생flag = True Then
             chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
         End If
+
+        RedrawAll() 'Grid 그리기
+        DrawGraph() '그래프 그리기
+        DrawScrollData()
+
+
+    End Sub
+
+    Private Sub SetScrolData()
+
+        Hscroll_1.Maximum = timeIndex - 1
+        Hscroll_1.Minimum = 0
+        Hscroll_1.Refresh
 
     End Sub
 
@@ -132,6 +139,8 @@ Public Class Form1
             cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
             cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
 
+            InitShinHoGird()
+
             InitDrawSelectedGird()
             DrawSelectedData()
             DrawShinhoGridData() '신호를 추가한다
@@ -142,7 +151,7 @@ Public Class Form1
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
-
+            lbl_ScrolValue.Text = "CurrentIndex : " & currentIndex.ToString() & ", Time = " & Data(0).ctime(currentIndex)
             UIVisible(True)
             grid1.Enabled = True
         End If
@@ -764,15 +773,12 @@ Public Class Form1
 
         Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
 
-        If selectedIndex > 0 Then
-            selectedJongmokIndex(0) = selectedIndex - 1
+        If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
 
-            '여기에 합산 Data 계산하는 로직 추가해야 함
-            CalcSumPrice() '콜풋 시가종가의 합계를 구한다
-            InitDrawSelectedGird()
-            DrawSelectedData()
-            DrawColor_Selected()
-            DrawGraph() '그래프 그리기
+            selectedJongmokIndex(0) = selectedIndex - 1
+            chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
+            Clac_DisplayAllGrid()
+
         End If
     End Sub
 
@@ -780,20 +786,15 @@ Public Class Form1
 
         Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
 
-        If selectedIndex > 0 Then
+        If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
 
             selectedJongmokIndex(1) = selectedIndex - 1
-            CalcSumPrice() '콜풋 시가종가의 합계를 구한다
-            InitDrawSelectedGird()
-            DrawSelectedData()
-            DrawColor_Selected()
-            DrawGraph() '그래프 그리기
+            chk_ChangeTargetIndex.Checked = False
+            Clac_DisplayAllGrid()
 
         End If
 
     End Sub
-
-
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
@@ -809,7 +810,6 @@ Public Class Form1
             '옵션 정보 가져와서 화면 표시
             GetAllData()
             Clac_DisplayAllGrid()
-            RedrawAll()
 
             'DB에 자동 저장 기능 추가 필요
 
@@ -843,6 +843,8 @@ Public Class Form1
         Dim str As String = "1.0.1_20220524"
 
         txt_programversion.Text = str
+
+        currentIndex = -1
 
         InitShinHoGird()
 
@@ -897,9 +899,7 @@ Public Class Form1
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()
-                RedrawAll() 'Grid 그리기
-                DrawGraph() '그래프 그리기
-                DrawScrollData()
+
             End If
 
         Else
@@ -928,15 +928,14 @@ Public Class Form1
 
             gTargetDateIndex = 0 '이것도 전역변수
             TargetDate = DBDateList(gTargetDateIndex)
+            sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
 
             TotalCount = GetDataFromDBHandler(TargetDate)
 
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()
-                RedrawAll() 'Grid 그리기
-                DrawGraph() '그래프 그리기
-                DrawScrollData()
+
             End If
 
         Else
@@ -960,12 +959,13 @@ Public Class Form1
 
             TotalCount = GetDataFromDBHandler(TargetDate) '이걸하면 딕셔너리의 data에서 해당 날짜의 Data를 가져온다
 
+            '날짜로부터 월물 계산하기
+            sMonth = getsMonth(TargetDate).ToString()
+
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()
-                RedrawAll() 'Grid 그리기
-                DrawGraph() '그래프 그리기
-                DrawScrollData()
+
             End If
 
         End If
@@ -977,5 +977,14 @@ Public Class Form1
         grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
     End Sub
 
+    Private Sub Hscroll_1_Scroll(sender As Object, e As ScrollEventArgs) Handles Hscroll_1.Scroll
 
+        If currentIndex >= 0 Then
+            Dim value = Hscroll_1.Value
+            If value <> currentIndex Then
+                currentIndex = value
+                Clac_DisplayAllGrid()
+            End If
+        End If
+    End Sub
 End Class

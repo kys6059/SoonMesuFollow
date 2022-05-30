@@ -108,6 +108,8 @@ Module Module_common
         timeIndex = 0
         timerCount = 0 '16초마다 돌아가는 타이머 주기
         timerMaxInterval = 16 '16초보다 크면 실행함
+        currentIndex = -1
+        timeIndex = -1
 
         JongmokTargetPrice = Val(Form1.txt_JongmokTargetPrice.Text)
         selectedJongmokIndex(0) = -1
@@ -305,6 +307,60 @@ Module Module_common
         End If
 
     End Sub
+
+    Public Function getsMonth(ByVal idate As Long) As Long
+        Dim i As Integer
+        Dim today_date, next_month As Date
+        Dim dayOfDate, monthOfDate, YearOfdate, nextmonth_year, next_month_month As Integer
+        Dim 목요일count As Integer
+        Dim tempdate As Date
+        Dim getMonth As Long
+
+        today_date = makeDate(idate)  '날짜를 만들고
+        next_month = DateAdd("M", 1, today_date)
+
+        dayOfDate = idate Mod 100
+        monthOfDate = Month(today_date)
+        YearOfdate = Year(today_date)
+
+        nextmonth_year = Year(next_month)
+        next_month_month = Month(next_month)
+
+
+        목요일count = 0
+
+        For i = 1 To dayOfDate
+
+            tempdate = DateSerial(YearOfdate, monthOfDate, i)
+            If Weekday(tempdate) = 5 Then ' 5 목요일
+                목요일count = 목요일count + 1
+            End If
+
+
+        Next
+
+        If 목요일count < 2 Then  '무조건 이번달과 같다
+
+            getMonth = (YearOfdate Mod 100) * 100 + monthOfDate
+
+        ElseIf 목요일count = 2 Then
+
+            If Weekday(today_date) = 5 Then '오늘이 목요일이면
+                '이번달이다
+                getMonth = (YearOfdate Mod 100) * 100 + monthOfDate
+            Else
+                '다음달이다
+                getMonth = (nextmonth_year Mod 100) * 100 + next_month_month
+            End If
+
+        Else '무조건 다음달이다
+            getMonth = (nextmonth_year Mod 100) * 100 + next_month_month
+        End If
+
+        Return getMonth
+
+    End Function
+
 
     Public Function getRemainDate(ByVal 월물 As String, ByVal idate As Long) As String
 
