@@ -33,13 +33,12 @@ Structure ShinhoType
     Dim A37_손절기준비율 As String
     Dim A38_익절기준비율 As String
     Dim A39_중간매도Flag As Integer
-    Dim A40_TimeoutTime As String
+    Dim A40_TimeoutTime As String '장 중 매도할 최종 시간
     Dim A41_매도시간 As String
     Dim A42_매도Index As Integer
     Dim A43_매도사유 As String  '익절, 손절, TimeOver 구분
     Dim A44_메모 As String
-    Dim A45_기준가격 As Single
-    Dim A46_신호Timeout As String
+    Dim A45_기준가격 As Single '매수할 때 기준가격
 End Structure
 
 Enum occurType
@@ -51,6 +50,65 @@ Module Algorithm
 
     Public 양매도TargetIndex As Integer
     Public ShinhoList As List(Of ShinhoType)
+
+    Public Sub 신호현재상태확인하기()
+
+        For i As Integer = 0 To ShinhoList.Count - 1
+
+            Dim shinho As ShinhoType = ShinhoList(i)
+
+            '신호 현재 상태가 1이면
+            If shinho.A33_현재상태 = 1 Then
+
+                If shinho.A06_신호ID = "S" Then
+                    IsContinueShinho_S(shinho)
+                    ShinhoList(i) = shinho
+                End If
+
+
+
+            End If
+
+        Next
+
+
+    End Sub
+
+    Private Sub IsContinueShinho_S(ByRef shinho As ShinhoType)
+
+        Dim 콜현재가, 풋현재가, 합계가격 As Single
+
+        콜현재가 = Data(shinho.A11_콜인덱스).price(0, currentIndex, 3)
+        풋현재가 = Data(shinho.A21_풋인덱스).price(1, currentIndex, 3)
+        합계가격 = 콜현재가 + 풋현재가
+
+        shinho.A32_현재합계가격 = 합계가격
+        shinho.A34_이익률 = (합계가격 / shinho.A31_신호합계가격)
+
+        If shinho.A35_손절기준가격 < 합계가격 Then '손절
+
+            shinho.A33_현재상태 = 0
+            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A42_매도Index = currentIndex
+            shinho.A43_매도사유 = "손절"
+
+        ElseIf shinho.A36_익절기준가격 > 합계가격 Then '익절
+            shinho.A33_현재상태 = 0
+            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A42_매도Index = currentIndex
+            shinho.A43_매도사유 = "익절"
+        End If
+
+        'time limit 체크
+        If Val(Data(shinho.A11_콜인덱스).ctime(currentIndex)) >= Val(shinho.A40_TimeoutTime) Then
+            shinho.A33_현재상태 = 0
+            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A42_매도Index = currentIndex
+            shinho.A43_매도사유 = "타임아웃"
+
+        End If
+
+    End Sub
 
     Public Function CalcAlrotithmAll() As Boolean '전체 알고리즘을 계산한다 - 일단 양매도 S 알고리즘만 먼저 적용함
 
@@ -153,7 +211,6 @@ Module Algorithm
         'shinho.A39_중간매도Flag
         shinho.A40_TimeoutTime = Form1.txt_신호TimeOut시간.Text
         shinho.A45_기준가격 = Val(Form1.txt_JongmokTargetPrice.Text)
-        shinho.A46_신호Timeout = Val(Form1.txt_신호TimeOut시간.Text)
         Return shinho
 
     End Function

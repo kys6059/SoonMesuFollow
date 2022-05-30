@@ -48,11 +48,7 @@ Public Class Form1
                 Clac_DisplayAllGrid()
 
 
-                '신호 만들고 해제 판단하기
-                Dim 신호발생flag As Boolean = CalcAlrotithmAll()
-                If 신호발생flag = True Then
-                    chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
-                End If
+
 
 
                 RedrawAll() 'Grid 그리기
@@ -95,6 +91,13 @@ Public Class Form1
 
         '최대최소,제2저가 계산
         CalcColorData()
+
+        '신호 만들고 해제 판단하기
+        신호현재상태확인하기()
+        Dim 신호발생flag As Boolean = CalcAlrotithmAll()
+        If 신호발생flag = True Then
+            chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
+        End If
 
     End Sub
 
@@ -462,7 +465,7 @@ Public Class Form1
         grd_ShinHo.Rows(34).Cells(0).Value = "A43_매도사유"
         grd_ShinHo.Rows(35).Cells(0).Value = "A44_메모"
         grd_ShinHo.Rows(36).Cells(0).Value = "A45_기준가격"
-        grd_ShinHo.Rows(37).Cells(0).Value = "A46_신호Timeout"
+        grd_ShinHo.Rows(37).Cells(0).Value = ""
     End Sub
 
 
@@ -580,7 +583,6 @@ Public Class Form1
         grd_ShinHo.Rows(34).Cells(1).Value = shinho.A43_매도사유
         grd_ShinHo.Rows(35).Cells(1).Value = shinho.A44_메모
         grd_ShinHo.Rows(36).Cells(1).Value = shinho.A45_기준가격
-        grd_ShinHo.Rows(37).Cells(1).Value = shinho.A46_신호Timeout
 
         If shinho.A33_현재상태 = 1 Then
             grd_ShinHo.Rows(24).Cells(1).Style.BackColor = Color.Yellow
