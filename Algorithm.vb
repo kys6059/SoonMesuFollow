@@ -38,7 +38,7 @@ Structure ShinhoType
     Dim A42_매도Index As Integer
     Dim A43_매도사유 As String  '익절, 손절, TimeOver 구분
     Dim A44_메모 As String
-    Dim A45_기준가격 As Single '매수할 때 기준가격
+    Dim A45_기준가격 As String '매수할 때 기준가격
     Dim A46_환산이익율 As Single '매수 관점에서 이익률
     Dim A47_IsReal As Integer
 End Structure
@@ -91,7 +91,7 @@ Module Algorithm
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
-            shinho.A43_매도사유 = "손절"
+            shinho.A43_매도사유 = "son"
 
         ElseIf shinho.A36_익절기준가격 > 합계가격 Then '익절
 
@@ -101,7 +101,7 @@ Module Algorithm
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
-            shinho.A43_매도사유 = "익절"
+            shinho.A43_매도사유 = "ik"
         End If
 
         'time limit 체크
@@ -109,7 +109,7 @@ Module Algorithm
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
-            shinho.A43_매도사유 = "타임아웃"
+            shinho.A43_매도사유 = "timeout"
         End If
 
         shinho.A46_환산이익율 = 1 - (shinho.A32_현재합계가격 / shinho.A31_신호합계가격)
@@ -217,7 +217,7 @@ Module Algorithm
         'shinho.A39_중간매도Flag
         shinho.A40_TimeoutTime = Form1.txt_신호TimeOut시간.Text
 
-        shinho.A45_기준가격 = Val(Form1.txt_JongmokTargetPrice.Text)
+        shinho.A45_기준가격 = Form1.txt_JongmokTargetPrice.Text
         If isRealFlag = True Then
             shinho.A47_IsReal = 1
         Else

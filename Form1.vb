@@ -980,6 +980,7 @@ Public Class Form1
         End If
 
         자동반복계산로직(0)
+        Add_Log("자동 반복 계산로직 완료", "")
 
     End Sub
 
@@ -1007,17 +1008,24 @@ Public Class Form1
                 SimulationTotalShinhoList.Add(ShinhoList(j))
             Next
 
-            'If Chk_실험중지.Checked = True Then
-            '    Chk_실험중지.Checked = False
-            '    Add_Log("실험중지", "")
-            '    Return
-            'End If
+            Threading.Thread.Sleep(50)
+
+            If Chk_실험중지.Checked = True Then
+                Chk_실험중지.Checked = False
+                Add_Log("실험중지", "")
+                Return
+            End If
 
         Next
 
-        Add_Log(cnt.ToString() + "차 자동계산완료", " : " + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
-
         '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
+        If SimulationTotalShinhoList.Count > 0 Then
+
+            'Add_Log(cnt.ToString() + "차 자동계산완료", " : " + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
+            InsertShinhoResult()
+            SimulationTotalShinhoList.Clear()
+
+        End If
 
     End Sub
 
@@ -1051,7 +1059,51 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btn_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_전체조건반복.Click
+    Private Sub btn_전체조건반복_Click(sender As Object, eee As EventArgs) Handles btn_전체조건반복.Click
+
+        Dim a, b, c, d, e, cnt As Integer
+
+        Dim 손절비율() As String = {"1.1", "1.2", "1.3"}
+        Dim 익절비율() As String = {"0.9", "0.8", "0.7"}
+        Dim 발생Index() As String = {"0", "2"}
+        Dim TimeoutTime() As String = {"1520", "1510", "1500"}
+        Dim 기준가격() As String = {"1.5", "2.0", "2.5"}
+
+        If SimulationTotalShinhoList Is Nothing Then
+            SimulationTotalShinhoList = New List(Of ShinhoType)
+        Else
+            SimulationTotalShinhoList.Clear()
+        End If
+
+        cnt = 0
+
+        'For a = 0 To 손절비율.Length - 1
+        'For b = 0 To 익절비율.Length - 1
+        'For c = 0 To 발생Index.Length - 1
+        For d = 0 To TimeoutTime.Length - 1
+                        For e = 0 To 기준가격.Length - 1
+
+                            txt_손절매비율.Text = 손절비율(a)
+                            txt_익절목표.Text = 익절비율(b)
+                            txt_양매도Target시간Index.Text = 발생Index(c)
+                            txt_신호TimeOut시간.Text = TimeoutTime(d)
+                            txt_JongmokTargetPrice.Text = 기준가격(e)
+
+                            Dim Str As String = "cnt_" + cnt.ToString() + "__손절매비율_" + 손절비율(a) + "__익절비율_" + 익절비율(b) + "__발생Index_" + 발생Index(c) + "__TimeoutTime_" + TimeoutTime(d) + "__기준가격_" + 기준가격(e)
+                Console.WriteLine(Str)
+                Add_Log("시뮬레이션 진행 : ", Str)
+                자동반복계산로직(cnt)
+                cnt += 1
+                        Next
+                    Next
+        '        Next
+        '    Next
+        'Next
+
+
+    End Sub
+
+    Private Sub DoFullCourseSimulation()
 
     End Sub
 

@@ -52,6 +52,73 @@ Module DBHandler
         Return cnt
     End Function
 
+    '시뮬레이션이나 실시간으로 발생한 신호의 결과를 빅쿼리에 저장한다
+    Public Sub InsertShinhoResult()
+        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
+        Dim dateaset_id = "option5"
+        Dim table_id = "Option_ShinhoResultTable"
+
+        Dim totalCount As Integer = SimulationTotalShinhoList.Count - 1
+
+        Dim rows(totalCount) As BigQueryInsertRow
+
+        For i As Integer = 0 To totalCount
+
+            Dim shinho As ShinhoType = SimulationTotalShinhoList(i)
+
+            rows(i) = New BigQueryInsertRow
+            rows(i).Add("A00_Month", shinho.A00_월물)
+            rows(i).Add("A01_Date", shinho.A01_날짜)
+            rows(i).Add("A02_Interval", shinho.A02_interval)
+            rows(i).Add("A03_RemainDate", shinho.A03_남은날짜)
+            rows(i).Add("A04_OccurIndex", shinho.A04_발생Index)
+            rows(i).Add("A05_OccurTime", shinho.A05_발생시간)
+            rows(i).Add("A06_ShinhoID", shinho.A06_신호ID)
+            rows(i).Add("A07_ShinhoCount", shinho.A07신호차수)
+            rows(i).Add("A11_CallIndex", shinho.A11_콜인덱스)
+            rows(i).Add("A12_CallHangsaga", shinho.A12_콜행사가)
+            rows(i).Add("A13_CallShinhoPrice", shinho.A13_콜신호발생가격)
+            rows(i).Add("A14_CallBuyingPrice", shinho.A14_콜매수가격)
+            rows(i).Add("A15_CallOrderNumber", shinho.A15_콜주문번호)
+            rows(i).Add("A16_CallJongmokCode", shinho.A16_콜종목코드)
+            rows(i).Add("A17_CallbuyingStatus", shinho.A17_콜체결상태)
+            rows(i).Add("A21_PutIndex", shinho.A21_풋인덱스)
+            rows(i).Add("A22_PutHangsaga", shinho.A22_풋행사가)
+            rows(i).Add("A23_PutShinhoPrice", shinho.A23_풋신호발생가격)
+            rows(i).Add("A24_PutBuyingPrice", shinho.A24_풋매수가격)
+            rows(i).Add("A25_PutOrderNumber", shinho.A25_풋주문번호)
+            rows(i).Add("A26_PutJongmokCode", shinho.A26_풋종목코드)
+            rows(i).Add("A27_PutBuyingStatus", shinho.A27_풋체결상태)
+            rows(i).Add("A31_ShinhoSumPrice", shinho.A31_신호합계가격)
+            rows(i).Add("A32_CurrentSumPrice", shinho.A32_현재합계가격)
+            rows(i).Add("A33_CurrentStatus", shinho.A33_현재상태)
+            rows(i).Add("A34_ProfitRatio", shinho.A34_이익률)
+            rows(i).Add("A35_SonjulPrice", shinho.A35_손절기준가격)
+            rows(i).Add("A36_IkjulPrice", shinho.A36_익절기준가격)
+            rows(i).Add("A37_SonjulRatio", shinho.A37_손절기준비율)
+            rows(i).Add("A38_IkjulRatio", shinho.A38_익절기준비율)
+            rows(i).Add("A39_MidSellFlag", shinho.A39_중간매도Flag)
+            rows(i).Add("A40_TimeoutTime", shinho.A40_TimeoutTime)
+            rows(i).Add("A41_SellTime", shinho.A41_매도시간)
+            rows(i).Add("A42_SellIndex", shinho.A42_매도Index)
+            rows(i).Add("A43_SellReason", shinho.A43_매도사유)
+            rows(i).Add("A44_Memo", shinho.A44_메모)
+            rows(i).Add("A45_OrderingPrice", shinho.A45_기준가격)
+            rows(i).Add("A46_LastProfitRatio", shinho.A46_환산이익율)
+            rows(i).Add("A47_IsReal", shinho.A47_IsReal)
+
+        Next
+
+        client.InsertRows(dateaset_id, table_id, rows)
+
+        'Dim str As String = " 신호결과 저장완료 " & SimulationTotalShinhoList.Count.ToString() & " 개의 row가 등록"
+        'Console.WriteLine(str)
+        'Add_Log("일반", str)
+
+    End Sub
+
+
+    '일일 데이터를 빅쿼리에 저장한다
     Public Function InsertTargetDateData(ByVal iDate As Integer) As Integer
 
         Dim retCount As Integer = 0
@@ -87,7 +154,7 @@ Module DBHandler
 
                     If Data(i).price(callput, j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
 
-                        rows(retCount) = New BigQueryInsertRow(retCount)
+                        rows(retCount) = New BigQueryInsertRow '(retCount) 여기에 (retCount)이게 붙으면 배열의 크기만큼 잡는건데 이건 아닌거 같아서 일단 제거하고 살펴보기로 함 (20220601)
                         rows(retCount).Add("cdate", iDate)
                         rows(retCount).Add("index", i)
                         rows(retCount).Add("hangsaga", Data(i).HangSaGa)
@@ -254,7 +321,7 @@ Module DBHandler
 
     End Sub
 
-    '빅쿼리 DB에 들어있는 전체 data를 가져온다  -------------- 일단 너무 복잡해지니 사용하지 않고 하루하루치 Data를 가져오는 걸 먼저 구현한다
+    '빅쿼리 DB에 들어있는 전체 data를 가져온다  
     '왜냐하면 하루씩 가져오면 너무 느려진다 
     Public Function GetRawData(ByVal dateLimitText As String) As Integer
 

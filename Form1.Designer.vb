@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -567,16 +567,16 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend1)
         Me.Chart1.Location = New System.Drawing.Point(2033, 150)
         Me.Chart1.Name = "Chart1"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.Chart1.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.Chart1.Series.Add(Series1)
         Me.Chart1.Size = New System.Drawing.Size(1182, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
@@ -797,6 +797,7 @@ Partial Class Form1
         '
         'TableLayoutPanel6
         '
+        Me.TableLayoutPanel6.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.TableLayoutPanel6.ColumnCount = 3
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.9004!))
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.27888!))
@@ -820,9 +821,9 @@ Partial Class Form1
         '
         Me.btn_전체조건반복.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_전체조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_전체조건반복.Location = New System.Drawing.Point(241, 38)
+        Me.btn_전체조건반복.Location = New System.Drawing.Point(241, 39)
         Me.btn_전체조건반복.Name = "btn_전체조건반복"
-        Me.btn_전체조건반복.Size = New System.Drawing.Size(189, 59)
+        Me.btn_전체조건반복.Size = New System.Drawing.Size(188, 57)
         Me.btn_전체조건반복.TabIndex = 5
         Me.btn_전체조건반복.Text = "전체조건 반복"
         Me.btn_전체조건반복.UseVisualStyleBackColor = True
@@ -831,9 +832,9 @@ Partial Class Form1
         '
         Me.btn_동일조건반복.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_동일조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_동일조건반복.Location = New System.Drawing.Point(110, 38)
+        Me.btn_동일조건반복.Location = New System.Drawing.Point(111, 39)
         Me.btn_동일조건반복.Name = "btn_동일조건반복"
-        Me.btn_동일조건반복.Size = New System.Drawing.Size(125, 59)
+        Me.btn_동일조건반복.Size = New System.Drawing.Size(123, 57)
         Me.btn_동일조건반복.TabIndex = 4
         Me.btn_동일조건반복.Text = "동일조건반복"
         Me.btn_동일조건반복.UseVisualStyleBackColor = True
@@ -843,9 +844,9 @@ Partial Class Form1
         Me.chk_화면끄기.AutoSize = True
         Me.chk_화면끄기.Dock = System.Windows.Forms.DockStyle.Right
         Me.chk_화면끄기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_화면끄기.Location = New System.Drawing.Point(9, 3)
+        Me.chk_화면끄기.Location = New System.Drawing.Point(9, 4)
         Me.chk_화면끄기.Name = "chk_화면끄기"
-        Me.chk_화면끄기.Size = New System.Drawing.Size(95, 29)
+        Me.chk_화면끄기.Size = New System.Drawing.Size(95, 28)
         Me.chk_화면끄기.TabIndex = 0
         Me.chk_화면끄기.Text = "화면끄기"
         Me.chk_화면끄기.UseVisualStyleBackColor = True
@@ -854,9 +855,9 @@ Partial Class Form1
         '
         Me.btn_당일반복.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_당일반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_당일반복.Location = New System.Drawing.Point(3, 38)
+        Me.btn_당일반복.Location = New System.Drawing.Point(4, 39)
         Me.btn_당일반복.Name = "btn_당일반복"
-        Me.btn_당일반복.Size = New System.Drawing.Size(101, 59)
+        Me.btn_당일반복.Size = New System.Drawing.Size(100, 57)
         Me.btn_당일반복.TabIndex = 1
         Me.btn_당일반복.Text = "당일반복"
         Me.btn_당일반복.UseVisualStyleBackColor = True
@@ -864,9 +865,9 @@ Partial Class Form1
         'txt_실험조건
         '
         Me.txt_실험조건.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_실험조건.Location = New System.Drawing.Point(241, 3)
+        Me.txt_실험조건.Location = New System.Drawing.Point(241, 4)
         Me.txt_실험조건.Name = "txt_실험조건"
-        Me.txt_실험조건.Size = New System.Drawing.Size(189, 29)
+        Me.txt_실험조건.Size = New System.Drawing.Size(188, 28)
         Me.txt_실험조건.TabIndex = 7
         Me.txt_실험조건.Text = ""
         '
@@ -875,9 +876,9 @@ Partial Class Form1
         Me.Chk_실험중지.AutoSize = True
         Me.Chk_실험중지.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Chk_실험중지.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Chk_실험중지.Location = New System.Drawing.Point(110, 3)
+        Me.Chk_실험중지.Location = New System.Drawing.Point(111, 4)
         Me.Chk_실험중지.Name = "Chk_실험중지"
-        Me.Chk_실험중지.Size = New System.Drawing.Size(125, 29)
+        Me.Chk_실험중지.Size = New System.Drawing.Size(123, 28)
         Me.Chk_실험중지.TabIndex = 8
         Me.Chk_실험중지.Text = "실험중지"
         Me.Chk_실험중지.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
