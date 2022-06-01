@@ -18,8 +18,6 @@ Public Class Form1
         InitDataStructure()
         InitObject()
 
-        UIVisible(False)
-
         Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
 
         isRealFlag = True '실시간 로직임을 기억한다
@@ -54,7 +52,6 @@ Public Class Form1
             MsgBox("사이보스에 연결되지 않았습니다")
         End If
 
-        UIVisible(True)
 
         Return False
 
@@ -83,19 +80,23 @@ Public Class Form1
 
         CalcSumPrice() '콜풋 시가종가의 합계를 구한다
 
-        '최대최소,제2저가 계산
-        CalcColorData()
+        CalcColorData()        '최대최소,제2저가 계산
 
-        '신호 만들고 해제 판단하기
-        신호현재상태확인하기()
+
+        신호현재상태확인하기()        '신호 만들고 해제 판단하기
+
         Dim 신호발생flag As Boolean = CalcAlrotithmAll()
         If 신호발생flag = True Then
             chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
         End If
 
-        RedrawAll() 'Grid 그리기
+        If chk_화면끄기.Checked = False Then
+            RedrawAll() 'Grid 그리기
+            DrawScrollData()
+        End If
+
         DrawGraph() '그래프 그리기
-        DrawScrollData()
+
 
 
     End Sub
@@ -112,12 +113,7 @@ Public Class Form1
 
         Dim tempIndex As Integer
 
-        If currentIndex > 0 Then
-
-            UIVisible(False)
-
-            InitFirstGrid()
-            DrawGrid1Data()
+        If currentIndex >= 0 Then
 
             'grd_selected 조절하기
             'combo에 전체 종목을 Add한다 인덱스, 행사가, 현재가격
@@ -139,21 +135,28 @@ Public Class Form1
             cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
             cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
 
+            If chk_화면끄기.Checked = False Then
+                grd_selected.Visible = False
+                grid1.Visible = False
+                InitFirstGrid()
+                DrawGrid1Data()
+                DrawColorAll()
+
+                InitDrawSelectedGird()
+                DrawSelectedData()
+                DrawColor_Selected()            '색깔 실제로 grid에 입히기
+                grd_selected.Visible = True
+                grid1.Visible = True
+            End If
+
             InitShinHoGird()
-
-            InitDrawSelectedGird()
-            DrawSelectedData()
             DrawShinhoGridData() '신호를 추가한다
-
-            '색깔 실제로 grid에 입히기
-            DrawColorAll()
-            DrawColor_Selected()
 
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
             lbl_ScrolValue.Text = "CurrentIndex : " & currentIndex.ToString() & ", Time = " & Data(0).ctime(currentIndex)
-            UIVisible(True)
-            grid1.Enabled = True
+
+
         End If
 
     End Sub
@@ -302,13 +305,11 @@ Public Class Form1
 
     End Sub
 
-
     Private Sub DrawGraph()
-
+        Chart1.Visible = False
         InitGraph()
         DrawWinFormGraph()
-        'DrawHippoGraph()
-
+        Chart1.Visible = True
     End Sub
 
     Private Sub DrawColor_Selected()
@@ -609,6 +610,8 @@ Public Class Form1
             grd_ShinHo.Rows(25).Cells(1).Style.ForeColor = Color.Black
         End If
 
+        grd_ShinHo.Refresh()
+
     End Sub
 
     Private Sub DrawSelectedData()
@@ -840,6 +843,9 @@ Public Class Form1
         Dim strdt As String = Format(dt, "yyMM01")
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
+        Dim today As Date = Now()
+        txt_실험조건.Text = "A" + Format(today, "yyMMdd")
+
         Dim str As String = "1.0.1_20220524"
 
         txt_programversion.Text = str
@@ -944,15 +950,87 @@ Public Class Form1
 
     End Sub
 
-    Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
+    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
+        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
+    End Sub
 
-        If gTargetDateIndex <> e.NewValue Then
+    Private Sub Hscroll_1_Scroll(sender As Object, e As ScrollEventArgs) Handles Hscroll_1.Scroll
 
-            Add_Log("일반", "DBDate_HScrollBar_ValueChanged 호출됨 " + e.NewValue.ToString())
+        If currentIndex >= 0 Then
+            Dim value = Hscroll_1.Value
+            If value <> currentIndex Then
+                currentIndex = value
+                Clac_DisplayAllGrid()
+            End If
+        End If
+    End Sub
+
+    Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
+        Dim i As Integer
+        isRealFlag = False
+        chk_화면끄기.Checked = True
+        For i = 0 To timeIndex - 1
+            currentIndex = i
+
+            Clac_DisplayAllGrid()
+        Next
+        chk_화면끄기.Checked = False
+        Clac_DisplayAllGrid()
+        isRealFlag = True
+        Add_Log("일반", "당일 자동반복 완료")
+    End Sub
+
+    Private Sub btn_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_동일조건반복.Click
+
+        isRealFlag = False
+
+        If SimulationTotalShinhoList Is Nothing Then
+            SimulationTotalShinhoList = New List(Of ShinhoType)
+        Else
+            SimulationTotalShinhoList.Clear()
+        End If
+
+        For i As Integer = 0 To DBTotalDateCount - 1
+
+
+            DBDate_HScrollBar.Value = i     ' 이 안에서도 Clac_DisplayAllGrid  호출하지만 그건 그날짜 data의 첫번째만 호출하는 것임
+            DBDate_HScrollBar.Refresh()
+
+            chk_화면끄기.Checked = True
+
+            '당일 내부에서 변경
+            For j As Integer = 0 To timeIndex - 1
+                currentIndex = j
+                If currentIndex = timeIndex - 1 Then chk_화면끄기.Checked = False
+                Clac_DisplayAllGrid()
+            Next
+
+            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+            For j = 0 To ShinhoList.Count - 1
+                SimulationTotalShinhoList.Add(ShinhoList(j))
+            Next
+
+            Add_Log("자동계산완료", " : " + DBDateList(i).ToString() + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
+
+            '여기서 DB에 입력하면 완료됨
+
+        Next
+
+
+
+    End Sub
+
+
+    Private Sub DBDate_HScrollBar_ValueChanged(sender As Object, e As EventArgs) Handles DBDate_HScrollBar.ValueChanged
+
+        Dim newValue As Integer = DBDate_HScrollBar.Value
+
+        If gTargetDateIndex <> newValue Then
+
             InitDataStructure()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
 
-            gTargetDateIndex = e.NewValue
+            gTargetDateIndex = newValue
 
             TargetDate = DBDateList(gTargetDateIndex)
             'TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣고 종목의 Count를 리턴한다
@@ -970,21 +1048,5 @@ Public Class Form1
 
         End If
 
-
-    End Sub
-
-    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
-        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
-    End Sub
-
-    Private Sub Hscroll_1_Scroll(sender As Object, e As ScrollEventArgs) Handles Hscroll_1.Scroll
-
-        If currentIndex >= 0 Then
-            Dim value = Hscroll_1.Value
-            If value <> currentIndex Then
-                currentIndex = value
-                Clac_DisplayAllGrid()
-            End If
-        End If
     End Sub
 End Class

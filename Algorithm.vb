@@ -50,6 +50,7 @@ Module Algorithm
 
     Public 양매도TargetIndex As Integer
     Public ShinhoList As List(Of ShinhoType)
+    Public SimulationTotalShinhoList As List(Of ShinhoType)
 
     Public Sub 신호현재상태확인하기()
 
@@ -65,13 +66,8 @@ Module Algorithm
                     ShinhoList(i) = shinho
                 End If
 
-
-
             End If
-
         Next
-
-
     End Sub
 
     Private Sub IsContinueShinho_S(ByRef shinho As ShinhoType)

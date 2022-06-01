@@ -288,25 +288,6 @@ Module Module_common
 
     End Function
 
-    Public Sub UIVisible(ByVal flag As Boolean)
-
-        If flag = True Then
-
-            Form1.grd_selected.Visible = True
-            Form1.grid1.Visible = True
-            Form1.Chart1.Visible = True
-            Form1.grid1.Enabled = True
-            Form1.grd_selected.Enabled = True
-        Else
-
-            Form1.grd_selected.Visible = False
-            Form1.grid1.Visible = False
-            Form1.Chart1.Visible = False
-            Form1.grid1.Enabled = False
-            Form1.grd_selected.Enabled = False
-        End If
-
-    End Sub
 
     Public Function getsMonth(ByVal idate As Long) As Long
         Dim i As Integer
@@ -421,6 +402,7 @@ Module Module_common
         Else
             Form1.txt_Log.Text = tDate & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
         End If
+        Form1.txt_Log.Refresh()
 
     End Sub
 

@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -80,6 +80,13 @@ Partial Class Form1
         Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ScrolValue = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_전체조건반복 = New System.Windows.Forms.Button()
+        Me.btn_동일조건반복 = New System.Windows.Forms.Button()
+        Me.chk_화면끄기 = New System.Windows.Forms.CheckBox()
+        Me.btn_당일반복 = New System.Windows.Forms.Button()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.txt_실험조건 = New System.Windows.Forms.RichTextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -89,6 +96,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.SuspendLayout()
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel5.SuspendLayout()
+        Me.TableLayoutPanel6.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_RealTimeStart
@@ -108,6 +116,7 @@ Partial Class Form1
         Me.grid1.AllowUserToResizeRows = False
         Me.grid1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.grid1.Enabled = False
         Me.grid1.Location = New System.Drawing.Point(21, 150)
         Me.grid1.Margin = New System.Windows.Forms.Padding(1)
         Me.grid1.Name = "grid1"
@@ -129,6 +138,7 @@ Partial Class Form1
         Me.grd_selected.AllowUserToResizeRows = False
         Me.grd_selected.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.grd_selected.Enabled = False
         Me.grd_selected.Location = New System.Drawing.Point(949, 150)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.ReadOnly = True
@@ -559,16 +569,16 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea8.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea8)
-        Legend8.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend8)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(2033, 150)
         Me.Chart1.Name = "Chart1"
-        Series8.ChartArea = "ChartArea1"
-        Series8.Legend = "Legend1"
-        Series8.Name = "Series1"
-        Me.Chart1.Series.Add(Series8)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1182, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
@@ -787,11 +797,99 @@ Partial Class Form1
         Me.lbl_ScrolValue.TabIndex = 17
         Me.lbl_ScrolValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'TableLayoutPanel6
+        '
+        Me.TableLayoutPanel6.ColumnCount = 3
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.9004!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.27888!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.82072!))
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_전체조건반복, 2, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_동일조건반복, 1, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.chk_화면끄기, 0, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.Label16, 1, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.txt_실험조건, 2, 0)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(2033, 44)
+        Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
+        Me.TableLayoutPanel6.RowCount = 2
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.73265!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 64.26735!))
+        Me.TableLayoutPanel6.Size = New System.Drawing.Size(433, 100)
+        Me.TableLayoutPanel6.TabIndex = 18
+        '
+        'btn_전체조건반복
+        '
+        Me.btn_전체조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_전체조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_전체조건반복.Location = New System.Drawing.Point(241, 38)
+        Me.btn_전체조건반복.Name = "btn_전체조건반복"
+        Me.btn_전체조건반복.Size = New System.Drawing.Size(189, 59)
+        Me.btn_전체조건반복.TabIndex = 5
+        Me.btn_전체조건반복.Text = "전체조건 반복"
+        Me.btn_전체조건반복.UseVisualStyleBackColor = True
+        '
+        'btn_동일조건반복
+        '
+        Me.btn_동일조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_동일조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_동일조건반복.Location = New System.Drawing.Point(110, 38)
+        Me.btn_동일조건반복.Name = "btn_동일조건반복"
+        Me.btn_동일조건반복.Size = New System.Drawing.Size(125, 59)
+        Me.btn_동일조건반복.TabIndex = 4
+        Me.btn_동일조건반복.Text = "동일조건반복"
+        Me.btn_동일조건반복.UseVisualStyleBackColor = True
+        '
+        'chk_화면끄기
+        '
+        Me.chk_화면끄기.AutoSize = True
+        Me.chk_화면끄기.Dock = System.Windows.Forms.DockStyle.Right
+        Me.chk_화면끄기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_화면끄기.Location = New System.Drawing.Point(9, 3)
+        Me.chk_화면끄기.Name = "chk_화면끄기"
+        Me.chk_화면끄기.Size = New System.Drawing.Size(95, 29)
+        Me.chk_화면끄기.TabIndex = 0
+        Me.chk_화면끄기.Text = "화면끄기"
+        Me.chk_화면끄기.UseVisualStyleBackColor = True
+        '
+        'btn_당일반복
+        '
+        Me.btn_당일반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_당일반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_당일반복.Location = New System.Drawing.Point(3, 38)
+        Me.btn_당일반복.Name = "btn_당일반복"
+        Me.btn_당일반복.Size = New System.Drawing.Size(101, 59)
+        Me.btn_당일반복.TabIndex = 1
+        Me.btn_당일반복.Text = "당일반복"
+        Me.btn_당일반복.UseVisualStyleBackColor = True
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label16.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label16.Location = New System.Drawing.Point(110, 2)
+        Me.Label16.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(125, 31)
+        Me.Label16.TabIndex = 6
+        Me.Label16.Text = "실험조건"
+        Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txt_실험조건
+        '
+        Me.txt_실험조건.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_실험조건.Location = New System.Drawing.Point(241, 3)
+        Me.txt_실험조건.Name = "txt_실험조건"
+        Me.txt_실험조건.Size = New System.Drawing.Size(189, 29)
+        Me.txt_실험조건.TabIndex = 7
+        Me.txt_실험조건.Text = ""
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3284, 1322)
+        Me.Controls.Add(Me.TableLayoutPanel6)
         Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.grd_ShinHo)
         Me.Controls.Add(Me.TableLayoutPanel4)
@@ -824,6 +922,8 @@ Partial Class Form1
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel5.ResumeLayout(False)
         Me.TableLayoutPanel5.PerformLayout()
+        Me.TableLayoutPanel6.ResumeLayout(False)
+        Me.TableLayoutPanel6.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -883,5 +983,12 @@ Partial Class Form1
     Friend WithEvents Hscroll_1 As HScrollBar
     Friend WithEvents TableLayoutPanel5 As TableLayoutPanel
     Friend WithEvents lbl_ScrolValue As Label
+    Friend WithEvents TableLayoutPanel6 As TableLayoutPanel
+    Friend WithEvents btn_전체조건반복 As Button
+    Friend WithEvents btn_동일조건반복 As Button
+    Friend WithEvents chk_화면끄기 As CheckBox
+    Friend WithEvents btn_당일반복 As Button
+    Friend WithEvents Label16 As Label
+    Friend WithEvents txt_실험조건 As RichTextBox
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class
