@@ -1059,11 +1059,11 @@ Public Class Form1
 
         Dim a, b, c, d, e, cnt As Integer
 
-        Dim 손절비율() As String = {"1.1", "1.2", "1.3"}
-        Dim 익절비율() As String = {"0.9", "0.8", "0.7"}
-        Dim 발생Index() As String = {"0", "2"}
-        Dim TimeoutTime() As String = {"1520", "1510", "1500"}
-        Dim 기준가격() As String = {"1.5", "2.0", "2.5"}
+        Dim 손절비율() As String = {"1.16", "1.2", "1.24"}
+        Dim 익절비율() As String = {"0.84", "0.8", "0.76"}
+        '        Dim 발생Index() As String = {"0", "2"}
+        '       Dim TimeoutTime() As String = {"1520", "1510", "1500"}
+        Dim 기준가격() As String = {"2.3", "2.6", "2.9"}
 
         If SimulationTotalShinhoList Is Nothing Then
             SimulationTotalShinhoList = New List(Of ShinhoType)
@@ -1075,23 +1075,19 @@ Public Class Form1
 
         For a = 0 To 손절비율.Length - 1
             For b = 0 To 익절비율.Length - 1
-                For c = 0 To 발생Index.Length - 1
-                    For d = 0 To TimeoutTime.Length - 1
-                        For e = 0 To 기준가격.Length - 1
+                For e = 0 To 기준가격.Length - 1
 
-                            txt_손절매비율.Text = 손절비율(a)
-                            txt_익절목표.Text = 익절비율(b)
-                            txt_양매도Target시간Index.Text = 발생Index(c)
-                            txt_신호TimeOut시간.Text = TimeoutTime(d)
-                            txt_JongmokTargetPrice.Text = 기준가격(e)
+                    txt_손절매비율.Text = 손절비율(a)
+                    txt_익절목표.Text = 익절비율(b)
+                    txt_JongmokTargetPrice.Text = 기준가격(e)
 
-                            Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
-                            Console.WriteLine(Simulation_조건)
-                            Add_Log("시뮬레이션 진행 : ", Simulation_조건)
-                            자동반복계산로직(cnt)
-                            cnt += 1
-                        Next
-                    Next
+                    'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
+
+                    Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_price_" + 기준가격(e)
+                    Console.WriteLine(Simulation_조건)
+                    Add_Log("시뮬레이션 진행 : ", Simulation_조건)
+                    자동반복계산로직(cnt)
+                    cnt += 1
                 Next
             Next
         Next
