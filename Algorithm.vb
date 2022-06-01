@@ -41,6 +41,7 @@ Structure ShinhoType
     Dim A45_기준가격 As String '매수할 때 기준가격
     Dim A46_환산이익율 As Single '매수 관점에서 이익률
     Dim A47_IsReal As Integer
+    Dim A48_조건전체 As String
 End Structure
 
 Enum occurType
@@ -53,6 +54,7 @@ Module Algorithm
     Public 양매도TargetIndex As Integer
     Public ShinhoList As List(Of ShinhoType)
     Public SimulationTotalShinhoList As List(Of ShinhoType)
+    Public Simulation_조건 As String
 
     Public Sub 신호현재상태확인하기()
 
@@ -226,6 +228,7 @@ Module Algorithm
 
 
         shinho.A44_메모 = Form1.txt_실험조건.Text
+        shinho.A48_조건전체 = Simulation_조건
         Return shinho
 
     End Function

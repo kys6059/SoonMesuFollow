@@ -397,7 +397,7 @@ Public Class Form1
     '신호그리드 초기화
     Private Sub InitShinHoGird()
 
-        Dim rowCount As Integer = 39
+        Dim rowCount As Integer = 40
 
         grd_ShinHo.Columns.Clear()
         grd_ShinHo.Rows.Clear()
@@ -460,6 +460,7 @@ Public Class Form1
         grd_ShinHo.Rows(36).Cells(0).Value = "A45_기준가격"
         grd_ShinHo.Rows(37).Cells(0).Value = "A46_환산이익율"
         grd_ShinHo.Rows(38).Cells(0).Value = "A47_실시간여부"
+        grd_ShinHo.Rows(39).Cells(0).Value = "A48_조건전체"
     End Sub
 
 
@@ -579,6 +580,7 @@ Public Class Form1
         grd_ShinHo.Rows(36).Cells(1).Value = shinho.A45_기준가격
         grd_ShinHo.Rows(37).Cells(1).Value = Format(shinho.A46_환산이익율, "##0.00#")
         grd_ShinHo.Rows(38).Cells(1).Value = shinho.A47_IsReal.ToString()
+        grd_ShinHo.Rows(39).Cells(1).Value = shinho.A48_조건전체
 
         If shinho.A33_현재상태 = 1 Then
             grd_ShinHo.Rows(24).Cells(1).Style.BackColor = Color.Yellow
@@ -1010,12 +1012,6 @@ Public Class Form1
 
             Threading.Thread.Sleep(50)
 
-            If Chk_실험중지.Checked = True Then
-                Chk_실험중지.Checked = False
-                Add_Log("실험중지", "")
-                Return
-            End If
-
         Next
 
         '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
@@ -1077,10 +1073,10 @@ Public Class Form1
 
         cnt = 0
 
-        'For a = 0 To 손절비율.Length - 1
-        'For b = 0 To 익절비율.Length - 1
-        'For c = 0 To 발생Index.Length - 1
-        For d = 0 To TimeoutTime.Length - 1
+        For a = 0 To 손절비율.Length - 1
+            For b = 0 To 익절비율.Length - 1
+                For c = 0 To 발생Index.Length - 1
+                    For d = 0 To TimeoutTime.Length - 1
                         For e = 0 To 기준가격.Length - 1
 
                             txt_손절매비율.Text = 손절비율(a)
@@ -1089,23 +1085,22 @@ Public Class Form1
                             txt_신호TimeOut시간.Text = TimeoutTime(d)
                             txt_JongmokTargetPrice.Text = 기준가격(e)
 
-                            Dim Str As String = "cnt_" + cnt.ToString() + "__손절매비율_" + 손절비율(a) + "__익절비율_" + 익절비율(b) + "__발생Index_" + 발생Index(c) + "__TimeoutTime_" + TimeoutTime(d) + "__기준가격_" + 기준가격(e)
-                Console.WriteLine(Str)
-                Add_Log("시뮬레이션 진행 : ", Str)
-                자동반복계산로직(cnt)
-                cnt += 1
+                            Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
+                            Console.WriteLine(Simulation_조건)
+                            Add_Log("시뮬레이션 진행 : ", Simulation_조건)
+                            자동반복계산로직(cnt)
+                            cnt += 1
                         Next
                     Next
-        '        Next
-        '    Next
-        'Next
+                Next
+            Next
+        Next
 
-
-    End Sub
-
-    Private Sub DoFullCourseSimulation()
+        Simulation_조건 = ""
 
     End Sub
+
+
 
 
 End Class

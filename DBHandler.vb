@@ -106,6 +106,7 @@ Module DBHandler
             rows(i).Add("A45_OrderingPrice", shinho.A45_기준가격)
             rows(i).Add("A46_LastProfitRatio", shinho.A46_환산이익율)
             rows(i).Add("A47_IsReal", shinho.A47_IsReal)
+            rows(i).Add("A48_TotalCondition", shinho.A48_조건전체)
 
         Next
 
