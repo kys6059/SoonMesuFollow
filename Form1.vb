@@ -945,8 +945,7 @@ Public Class Form1
         grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
     End Sub
 
-    Private Sub Hscroll_1_Scroll(sender As Object, e As ScrollEventArgs) Handles Hscroll_1.Scroll
-
+    Private Sub Hscroll_1_ValueChanged(sender As Object, e As EventArgs) Handles Hscroll_1.ValueChanged
         If currentIndex >= 0 Then
             Dim value = Hscroll_1.Value
             If value <> currentIndex Then
@@ -1055,4 +1054,6 @@ Public Class Form1
     Private Sub btn_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_전체조건반복.Click
 
     End Sub
+
+
 End Class
