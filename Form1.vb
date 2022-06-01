@@ -397,7 +397,7 @@ Public Class Form1
     '신호그리드 초기화
     Private Sub InitShinHoGird()
 
-        Dim rowCount As Integer = 38
+        Dim rowCount As Integer = 39
 
         grd_ShinHo.Columns.Clear()
         grd_ShinHo.Rows.Clear()
@@ -418,7 +418,7 @@ Public Class Form1
         grd_ShinHo.RowHeadersDefaultCellStyle.ForeColor = Color.Black
 
         For i As Integer = 0 To rowCount - 1
-            grd_ShinHo.Rows(i).Height = 23 '전체 Row 높이 지정
+            grd_ShinHo.Rows(i).Height = 22 '전체 Row 높이 지정
         Next
 
         grd_ShinHo.Rows(0).Cells(0).Value = "A00_월물"
@@ -458,7 +458,8 @@ Public Class Form1
         grd_ShinHo.Rows(34).Cells(0).Value = "A43_매도사유"
         grd_ShinHo.Rows(35).Cells(0).Value = "A44_메모"
         grd_ShinHo.Rows(36).Cells(0).Value = "A45_기준가격"
-        grd_ShinHo.Rows(37).Cells(0).Value = ""
+        grd_ShinHo.Rows(37).Cells(0).Value = "A46_환산이익율"
+        grd_ShinHo.Rows(38).Cells(0).Value = "A47_실시간여부"
     End Sub
 
 
@@ -576,6 +577,8 @@ Public Class Form1
         grd_ShinHo.Rows(34).Cells(1).Value = shinho.A43_매도사유
         grd_ShinHo.Rows(35).Cells(1).Value = shinho.A44_메모
         grd_ShinHo.Rows(36).Cells(1).Value = shinho.A45_기준가격
+        grd_ShinHo.Rows(37).Cells(1).Value = Format(shinho.A46_환산이익율, "##0.00#")
+        grd_ShinHo.Rows(38).Cells(1).Value = shinho.A47_IsReal.ToString()
 
         If shinho.A33_현재상태 = 1 Then
             grd_ShinHo.Rows(24).Cells(1).Style.BackColor = Color.Yellow
@@ -588,9 +591,14 @@ Public Class Form1
         If shinho.A34_이익률 > 1 Then
             grd_ShinHo.Rows(25).Cells(1).Style.BackColor = Color.Yellow
             grd_ShinHo.Rows(25).Cells(1).Style.ForeColor = Color.Red
+            grd_ShinHo.Rows(37).Cells(1).Style.BackColor = Color.LightGreen
+            grd_ShinHo.Rows(37).Cells(1).Style.ForeColor = Color.Black
         Else
             grd_ShinHo.Rows(25).Cells(1).Style.BackColor = Color.LightGreen
             grd_ShinHo.Rows(25).Cells(1).Style.ForeColor = Color.Black
+            grd_ShinHo.Rows(37).Cells(1).Style.BackColor = Color.Yellow
+            grd_ShinHo.Rows(37).Cells(1).Style.ForeColor = Color.Red
+
         End If
 
         grd_ShinHo.Refresh()
@@ -949,8 +957,9 @@ Public Class Form1
     End Sub
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
+
         Dim i As Integer
-        isRealFlag = False
+
         chk_화면끄기.Checked = True
         For i = 0 To timeIndex - 1
             currentIndex = i
@@ -959,7 +968,7 @@ Public Class Form1
         Next
         chk_화면끄기.Checked = False
         Clac_DisplayAllGrid()
-        isRealFlag = True
+
         Add_Log("일반", "당일 자동반복 완료")
     End Sub
 
@@ -1040,6 +1049,10 @@ Public Class Form1
             End If
 
         End If
+
+    End Sub
+
+    Private Sub btn_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_전체조건반복.Click
 
     End Sub
 End Class
