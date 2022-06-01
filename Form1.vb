@@ -340,23 +340,6 @@ Public Class Form1
             Next
         Next
 
-        'Dim max As Single = Single.MinValue
-        'Dim min As Single = Single.MaxValue
-        'Dim 종가max As Single = Single.MinValue
-        'Dim 종가min As Single = Single.MaxValue
-
-        'For j = 0 To currentIndex - 1
-
-        '    Dim 시가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 0) + Data(selectedJongmokIndex(1)).price(1, j, 0)
-        '    If max < 시가합계 Then max = 시가합계
-        '    If min > 시가합계 Then min = 시가합계
-
-        '    Dim 종가합계 As Single = Data(selectedJongmokIndex(0)).price(0, j, 3) + Data(selectedJongmokIndex(1)).price(1, j, 3)
-        '    If 종가max < 종가합계 Then 종가max = 종가합계
-        '    If 종가min > 종가합계 Then 종가min = 종가합계
-
-        'Next
-
         For j = 0 To currentIndex - 1
             If SumDataSet.siMax = SumDataSet.siSum(j) Then DrawColorOne(j, 11, 0, grd_selected)
             If SumDataSet.siMin = SumDataSet.siSum(j) Then DrawColorOne(j, 11, 1, grd_selected)
@@ -982,16 +965,21 @@ Public Class Form1
 
     Private Sub btn_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_동일조건반복.Click
 
-        isRealFlag = False
-
         If SimulationTotalShinhoList Is Nothing Then
             SimulationTotalShinhoList = New List(Of ShinhoType)
         Else
             SimulationTotalShinhoList.Clear()
         End If
 
-        For i As Integer = 0 To DBTotalDateCount - 1
+        자동반복계산로직(0)
 
+    End Sub
+
+    Private Sub 자동반복계산로직(ByVal cnt As Integer)
+
+        isRealFlag = False
+
+        For i As Integer = 0 To DBTotalDateCount - 1
 
             DBDate_HScrollBar.Value = i     ' 이 안에서도 Clac_DisplayAllGrid  호출하지만 그건 그날짜 data의 첫번째만 호출하는 것임
             DBDate_HScrollBar.Refresh()
@@ -1000,6 +988,7 @@ Public Class Form1
 
             '당일 내부에서 변경
             For j As Integer = 0 To timeIndex - 1
+
                 currentIndex = j
                 If currentIndex = timeIndex - 1 Then chk_화면끄기.Checked = False
                 Clac_DisplayAllGrid()
@@ -1010,13 +999,17 @@ Public Class Form1
                 SimulationTotalShinhoList.Add(ShinhoList(j))
             Next
 
-            Add_Log("자동계산완료", " : " + DBDateList(i).ToString() + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
-
-            '여기서 DB에 입력하면 완료됨
+            'If Chk_실험중지.Checked = True Then
+            '    Chk_실험중지.Checked = False
+            '    Add_Log("실험중지", "")
+            '    Return
+            'End If
 
         Next
 
+        Add_Log(cnt.ToString() + "차 자동계산완료", " : " + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
 
+        '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
 
     End Sub
 

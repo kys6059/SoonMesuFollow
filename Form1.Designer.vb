@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -85,8 +85,8 @@ Partial Class Form1
         Me.btn_동일조건반복 = New System.Windows.Forms.Button()
         Me.chk_화면끄기 = New System.Windows.Forms.CheckBox()
         Me.btn_당일반복 = New System.Windows.Forms.Button()
-        Me.Label16 = New System.Windows.Forms.Label()
         Me.txt_실험조건 = New System.Windows.Forms.RichTextBox()
+        Me.Chk_실험중지 = New System.Windows.Forms.CheckBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -569,16 +569,16 @@ Partial Class Form1
         '
         'Chart1
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend2)
+        ChartArea1.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend1)
         Me.Chart1.Location = New System.Drawing.Point(2033, 150)
         Me.Chart1.Name = "Chart1"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.Chart1.Series.Add(Series2)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.Chart1.Series.Add(Series1)
         Me.Chart1.Size = New System.Drawing.Size(1182, 906)
         Me.Chart1.TabIndex = 13
         Me.Chart1.Text = "Chart1"
@@ -807,13 +807,14 @@ Partial Class Form1
         Me.TableLayoutPanel6.Controls.Add(Me.btn_동일조건반복, 1, 1)
         Me.TableLayoutPanel6.Controls.Add(Me.chk_화면끄기, 0, 0)
         Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
-        Me.TableLayoutPanel6.Controls.Add(Me.Label16, 1, 0)
         Me.TableLayoutPanel6.Controls.Add(Me.txt_실험조건, 2, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.Chk_실험중지, 1, 0)
         Me.TableLayoutPanel6.Location = New System.Drawing.Point(2033, 44)
         Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
         Me.TableLayoutPanel6.RowCount = 2
         Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.73265!))
         Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 64.26735!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel6.Size = New System.Drawing.Size(433, 100)
         Me.TableLayoutPanel6.TabIndex = 18
         '
@@ -862,19 +863,6 @@ Partial Class Form1
         Me.btn_당일반복.Text = "당일반복"
         Me.btn_당일반복.UseVisualStyleBackColor = True
         '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label16.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label16.Location = New System.Drawing.Point(110, 2)
-        Me.Label16.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(125, 31)
-        Me.Label16.TabIndex = 6
-        Me.Label16.Text = "실험조건"
-        Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
         'txt_실험조건
         '
         Me.txt_실험조건.Dock = System.Windows.Forms.DockStyle.Fill
@@ -883,6 +871,19 @@ Partial Class Form1
         Me.txt_실험조건.Size = New System.Drawing.Size(189, 29)
         Me.txt_실험조건.TabIndex = 7
         Me.txt_실험조건.Text = ""
+        '
+        'Chk_실험중지
+        '
+        Me.Chk_실험중지.AutoSize = True
+        Me.Chk_실험중지.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Chk_실험중지.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Chk_실험중지.Location = New System.Drawing.Point(110, 3)
+        Me.Chk_실험중지.Name = "Chk_실험중지"
+        Me.Chk_실험중지.Size = New System.Drawing.Size(125, 29)
+        Me.Chk_실험중지.TabIndex = 8
+        Me.Chk_실험중지.Text = "실험중지"
+        Me.Chk_실험중지.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Chk_실험중지.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -988,7 +989,7 @@ Partial Class Form1
     Friend WithEvents btn_동일조건반복 As Button
     Friend WithEvents chk_화면끄기 As CheckBox
     Friend WithEvents btn_당일반복 As Button
-    Friend WithEvents Label16 As Label
     Friend WithEvents txt_실험조건 As RichTextBox
+    Friend WithEvents Chk_실험중지 As CheckBox
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class

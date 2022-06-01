@@ -83,12 +83,19 @@ Module Algorithm
 
         If shinho.A35_손절기준가격 < 합계가격 Then '손절
 
+            shinho.A32_현재합계가격 = shinho.A35_손절기준가격 - 0.01
+            shinho.A34_이익률 = (shinho.A32_현재합계가격 / shinho.A31_신호합계가격)
+
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
             shinho.A43_매도사유 = "손절"
 
         ElseIf shinho.A36_익절기준가격 > 합계가격 Then '익절
+
+            shinho.A32_현재합계가격 = shinho.A36_익절기준가격 - 0.01
+            shinho.A34_이익률 = (shinho.A32_현재합계가격 / shinho.A31_신호합계가격)
+
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
