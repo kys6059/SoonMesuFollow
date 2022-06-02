@@ -223,6 +223,9 @@ Public Class Form1
 
                 Next
                 'Chart1.Series(CandlestrickSeries).ToolTip = Format("0.00", "#VALY") '이렇게 하면 시리즈 전체에 같은 형태의 ToopTip을 추가할 수 있으나 Point 각각 입력하는 방식을 선택했다
+
+
+
             Next
 
             '콜 풋 차트의 크기를 똑같이 하기 위해서 최대,최소값을 맞춘다
@@ -231,8 +234,51 @@ Public Class Form1
             For i = 0 To 1
                 Chart1.ChartAreas(i).AxisY.Minimum = minValue
                 Chart1.ChartAreas(i).AxisY.Maximum = maxValue
-                Chart1.ChartAreas(i).AxisY.Interval = 0.1
+                Chart1.ChartAreas(i).AxisY.Interval = 0.2
             Next
+
+
+            'SumGraph 그리기
+            For i = 0 To tempindex
+
+                Chart1.Series("SiSum").Points.AddXY(i, SumDataSet.siSum(i)) '시가를 처음 넣는다
+                Chart1.Series("JongSum").Points.AddXY(i, SumDataSet.jongSum(i))
+
+                Dim str As String = "시간:" & Data(0).ctime(i) & vbCrLf & "시가합계:" & SumDataSet.siSum(i).ToString() & vbCrLf & "종가합계:" & SumDataSet.jongSum(i).ToString()
+                Chart1.Series("SiSum").Points(i).ToolTip = str
+                Chart1.Series("JongSum").Points(i).ToolTip = str
+
+                If SumDataSet.siSum(i) = SumDataSet.siMax Then
+                    Dim ann = New CalloutAnnotation
+                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "시가최고:" & SumDataSet.siMax
+                    ann.ForeColor = Color.Red
+                    ann.AnchorDataPoint = Chart1.Series("SiSum").Points(i)
+                    Chart1.Annotations.Add(ann)
+                End If
+
+                If SumDataSet.jongSum(i) = SumDataSet.jongMax Then
+                    Dim ann = New CalloutAnnotation
+                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "종가최고:" & SumDataSet.jongMax
+                    ann.ForeColor = Color.Magenta
+                    ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
+                    Chart1.Annotations.Add(ann)
+                End If
+
+                If SumDataSet.jongSum(i) = SumDataSet.jongmin Then
+                    Dim ann = New CalloutAnnotation
+                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "종가최저:" & SumDataSet.jongmin
+                    ann.ForeColor = Color.Green
+                    ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
+                    Chart1.Annotations.Add(ann)
+                End If
+
+            Next
+
+            Chart1.ChartAreas("SUMGraph").AxisY.Minimum = SumDataSet.jongmin - 0.1
+            Chart1.ChartAreas("SUMGraph").AxisY.Maximum = SumDataSet.siMax + 0.1
+            Chart1.ChartAreas("SUMGraph").AxisY.Interval = 0.1
+
+
         End If
     End Sub
 
@@ -299,9 +345,25 @@ Public Class Form1
             Chart1.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
-
-
         Next
+
+        '합계그래프 정의
+        Chart1.ChartAreas.Add("SUMGraph")
+        Chart1.ChartAreas("SUMGraph").AxisY.LabelStyle.Format = "{0:0.00}"
+        Chart1.ChartAreas("SUMGraph").AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        Chart1.ChartAreas("SUMGraph").AxisX.MajorGrid.LineColor = Color.Gray
+        Chart1.ChartAreas("SUMGraph").AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        Chart1.ChartAreas("SUMGraph").AxisY.MajorGrid.LineColor = Color.Gray
+
+        Dim chartName() As String = {"SiSum", "JongSum"}
+        For i As Integer = 0 To 1
+            Chart1.Series.Add(chartName(i))
+            Chart1.Series(chartName(i)).ChartArea = "SUMGraph"
+            Chart1.Series(chartName(i)).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Chart1.Series(chartName(i)).Color = Color.Red
+        Next
+        Chart1.Series(chartName(1)).Color = Color.Black
+
 
     End Sub
 
@@ -1059,11 +1121,11 @@ Public Class Form1
 
         Dim a, b, c, d, e, cnt As Integer
 
-        Dim 손절비율() As String = {"1.16", "1.2", "1.24"}
-        Dim 익절비율() As String = {"0.84", "0.8", "0.76"}
+        Dim 손절비율() As String = {"1.12", "1.14", "1.16", "1.18", "1.20", "1.22", "1.24", "1.26"}
+        Dim 익절비율() As String = {"0.3", "0.76"}
         '        Dim 발생Index() As String = {"0", "2"}
         '       Dim TimeoutTime() As String = {"1520", "1510", "1500"}
-        Dim 기준가격() As String = {"2.3", "2.6", "2.9"}
+        'Dim 기준가격() As String = {"2.3", "2.6", "2.9"}
 
         If SimulationTotalShinhoList Is Nothing Then
             SimulationTotalShinhoList = New List(Of ShinhoType)
@@ -1075,20 +1137,18 @@ Public Class Form1
 
         For a = 0 To 손절비율.Length - 1
             For b = 0 To 익절비율.Length - 1
-                For e = 0 To 기준가격.Length - 1
 
-                    txt_손절매비율.Text = 손절비율(a)
-                    txt_익절목표.Text = 익절비율(b)
-                    txt_JongmokTargetPrice.Text = 기준가격(e)
+                txt_손절매비율.Text = 손절비율(a)
+                txt_익절목표.Text = 익절비율(b)
 
-                    'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
+                'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
 
-                    Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_price_" + 기준가격(e)
-                    Console.WriteLine(Simulation_조건)
-                    Add_Log("시뮬레이션 진행 : ", Simulation_조건)
-                    자동반복계산로직(cnt)
-                    cnt += 1
-                Next
+                Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b)
+                Console.WriteLine(Simulation_조건)
+                Add_Log("시뮬레이션 진행 : ", Simulation_조건)
+                자동반복계산로직(cnt)
+                cnt += 1
+
             Next
         Next
 
@@ -1096,7 +1156,7 @@ Public Class Form1
 
     End Sub
 
-
-
-
+    Private Sub btn_MarketEye_Click(sender As Object, e As EventArgs) Handles btn_MarketEye.Click
+        GetMarketEyeData()
+    End Sub
 End Class

@@ -4,12 +4,32 @@ Imports CPSYSDIBLib
 Imports CPUTILLib
 Imports DSCBO1Lib
 
+Structure MarketEyeObjType
+
+    Dim code As String
+    Dim iTime As Long
+    Dim jong As Single
+    Dim si As Single
+    Dim go As Single
+    Dim jue As Single
+    Dim volume As Long
+    Dim 장구분 As SByte
+    Dim 전일거래량 As Long
+    Dim 전일종가 As Single
+    Dim 시간외단일예상체결가 As Single
+    Dim 매도호가 As Single
+    Dim 매수호가 As Single
+
+End Structure
+
 Module realtime_daishin
 
     Dim callputobj = New OptionCallput
     Dim oCur = New OptionCurOnly
     Dim optcodeobj As New CpOptionCode
     Dim chartobj As New FutOptChart
+    Dim MarketEyeObj As New MarketEye
+    Dim MarketEyeRetList As List(Of MarketEyeObjType) = New List(Of MarketEyeObjType)
 
 
     Public Sub InitObject() '날짜는 바꿀 수 있지만 월을 바꾸면 이미 지나간 월이되어 가져올 수 있는 Data 건수가 0이된다. 따라서 월물이 바뀔 때는 예전 날짜 data를 가져올 수 없다
@@ -40,7 +60,7 @@ Module realtime_daishin
         End Try
 
         If ret = True Then
-            CurrentTime = fMst.GetHeaderValue(82) '체결시간
+            CurrentTime = fMst.GetHeaderValue(82) '체결시간  ----------------------------------------------------------------- 장 시작전에 이게 어떻게 되는지 봐야 함 이게 0859 이렇게 들어오면 그 시간에 맞춰서 작업하는게 좋겠음
             tempTargetDateFromCybos = fMst.GetHeaderValue(31) '입회일자
             tempTargetDateFromForm = Form1.txt_TargetDate.Text
 
@@ -189,4 +209,80 @@ Module realtime_daishin
         FindIndexFormTime = (((si - 9) * (60 / Interval)) + (bun / Interval)) - 1
     End Function
 
+    Public Sub GetMarketEyeData()
+
+        Dim reqList As List(Of String) = New List(Of String)
+        Dim rqField = New Integer() {
+            0,              '종목코드(string)
+            1,              '시간( ulong) - hhmm
+            4,              '현재가(long or float)
+            5,              '시가(long or float)
+            6,              '고가(long or float)
+            7,              '저가(long or float)
+            8,                '매도호가
+            9,                 '매수호가
+            10,              '거래량( ulong)
+            12,              '장구분(char or empty)   0 - 장전, 1 - 동시호가  2 - 장중
+            22,              '전일거래량(ulong)
+            23,              '전일종가(long or float)
+            54               '시간외 단일 예상체결가
+        }
+
+        reqList.Clear()
+
+        For i As Integer = 0 To TotalCount - 1
+
+            reqList.Add(Data(i).Code(0))
+            reqList.Add(Data(i).Code(1))
+
+        Next
+
+        If reqList.Count > 0 Then
+            MarketEyeObj.SetInputValue(0, rqField)
+            MarketEyeObj.SetInputValue(1, reqList.ToArray())
+            MarketEyeObj.BlockRequest()
+
+            Dim cnt As Integer = MarketEyeObj.GetHeaderValue(2)
+
+            If cnt > 0 Then
+                ParseData(MarketEyeObj)
+            End If
+        End If
+
+    End Sub
+
+    Private Sub ParseData(ByVal obj As MarketEye)
+
+        Dim cnt As Integer = MarketEyeObj.GetHeaderValue(2)
+
+        If MarketEyeRetList Is Nothing Then
+            MarketEyeRetList = New List(Of MarketEyeObjType)
+        Else
+            MarketEyeRetList.Clear()
+        End If
+
+        For j As Integer = 0 To cnt - 1
+
+            Dim m As MarketEyeObjType = New MarketEyeObjType
+            m.code = MarketEyeObj.GetDataValue(0, j)
+            m.iTime = MarketEyeObj.GetDataValue(1, j)
+            m.jong = MarketEyeObj.GetDataValue(2, j)
+            m.si = MarketEyeObj.GetDataValue(3, j)
+            m.go = MarketEyeObj.GetDataValue(4, j)
+            m.jue = MarketEyeObj.GetDataValue(5, j)
+            m.매도호가 = MarketEyeObj.GetDataValue(6, j)
+            m.매수호가 = MarketEyeObj.GetDataValue(7, j)
+            m.volume = MarketEyeObj.GetDataValue(8, j)
+            m.장구분 = MarketEyeObj.GetDataValue(9, j)
+            m.전일거래량 = MarketEyeObj.GetDataValue(10, j)
+            m.전일종가 = MarketEyeObj.GetDataValue(11, j)
+            m.시간외단일예상체결가 = MarketEyeObj.GetDataValue(12, j)
+
+
+            MarketEyeRetList.Add(m)
+        Next
+
+    End Sub
+
 End Module
+

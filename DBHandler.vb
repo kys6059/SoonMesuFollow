@@ -422,34 +422,38 @@ Module DBHandler
             Dim jong As Single = Val(row("jong"))
             Dim volume As Integer = Val(row("volume"))
 
-            Dim callput As Integer
-            If iFlag = 1 Then
-                callput = 0
-            ElseIf iFlag = 6 Then
-                callput = 1
-            Else
-                Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
-                callput = 0
+            If ctime <= 1535 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
+
+                Dim callput As Integer
+                If iFlag = 1 Then
+                    callput = 0
+                ElseIf iFlag = 6 Then
+                    callput = 1
+                Else
+                    Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
+                    callput = 0
+                End If
+
+                If index <> jongmokIndex Then
+                    jongmokIndex = index
+                    '시간입력
+                    SetTimeDataForDataForDBData(Data, jongmokIndex)
+                    Data(jongmokIndex).HangSaGa = hangsaga
+                End If
+
+                Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
+                currentIndex = Math.Max(currentIndex, iIndex)
+                timeIndex = Math.Max(timeIndex, currentIndex + 1)
+
+                Data(jongmokIndex).price(callput, iIndex, 0) = si
+                Data(jongmokIndex).price(callput, iIndex, 1) = go
+                Data(jongmokIndex).price(callput, iIndex, 2) = jue
+                Data(jongmokIndex).price(callput, iIndex, 3) = jong
+                Data(jongmokIndex).거래량(callput, iIndex) = volume
+
+                cnt += 1
             End If
 
-            If index <> jongmokIndex Then
-                jongmokIndex = index
-                '시간입력
-                SetTimeDataForDataForDBData(Data, jongmokIndex)
-                Data(jongmokIndex).HangSaGa = hangsaga
-            End If
-
-            Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
-            currentIndex = Math.Max(currentIndex, iIndex)
-            timeIndex = Math.Max(timeIndex, currentIndex + 1)
-
-            Data(jongmokIndex).price(callput, iIndex, 0) = si
-            Data(jongmokIndex).price(callput, iIndex, 1) = go
-            Data(jongmokIndex).price(callput, iIndex, 2) = jue
-            Data(jongmokIndex).price(callput, iIndex, 3) = jong
-            Data(jongmokIndex).거래량(callput, iIndex) = volume
-
-            cnt += 1
         Next
 
         Return jongmokIndex + 1
