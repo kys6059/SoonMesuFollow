@@ -5,7 +5,7 @@ Structure ShinhoType
     Dim A00_월물 As String
     Dim A01_날짜 As String
     Dim A02_interval As Integer
-    Dim A03_남은날짜 As Single
+    Dim A03_남은날짜 As Integer
     Dim A04_발생Index As Integer
     Dim A05_발생시간 As String
     Dim A06_신호ID As String

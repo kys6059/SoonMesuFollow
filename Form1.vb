@@ -899,9 +899,24 @@ Public Class Form1
         txt_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
         Dim today As Date = Now()
-        txt_실험조건.Text = "A" + Format(today, "yyMMdd")
+        Dim strToday As String = Format(today, "yyMMdd")
+        txt_실험조건.Text = "A" + strToday
+        Dim lDate As Long = Val(strToday)
+        Dim 월물 As Long = getsMonth(lDate)
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
 
-        Dim str As String = "1.0.1_20220524"
+        If 남은날짜 <= 3 Then  '남은날짜가 작으면 0.15로 바꾼다
+            txt_손절매비율.Text = "1.2"
+            Label15.Text = "손절매비율(3일이하)"
+        ElseIf 남은날짜 > 3 And 남은날짜 <= 10 Then
+            txt_손절매비율.Text = "1.16"
+            Label15.Text = "손절매비율(10일이하)"
+        Else
+            txt_손절매비율.Text = "1.12"
+            Label15.Text = "손절매비율(10일초과)"
+        End If
+
+        Dim str As String = "1.1.0_20220602"
 
         txt_programversion.Text = str
 

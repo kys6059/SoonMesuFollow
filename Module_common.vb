@@ -307,7 +307,6 @@ Module Module_common
         nextmonth_year = Year(next_month)
         next_month_month = Month(next_month)
 
-
         목요일count = 0
 
         For i = 1 To dayOfDate
@@ -343,7 +342,7 @@ Module Module_common
     End Function
 
 
-    Public Function getRemainDate(ByVal 월물 As String, ByVal idate As Long) As String
+    Public Function getRemainDate(ByVal 월물 As String, ByVal idate As Long) As Integer
 
         Dim yearof월물, monthof월물, i, 목요일count As Integer
         Dim tempdate, 만기일, tempToday As Date
@@ -360,7 +359,6 @@ Module Module_common
             End If
 
             If 목요일count >= 2 Then '이날이 만기일임
-
                 만기일 = tempdate
                 Exit For
             End If
