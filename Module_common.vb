@@ -89,6 +89,8 @@ Module Module_common
     Public JongmokTargetPrice As Single  '기준이 되는 targetprice - default 2.0
     Public timerCount As Integer
     Public timerMaxInterval As Integer
+    Public Const g_strServerAddress As String = "hts.etrade.co.kr"
+    Public 거래비밀번호 As String
 
     Public Sub InitDataStructure()
 

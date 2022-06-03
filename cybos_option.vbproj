@@ -177,6 +177,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="realtime_daishin.vb" />
+    <Compile Include="realtime_ebest.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
@@ -260,6 +261,24 @@
     </COMReference>
     <COMReference Include="DSCBO1Lib">
       <Guid>{859343F1-08FD-11D4-8231-00105A7C4F8C}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="XA_DATASETLib">
+      <Guid>{CAA15009-CF22-4D1D-AF40-093DBC5A6A0F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="XA_SESSIONLib">
+      <Guid>{F5CC65C5-2965-451B-A6C4-CBC7B8B4AE08}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>

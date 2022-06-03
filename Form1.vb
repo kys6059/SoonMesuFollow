@@ -173,8 +173,8 @@ Public Class Form1
 
         If currentIndex > 0 Then
 
-            For i = 0 To Chart1.Series.Count - 1
-                Chart1.Series(i).Points.Clear()
+            For i = 0 To txt_ebest_id.Series.Count - 1
+                txt_ebest_id.Series(i).Points.Clear()
             Next
 
             tempindex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
@@ -187,21 +187,21 @@ Public Class Form1
                 For i = 0 To tempindex
 
                     '                main Series 입력
-                    retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
+                    retindex = txt_ebest_id.Series(CandlestrickSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
 
                     If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 종가가 크면 
-                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
-                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                        txt_ebest_id.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                        txt_ebest_id.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
                     ElseIf Data(selectedJongmokIndex(callput)).price(callput, i, 0) > Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then
-                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
-                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                        txt_ebest_id.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                        txt_ebest_id.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
                     End If
 
                     Dim str As String = "시간:" & Data(0).ctime(i) & vbCrLf & "시가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 0) & vbCrLf & "종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
-                    Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).ToolTip = str
 
 
                     'Annotation 추가 - 고가저가
@@ -217,9 +217,9 @@ Public Class Form1
                     End If
 
                     'high Line 입력
-                    Chart1.Series(UpperSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
+                    txt_ebest_id.Series(UpperSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
                     'low Line 입력
-                    Chart1.Series(LowerSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
+                    txt_ebest_id.Series(LowerSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
 
                 Next
                 'Chart1.Series(CandlestrickSeries).ToolTip = Format("0.00", "#VALY") '이렇게 하면 시리즈 전체에 같은 형태의 ToopTip을 추가할 수 있으나 Point 각각 입력하는 방식을 선택했다
@@ -232,65 +232,65 @@ Public Class Form1
             Dim maxValue As Single = Math.Max(Data(selectedJongmokIndex(0)).Big(0, 1), Data(selectedJongmokIndex(1)).Big(1, 1)) + 0.1
             Dim minValue As Single = Math.Min(Data(selectedJongmokIndex(0)).Small(0, 2), Data(selectedJongmokIndex(1)).Small(1, 2)) - 0.1
             For i = 0 To 1
-                Chart1.ChartAreas(i).AxisY.Minimum = minValue
-                Chart1.ChartAreas(i).AxisY.Maximum = maxValue
-                Chart1.ChartAreas(i).AxisY.Interval = 0.2
+                txt_ebest_id.ChartAreas(i).AxisY.Minimum = minValue
+                txt_ebest_id.ChartAreas(i).AxisY.Maximum = maxValue
+                txt_ebest_id.ChartAreas(i).AxisY.Interval = 0.2
             Next
 
 
             'SumGraph 그리기
             For i = 0 To tempindex
 
-                Chart1.Series("SiSum").Points.AddXY(i, SumDataSet.siSum(i)) '시가를 처음 넣는다
-                Chart1.Series("JongSum").Points.AddXY(i, SumDataSet.jongSum(i))
+                txt_ebest_id.Series("SiSum").Points.AddXY(i, SumDataSet.siSum(i)) '시가를 처음 넣는다
+                txt_ebest_id.Series("JongSum").Points.AddXY(i, SumDataSet.jongSum(i))
 
                 Dim str As String = Data(0).ctime(i) & vbCrLf & "시가합계:" & SumDataSet.siSum(i).ToString() & vbCrLf & "종가합계:" & SumDataSet.jongSum(i).ToString()
-                Chart1.Series("SiSum").Points(i).ToolTip = str
-                Chart1.Series("JongSum").Points(i).ToolTip = str
+                txt_ebest_id.Series("SiSum").Points(i).ToolTip = str
+                txt_ebest_id.Series("JongSum").Points(i).ToolTip = str
 
                 If SumDataSet.siSum(i) = SumDataSet.siMax Then
                     Dim ann = New CalloutAnnotation
                     ann.Text = Data(0).ctime(i) & vbCrLf & "시가최고:" & SumDataSet.siMax
                     ann.ForeColor = Color.Red
-                    ann.AnchorDataPoint = Chart1.Series("SiSum").Points(i)
-                    Chart1.Annotations.Add(ann)
+                    ann.AnchorDataPoint = txt_ebest_id.Series("SiSum").Points(i)
+                    txt_ebest_id.Annotations.Add(ann)
                 End If
 
                 If SumDataSet.jongSum(i) = SumDataSet.jongMax Then
                     Dim ann = New CalloutAnnotation
                     ann.Text = Data(0).ctime(i) & vbCrLf & "종가최고:" & SumDataSet.jongMax
                     ann.ForeColor = Color.Magenta
-                    ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
-                    Chart1.Annotations.Add(ann)
+                    ann.AnchorDataPoint = txt_ebest_id.Series("JongSum").Points(i)
+                    txt_ebest_id.Annotations.Add(ann)
                 End If
 
                 If SumDataSet.jongSum(i) = SumDataSet.jongmin Then
                     Dim ann = New CalloutAnnotation
                     ann.Text = Data(0).ctime(i) & vbCrLf & "종가최저:" & SumDataSet.jongmin
                     ann.ForeColor = Color.Green
-                    ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
-                    Chart1.Annotations.Add(ann)
+                    ann.AnchorDataPoint = txt_ebest_id.Series("JongSum").Points(i)
+                    txt_ebest_id.Annotations.Add(ann)
                 End If
 
                 If ShinhoList.Count > 0 Then   '신호가 있으면 관련 정보를 표시한다
-                    Chart1.Series("Shinho").Points.AddXY(i, ShinhoList(0).A31_신호합계가격)
-                    Chart1.Series("Shinho").Points(i).ToolTip = "매수가격:" & Format(ShinhoList(0).A31_신호합계가격, "0.00")
+                    txt_ebest_id.Series("Shinho").Points.AddXY(i, ShinhoList(0).A31_신호합계가격)
+                    txt_ebest_id.Series("Shinho").Points(i).ToolTip = "매수가격:" & Format(ShinhoList(0).A31_신호합계가격, "0.00")
                     If i = currentIndex Then
                         Dim ann = New CalloutAnnotation
                         ann.Text = Data(0).ctime(i) & vbCrLf & "매수가격:" & Format(ShinhoList(0).A31_신호합계가격, "0.00") & vbCrLf & "현재가격:" & Format(ShinhoList(0).A32_현재합계가격, "0.00") & vbCrLf & "환산이익률:" & Format(ShinhoList(0).A46_환산이익율, "0.000")
                         ann.BackColor = Color.IndianRed
                         ann.ForeColor = Color.Yellow
-                        ann.AnchorDataPoint = Chart1.Series("Shinho").Points(i)
-                        Chart1.Annotations.Add(ann)
+                        ann.AnchorDataPoint = txt_ebest_id.Series("Shinho").Points(i)
+                        txt_ebest_id.Annotations.Add(ann)
                     End If
 
                 End If
 
             Next
 
-            Chart1.ChartAreas("SUMGraph").AxisY.Minimum = Math.Min(SumDataSet.jongmin, SumDataSet.siMin) - 0.1
-            Chart1.ChartAreas("SUMGraph").AxisY.Maximum = Math.Max(SumDataSet.siMax, SumDataSet.jongMax) + 0.1
-            Chart1.ChartAreas("SUMGraph").AxisY.Interval = 0.1
+            txt_ebest_id.ChartAreas("SUMGraph").AxisY.Minimum = Math.Min(SumDataSet.jongmin, SumDataSet.siMin) - 0.1
+            txt_ebest_id.ChartAreas("SUMGraph").AxisY.Maximum = Math.Max(SumDataSet.siMax, SumDataSet.jongMax) + 0.1
+            txt_ebest_id.ChartAreas("SUMGraph").AxisY.Interval = 0.1
 
 
 
@@ -312,10 +312,10 @@ Public Class Form1
             ann.ForeColor = Color.Green
         End If
 
-        ann.AnchorDataPoint = Chart1.Series("CandleStick_" + callput.ToString()).Points(index)
+        ann.AnchorDataPoint = txt_ebest_id.Series("CandleStick_" + callput.ToString()).Points(index)
         ann.Visible = True
 
-        Chart1.Annotations.Add(ann)
+        txt_ebest_id.Annotations.Add(ann)
 
 
 
@@ -325,77 +325,77 @@ Public Class Form1
 
         Dim str, ChartAreaStr As String
 
-        Chart1.Series.Clear()
-        Chart1.ChartAreas.Clear()
-        Chart1.Legends.Clear()
-        Chart1.Annotations.Clear()
+        txt_ebest_id.Series.Clear()
+        txt_ebest_id.ChartAreas.Clear()
+        txt_ebest_id.Legends.Clear()
+        txt_ebest_id.Annotations.Clear()
 
         For i As Integer = 0 To 1
 
             ChartAreaStr = "ChartArea_" + i.ToString()
-            Chart1.ChartAreas.Add(ChartAreaStr)
+            txt_ebest_id.ChartAreas.Add(ChartAreaStr)
 
             str = "CandleStick_" + i.ToString()
-            Chart1.Series.Add(str)
-            Chart1.Series(str).ChartArea = ChartAreaStr
-            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Candlestick
-            Chart1.Series(str).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+            txt_ebest_id.Series.Add(str)
+            txt_ebest_id.Series(str).ChartArea = ChartAreaStr
+            txt_ebest_id.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Candlestick
+            txt_ebest_id.Series(str).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
 
             str = "Upper_" + i.ToString()
-            Chart1.Series.Add(str)
-            Chart1.Series(str).ChartArea = ChartAreaStr
-            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            Chart1.Series(str).Color = Color.Red
+            txt_ebest_id.Series.Add(str)
+            txt_ebest_id.Series(str).ChartArea = ChartAreaStr
+            txt_ebest_id.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            txt_ebest_id.Series(str).Color = Color.Red
 
             str = "Lower_" + i.ToString()
-            Chart1.Series.Add(str)
-            Chart1.Series(str).ChartArea = ChartAreaStr
-            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            Chart1.Series(str).Color = Color.Blue
+            txt_ebest_id.Series.Add(str)
+            txt_ebest_id.Series(str).ChartArea = ChartAreaStr
+            txt_ebest_id.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            txt_ebest_id.Series(str).Color = Color.Blue
 
             'ChartArea 속성 설정
 
             ''Lebel 설정
-            Chart1.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+            txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
             '축 선 속성 설정
-            Chart1.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-            Chart1.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
-            Chart1.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-            Chart1.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+            txt_ebest_id.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            txt_ebest_id.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
+            txt_ebest_id.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            txt_ebest_id.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
         Next
 
         '합계그래프 정의
-        Chart1.ChartAreas.Add("SUMGraph")
-        Chart1.ChartAreas("SUMGraph").AxisY.LabelStyle.Format = "{0:0.00}"
-        Chart1.ChartAreas("SUMGraph").AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-        Chart1.ChartAreas("SUMGraph").AxisX.MajorGrid.LineColor = Color.Gray
-        Chart1.ChartAreas("SUMGraph").AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-        Chart1.ChartAreas("SUMGraph").AxisY.MajorGrid.LineColor = Color.Gray
+        txt_ebest_id.ChartAreas.Add("SUMGraph")
+        txt_ebest_id.ChartAreas("SUMGraph").AxisY.LabelStyle.Format = "{0:0.00}"
+        txt_ebest_id.ChartAreas("SUMGraph").AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        txt_ebest_id.ChartAreas("SUMGraph").AxisX.MajorGrid.LineColor = Color.Gray
+        txt_ebest_id.ChartAreas("SUMGraph").AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        txt_ebest_id.ChartAreas("SUMGraph").AxisY.MajorGrid.LineColor = Color.Gray
 
         Dim chartName() As String = {"SiSum", "JongSum"}
         For i As Integer = 0 To 1
-            Chart1.Series.Add(chartName(i))
-            Chart1.Series(chartName(i)).ChartArea = "SUMGraph"
-            Chart1.Series(chartName(i)).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            Chart1.Series(chartName(i)).Color = Color.Black
+            txt_ebest_id.Series.Add(chartName(i))
+            txt_ebest_id.Series(chartName(i)).ChartArea = "SUMGraph"
+            txt_ebest_id.Series(chartName(i)).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            txt_ebest_id.Series(chartName(i)).Color = Color.Black
         Next
-        Chart1.Series(chartName(1)).Color = Color.Red
+        txt_ebest_id.Series(chartName(1)).Color = Color.Red
 
         If ShinhoList.Count > 0 Then            '신호가 있으면 매수가에 직선을 긋는다
-            Chart1.Series.Add("Shinho")
-            Chart1.Series("Shinho").ChartArea = "SUMGraph"
-            Chart1.Series("Shinho").ChartType = DataVisualization.Charting.SeriesChartType.Line
-            Chart1.Series("Shinho").Color = Color.DodgerBlue
-            Chart1.Series("Shinho").BorderDashStyle = ChartDashStyle.Dash
+            txt_ebest_id.Series.Add("Shinho")
+            txt_ebest_id.Series("Shinho").ChartArea = "SUMGraph"
+            txt_ebest_id.Series("Shinho").ChartType = DataVisualization.Charting.SeriesChartType.Line
+            txt_ebest_id.Series("Shinho").Color = Color.DodgerBlue
+            txt_ebest_id.Series("Shinho").BorderDashStyle = ChartDashStyle.Dash
         End If
 
     End Sub
 
     Private Sub DrawGraph()
-        Chart1.Visible = False
+        txt_ebest_id.Visible = False
         InitGraph()
         DrawWinFormGraph()
-        Chart1.Visible = True
+        txt_ebest_id.Visible = True
     End Sub
 
     Private Sub DrawColor_Selected()
@@ -1210,6 +1210,43 @@ Public Class Form1
 
     End Sub
 
+    Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
 
+        Dim nServerType As Integer
+        Dim strServerAddress, password As String
 
+        If txt_ebest_pwd.Text = "" Then
+            MessageBox.Show("이베스트 비밀번호가 잘못되었습니다")
+            Return
+        End If
+
+        If chk_모의투자연결.Checked = False Then
+            nServerType = 0     ' 실서버
+            strServerAddress = "hts.etrade.co.kr"
+            거래비밀번호 = "3487"
+            password = txt_ebest_pwd.Text
+        Else
+            nServerType = 1     ' 모의투자서버
+            strServerAddress = "demo.ebestsec.co.kr"
+            password = "kys6059"
+            거래비밀번호 = "0000"
+        End If
+
+        Dim id As String = txt_ebest_id1.Text
+        Dim pwd As String = txt_ebest_pwd.Text
+        Dim cert As String = txt_ebest인증비밀번호.Text
+
+        Dim bSuccess As Boolean = ConnectToEbest(id, pwd, cert, nServerType, strServerAddress)
+        If bSuccess = False Then
+            MessageBox.Show("로그인 실패")
+        Else
+            Add_Log("일반", "이베스트 로그인 성공 at " + strServerAddress)
+
+        End If
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        매도증거금조회()
+    End Sub
 End Class
