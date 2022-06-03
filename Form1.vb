@@ -244,13 +244,13 @@ Public Class Form1
                 Chart1.Series("SiSum").Points.AddXY(i, SumDataSet.siSum(i)) '시가를 처음 넣는다
                 Chart1.Series("JongSum").Points.AddXY(i, SumDataSet.jongSum(i))
 
-                Dim str As String = "시간:" & Data(0).ctime(i) & vbCrLf & "시가합계:" & SumDataSet.siSum(i).ToString() & vbCrLf & "종가합계:" & SumDataSet.jongSum(i).ToString()
+                Dim str As String = Data(0).ctime(i) & vbCrLf & "시가합계:" & SumDataSet.siSum(i).ToString() & vbCrLf & "종가합계:" & SumDataSet.jongSum(i).ToString()
                 Chart1.Series("SiSum").Points(i).ToolTip = str
                 Chart1.Series("JongSum").Points(i).ToolTip = str
 
                 If SumDataSet.siSum(i) = SumDataSet.siMax Then
                     Dim ann = New CalloutAnnotation
-                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "시가최고:" & SumDataSet.siMax
+                    ann.Text = Data(0).ctime(i) & vbCrLf & "시가최고:" & SumDataSet.siMax
                     ann.ForeColor = Color.Red
                     ann.AnchorDataPoint = Chart1.Series("SiSum").Points(i)
                     Chart1.Annotations.Add(ann)
@@ -258,7 +258,7 @@ Public Class Form1
 
                 If SumDataSet.jongSum(i) = SumDataSet.jongMax Then
                     Dim ann = New CalloutAnnotation
-                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "종가최고:" & SumDataSet.jongMax
+                    ann.Text = Data(0).ctime(i) & vbCrLf & "종가최고:" & SumDataSet.jongMax
                     ann.ForeColor = Color.Magenta
                     ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
                     Chart1.Annotations.Add(ann)
@@ -266,17 +266,34 @@ Public Class Form1
 
                 If SumDataSet.jongSum(i) = SumDataSet.jongmin Then
                     Dim ann = New CalloutAnnotation
-                    ann.Text = "시간:" & Data(0).ctime(i) & vbCrLf & "종가최저:" & SumDataSet.jongmin
+                    ann.Text = Data(0).ctime(i) & vbCrLf & "종가최저:" & SumDataSet.jongmin
                     ann.ForeColor = Color.Green
                     ann.AnchorDataPoint = Chart1.Series("JongSum").Points(i)
                     Chart1.Annotations.Add(ann)
                 End If
 
+                If ShinhoList.Count > 0 Then   '신호가 있으면 관련 정보를 표시한다
+                    Chart1.Series("Shinho").Points.AddXY(i, ShinhoList(0).A31_신호합계가격)
+                    Chart1.Series("Shinho").Points(i).ToolTip = "매수가격:" & Format(ShinhoList(0).A31_신호합계가격, "0.00")
+                    If i = currentIndex Then
+                        Dim ann = New CalloutAnnotation
+                        ann.Text = Data(0).ctime(i) & vbCrLf & "매수가격:" & Format(ShinhoList(0).A31_신호합계가격, "0.00") & vbCrLf & "현재가격:" & Format(ShinhoList(0).A32_현재합계가격, "0.00") & vbCrLf & "환산이익률:" & Format(ShinhoList(0).A46_환산이익율, "0.000")
+                        ann.BackColor = Color.IndianRed
+                        ann.ForeColor = Color.Yellow
+                        ann.AnchorDataPoint = Chart1.Series("Shinho").Points(i)
+                        Chart1.Annotations.Add(ann)
+                    End If
+
+                End If
+
             Next
 
-            Chart1.ChartAreas("SUMGraph").AxisY.Minimum = SumDataSet.jongmin - 0.1
-            Chart1.ChartAreas("SUMGraph").AxisY.Maximum = SumDataSet.siMax + 0.1
+            Chart1.ChartAreas("SUMGraph").AxisY.Minimum = Math.Min(SumDataSet.jongmin, SumDataSet.siMin) - 0.1
+            Chart1.ChartAreas("SUMGraph").AxisY.Maximum = Math.Max(SumDataSet.siMax, SumDataSet.jongMax) + 0.1
             Chart1.ChartAreas("SUMGraph").AxisY.Interval = 0.1
+
+
+
 
 
         End If
@@ -360,10 +377,17 @@ Public Class Form1
             Chart1.Series.Add(chartName(i))
             Chart1.Series(chartName(i)).ChartArea = "SUMGraph"
             Chart1.Series(chartName(i)).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            Chart1.Series(chartName(i)).Color = Color.Red
+            Chart1.Series(chartName(i)).Color = Color.Black
         Next
-        Chart1.Series(chartName(1)).Color = Color.Black
+        Chart1.Series(chartName(1)).Color = Color.Red
 
+        If ShinhoList.Count > 0 Then            '신호가 있으면 매수가에 직선을 긋는다
+            Chart1.Series.Add("Shinho")
+            Chart1.Series("Shinho").ChartArea = "SUMGraph"
+            Chart1.Series("Shinho").ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Chart1.Series("Shinho").Color = Color.DodgerBlue
+            Chart1.Series("Shinho").BorderDashStyle = ChartDashStyle.Dash
+        End If
 
     End Sub
 
@@ -900,7 +924,6 @@ Public Class Form1
 
         Dim today As Date = Now()
         Dim strToday As String = Format(today, "yyMMdd")
-        txt_실험조건.Text = "A" + strToday
         Dim lDate As Long = Val(strToday)
         Dim 월물 As Long = getsMonth(lDate)
         Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
@@ -916,6 +939,7 @@ Public Class Form1
             Label15.Text = "손절매비율(10일초과)"
         End If
 
+        txt_실험조건.Text = "A" + strToday
         Dim str As String = "1.1.0_20220602"
 
         txt_programversion.Text = str
@@ -1122,6 +1146,21 @@ Public Class Form1
             '날짜로부터 월물 계산하기
             sMonth = getsMonth(TargetDate).ToString()
 
+            Dim 남은날짜 As Integer = getRemainDate(sMonth, TargetDate)
+
+            If 남은날짜 <= 3 Then  '남은날짜가 작으면 0.15로 바꾼다
+                txt_손절매비율.Text = "1.2"
+                Label15.Text = "손절매비율(3일이하)"
+            ElseIf 남은날짜 > 3 And 남은날짜 <= 10 Then
+                txt_손절매비율.Text = "1.16"
+                Label15.Text = "손절매비율(10일이하)"
+            Else
+                txt_손절매비율.Text = "1.12"
+                Label15.Text = "손절매비율(10일초과)"
+            End If
+
+            txt_손절매비율.Refresh()
+
             If TotalCount > 0 Then
 
                 Clac_DisplayAllGrid()
@@ -1171,7 +1210,6 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btn_MarketEye_Click(sender As Object, e As EventArgs) Handles btn_MarketEye.Click
-        GetMarketEyeData()
-    End Sub
+
+
 End Class

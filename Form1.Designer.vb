@@ -87,7 +87,6 @@ Partial Class Form1
         Me.btn_당일반복 = New System.Windows.Forms.Button()
         Me.txt_실험조건 = New System.Windows.Forms.RichTextBox()
         Me.Chk_실험중지 = New System.Windows.Forms.CheckBox()
-        Me.btn_MarketEye = New System.Windows.Forms.Button()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -885,21 +884,11 @@ Partial Class Form1
         Me.Chk_실험중지.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.Chk_실험중지.UseVisualStyleBackColor = True
         '
-        'btn_MarketEye
-        '
-        Me.btn_MarketEye.Location = New System.Drawing.Point(940, 10)
-        Me.btn_MarketEye.Name = "btn_MarketEye"
-        Me.btn_MarketEye.Size = New System.Drawing.Size(146, 60)
-        Me.btn_MarketEye.TabIndex = 19
-        Me.btn_MarketEye.Text = "MarketEye"
-        Me.btn_MarketEye.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3284, 1322)
-        Me.Controls.Add(Me.btn_MarketEye)
         Me.Controls.Add(Me.TableLayoutPanel6)
         Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.grd_ShinHo)
@@ -1001,6 +990,5 @@ Partial Class Form1
     Friend WithEvents btn_당일반복 As Button
     Friend WithEvents txt_실험조건 As RichTextBox
     Friend WithEvents Chk_실험중지 As CheckBox
-    Friend WithEvents btn_MarketEye As Button
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class

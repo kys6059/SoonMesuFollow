@@ -60,7 +60,7 @@ Module realtime_daishin
         End Try
 
         If ret = True Then
-            CurrentTime = fMst.GetHeaderValue(82) '체결시간  ----------------------------------------------------------------- 장 시작전에 이게 어떻게 되는지 봐야 함 이게 0859 이렇게 들어오면 그 시간에 맞춰서 작업하는게 좋겠음
+            CurrentTime = fMst.GetHeaderValue(82) '체결시간  ----------------------------------------------------------------- 장 시작전에 이게 0 으로 들어옴  816분에 테스트함
             tempTargetDateFromCybos = fMst.GetHeaderValue(31) '입회일자
             tempTargetDateFromForm = Form1.txt_TargetDate.Text
 
@@ -209,6 +209,10 @@ Module realtime_daishin
         FindIndexFormTime = (((si - 9) * (60 / Interval)) + (bun / Interval)) - 1
     End Function
 
+
+    '이걸 통해서 장전 예상 체결가를 가져올 수 있음
+    '시간 iTime이 0으로 들어오고
+    '350 이렇게 long 타입으로 들어오는데 이게 3.50임. 즉 100으로 나눈 값을 활용하면 됨
     Public Sub GetMarketEyeData()
 
         Dim reqList As List(Of String) = New List(Of String)
@@ -225,7 +229,7 @@ Module realtime_daishin
             12,              '장구분(char or empty)   0 - 장전, 1 - 동시호가  2 - 장중
             22,              '전일거래량(ulong)
             23,              '전일종가(long or float)
-            54               '시간외 단일 예상체결가
+            28               ' 예상체결가  ---------------------------------------------------- 장전
         }
 
         reqList.Clear()
