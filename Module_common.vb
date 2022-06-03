@@ -244,7 +244,6 @@ Module Module_common
     '칼라 7번은 녹색 Chk_Display_Green
     Public Function ItsColor(ByVal jongMok As Integer, ByVal iFlag As Integer, ByVal iIndex As Integer, ByVal sigojuejong As Integer) As Integer
 
-        Dim SkyBlueValue As Single
         Dim color As Integer
 
         color = 4 '아래 조건에 아무데도 안걸리면 흰색

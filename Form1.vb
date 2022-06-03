@@ -1173,7 +1173,7 @@ Public Class Form1
 
     Private Sub btn_전체조건반복_Click(sender As Object, eee As EventArgs) Handles btn_전체조건반복.Click
 
-        Dim a, b, c, d, e, cnt As Integer
+        Dim a, b, cnt As Integer
 
         Dim 손절비율() As String = {"1.12", "1.14", "1.16", "1.18", "1.20", "1.22", "1.24", "1.26"}
         Dim 익절비율() As String = {"0.3", "0.76"}
