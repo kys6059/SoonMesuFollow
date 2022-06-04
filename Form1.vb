@@ -37,7 +37,6 @@ Public Class Form1
             tempMonth = TargetDate Mod 20000000
             tempMonth = tempMonth / 100
 
-
             If TotalCount > 0 And (sMonth - tempMonth) <= 1 Then
 
                 SetTimeDataForData(Data) '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
@@ -52,22 +51,15 @@ Public Class Form1
             MsgBox("사이보스에 연결되지 않았습니다")
         End If
 
-
         Return False
 
     End Function
 
     Public Sub DrawScrollData()
 
-        If DBTotalDateCount > 1 Then
-
-            lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + (gTargetDateIndex + 1).ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
-
-        End If
+        If DBTotalDateCount > 1 Then lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + (gTargetDateIndex + 1).ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
 
     End Sub
-
-
 
     Private Sub Clac_DisplayAllGrid()         'selectedJongmokIndex 계산
 
@@ -82,7 +74,6 @@ Public Class Form1
 
         CalcColorData()        '최대최소,제2저가 계산
 
-
         신호현재상태확인하기()        '신호 만들고 해제 판단하기
 
         Dim 신호발생flag As Boolean = CalcAlrotithmAll()
@@ -96,8 +87,6 @@ Public Class Form1
         End If
 
         DrawGraph() '그래프 그리기
-
-
 
     End Sub
 
@@ -126,9 +115,9 @@ Public Class Form1
             cmb_selectedJongmokIndex_1.Items.Add(" ")
             For i As Integer = 0 To TotalCount - 1
                 Dim str As String
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")"
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")-" & Format(Data(i).증거금(0), "###,###,###,##0")
                 cmb_selectedJongmokIndex_0.Items.Add(str)
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")"
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")-" & Format(Data(i).증거금(1), "###,###,###,##0")
                 cmb_selectedJongmokIndex_1.Items.Add(str)
             Next
 
@@ -147,6 +136,7 @@ Public Class Form1
                 DrawColor_Selected()            '색깔 실제로 grid에 입히기
                 grd_selected.Visible = True
                 grid1.Visible = True
+
             End If
 
             InitShinHoGird()
@@ -224,8 +214,6 @@ Public Class Form1
                 Next
                 'Chart1.Series(CandlestrickSeries).ToolTip = Format("0.00", "#VALY") '이렇게 하면 시리즈 전체에 같은 형태의 ToopTip을 추가할 수 있으나 Point 각각 입력하는 방식을 선택했다
 
-
-
             Next
 
             '콜 풋 차트의 크기를 똑같이 하기 위해서 최대,최소값을 맞춘다
@@ -292,10 +280,6 @@ Public Class Form1
             txt_ebest_id.ChartAreas("SUMGraph").AxisY.Maximum = Math.Max(SumDataSet.siMax, SumDataSet.jongMax) + 0.1
             txt_ebest_id.ChartAreas("SUMGraph").AxisY.Interval = 0.1
 
-
-
-
-
         End If
     End Sub
 
@@ -316,8 +300,6 @@ Public Class Form1
         ann.Visible = True
 
         txt_ebest_id.Annotations.Add(ann)
-
-
 
     End Sub
 
@@ -405,7 +387,6 @@ Public Class Form1
         Dim point As Integer
 
         For callput = 0 To 1
-
 
             i = selectedJongmokIndex(callput)
 
@@ -549,7 +530,6 @@ Public Class Form1
         grd_ShinHo.Rows(39).Cells(0).Value = "A48_조건전체"
     End Sub
 
-
     'selectedgrid 초기화
     Private Sub InitDrawSelectedGird()
         Dim defaultWidth As Integer
@@ -559,7 +539,6 @@ Public Class Form1
 
         grd_selected.Columns.Clear()
         grd_selected.Rows.Clear()
-
 
         '전체 크기 지정
         grd_selected.ColumnCount = 13
@@ -699,7 +678,6 @@ Public Class Form1
         selectedCallIndex = selectedJongmokIndex(0)
         selectedPutIndex = selectedJongmokIndex(1)
 
-
         For j = 0 To currentIndex
 
             If Val(Data(selectedCallIndex).ctime(j)) > 0 Then
@@ -818,7 +796,6 @@ Public Class Form1
             grid1.Columns(i * 10 + 10).Width = 10
         Next
 
-
     End Sub
 
     Private Sub DrawGrid1Data()
@@ -888,6 +865,7 @@ Public Class Form1
             timerCount = 0
 
             '계좌정보 가져오기
+            If EBESTisConntected = True Then 계좌조회()
 
             '옵션 정보 가져와서 화면 표시
             GetAllData()
@@ -1246,7 +1224,92 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        매도증거금조회()
+    Public Sub Display계좌정보()
+
+        lbl_주문가능금액.Text = Format(주문가능금액, "###,###,###,###,##0")
+        lbl_인출가능금액.Text = Format(인출가능금액, "###,###,###,###,##0")
+        lbl_매매손익합계.Text = Format(평가종합.매매손익합계, "###,###,###,###,##0")
+        lbl_평가금액.Text = Format(평가종합.평가금액, "###,###,###,###,##0")
+        lbl_평가손익.Text = Format(평가종합.평가손익, "###,###,###,###,##0")
+
+        Init_grd_잔고조회()
+        Draw_grd_잔고조회()
+
     End Sub
+
+    Private Sub Init_grd_잔고조회()
+
+        grd_잔고조회.Columns.Clear()
+        grd_잔고조회.Rows.Clear()
+
+        grd_잔고조회.ColumnCount = 13         '전체 크기 지정
+
+        If List잔고 Is Nothing Then
+            grd_잔고조회.RowCount = 1
+        Else
+            grd_잔고조회.RowCount = List잔고.Count + 1
+        End If
+
+        grd_잔고조회.RowHeadersWidth = 35
+
+        grd_잔고조회.Columns(0).HeaderText = "종목번호"
+        grd_잔고조회.Columns(1).HeaderText = "구분"
+        grd_잔고조회.Columns(2).HeaderText = "잔고수량"
+        grd_잔고조회.Columns(3).HeaderText = "청산가능수량"
+        grd_잔고조회.Columns(4).HeaderText = "평균단가"
+        grd_잔고조회.Columns(5).HeaderText = "총매입금액"
+        grd_잔고조회.Columns(6).HeaderText = "매매구분"
+        grd_잔고조회.Columns(7).HeaderText = "매매손익"
+        grd_잔고조회.Columns(8).HeaderText = "처리순번"
+        grd_잔고조회.Columns(9).HeaderText = "현재가"
+        grd_잔고조회.Columns(10).HeaderText = "평가금액"
+        grd_잔고조회.Columns(11).HeaderText = "평가손익"
+        grd_잔고조회.Columns(12).HeaderText = "수익율"
+
+        Dim defaultWidth As Integer = 70
+        grd_잔고조회.Columns(0).Width = defaultWidth + 30
+        grd_잔고조회.Columns(1).Width = defaultWidth
+        grd_잔고조회.Columns(2).Width = defaultWidth
+        grd_잔고조회.Columns(3).Width = defaultWidth + 50
+        grd_잔고조회.Columns(4).Width = defaultWidth
+        grd_잔고조회.Columns(5).Width = defaultWidth + 30
+        grd_잔고조회.Columns(6).Width = defaultWidth
+        grd_잔고조회.Columns(7).Width = defaultWidth + 30
+        grd_잔고조회.Columns(8).Width = defaultWidth
+        grd_잔고조회.Columns(9).Width = defaultWidth
+        grd_잔고조회.Columns(10).Width = defaultWidth + 30
+        grd_잔고조회.Columns(11).Width = defaultWidth + 30
+        grd_잔고조회.Columns(12).Width = defaultWidth + 30
+
+        grd_잔고조회.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+        For i = 0 To grd_잔고조회.ColumnCount - 1   '헤더 가운데 정렬
+            grd_잔고조회.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grd_잔고조회.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
+    End Sub
+
+    Private Sub Draw_grd_잔고조회()
+
+        If List잔고 Is Nothing Then Return
+
+        For i As Integer = 0 To List잔고.Count - 1
+
+            grd_잔고조회.Rows(i).Cells(0).Value = List잔고(i).A01_종복번호
+            grd_잔고조회.Rows(i).Cells(1).Value = List잔고(i).A02_구분
+            grd_잔고조회.Rows(i).Cells(2).Value = Format(List잔고(i).A03_잔고수량, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(3).Value = List잔고(i).A04_청산가능수량
+            grd_잔고조회.Rows(i).Cells(4).Value = List잔고(i).A05_평균단가
+            grd_잔고조회.Rows(i).Cells(5).Value = Format(List잔고(i).A06_총매입금액, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(6).Value = List잔고(i).A07_매매구분
+            grd_잔고조회.Rows(i).Cells(7).Value = List잔고(i).A08_매매손익
+            grd_잔고조회.Rows(i).Cells(8).Value = List잔고(i).A09_처리순번
+            grd_잔고조회.Rows(i).Cells(9).Value = List잔고(i).A10_현재가
+            grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
+
+        Next
+    End Sub
+
 End Class
