@@ -80,6 +80,18 @@ Module Algorithm
 
         콜현재가 = Data(shinho.A11_콜인덱스).price(0, currentIndex, 3)
         풋현재가 = Data(shinho.A21_풋인덱스).price(1, currentIndex, 3)
+
+        If 콜현재가 <= 0 Then
+            Add_Log("이상동작", "콜현재가 = " & 콜현재가.ToString())
+            Return
+        End If
+
+        If 풋현재가 <= 0 Then
+            Add_Log("이상동작", "풋현재가 = " & 풋현재가.ToString())
+            Return
+        End If
+
+
         합계가격 = 콜현재가 + 풋현재가
 
         shinho.A32_현재합계가격 = 합계가격

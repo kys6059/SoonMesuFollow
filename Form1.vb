@@ -168,6 +168,8 @@ Public Class Form1
             Next
 
             tempindex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+            Dim maxValue As Single = Single.MinValue
+            Dim minValue As Single = Single.MaxValue
 
             For callput = 0 To 1
 
@@ -211,14 +213,17 @@ Public Class Form1
                     'low Line 입력
                     txt_ebest_id.Series(LowerSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
 
+                    If maxValue < Data(selectedJongmokIndex(callput)).price(callput, i, 1) Then maxValue = Data(selectedJongmokIndex(callput)).price(callput, i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                    If minValue > Data(selectedJongmokIndex(callput)).price(callput, i, 2) Then minValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2)
+
                 Next
                 'Chart1.Series(CandlestrickSeries).ToolTip = Format("0.00", "#VALY") '이렇게 하면 시리즈 전체에 같은 형태의 ToopTip을 추가할 수 있으나 Point 각각 입력하는 방식을 선택했다
 
             Next
 
             '콜 풋 차트의 크기를 똑같이 하기 위해서 최대,최소값을 맞춘다
-            Dim maxValue As Single = Math.Max(Data(selectedJongmokIndex(0)).Big(0, 1), Data(selectedJongmokIndex(1)).Big(1, 1)) + 0.1
-            Dim minValue As Single = Math.Min(Data(selectedJongmokIndex(0)).Small(0, 2), Data(selectedJongmokIndex(1)).Small(1, 2)) - 0.1
+            maxValue = maxValue + 0.1
+            minValue = minValue - 0.1
             For i = 0 To 1
                 txt_ebest_id.ChartAreas(i).AxisY.Minimum = minValue
                 txt_ebest_id.ChartAreas(i).AxisY.Maximum = maxValue
