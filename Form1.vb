@@ -1199,7 +1199,7 @@ Public Class Form1
         Dim strServerAddress, password As String
 
         If txt_ebest_pwd.Text = "" Then
-            MessageBox.Show("이베스트 비밀번호가 잘못되었습니다")
+            MessageBox.Show("이베스트 비밀번호가 비어있습니다")
             Return
         End If
 
@@ -1211,15 +1211,14 @@ Public Class Form1
         Else
             nServerType = 1     ' 모의투자서버
             strServerAddress = "demo.ebestsec.co.kr"
-            password = "kys6059"
+            password = "kys60590"
             거래비밀번호 = "0000"
         End If
 
         Dim id As String = txt_ebest_id1.Text
-        Dim pwd As String = txt_ebest_pwd.Text
         Dim cert As String = txt_ebest인증비밀번호.Text
 
-        Dim bSuccess As Boolean = ConnectToEbest(id, pwd, cert, nServerType, strServerAddress)
+        Dim bSuccess As Boolean = ConnectToEbest(id, password, cert, nServerType, strServerAddress)
         If bSuccess = False Then
             MessageBox.Show("로그인 실패")
         Else
@@ -1236,6 +1235,7 @@ Public Class Form1
         lbl_매매손익합계.Text = Format(평가종합.매매손익합계, "###,###,###,###,##0")
         lbl_평가금액.Text = Format(평가종합.평가금액, "###,###,###,###,##0")
         lbl_평가손익.Text = Format(평가종합.평가손익, "###,###,###,###,##0")
+        lbl_계좌번호.Text = strAccountNum
 
         Init_grd_잔고조회()
         Draw_grd_잔고조회()
@@ -1315,6 +1315,70 @@ Public Class Form1
             grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
 
         Next
+    End Sub
+
+
+
+    Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
+        Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+        Dim count As Integer = 1
+
+        한종목매도(code, price, count)
+    End Sub
+
+    Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
+        Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
+        Dim count As Integer = 1
+
+        한종목매도(code, price, count)
+    End Sub
+
+    Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
+        Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+
+        구매가능수량조회(code, price)
+    End Sub
+
+    Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_put_구매가능수.Click
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
+        Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
+
+        구매가능수량조회(code, price)
+    End Sub
+
+    Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_call_매수.Click
+
+        Add_Log("일반", "콜 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
+
+        For i As Integer = 0 To List잔고.Count - 1
+            Dim it As 잔고Type = List잔고(i)
+            Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
+            If 종목구분 = "2" Then
+                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            End If
+        Next
+
+    End Sub
+
+    Private Sub btn_put_매수_Click(sender As Object, e As EventArgs) Handles btn_put_매수.Click
+
+        Add_Log("일반", "풋 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
+
+        For i As Integer = 0 To List잔고.Count - 1
+            Dim it As 잔고Type = List잔고(i)
+            Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
+            If 종목구분 = "3" Then
+                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            End If
+        Next
+
     End Sub
 
 End Class
