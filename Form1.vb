@@ -480,8 +480,8 @@ Public Class Form1
         grd_ShinHo.Columns(1).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
         grd_ShinHo.Columns(0).HeaderText = "항목"
         grd_ShinHo.Columns(1).HeaderText = "내용"
-        grd_ShinHo.Columns(0).Width = 150
-        grd_ShinHo.Columns(1).Width = 150
+        grd_ShinHo.Columns(0).Width = 100
+        grd_ShinHo.Columns(1).Width = 100
 
         grd_ShinHo.RowHeadersWidth = 30
         grd_ShinHo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
@@ -493,46 +493,46 @@ Public Class Form1
             grd_ShinHo.Rows(i).Height = 22 '전체 Row 높이 지정
         Next
 
-        grd_ShinHo.Rows(0).Cells(0).Value = "A00_월물"
-        grd_ShinHo.Rows(1).Cells(0).Value = "A01_날짜"
-        grd_ShinHo.Rows(2).Cells(0).Value = "A02_interval"
-        grd_ShinHo.Rows(3).Cells(0).Value = "A03_남은날짜"
-        grd_ShinHo.Rows(4).Cells(0).Value = "A04_발생Index"
-        grd_ShinHo.Rows(5).Cells(0).Value = "A05_발생시간"
-        grd_ShinHo.Rows(6).Cells(0).Value = "A06_신호ID"
-        grd_ShinHo.Rows(7).Cells(0).Value = "A07신호차수"
-        grd_ShinHo.Rows(8).Cells(0).Value = "A11_콜인덱스"
-        grd_ShinHo.Rows(9).Cells(0).Value = "A12_콜행사가"
-        grd_ShinHo.Rows(10).Cells(0).Value = "A13_콜신호발생가격"
-        grd_ShinHo.Rows(11).Cells(0).Value = "A14_콜매수가격"
-        grd_ShinHo.Rows(12).Cells(0).Value = "A15_콜주문번호"
-        grd_ShinHo.Rows(13).Cells(0).Value = "A16_콜종목코드"
-        grd_ShinHo.Rows(14).Cells(0).Value = "A17_콜체결상태"
-        grd_ShinHo.Rows(15).Cells(0).Value = "A21_풋인덱스"
-        grd_ShinHo.Rows(16).Cells(0).Value = "A22_풋행사가"
-        grd_ShinHo.Rows(17).Cells(0).Value = "A23_풋신호발생가격"
-        grd_ShinHo.Rows(18).Cells(0).Value = "A24_풋매수가격"
-        grd_ShinHo.Rows(19).Cells(0).Value = "A25_풋주문번호"
-        grd_ShinHo.Rows(20).Cells(0).Value = "A26_풋종목코드"
-        grd_ShinHo.Rows(21).Cells(0).Value = "A27_풋체결상태"
-        grd_ShinHo.Rows(22).Cells(0).Value = "A31_신호합계가격"
-        grd_ShinHo.Rows(23).Cells(0).Value = "A32_현재합계가격"
-        grd_ShinHo.Rows(24).Cells(0).Value = "A33_현재상태"
-        grd_ShinHo.Rows(25).Cells(0).Value = "A34_이익률"
-        grd_ShinHo.Rows(26).Cells(0).Value = "A35_손절기준가격"
-        grd_ShinHo.Rows(27).Cells(0).Value = "A36_익절기준가격"
-        grd_ShinHo.Rows(28).Cells(0).Value = "A37_손절기준비율"
-        grd_ShinHo.Rows(29).Cells(0).Value = "A38_익절기준비율"
-        grd_ShinHo.Rows(30).Cells(0).Value = "A39_중간매도Flag"
-        grd_ShinHo.Rows(31).Cells(0).Value = "A40_TimeoutTime"
-        grd_ShinHo.Rows(32).Cells(0).Value = "A41_매도시간"
-        grd_ShinHo.Rows(33).Cells(0).Value = "A42_매도Index"
-        grd_ShinHo.Rows(34).Cells(0).Value = "A43_매도사유"
-        grd_ShinHo.Rows(35).Cells(0).Value = "A44_메모"
-        grd_ShinHo.Rows(36).Cells(0).Value = "A45_기준가격"
-        grd_ShinHo.Rows(37).Cells(0).Value = "A46_환산이익율"
-        grd_ShinHo.Rows(38).Cells(0).Value = "A47_실시간여부"
-        grd_ShinHo.Rows(39).Cells(0).Value = "A48_조건전체"
+        grd_ShinHo.Rows(0).Cells(0).Value = "월물"
+        grd_ShinHo.Rows(1).Cells(0).Value = "날짜"
+        grd_ShinHo.Rows(2).Cells(0).Value = "interval"
+        grd_ShinHo.Rows(3).Cells(0).Value = "남은날짜"
+        grd_ShinHo.Rows(4).Cells(0).Value = "발생Index"
+        grd_ShinHo.Rows(5).Cells(0).Value = "발생시간"
+        grd_ShinHo.Rows(6).Cells(0).Value = "신호ID"
+        grd_ShinHo.Rows(7).Cells(0).Value = "호차수"
+        grd_ShinHo.Rows(8).Cells(0).Value = "콜인덱스"
+        grd_ShinHo.Rows(9).Cells(0).Value = "콜행사가"
+        grd_ShinHo.Rows(10).Cells(0).Value = "콜신호발생가격"
+        grd_ShinHo.Rows(11).Cells(0).Value = "콜매수가격"
+        grd_ShinHo.Rows(12).Cells(0).Value = "콜주문번호"
+        grd_ShinHo.Rows(13).Cells(0).Value = "콜종목코드"
+        grd_ShinHo.Rows(14).Cells(0).Value = "콜체결상태"
+        grd_ShinHo.Rows(15).Cells(0).Value = "풋인덱스"
+        grd_ShinHo.Rows(16).Cells(0).Value = "풋행사가"
+        grd_ShinHo.Rows(17).Cells(0).Value = "풋신호발생가격"
+        grd_ShinHo.Rows(18).Cells(0).Value = "풋매수가격"
+        grd_ShinHo.Rows(19).Cells(0).Value = "풋주문번호"
+        grd_ShinHo.Rows(20).Cells(0).Value = "풋종목코드"
+        grd_ShinHo.Rows(21).Cells(0).Value = "풋체결상태"
+        grd_ShinHo.Rows(22).Cells(0).Value = "신호합계가격"
+        grd_ShinHo.Rows(23).Cells(0).Value = "현재합계가격"
+        grd_ShinHo.Rows(24).Cells(0).Value = "현재상태"
+        grd_ShinHo.Rows(25).Cells(0).Value = "이익률"
+        grd_ShinHo.Rows(26).Cells(0).Value = "손절기준가격"
+        grd_ShinHo.Rows(27).Cells(0).Value = "익절기준가격"
+        grd_ShinHo.Rows(28).Cells(0).Value = "손절기준비율"
+        grd_ShinHo.Rows(29).Cells(0).Value = "익절기준비율"
+        grd_ShinHo.Rows(30).Cells(0).Value = "중간매도Flag"
+        grd_ShinHo.Rows(31).Cells(0).Value = "TimeoutTime"
+        grd_ShinHo.Rows(32).Cells(0).Value = "매도시간"
+        grd_ShinHo.Rows(33).Cells(0).Value = "매도Index"
+        grd_ShinHo.Rows(34).Cells(0).Value = "매도사유"
+        grd_ShinHo.Rows(35).Cells(0).Value = "메모"
+        grd_ShinHo.Rows(36).Cells(0).Value = "기준가격"
+        grd_ShinHo.Rows(37).Cells(0).Value = "환산이익율"
+        grd_ShinHo.Rows(38).Cells(0).Value = "실시간여부"
+        grd_ShinHo.Rows(39).Cells(0).Value = "조건전체"
     End Sub
 
     'selectedgrid 초기화
@@ -1271,20 +1271,20 @@ Public Class Form1
         grd_잔고조회.Columns(11).HeaderText = "평가손익"
         grd_잔고조회.Columns(12).HeaderText = "수익율"
 
-        Dim defaultWidth As Integer = 70
-        grd_잔고조회.Columns(0).Width = defaultWidth + 30
+        Dim defaultWidth As Integer = 68
+        grd_잔고조회.Columns(0).Width = defaultWidth + 15
         grd_잔고조회.Columns(1).Width = defaultWidth
         grd_잔고조회.Columns(2).Width = defaultWidth
-        grd_잔고조회.Columns(3).Width = defaultWidth + 50
+        grd_잔고조회.Columns(3).Width = defaultWidth + 20
         grd_잔고조회.Columns(4).Width = defaultWidth
-        grd_잔고조회.Columns(5).Width = defaultWidth + 30
+        grd_잔고조회.Columns(5).Width = defaultWidth + 20
         grd_잔고조회.Columns(6).Width = defaultWidth
-        grd_잔고조회.Columns(7).Width = defaultWidth + 30
+        grd_잔고조회.Columns(7).Width = defaultWidth + 20
         grd_잔고조회.Columns(8).Width = defaultWidth
         grd_잔고조회.Columns(9).Width = defaultWidth
-        grd_잔고조회.Columns(10).Width = defaultWidth + 30
-        grd_잔고조회.Columns(11).Width = defaultWidth + 30
-        grd_잔고조회.Columns(12).Width = defaultWidth + 30
+        grd_잔고조회.Columns(10).Width = defaultWidth + 20
+        grd_잔고조회.Columns(11).Width = defaultWidth + 20
+        grd_잔고조회.Columns(12).Width = defaultWidth + 20
 
         grd_잔고조회.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
@@ -1320,21 +1320,49 @@ Public Class Form1
 
 
     Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
+
+        If 진짜할건지확인() = False Then Return
+
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
         Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
         Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
         Dim count As Integer = 1
 
-        한종목매도(code, price, count)
+        Dim 구매가능대비비율 As Single = Val(txt_구매가능대비비율.Text)
+
+        Dim 최소구매가능개수 = Math.Min(콜구매가능개수, 풋구매가능개수)
+
+        If 최소구매가능개수 > 1 And 구매가능대비비율 > 0 Then
+
+            count = 최소구매가능개수 * 구매가능대비비율
+            한종목매도(code, price, count)
+        Else
+            Add_Log("일반", "콜 매도 시 최소구매가능개수 부족")
+        End If
+
+
     End Sub
 
     Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
+
+        If 진짜할건지확인() = False Then Return
+
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
         Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
         Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
         Dim count As Integer = 1
+        Dim 구매가능대비비율 As Single = Val(txt_구매가능대비비율.Text)
+        Dim 최소구매가능개수 = Math.Min(콜구매가능개수, 풋구매가능개수)
 
-        한종목매도(code, price, count)
+        If 최소구매가능개수 > 1 And 구매가능대비비율 > 0 Then
+
+            count = 최소구매가능개수 * 구매가능대비비율
+            한종목매도(code, price, count)
+        Else
+            Add_Log("일반", "풋 매도 시 최소구매가능개수 부족")
+        End If
+
+
     End Sub
 
     Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
@@ -1355,6 +1383,8 @@ Public Class Form1
 
     Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_call_매수.Click
 
+        If 진짜할건지확인() = False Then Return
+
         Add_Log("일반", "콜 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
@@ -1369,6 +1399,8 @@ Public Class Form1
 
     Private Sub btn_put_매수_Click(sender As Object, e As EventArgs) Handles btn_put_매수.Click
 
+        If 진짜할건지확인() = False Then Return
+
         Add_Log("일반", "풋 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
@@ -1380,5 +1412,32 @@ Public Class Form1
         Next
 
     End Sub
+
+    Private Sub btn_전체정리_Click(sender As Object, e As EventArgs) Handles btn_전체정리.Click
+
+        If 진짜할건지확인() = False Then Return
+
+        Add_Log("일반", "전체 환매수를 눌렀음 현재 잔고의 갯수: " & List잔고.Count.ToString())
+
+        For i As Integer = 0 To List잔고.Count - 1
+
+            Dim it As 잔고Type = List잔고(i)
+            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+
+        Next
+    End Sub
+
+    Public Function 진짜할건지확인() As Boolean
+
+        Dim dr As DialogResult
+        dr = MessageBox.Show("진짜 매매할건가?", "매매여부", MessageBoxButtons.YesNo)
+
+        If dr = DialogResult.No Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
 
 End Class

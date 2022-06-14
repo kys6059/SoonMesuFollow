@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea10 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend10 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series10 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -91,12 +91,14 @@ Partial Class Form1
         Me.txt_ebest_id1 = New System.Windows.Forms.TextBox()
         Me.txt_ebest인증비밀번호 = New System.Windows.Forms.TextBox()
         Me.txt_ebest_pwd = New System.Windows.Forms.TextBox()
+        Me.chk_모의투자연결 = New System.Windows.Forms.CheckBox()
         Me.Label21 = New System.Windows.Forms.Label()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.btn_이베스트로그인 = New System.Windows.Forms.Button()
-        Me.chk_모의투자연결 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel8 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.lbl_계좌번호 = New System.Windows.Forms.Label()
         Me.lbl_평가손익 = New System.Windows.Forms.Label()
         Me.lbl_평가금액 = New System.Windows.Forms.Label()
         Me.lbl_매매손익합계 = New System.Windows.Forms.Label()
@@ -109,15 +111,15 @@ Partial Class Form1
         Me.Label17 = New System.Windows.Forms.Label()
         Me.grd_잔고조회 = New System.Windows.Forms.DataGridView()
         Me.TLP_BuySell = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
-        Me.btn_call_매수 = New System.Windows.Forms.Button()
-        Me.btn_call_매도 = New System.Windows.Forms.Button()
-        Me.btn_전체정리 = New System.Windows.Forms.Button()
-        Me.btn_put_구매가능수 = New System.Windows.Forms.Button()
-        Me.btn_put_매수 = New System.Windows.Forms.Button()
         Me.btn_put_매도 = New System.Windows.Forms.Button()
-        Me.lbl_계좌번호 = New System.Windows.Forms.Label()
-        Me.Label24 = New System.Windows.Forms.Label()
+        Me.btn_put_매수 = New System.Windows.Forms.Button()
+        Me.btn_put_구매가능수 = New System.Windows.Forms.Button()
+        Me.btn_전체정리 = New System.Windows.Forms.Button()
+        Me.btn_call_매도 = New System.Windows.Forms.Button()
+        Me.btn_call_매수 = New System.Windows.Forms.Button()
+        Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.txt_구매가능대비비율 = New System.Windows.Forms.RichTextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -161,7 +163,7 @@ Partial Class Form1
         Me.grid1.ShowCellToolTips = False
         Me.grid1.ShowEditingIcon = False
         Me.grid1.ShowRowErrors = False
-        Me.grid1.Size = New System.Drawing.Size(913, 906)
+        Me.grid1.Size = New System.Drawing.Size(758, 906)
         Me.grid1.TabIndex = 1
         '
         'grd_selected
@@ -172,7 +174,7 @@ Partial Class Form1
         Me.grd_selected.AllowUserToResizeRows = False
         Me.grd_selected.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_selected.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grd_selected.Location = New System.Drawing.Point(949, 168)
+        Me.grd_selected.Location = New System.Drawing.Point(772, 168)
         Me.grd_selected.Name = "grd_selected"
         Me.grd_selected.ReadOnly = True
         Me.grd_selected.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -196,7 +198,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(949, 126)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(771, 134)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -271,7 +273,7 @@ Partial Class Form1
         Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetDate, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.chk_ChangeTargetIndex, 1, 5)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_programversion, 1, 6)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(21, 1087)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(10, 1081)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 7
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
@@ -282,7 +284,7 @@ Partial Class Form1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28816!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(386, 227)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(346, 227)
         Me.TableLayoutPanel2.TabIndex = 4
         '
         'Label8
@@ -292,7 +294,7 @@ Partial Class Form1
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(4, 193)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(185, 33)
+        Me.Label8.Size = New System.Drawing.Size(165, 33)
         Me.Label8.TabIndex = 12
         Me.Label8.Text = "프로그램 버전"
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -304,7 +306,7 @@ Partial Class Form1
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(4, 161)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(185, 31)
+        Me.Label7.Size = New System.Drawing.Size(165, 31)
         Me.Label7.TabIndex = 10
         Me.Label7.Text = "기준종목 자동 변경"
         Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -316,7 +318,7 @@ Partial Class Form1
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(4, 129)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(185, 31)
+        Me.Label6.Size = New System.Drawing.Size(165, 31)
         Me.Label6.TabIndex = 8
         Me.Label6.Text = "기준가"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -325,9 +327,9 @@ Partial Class Form1
         '
         Me.txt_JongmokTargetPrice.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_JongmokTargetPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_JongmokTargetPrice.Location = New System.Drawing.Point(197, 132)
+        Me.txt_JongmokTargetPrice.Location = New System.Drawing.Point(176, 132)
         Me.txt_JongmokTargetPrice.Name = "txt_JongmokTargetPrice"
-        Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(184, 24)
+        Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(166, 24)
         Me.txt_JongmokTargetPrice.TabIndex = 9
         Me.txt_JongmokTargetPrice.Text = "2.3"
         Me.txt_JongmokTargetPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -339,7 +341,7 @@ Partial Class Form1
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.Location = New System.Drawing.Point(4, 97)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(185, 31)
+        Me.Label5.Size = New System.Drawing.Size(165, 31)
         Me.Label5.TabIndex = 6
         Me.Label5.Text = "가격 하한"
         Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -348,9 +350,9 @@ Partial Class Form1
         '
         Me.txt_LowerLimit.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_LowerLimit.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_LowerLimit.Location = New System.Drawing.Point(197, 100)
+        Me.txt_LowerLimit.Location = New System.Drawing.Point(176, 100)
         Me.txt_LowerLimit.Name = "txt_LowerLimit"
-        Me.txt_LowerLimit.Size = New System.Drawing.Size(184, 24)
+        Me.txt_LowerLimit.Size = New System.Drawing.Size(166, 24)
         Me.txt_LowerLimit.TabIndex = 7
         Me.txt_LowerLimit.Text = "0.1"
         Me.txt_LowerLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -362,7 +364,7 @@ Partial Class Form1
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(4, 65)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(185, 31)
+        Me.Label4.Size = New System.Drawing.Size(165, 31)
         Me.Label4.TabIndex = 4
         Me.Label4.Text = "가격 상한"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -371,9 +373,9 @@ Partial Class Form1
         '
         Me.txt_UpperLimit.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_UpperLimit.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_UpperLimit.Location = New System.Drawing.Point(197, 68)
+        Me.txt_UpperLimit.Location = New System.Drawing.Point(176, 68)
         Me.txt_UpperLimit.Name = "txt_UpperLimit"
-        Me.txt_UpperLimit.Size = New System.Drawing.Size(184, 24)
+        Me.txt_UpperLimit.Size = New System.Drawing.Size(166, 24)
         Me.txt_UpperLimit.TabIndex = 5
         Me.txt_UpperLimit.Text = "5.0"
         Me.txt_UpperLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -385,7 +387,7 @@ Partial Class Form1
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.Location = New System.Drawing.Point(4, 33)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(185, 31)
+        Me.Label3.Size = New System.Drawing.Size(165, 31)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Interval"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -394,9 +396,9 @@ Partial Class Form1
         '
         Me.txt_Interval.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_Interval.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_Interval.Location = New System.Drawing.Point(197, 36)
+        Me.txt_Interval.Location = New System.Drawing.Point(176, 36)
         Me.txt_Interval.Name = "txt_Interval"
-        Me.txt_Interval.Size = New System.Drawing.Size(184, 24)
+        Me.txt_Interval.Size = New System.Drawing.Size(166, 24)
         Me.txt_Interval.TabIndex = 3
         Me.txt_Interval.Text = "5"
         Me.txt_Interval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -408,7 +410,7 @@ Partial Class Form1
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(4, 1)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(185, 31)
+        Me.Label2.Size = New System.Drawing.Size(165, 31)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "목표날짜"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -417,9 +419,9 @@ Partial Class Form1
         '
         Me.txt_TargetDate.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_TargetDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_TargetDate.Location = New System.Drawing.Point(196, 4)
+        Me.txt_TargetDate.Location = New System.Drawing.Point(176, 4)
         Me.txt_TargetDate.Name = "txt_TargetDate"
-        Me.txt_TargetDate.Size = New System.Drawing.Size(186, 24)
+        Me.txt_TargetDate.Size = New System.Drawing.Size(166, 24)
         Me.txt_TargetDate.TabIndex = 1
         Me.txt_TargetDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
@@ -430,9 +432,9 @@ Partial Class Form1
         Me.chk_ChangeTargetIndex.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_ChangeTargetIndex.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_ChangeTargetIndex.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_ChangeTargetIndex.Location = New System.Drawing.Point(196, 164)
+        Me.chk_ChangeTargetIndex.Location = New System.Drawing.Point(176, 164)
         Me.chk_ChangeTargetIndex.Name = "chk_ChangeTargetIndex"
-        Me.chk_ChangeTargetIndex.Size = New System.Drawing.Size(186, 25)
+        Me.chk_ChangeTargetIndex.Size = New System.Drawing.Size(166, 25)
         Me.chk_ChangeTargetIndex.TabIndex = 11
         Me.chk_ChangeTargetIndex.Text = "자동변경 허용"
         Me.chk_ChangeTargetIndex.UseVisualStyleBackColor = True
@@ -441,9 +443,9 @@ Partial Class Form1
         '
         Me.txt_programversion.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_programversion.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_programversion.Location = New System.Drawing.Point(197, 197)
+        Me.txt_programversion.Location = New System.Drawing.Point(176, 197)
         Me.txt_programversion.Name = "txt_programversion"
-        Me.txt_programversion.Size = New System.Drawing.Size(184, 24)
+        Me.txt_programversion.Size = New System.Drawing.Size(166, 24)
         Me.txt_programversion.TabIndex = 13
         Me.txt_programversion.Text = "2.0"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -487,22 +489,22 @@ Partial Class Form1
         Me.TableLayoutPanel3.Controls.Add(Me.chk_AutoSave, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.lbl_DBDateInfo, 3, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.DBDate_HScrollBar, 3, 1)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(233, 21)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(230, 12)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.29851!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 59.70149!))
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel3.Size = New System.Drawing.Size(644, 100)
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(647, 109)
         Me.TableLayoutPanel3.TabIndex = 8
         '
         'chk_AutoTurnOff
         '
         Me.chk_AutoTurnOff.AutoSize = True
         Me.chk_AutoTurnOff.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_AutoTurnOff.Location = New System.Drawing.Point(4, 44)
+        Me.chk_AutoTurnOff.Location = New System.Drawing.Point(4, 47)
         Me.chk_AutoTurnOff.Name = "chk_AutoTurnOff"
-        Me.chk_AutoTurnOff.Size = New System.Drawing.Size(110, 52)
+        Me.chk_AutoTurnOff.Size = New System.Drawing.Size(110, 58)
         Me.chk_AutoTurnOff.TabIndex = 11
         Me.chk_AutoTurnOff.Text = "자동PC끄기"
         Me.chk_AutoTurnOff.UseVisualStyleBackColor = True
@@ -513,7 +515,7 @@ Partial Class Form1
         Me.txt_TableName.Font = New System.Drawing.Font("굴림", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.txt_TableName.Location = New System.Drawing.Point(238, 4)
         Me.txt_TableName.Name = "txt_TableName"
-        Me.txt_TableName.Size = New System.Drawing.Size(168, 21)
+        Me.txt_TableName.Size = New System.Drawing.Size(169, 21)
         Me.txt_TableName.TabIndex = 8
         Me.txt_TableName.Text = "option_190628"
         '
@@ -521,9 +523,9 @@ Partial Class Form1
         '
         Me.btn_SelectDB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_SelectDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_SelectDB.Location = New System.Drawing.Point(238, 44)
+        Me.btn_SelectDB.Location = New System.Drawing.Point(238, 47)
         Me.btn_SelectDB.Name = "btn_SelectDB"
-        Me.btn_SelectDB.Size = New System.Drawing.Size(168, 52)
+        Me.btn_SelectDB.Size = New System.Drawing.Size(169, 58)
         Me.btn_SelectDB.TabIndex = 6
         Me.btn_SelectDB.Text = "DB 가져오기"
         Me.btn_SelectDB.UseVisualStyleBackColor = True
@@ -541,9 +543,9 @@ Partial Class Form1
         '
         Me.btn_InsertDB.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_InsertDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_InsertDB.Location = New System.Drawing.Point(121, 44)
+        Me.btn_InsertDB.Location = New System.Drawing.Point(121, 47)
         Me.btn_InsertDB.Name = "btn_InsertDB"
-        Me.btn_InsertDB.Size = New System.Drawing.Size(110, 52)
+        Me.btn_InsertDB.Size = New System.Drawing.Size(110, 58)
         Me.btn_InsertDB.TabIndex = 1
         Me.btn_InsertDB.Text = "DB에 입력"
         Me.btn_InsertDB.UseVisualStyleBackColor = True
@@ -554,7 +556,7 @@ Partial Class Form1
         Me.chk_AutoSave.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_AutoSave.Location = New System.Drawing.Point(4, 4)
         Me.chk_AutoSave.Name = "chk_AutoSave"
-        Me.chk_AutoSave.Size = New System.Drawing.Size(110, 33)
+        Me.chk_AutoSave.Size = New System.Drawing.Size(110, 36)
         Me.chk_AutoSave.TabIndex = 9
         Me.chk_AutoSave.Text = "자동저장(1530)"
         Me.chk_AutoSave.UseVisualStyleBackColor = True
@@ -564,9 +566,9 @@ Partial Class Form1
         Me.lbl_DBDateInfo.AutoSize = True
         Me.lbl_DBDateInfo.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_DBDateInfo.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_DBDateInfo.Location = New System.Drawing.Point(413, 1)
+        Me.lbl_DBDateInfo.Location = New System.Drawing.Point(414, 1)
         Me.lbl_DBDateInfo.Name = "lbl_DBDateInfo"
-        Me.lbl_DBDateInfo.Size = New System.Drawing.Size(227, 39)
+        Me.lbl_DBDateInfo.Size = New System.Drawing.Size(229, 42)
         Me.lbl_DBDateInfo.TabIndex = 12
         Me.lbl_DBDateInfo.Text = "X일 중 Y일"
         Me.lbl_DBDateInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -575,25 +577,25 @@ Partial Class Form1
         '
         Me.DBDate_HScrollBar.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DBDate_HScrollBar.LargeChange = 1
-        Me.DBDate_HScrollBar.Location = New System.Drawing.Point(410, 41)
+        Me.DBDate_HScrollBar.Location = New System.Drawing.Point(411, 44)
         Me.DBDate_HScrollBar.Name = "DBDate_HScrollBar"
-        Me.DBDate_HScrollBar.Size = New System.Drawing.Size(233, 58)
+        Me.DBDate_HScrollBar.Size = New System.Drawing.Size(235, 64)
         Me.DBDate_HScrollBar.TabIndex = 13
         '
         'txt_Log
         '
         Me.txt_Log.BackColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.txt_Log.Location = New System.Drawing.Point(820, 1087)
+        Me.txt_Log.Location = New System.Drawing.Point(657, 1082)
         Me.txt_Log.Multiline = True
         Me.txt_Log.Name = "txt_Log"
         Me.txt_Log.ReadOnly = True
         Me.txt_Log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txt_Log.Size = New System.Drawing.Size(666, 227)
+        Me.txt_Log.Size = New System.Drawing.Size(587, 227)
         Me.txt_Log.TabIndex = 9
         '
         'txt_DB_Date_Limit
         '
-        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(354, 125)
+        Me.txt_DB_Date_Limit.Location = New System.Drawing.Point(351, 127)
         Me.txt_DB_Date_Limit.Name = "txt_DB_Date_Limit"
         Me.txt_DB_Date_Limit.Size = New System.Drawing.Size(309, 21)
         Me.txt_DB_Date_Limit.TabIndex = 11
@@ -601,17 +603,17 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea10.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea10)
-        Legend10.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend10)
-        Me.txt_ebest_id.Location = New System.Drawing.Point(2033, 168)
+        ChartArea2.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend2)
+        Me.txt_ebest_id.Location = New System.Drawing.Point(1732, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series10.ChartArea = "ChartArea1"
-        Series10.Legend = "Legend1"
-        Series10.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series10)
-        Me.txt_ebest_id.Size = New System.Drawing.Size(1182, 906)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series2)
+        Me.txt_ebest_id.Size = New System.Drawing.Size(1040, 904)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
         '
@@ -632,7 +634,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.Controls.Add(Me.txt_익절목표, 1, 1)
         Me.TableLayoutPanel4.Controls.Add(Me.Label15, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_손절매비율, 1, 0)
-        Me.TableLayoutPanel4.Location = New System.Drawing.Point(428, 1087)
+        Me.TableLayoutPanel4.Location = New System.Drawing.Point(362, 1082)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 7
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
@@ -642,7 +644,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28531!))
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28816!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(386, 228)
+        Me.TableLayoutPanel4.Size = New System.Drawing.Size(289, 228)
         Me.TableLayoutPanel4.TabIndex = 14
         '
         'Label9
@@ -652,7 +654,7 @@ Partial Class Form1
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.Location = New System.Drawing.Point(4, 193)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(185, 34)
+        Me.Label9.Size = New System.Drawing.Size(137, 34)
         Me.Label9.TabIndex = 12
         Me.Label9.Text = "---"
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -664,7 +666,7 @@ Partial Class Form1
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.Location = New System.Drawing.Point(4, 161)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(185, 31)
+        Me.Label10.Size = New System.Drawing.Size(137, 31)
         Me.Label10.TabIndex = 10
         Me.Label10.Text = "---"
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -676,7 +678,7 @@ Partial Class Form1
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.Location = New System.Drawing.Point(4, 129)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(185, 31)
+        Me.Label11.Size = New System.Drawing.Size(137, 31)
         Me.Label11.TabIndex = 8
         Me.Label11.Text = "---"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -688,7 +690,7 @@ Partial Class Form1
         Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.Location = New System.Drawing.Point(4, 97)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(185, 31)
+        Me.Label12.Size = New System.Drawing.Size(137, 31)
         Me.Label12.TabIndex = 6
         Me.Label12.Text = "신호유지 TimeOut"
         Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -697,9 +699,9 @@ Partial Class Form1
         '
         Me.txt_신호TimeOut시간.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_신호TimeOut시간.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_신호TimeOut시간.Location = New System.Drawing.Point(197, 100)
+        Me.txt_신호TimeOut시간.Location = New System.Drawing.Point(148, 100)
         Me.txt_신호TimeOut시간.Name = "txt_신호TimeOut시간"
-        Me.txt_신호TimeOut시간.Size = New System.Drawing.Size(184, 24)
+        Me.txt_신호TimeOut시간.Size = New System.Drawing.Size(137, 24)
         Me.txt_신호TimeOut시간.TabIndex = 7
         Me.txt_신호TimeOut시간.Text = "1520"
         Me.txt_신호TimeOut시간.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -711,7 +713,7 @@ Partial Class Form1
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.Location = New System.Drawing.Point(4, 65)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(185, 31)
+        Me.Label13.Size = New System.Drawing.Size(137, 31)
         Me.Label13.TabIndex = 4
         Me.Label13.Text = "신호 TargetIndex"
         Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -720,9 +722,9 @@ Partial Class Form1
         '
         Me.txt_양매도Target시간Index.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_양매도Target시간Index.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_양매도Target시간Index.Location = New System.Drawing.Point(197, 68)
+        Me.txt_양매도Target시간Index.Location = New System.Drawing.Point(148, 68)
         Me.txt_양매도Target시간Index.Name = "txt_양매도Target시간Index"
-        Me.txt_양매도Target시간Index.Size = New System.Drawing.Size(184, 24)
+        Me.txt_양매도Target시간Index.Size = New System.Drawing.Size(137, 24)
         Me.txt_양매도Target시간Index.TabIndex = 5
         Me.txt_양매도Target시간Index.Text = "0"
         Me.txt_양매도Target시간Index.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -734,7 +736,7 @@ Partial Class Form1
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label14.Location = New System.Drawing.Point(4, 33)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(185, 31)
+        Me.Label14.Size = New System.Drawing.Size(137, 31)
         Me.Label14.TabIndex = 2
         Me.Label14.Text = "익절목표"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -743,9 +745,9 @@ Partial Class Form1
         '
         Me.txt_익절목표.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.txt_익절목표.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_익절목표.Location = New System.Drawing.Point(197, 36)
+        Me.txt_익절목표.Location = New System.Drawing.Point(148, 36)
         Me.txt_익절목표.Name = "txt_익절목표"
-        Me.txt_익절목표.Size = New System.Drawing.Size(184, 24)
+        Me.txt_익절목표.Size = New System.Drawing.Size(137, 24)
         Me.txt_익절목표.TabIndex = 3
         Me.txt_익절목표.Text = "0.3"
         Me.txt_익절목표.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -757,7 +759,7 @@ Partial Class Form1
         Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.Location = New System.Drawing.Point(4, 1)
         Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(185, 31)
+        Me.Label15.Size = New System.Drawing.Size(137, 31)
         Me.Label15.TabIndex = 0
         Me.Label15.Text = "손절매비율"
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -766,9 +768,9 @@ Partial Class Form1
         '
         Me.txt_손절매비율.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_손절매비율.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_손절매비율.Location = New System.Drawing.Point(196, 4)
+        Me.txt_손절매비율.Location = New System.Drawing.Point(148, 4)
         Me.txt_손절매비율.Name = "txt_손절매비율"
-        Me.txt_손절매비율.Size = New System.Drawing.Size(186, 24)
+        Me.txt_손절매비율.Size = New System.Drawing.Size(137, 24)
         Me.txt_손절매비율.TabIndex = 1
         Me.txt_손절매비율.Text = "1.2"
         Me.txt_손절매비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -781,7 +783,7 @@ Partial Class Form1
         Me.grd_ShinHo.AllowUserToResizeRows = False
         Me.grd_ShinHo.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_ShinHo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grd_ShinHo.Location = New System.Drawing.Point(1704, 168)
+        Me.grd_ShinHo.Location = New System.Drawing.Point(1518, 168)
         Me.grd_ShinHo.Name = "grd_ShinHo"
         Me.grd_ShinHo.ReadOnly = True
         Me.grd_ShinHo.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -790,7 +792,7 @@ Partial Class Form1
         Me.grd_ShinHo.ShowCellToolTips = False
         Me.grd_ShinHo.ShowEditingIcon = False
         Me.grd_ShinHo.ShowRowErrors = False
-        Me.grd_ShinHo.Size = New System.Drawing.Size(312, 906)
+        Me.grd_ShinHo.Size = New System.Drawing.Size(210, 906)
         Me.grd_ShinHo.TabIndex = 15
         Me.grd_ShinHo.TabStop = False
         '
@@ -800,7 +802,7 @@ Partial Class Form1
         Me.Hscroll_1.LargeChange = 1
         Me.Hscroll_1.Location = New System.Drawing.Point(0, 0)
         Me.Hscroll_1.Name = "Hscroll_1"
-        Me.Hscroll_1.Size = New System.Drawing.Size(433, 33)
+        Me.Hscroll_1.Size = New System.Drawing.Size(306, 42)
         Me.Hscroll_1.TabIndex = 16
         '
         'TableLayoutPanel5
@@ -809,12 +811,12 @@ Partial Class Form1
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel5.Controls.Add(Me.Hscroll_1, 0, 0)
         Me.TableLayoutPanel5.Controls.Add(Me.lbl_ScrolValue, 0, 1)
-        Me.TableLayoutPanel5.Location = New System.Drawing.Point(2033, 101)
+        Me.TableLayoutPanel5.Location = New System.Drawing.Point(1732, 86)
         Me.TableLayoutPanel5.Name = "TableLayoutPanel5"
         Me.TableLayoutPanel5.RowCount = 2
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.55556!))
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 44.44444!))
-        Me.TableLayoutPanel5.Size = New System.Drawing.Size(433, 61)
+        Me.TableLayoutPanel5.Size = New System.Drawing.Size(306, 76)
         Me.TableLayoutPanel5.TabIndex = 17
         '
         'lbl_ScrolValue
@@ -823,9 +825,9 @@ Partial Class Form1
         Me.lbl_ScrolValue.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.lbl_ScrolValue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_ScrolValue.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_ScrolValue.Location = New System.Drawing.Point(3, 33)
+        Me.lbl_ScrolValue.Location = New System.Drawing.Point(3, 42)
         Me.lbl_ScrolValue.Name = "lbl_ScrolValue"
-        Me.lbl_ScrolValue.Size = New System.Drawing.Size(427, 28)
+        Me.lbl_ScrolValue.Size = New System.Drawing.Size(300, 34)
         Me.lbl_ScrolValue.TabIndex = 17
         Me.lbl_ScrolValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -842,7 +844,7 @@ Partial Class Form1
         Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
         Me.TableLayoutPanel6.Controls.Add(Me.txt_실험조건, 2, 0)
         Me.TableLayoutPanel6.Controls.Add(Me.Chk_실험중지, 1, 0)
-        Me.TableLayoutPanel6.Location = New System.Drawing.Point(2030, 2)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(2044, 60)
         Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
         Me.TableLayoutPanel6.RowCount = 2
         Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.73265!))
@@ -920,61 +922,78 @@ Partial Class Form1
         '
         'TableLayoutPanel7
         '
-        Me.TableLayoutPanel7.ColumnCount = 2
-        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.77778!))
-        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.88889!))
+        Me.TableLayoutPanel7.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
+        Me.TableLayoutPanel7.ColumnCount = 3
+        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.3224!))
+        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.25137!))
+        Me.TableLayoutPanel7.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.42623!))
         Me.TableLayoutPanel7.Controls.Add(Me.txt_ebest_id1, 1, 0)
         Me.TableLayoutPanel7.Controls.Add(Me.txt_ebest인증비밀번호, 1, 2)
         Me.TableLayoutPanel7.Controls.Add(Me.txt_ebest_pwd, 1, 1)
+        Me.TableLayoutPanel7.Controls.Add(Me.chk_모의투자연결, 2, 0)
         Me.TableLayoutPanel7.Controls.Add(Me.Label21, 0, 2)
         Me.TableLayoutPanel7.Controls.Add(Me.Label18, 0, 1)
         Me.TableLayoutPanel7.Controls.Add(Me.Label16, 0, 0)
-        Me.TableLayoutPanel7.Location = New System.Drawing.Point(949, 13)
+        Me.TableLayoutPanel7.Controls.Add(Me.btn_이베스트로그인, 2, 1)
+        Me.TableLayoutPanel7.Location = New System.Drawing.Point(883, 13)
         Me.TableLayoutPanel7.Name = "TableLayoutPanel7"
         Me.TableLayoutPanel7.RowCount = 3
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel7.Size = New System.Drawing.Size(371, 89)
+        Me.TableLayoutPanel7.Size = New System.Drawing.Size(625, 108)
         Me.TableLayoutPanel7.TabIndex = 19
         '
         'txt_ebest_id1
         '
         Me.txt_ebest_id1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_ebest_id1.Location = New System.Drawing.Point(157, 3)
+        Me.txt_ebest_id1.Location = New System.Drawing.Point(174, 4)
         Me.txt_ebest_id1.Name = "txt_ebest_id1"
-        Me.txt_ebest_id1.Size = New System.Drawing.Size(211, 21)
+        Me.txt_ebest_id1.Size = New System.Drawing.Size(231, 21)
         Me.txt_ebest_id1.TabIndex = 24
         Me.txt_ebest_id1.Text = "f92887"
         '
         'txt_ebest인증비밀번호
         '
         Me.txt_ebest인증비밀번호.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_ebest인증비밀번호.Location = New System.Drawing.Point(157, 61)
+        Me.txt_ebest인증비밀번호.Location = New System.Drawing.Point(174, 74)
         Me.txt_ebest인증비밀번호.Name = "txt_ebest인증비밀번호"
         Me.txt_ebest인증비밀번호.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txt_ebest인증비밀번호.Size = New System.Drawing.Size(211, 21)
+        Me.txt_ebest인증비밀번호.Size = New System.Drawing.Size(231, 21)
         Me.txt_ebest인증비밀번호.TabIndex = 23
         Me.txt_ebest인증비밀번호.Text = "youngsookim6059!"
         '
         'txt_ebest_pwd
         '
         Me.txt_ebest_pwd.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_ebest_pwd.Location = New System.Drawing.Point(157, 32)
+        Me.txt_ebest_pwd.Location = New System.Drawing.Point(174, 39)
         Me.txt_ebest_pwd.Name = "txt_ebest_pwd"
         Me.txt_ebest_pwd.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.txt_ebest_pwd.Size = New System.Drawing.Size(211, 21)
+        Me.txt_ebest_pwd.Size = New System.Drawing.Size(231, 21)
         Me.txt_ebest_pwd.TabIndex = 22
         Me.txt_ebest_pwd.Text = "kys6059!"
+        '
+        'chk_모의투자연결
+        '
+        Me.chk_모의투자연결.AutoSize = True
+        Me.chk_모의투자연결.Checked = True
+        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_모의투자연결.Location = New System.Drawing.Point(412, 4)
+        Me.chk_모의투자연결.Name = "chk_모의투자연결"
+        Me.chk_모의투자연결.Size = New System.Drawing.Size(209, 28)
+        Me.chk_모의투자연결.TabIndex = 21
+        Me.chk_모의투자연결.Text = "모의투자서버"
+        Me.chk_모의투자연결.UseVisualStyleBackColor = True
         '
         'Label21
         '
         Me.Label21.AutoSize = True
         Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label21.Location = New System.Drawing.Point(3, 60)
+        Me.Label21.Location = New System.Drawing.Point(4, 73)
         Me.Label21.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(148, 27)
+        Me.Label21.Size = New System.Drawing.Size(163, 32)
         Me.Label21.TabIndex = 6
         Me.Label21.Text = "공인인증서 암호"
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -983,10 +1002,10 @@ Partial Class Form1
         '
         Me.Label18.AutoSize = True
         Me.Label18.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label18.Location = New System.Drawing.Point(3, 31)
+        Me.Label18.Location = New System.Drawing.Point(4, 38)
         Me.Label18.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(148, 25)
+        Me.Label18.Size = New System.Drawing.Size(163, 30)
         Me.Label18.TabIndex = 3
         Me.Label18.Text = "PWD"
         Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -995,65 +1014,84 @@ Partial Class Form1
         '
         Me.Label16.AutoSize = True
         Me.Label16.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label16.Location = New System.Drawing.Point(3, 2)
+        Me.Label16.Location = New System.Drawing.Point(4, 3)
         Me.Label16.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(148, 25)
+        Me.Label16.Size = New System.Drawing.Size(163, 30)
         Me.Label16.TabIndex = 1
         Me.Label16.Text = "ID"
         Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'btn_이베스트로그인
         '
+        Me.btn_이베스트로그인.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_이베스트로그인.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_이베스트로그인.Location = New System.Drawing.Point(1326, 44)
+        Me.btn_이베스트로그인.Location = New System.Drawing.Point(412, 39)
         Me.btn_이베스트로그인.Name = "btn_이베스트로그인"
-        Me.btn_이베스트로그인.Size = New System.Drawing.Size(175, 56)
+        Me.TableLayoutPanel7.SetRowSpan(Me.btn_이베스트로그인, 2)
+        Me.btn_이베스트로그인.Size = New System.Drawing.Size(209, 65)
         Me.btn_이베스트로그인.TabIndex = 20
         Me.btn_이베스트로그인.Text = "이베스트 로그인"
         Me.btn_이베스트로그인.UseVisualStyleBackColor = True
         '
-        'chk_모의투자연결
-        '
-        Me.chk_모의투자연결.AutoSize = True
-        Me.chk_모의투자연결.Checked = True
-        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_모의투자연결.Location = New System.Drawing.Point(1337, 18)
-        Me.chk_모의투자연결.Name = "chk_모의투자연결"
-        Me.chk_모의투자연결.Size = New System.Drawing.Size(96, 16)
-        Me.chk_모의투자연결.TabIndex = 21
-        Me.chk_모의투자연결.Text = "모의투자서버"
-        Me.chk_모의투자연결.UseVisualStyleBackColor = True
-        '
         'TableLayoutPanel8
         '
         Me.TableLayoutPanel8.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
-        Me.TableLayoutPanel8.ColumnCount = 6
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.38461!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.38461!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.38461!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.38461!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.38461!))
-        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.07692!))
-        Me.TableLayoutPanel8.Controls.Add(Me.Label24, 5, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_계좌번호, 5, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_평가손익, 4, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_평가금액, 3, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_매매손익합계, 2, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_인출가능금액, 1, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.lbl_주문가능금액, 0, 1)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label23, 4, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label22, 3, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label20, 2, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label19, 1, 0)
-        Me.TableLayoutPanel8.Controls.Add(Me.Label17, 0, 0)
-        Me.TableLayoutPanel8.Location = New System.Drawing.Point(2030, 1123)
+        Me.TableLayoutPanel8.ColumnCount = 7
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.44086!))
+        Me.TableLayoutPanel8.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.35484!))
+        Me.TableLayoutPanel8.Controls.Add(Me.Label24, 6, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_계좌번호, 6, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_평가손익, 5, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_평가금액, 4, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_매매손익합계, 3, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_인출가능금액, 2, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.lbl_주문가능금액, 1, 1)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label23, 5, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label22, 4, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label20, 3, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label19, 2, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label17, 1, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.Label26, 0, 0)
+        Me.TableLayoutPanel8.Controls.Add(Me.txt_구매가능대비비율, 0, 1)
+        Me.TableLayoutPanel8.Location = New System.Drawing.Point(1743, 1081)
         Me.TableLayoutPanel8.Name = "TableLayoutPanel8"
         Me.TableLayoutPanel8.RowCount = 2
         Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel8.Size = New System.Drawing.Size(1182, 75)
+        Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel8.Size = New System.Drawing.Size(1029, 90)
         Me.TableLayoutPanel8.TabIndex = 22
+        '
+        'Label24
+        '
+        Me.Label24.AutoSize = True
+        Me.Label24.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label24.Location = New System.Drawing.Point(832, 3)
+        Me.Label24.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.Label24.Name = "Label24"
+        Me.Label24.Size = New System.Drawing.Size(193, 39)
+        Me.Label24.TabIndex = 35
+        Me.Label24.Text = "계좌번호"
+        Me.Label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_계좌번호
+        '
+        Me.lbl_계좌번호.AutoSize = True
+        Me.lbl_계좌번호.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.lbl_계좌번호.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_계좌번호.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.lbl_계좌번호.Location = New System.Drawing.Point(832, 47)
+        Me.lbl_계좌번호.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.lbl_계좌번호.Name = "lbl_계좌번호"
+        Me.lbl_계좌번호.Size = New System.Drawing.Size(193, 40)
+        Me.lbl_계좌번호.TabIndex = 34
+        Me.lbl_계좌번호.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_평가손익
         '
@@ -1061,10 +1099,10 @@ Partial Class Form1
         Me.lbl_평가손익.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.lbl_평가손익.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_평가손익.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_평가손익.Location = New System.Drawing.Point(728, 40)
+        Me.lbl_평가손익.Location = New System.Drawing.Point(694, 47)
         Me.lbl_평가손익.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lbl_평가손익.Name = "lbl_평가손익"
-        Me.lbl_평가손익.Size = New System.Drawing.Size(174, 32)
+        Me.lbl_평가손익.Size = New System.Drawing.Size(131, 40)
         Me.lbl_평가손익.TabIndex = 32
         Me.lbl_평가손익.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -1074,10 +1112,10 @@ Partial Class Form1
         Me.lbl_평가금액.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.lbl_평가금액.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_평가금액.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_평가금액.Location = New System.Drawing.Point(547, 40)
+        Me.lbl_평가금액.Location = New System.Drawing.Point(556, 47)
         Me.lbl_평가금액.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lbl_평가금액.Name = "lbl_평가금액"
-        Me.lbl_평가금액.Size = New System.Drawing.Size(174, 32)
+        Me.lbl_평가금액.Size = New System.Drawing.Size(131, 40)
         Me.lbl_평가금액.TabIndex = 31
         Me.lbl_평가금액.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -1087,10 +1125,10 @@ Partial Class Form1
         Me.lbl_매매손익합계.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.lbl_매매손익합계.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_매매손익합계.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_매매손익합계.Location = New System.Drawing.Point(366, 40)
+        Me.lbl_매매손익합계.Location = New System.Drawing.Point(418, 47)
         Me.lbl_매매손익합계.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lbl_매매손익합계.Name = "lbl_매매손익합계"
-        Me.lbl_매매손익합계.Size = New System.Drawing.Size(174, 32)
+        Me.lbl_매매손익합계.Size = New System.Drawing.Size(131, 40)
         Me.lbl_매매손익합계.TabIndex = 30
         Me.lbl_매매손익합계.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -1100,10 +1138,10 @@ Partial Class Form1
         Me.lbl_인출가능금액.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.lbl_인출가능금액.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_인출가능금액.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_인출가능금액.Location = New System.Drawing.Point(185, 40)
+        Me.lbl_인출가능금액.Location = New System.Drawing.Point(280, 47)
         Me.lbl_인출가능금액.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lbl_인출가능금액.Name = "lbl_인출가능금액"
-        Me.lbl_인출가능금액.Size = New System.Drawing.Size(174, 32)
+        Me.lbl_인출가능금액.Size = New System.Drawing.Size(131, 40)
         Me.lbl_인출가능금액.TabIndex = 29
         Me.lbl_인출가능금액.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -1113,10 +1151,10 @@ Partial Class Form1
         Me.lbl_주문가능금액.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.lbl_주문가능금액.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_주문가능금액.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_주문가능금액.Location = New System.Drawing.Point(4, 40)
+        Me.lbl_주문가능금액.Location = New System.Drawing.Point(142, 47)
         Me.lbl_주문가능금액.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.lbl_주문가능금액.Name = "lbl_주문가능금액"
-        Me.lbl_주문가능금액.Size = New System.Drawing.Size(174, 32)
+        Me.lbl_주문가능금액.Size = New System.Drawing.Size(131, 40)
         Me.lbl_주문가능금액.TabIndex = 28
         Me.lbl_주문가능금액.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -1124,10 +1162,10 @@ Partial Class Form1
         '
         Me.Label23.AutoSize = True
         Me.Label23.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label23.Location = New System.Drawing.Point(728, 3)
+        Me.Label23.Location = New System.Drawing.Point(694, 3)
         Me.Label23.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(174, 32)
+        Me.Label23.Size = New System.Drawing.Size(131, 39)
         Me.Label23.TabIndex = 27
         Me.Label23.Text = "평가손익"
         Me.Label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1136,10 +1174,10 @@ Partial Class Form1
         '
         Me.Label22.AutoSize = True
         Me.Label22.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label22.Location = New System.Drawing.Point(547, 3)
+        Me.Label22.Location = New System.Drawing.Point(556, 3)
         Me.Label22.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(174, 32)
+        Me.Label22.Size = New System.Drawing.Size(131, 39)
         Me.Label22.TabIndex = 26
         Me.Label22.Text = "평가금액"
         Me.Label22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1148,10 +1186,10 @@ Partial Class Form1
         '
         Me.Label20.AutoSize = True
         Me.Label20.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label20.Location = New System.Drawing.Point(366, 3)
+        Me.Label20.Location = New System.Drawing.Point(418, 3)
         Me.Label20.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(174, 32)
+        Me.Label20.Size = New System.Drawing.Size(131, 39)
         Me.Label20.TabIndex = 25
         Me.Label20.Text = "매매손익합계"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1160,10 +1198,10 @@ Partial Class Form1
         '
         Me.Label19.AutoSize = True
         Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label19.Location = New System.Drawing.Point(185, 3)
+        Me.Label19.Location = New System.Drawing.Point(280, 3)
         Me.Label19.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(174, 32)
+        Me.Label19.Size = New System.Drawing.Size(131, 39)
         Me.Label19.TabIndex = 24
         Me.Label19.Text = "인출가능금액"
         Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1172,10 +1210,10 @@ Partial Class Form1
         '
         Me.Label17.AutoSize = True
         Me.Label17.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label17.Location = New System.Drawing.Point(4, 3)
+        Me.Label17.Location = New System.Drawing.Point(142, 3)
         Me.Label17.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(174, 32)
+        Me.Label17.Size = New System.Drawing.Size(131, 39)
         Me.Label17.TabIndex = 23
         Me.Label17.Text = "주문가능금액"
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1188,7 +1226,7 @@ Partial Class Form1
         Me.grd_잔고조회.AllowUserToResizeRows = False
         Me.grd_잔고조회.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grd_잔고조회.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grd_잔고조회.Location = New System.Drawing.Point(2030, 1205)
+        Me.grd_잔고조회.Location = New System.Drawing.Point(1743, 1178)
         Me.grd_잔고조회.Name = "grd_잔고조회"
         Me.grd_잔고조회.ReadOnly = True
         Me.grd_잔고조회.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -1197,7 +1235,7 @@ Partial Class Form1
         Me.grd_잔고조회.ShowCellToolTips = False
         Me.grd_잔고조회.ShowEditingIcon = False
         Me.grd_잔고조회.ShowRowErrors = False
-        Me.grd_잔고조회.Size = New System.Drawing.Size(1182, 103)
+        Me.grd_잔고조회.Size = New System.Drawing.Size(1029, 123)
         Me.grd_잔고조회.TabIndex = 23
         Me.grd_잔고조회.TabStop = False
         '
@@ -1216,58 +1254,35 @@ Partial Class Form1
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매도, 2, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매수, 1, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_구매가능수, 0, 0)
-        Me.TLP_BuySell.Location = New System.Drawing.Point(1492, 1091)
+        Me.TLP_BuySell.Location = New System.Drawing.Point(1250, 1082)
         Me.TLP_BuySell.Name = "TLP_BuySell"
         Me.TLP_BuySell.RowCount = 2
         Me.TLP_BuySell.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLP_BuySell.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLP_BuySell.Size = New System.Drawing.Size(524, 222)
+        Me.TLP_BuySell.Size = New System.Drawing.Size(487, 222)
         Me.TLP_BuySell.TabIndex = 24
         '
-        'btn_call_구매가능수
+        'btn_put_매도
         '
-        Me.btn_call_구매가능수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_call_구매가능수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_call_구매가능수.Location = New System.Drawing.Point(4, 4)
-        Me.btn_call_구매가능수.Name = "btn_call_구매가능수"
-        Me.btn_call_구매가능수.Size = New System.Drawing.Size(123, 103)
-        Me.btn_call_구매가능수.TabIndex = 0
-        Me.btn_call_구매가능수.Text = "콜 구매가능"
-        Me.btn_call_구매가능수.UseVisualStyleBackColor = True
+        Me.btn_put_매도.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_put_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_put_매도.Location = New System.Drawing.Point(246, 114)
+        Me.btn_put_매도.Name = "btn_put_매도"
+        Me.btn_put_매도.Size = New System.Drawing.Size(114, 104)
+        Me.btn_put_매도.TabIndex = 6
+        Me.btn_put_매도.Text = "풋 매도"
+        Me.btn_put_매도.UseVisualStyleBackColor = True
         '
-        'btn_call_매수
+        'btn_put_매수
         '
-        Me.btn_call_매수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_call_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_call_매수.Location = New System.Drawing.Point(134, 4)
-        Me.btn_call_매수.Name = "btn_call_매수"
-        Me.btn_call_매수.Size = New System.Drawing.Size(123, 103)
-        Me.btn_call_매수.TabIndex = 1
-        Me.btn_call_매수.Text = "콜 환매수"
-        Me.btn_call_매수.UseVisualStyleBackColor = True
-        '
-        'btn_call_매도
-        '
-        Me.btn_call_매도.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_call_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_call_매도.Location = New System.Drawing.Point(264, 4)
-        Me.btn_call_매도.Name = "btn_call_매도"
-        Me.btn_call_매도.Size = New System.Drawing.Size(123, 103)
-        Me.btn_call_매도.TabIndex = 2
-        Me.btn_call_매도.Text = "콜 매도"
-        Me.btn_call_매도.UseVisualStyleBackColor = True
-        '
-        'btn_전체정리
-        '
-        Me.btn_전체정리.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_전체정리.Font = New System.Drawing.Font("굴림", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_전체정리.Location = New System.Drawing.Point(394, 4)
-        Me.btn_전체정리.Name = "btn_전체정리"
-        Me.TLP_BuySell.SetRowSpan(Me.btn_전체정리, 2)
-        Me.btn_전체정리.Size = New System.Drawing.Size(126, 214)
-        Me.btn_전체정리.TabIndex = 3
-        Me.btn_전체정리.Text = "전체 정리"
-        Me.btn_전체정리.UseVisualStyleBackColor = True
+        Me.btn_put_매수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_put_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_put_매수.Location = New System.Drawing.Point(125, 114)
+        Me.btn_put_매수.Name = "btn_put_매수"
+        Me.btn_put_매수.Size = New System.Drawing.Size(114, 104)
+        Me.btn_put_매수.TabIndex = 5
+        Me.btn_put_매수.Text = "풋 환매수"
+        Me.btn_put_매수.UseVisualStyleBackColor = True
         '
         'btn_put_구매가능수
         '
@@ -1275,68 +1290,86 @@ Partial Class Form1
         Me.btn_put_구매가능수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btn_put_구매가능수.Location = New System.Drawing.Point(4, 114)
         Me.btn_put_구매가능수.Name = "btn_put_구매가능수"
-        Me.btn_put_구매가능수.Size = New System.Drawing.Size(123, 104)
+        Me.btn_put_구매가능수.Size = New System.Drawing.Size(114, 104)
         Me.btn_put_구매가능수.TabIndex = 4
         Me.btn_put_구매가능수.Text = "풋 구매가능"
         Me.btn_put_구매가능수.UseVisualStyleBackColor = True
         '
-        'btn_put_매수
+        'btn_전체정리
         '
-        Me.btn_put_매수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_put_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_매수.Location = New System.Drawing.Point(134, 114)
-        Me.btn_put_매수.Name = "btn_put_매수"
-        Me.btn_put_매수.Size = New System.Drawing.Size(123, 104)
-        Me.btn_put_매수.TabIndex = 5
-        Me.btn_put_매수.Text = "풋 환매수"
-        Me.btn_put_매수.UseVisualStyleBackColor = True
+        Me.btn_전체정리.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_전체정리.Font = New System.Drawing.Font("굴림", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_전체정리.Location = New System.Drawing.Point(367, 4)
+        Me.btn_전체정리.Name = "btn_전체정리"
+        Me.TLP_BuySell.SetRowSpan(Me.btn_전체정리, 2)
+        Me.btn_전체정리.Size = New System.Drawing.Size(116, 214)
+        Me.btn_전체정리.TabIndex = 3
+        Me.btn_전체정리.Text = "전체 정리"
+        Me.btn_전체정리.UseVisualStyleBackColor = True
         '
-        'btn_put_매도
+        'btn_call_매도
         '
-        Me.btn_put_매도.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_put_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_매도.Location = New System.Drawing.Point(264, 114)
-        Me.btn_put_매도.Name = "btn_put_매도"
-        Me.btn_put_매도.Size = New System.Drawing.Size(123, 104)
-        Me.btn_put_매도.TabIndex = 6
-        Me.btn_put_매도.Text = "풋 매도"
-        Me.btn_put_매도.UseVisualStyleBackColor = True
+        Me.btn_call_매도.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_call_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_call_매도.Location = New System.Drawing.Point(246, 4)
+        Me.btn_call_매도.Name = "btn_call_매도"
+        Me.btn_call_매도.Size = New System.Drawing.Size(114, 103)
+        Me.btn_call_매도.TabIndex = 2
+        Me.btn_call_매도.Text = "콜 매도"
+        Me.btn_call_매도.UseVisualStyleBackColor = True
         '
-        'lbl_계좌번호
+        'btn_call_매수
         '
-        Me.lbl_계좌번호.AutoSize = True
-        Me.lbl_계좌번호.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.lbl_계좌번호.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_계좌번호.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_계좌번호.Location = New System.Drawing.Point(909, 40)
-        Me.lbl_계좌번호.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.lbl_계좌번호.Name = "lbl_계좌번호"
-        Me.lbl_계좌번호.Size = New System.Drawing.Size(269, 32)
-        Me.lbl_계좌번호.TabIndex = 34
-        Me.lbl_계좌번호.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btn_call_매수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_call_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_call_매수.Location = New System.Drawing.Point(125, 4)
+        Me.btn_call_매수.Name = "btn_call_매수"
+        Me.btn_call_매수.Size = New System.Drawing.Size(114, 103)
+        Me.btn_call_매수.TabIndex = 1
+        Me.btn_call_매수.Text = "콜 환매수"
+        Me.btn_call_매수.UseVisualStyleBackColor = True
         '
-        'Label24
+        'btn_call_구매가능수
         '
-        Me.Label24.AutoSize = True
-        Me.Label24.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label24.Location = New System.Drawing.Point(909, 3)
-        Me.Label24.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(269, 32)
-        Me.Label24.TabIndex = 35
-        Me.Label24.Text = "계좌번호"
-        Me.Label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.btn_call_구매가능수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_call_구매가능수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_call_구매가능수.Location = New System.Drawing.Point(4, 4)
+        Me.btn_call_구매가능수.Name = "btn_call_구매가능수"
+        Me.btn_call_구매가능수.Size = New System.Drawing.Size(114, 103)
+        Me.btn_call_구매가능수.TabIndex = 0
+        Me.btn_call_구매가능수.Text = "콜 구매가능"
+        Me.btn_call_구매가능수.UseVisualStyleBackColor = True
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label26.Location = New System.Drawing.Point(4, 1)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(131, 43)
+        Me.Label26.TabIndex = 37
+        Me.Label26.Text = "구매가능 대비 비율"
+        Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_구매가능대비비율
+        '
+        Me.txt_구매가능대비비율.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_구매가능대비비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_구매가능대비비율.Location = New System.Drawing.Point(4, 48)
+        Me.txt_구매가능대비비율.Name = "txt_구매가능대비비율"
+        Me.txt_구매가능대비비율.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+        Me.txt_구매가능대비비율.Size = New System.Drawing.Size(131, 38)
+        Me.txt_구매가능대비비율.TabIndex = 38
+        Me.txt_구매가능대비비율.Text = "0.5"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(3284, 1322)
+        Me.ClientSize = New System.Drawing.Size(2784, 1322)
         Me.Controls.Add(Me.TLP_BuySell)
         Me.Controls.Add(Me.grd_잔고조회)
         Me.Controls.Add(Me.TableLayoutPanel8)
-        Me.Controls.Add(Me.chk_모의투자연결)
-        Me.Controls.Add(Me.btn_이베스트로그인)
         Me.Controls.Add(Me.TableLayoutPanel7)
         Me.Controls.Add(Me.TableLayoutPanel6)
         Me.Controls.Add(Me.TableLayoutPanel5)
@@ -1353,7 +1386,7 @@ Partial Class Form1
         Me.Controls.Add(Me.grid1)
         Me.Controls.Add(Me.btn_RealTimeStart)
         Me.Controls.Add(Me.TableLayoutPanel2)
-        Me.Location = New System.Drawing.Point(20, 30)
+        Me.Location = New System.Drawing.Point(0, 30)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Form1"
@@ -1476,5 +1509,7 @@ Partial Class Form1
     Friend WithEvents btn_call_구매가능수 As Button
     Friend WithEvents Label24 As Label
     Friend WithEvents lbl_계좌번호 As Label
+    Friend WithEvents Label26 As Label
+    Friend WithEvents txt_구매가능대비비율 As RichTextBox
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class
