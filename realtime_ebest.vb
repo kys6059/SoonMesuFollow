@@ -236,6 +236,8 @@ Module realtime_ebest
 
     End Sub
 
+
+    '더이상 사용하지 않음 - 주문가능수량으로 대체함
     Public Sub 매도증거금조회()
         Dim nSuccess As Integer
         Dim yyyy, tempMonth As String
@@ -265,7 +267,7 @@ Module realtime_ebest
 
     End Sub
 
-
+    '더이상 사용하지 않음 - 주문가능수량으로 대체함
     Private Sub XAQuery_매도증거금조회_ReceiveData(ByVal szTrCode As String)
 
         Add_Log("일반", "매도증거금 조회 이벤트 진입")
@@ -511,8 +513,8 @@ Module realtime_ebest
         str += ", 주문가능수량=" & 주문가능수량.ToString()
         str += ", 신규주문가능수량=" & 신규주문가능수량.ToString()
         str += ", 청산주문가능수량=" & 청산주문가능수량.ToString()
-        str += ", 사용예정증거금액=" & 사용예정증거금액.ToString()
-        str += ", 사용예정현금증거금액=" & 사용예정현금증거금액.ToString()
+        str += ", 사용예정증거금액=" & Format(사용예정증거금액, "###,###,###,#00")
+        str += ", 사용예정현금증거금액=" & Format(사용예정현금증거금액, "###,###,###,#00")
         str += ", 주문가능금액=" & Format(주문가능금액, "###,###,###,#00")
         str += ", 현금주문가능금액=" & Format(현금주문가능금액, "###,###,###,#00")
 

@@ -81,16 +81,8 @@ Module Algorithm
         콜현재가 = Data(shinho.A11_콜인덱스).price(0, currentIndex, 3)
         풋현재가 = Data(shinho.A21_풋인덱스).price(1, currentIndex, 3)
 
-        If 콜현재가 <= 0 Then
-            Add_Log("이상동작", "콜현재가 = " & 콜현재가.ToString())
-            Return
-        End If
-
-        If 풋현재가 <= 0 Then
-            Add_Log("이상동작", "풋현재가 = " & 풋현재가.ToString())
-            Return
-        End If
-
+        If 콜현재가 <= 0 Then Return
+        If 풋현재가 <= 0 Then Return
 
         합계가격 = 콜현재가 + 풋현재가
 
@@ -237,7 +229,6 @@ Module Algorithm
         Else
             shinho.A47_IsReal = 0
         End If
-
 
         shinho.A44_메모 = Form1.txt_실험조건.Text
         shinho.A48_조건전체 = Simulation_조건

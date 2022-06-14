@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -603,16 +603,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend2)
+        ChartArea4.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea4)
+        Legend4.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend4)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1732, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series2)
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series4)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1040, 904)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
