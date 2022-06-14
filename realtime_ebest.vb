@@ -100,14 +100,14 @@ Module realtime_ebest
 
             If bSuccess = False Then
                 Dim errNum As Integer = XASession1.GetLastError()
-                MessageBox.Show(XASession1.GetErrorMessage(errNum))
+                Add_Log("일반", XASession1.GetErrorMessage(errNum))
                 Return False
             End If
 
             Dim conn As Boolean = XASession1.Login(id, pwd, cert, nvserverType, True)
             If conn = False Then
                 Dim errNum As Integer = XASession1.GetLastError()
-                MessageBox.Show(XASession1.GetErrorMessage(errNum))
+                Add_Log("일반", XASession1.GetErrorMessage(errNum))
                 Return False
             End If
 
@@ -155,7 +155,7 @@ Module realtime_ebest
         XAQuery_계좌조회.SetFieldData("CFOBQ10500InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
 
         Dim nSuccess As Integer = XAQuery_계좌조회.Request(False)
-        If nSuccess < 0 Then MessageBox.Show("계좌조회() 함수호출 시 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", "계좌조회() 함수호출 시 오류: " & nSuccess.ToString())
 
 
         'Add_Log("일반", "계좌 조회시작")
@@ -187,7 +187,7 @@ Module realtime_ebest
 
 
         Dim nSuccess As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.Request(False)
-        If nSuccess < 0 Then MessageBox.Show(" 선물옵션_잔고평가_이동평균조회 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", " 선물옵션_잔고평가_이동평균조회 오류: " & nSuccess.ToString())
 
         'Add_Log("일반", "선물옵션_잔고평가 진입")
 
@@ -272,7 +272,7 @@ Module realtime_ebest
         nSuccess = XAQuery_매도증거금조회.Request(False)
 
         If nSuccess < 0 Then
-            MessageBox.Show(" 체결정보조회 전송오류: " & nSuccess.ToString())
+            Add_Log("일반", " 체결정보조회 전송오류: " & nSuccess.ToString())
         Else
             Add_Log("일반", "매도증거금 조회 시작 - 성공 nSuccess = " & nSuccess.ToString())
         End If
@@ -348,7 +348,7 @@ Module realtime_ebest
 
 
         Dim nSuccess As Integer = XAQuery_체결정보조회.Request(False)
-        If nSuccess < 0 Then MessageBox.Show(" 체결정보조회 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", " 체결정보조회 오류: " & nSuccess.ToString())
 
     End Sub
     Private Sub XAQuery_체결정보조회_ReceiveData(ByVal szTrCode As String)
@@ -402,7 +402,7 @@ Module realtime_ebest
         If XAQuery_체결정보조회.IsNext = 1 Then   ' 체결건수가 10건이 넘어서 다음에 또 있다고 나오면 true로request하면 다음걸 또 받아온다
 
             Dim nSuccess As Integer = XAQuery_체결정보조회.Request(True)
-            If nSuccess < 0 Then MessageBox.Show(" 체결정보조회 전송오류: " & nSuccess.ToString())
+            If nSuccess < 0 Then Add_Log("일반", " 체결정보조회 전송오류: " & nSuccess.ToString())
 
         End If
 
@@ -425,7 +425,7 @@ Module realtime_ebest
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
-        If nSuccess < 0 Then MessageBox.Show(" 한종목매도 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", " 한종목매도 오류: " & nSuccess.ToString())
 
         Add_Log("일반", "한종목 매도 진입")
 
@@ -447,7 +447,7 @@ Module realtime_ebest
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
-        If nSuccess < 0 Then MessageBox.Show(" 한종목매수 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
 
         Add_Log("일반", "한종목 매수 진입")
 
@@ -489,9 +489,9 @@ Module realtime_ebest
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "00")   '호가유형 지정가 00, 시장가 03
 
         Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
-        If nSuccess < 0 Then MessageBox.Show(" XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
+        If nSuccess < 0 Then Add_Log("일반", " XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
 
-        Console.WriteLine("일반", "XAQuery_구매가능수량조회 매수 진입")
+        'Console.WriteLine("일반", "XAQuery_구매가능수량조회 매수 진입")
 
     End Sub
 
@@ -532,7 +532,7 @@ Module realtime_ebest
         str += ", 주문가능금액=" & Format(주문가능금액, "###,###,###,#00")
         str += ", 현금주문가능금액=" & Format(현금주문가능금액, "###,###,###,#00")
 
-        Console.WriteLine(str)
+        'Console.WriteLine(str)
 
     End Sub
 

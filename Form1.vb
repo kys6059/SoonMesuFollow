@@ -1234,7 +1234,7 @@ Public Class Form1
 
         Dim bSuccess As Boolean = ConnectToEbest(id, password, cert, nServerType, strServerAddress)
         If bSuccess = False Then
-            MessageBox.Show("로그인 실패")
+            Add_Log("일반", "로그인 실패")
         Else
             Add_Log("일반", "이베스트 로그인 성공 at " + strServerAddress)
 
