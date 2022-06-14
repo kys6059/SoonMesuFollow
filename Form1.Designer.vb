@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -109,6 +109,8 @@ Partial Class Form1
         Me.Label20 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.txt_구매가능대비비율 = New System.Windows.Forms.RichTextBox()
         Me.grd_잔고조회 = New System.Windows.Forms.DataGridView()
         Me.TLP_BuySell = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_put_매도 = New System.Windows.Forms.Button()
@@ -118,8 +120,8 @@ Partial Class Form1
         Me.btn_call_매도 = New System.Windows.Forms.Button()
         Me.btn_call_매수 = New System.Windows.Forms.Button()
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
-        Me.Label26 = New System.Windows.Forms.Label()
-        Me.txt_구매가능대비비율 = New System.Windows.Forms.RichTextBox()
+        Me.chk_양매도실행 = New System.Windows.Forms.CheckBox()
+        Me.Timer구매가능개수찾기 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -603,16 +605,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend4)
+        ChartArea2.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend2)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1732, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series4)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series2)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1040, 904)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
@@ -623,6 +625,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.ColumnCount = 2
         Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel4.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel4.Controls.Add(Me.chk_양매도실행, 1, 5)
         Me.TableLayoutPanel4.Controls.Add(Me.Label9, 0, 6)
         Me.TableLayoutPanel4.Controls.Add(Me.Label10, 0, 5)
         Me.TableLayoutPanel4.Controls.Add(Me.Label11, 0, 4)
@@ -668,7 +671,7 @@ Partial Class Form1
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(137, 31)
         Me.Label10.TabIndex = 10
-        Me.Label10.Text = "---"
+        Me.Label10.Text = "양매도 실행"
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label11
@@ -1218,6 +1221,28 @@ Partial Class Form1
         Me.Label17.Text = "주문가능금액"
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label26.Location = New System.Drawing.Point(4, 1)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(131, 43)
+        Me.Label26.TabIndex = 37
+        Me.Label26.Text = "구매가능 대비 비율"
+        Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_구매가능대비비율
+        '
+        Me.txt_구매가능대비비율.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_구매가능대비비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_구매가능대비비율.Location = New System.Drawing.Point(4, 48)
+        Me.txt_구매가능대비비율.Name = "txt_구매가능대비비율"
+        Me.txt_구매가능대비비율.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+        Me.txt_구매가능대비비율.Size = New System.Drawing.Size(131, 38)
+        Me.txt_구매가능대비비율.TabIndex = 38
+        Me.txt_구매가능대비비율.Text = "0.5"
+        '
         'grd_잔고조회
         '
         Me.grd_잔고조회.AllowUserToAddRows = False
@@ -1340,27 +1365,19 @@ Partial Class Form1
         Me.btn_call_구매가능수.Text = "콜 구매가능"
         Me.btn_call_구매가능수.UseVisualStyleBackColor = True
         '
-        'Label26
+        'chk_양매도실행
         '
-        Me.Label26.AutoSize = True
-        Me.Label26.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label26.Location = New System.Drawing.Point(4, 1)
-        Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(131, 43)
-        Me.Label26.TabIndex = 37
-        Me.Label26.Text = "구매가능 대비 비율"
-        Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'txt_구매가능대비비율
-        '
-        Me.txt_구매가능대비비율.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_구매가능대비비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_구매가능대비비율.Location = New System.Drawing.Point(4, 48)
-        Me.txt_구매가능대비비율.Name = "txt_구매가능대비비율"
-        Me.txt_구매가능대비비율.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txt_구매가능대비비율.Size = New System.Drawing.Size(131, 38)
-        Me.txt_구매가능대비비율.TabIndex = 38
-        Me.txt_구매가능대비비율.Text = "0.5"
+        Me.chk_양매도실행.AutoSize = True
+        Me.chk_양매도실행.Checked = True
+        Me.chk_양매도실행.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_양매도실행.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_양매도실행.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_양매도실행.Location = New System.Drawing.Point(148, 164)
+        Me.chk_양매도실행.Name = "chk_양매도실행"
+        Me.chk_양매도실행.Size = New System.Drawing.Size(137, 25)
+        Me.chk_양매도실행.TabIndex = 13
+        Me.chk_양매도실행.Text = "양매도 실행"
+        Me.chk_양매도실행.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -1511,5 +1528,7 @@ Partial Class Form1
     Friend WithEvents lbl_계좌번호 As Label
     Friend WithEvents Label26 As Label
     Friend WithEvents txt_구매가능대비비율 As RichTextBox
+    Friend WithEvents chk_양매도실행 As CheckBox
+    Friend WithEvents Timer구매가능개수찾기 As Timer
     'Friend WithEvents HHippoChart1 As Hippo.WindowsForm4.hHippoChart
 End Class

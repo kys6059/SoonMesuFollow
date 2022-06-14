@@ -115,9 +115,9 @@ Public Class Form1
             cmb_selectedJongmokIndex_1.Items.Add(" ")
             For i As Integer = 0 To TotalCount - 1
                 Dim str As String
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")-" & Format(Data(i).증거금(0), "###,###,###,##0")
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")-" & 콜구매가능개수.ToString()
                 cmb_selectedJongmokIndex_0.Items.Add(str)
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")-" & Format(Data(i).증거금(1), "###,###,###,##0")
+                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")-" & 풋구매가능개수.ToString()
                 cmb_selectedJongmokIndex_1.Items.Add(str)
             Next
 
@@ -883,6 +883,20 @@ Public Class Form1
 
     End Sub
 
+    '계좌정보를 갖고오고 난 후 2초 후에 Timer를 통해 구매가능개수를 가져온다 - 아마 1초에 1개만 조회 가능한 듯
+
+    Private Sub Timer구매가능개수찾기_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기.Tick
+
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim putcode As String = Data(selectedJongmokIndex(1)).Code(1)
+        Dim putprice As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
+
+        구매가능수량조회(putcode, putprice)
+
+        Timer구매가능개수찾기.Enabled = False
+
+    End Sub
+
     Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
 
         If btn_TimerStart.Text = "START" Then
@@ -1438,6 +1452,5 @@ Public Class Form1
             Return True
         End If
     End Function
-
 
 End Class

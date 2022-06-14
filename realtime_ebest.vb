@@ -204,11 +204,11 @@ Module realtime_ebest
         'Add_Log("일반", "XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
         Console.WriteLine("XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
 
-        평가종합.매매손익합계 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tdtsunik", 0)
+        평가종합.매매손익합계 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tdtsunik", 0))
         평가종합.cts_expcode = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "cts_expcode", 0)
         평가종합.cts_medocd = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "cts_medocd", 0)
-        평가종합.평가금액 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tappamt", 0)
-        평가종합.평가손익 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tsunik", 0)
+        평가종합.평가금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tappamt", 0))
+        평가종합.평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tsunik", 0))
 
         Dim count As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.GetBlockCount("t0441OutBlock1")        ' Occurs 의 갯수를 구한다.
 
@@ -216,23 +216,35 @@ Module realtime_ebest
             Dim it As 잔고Type = New 잔고Type
             it.A01_종복번호 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "expcode", i) '종목번호
             it.A02_구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medosu", i) '구분
-            it.A03_잔고수량 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "jqty", i)
-            it.A04_청산가능수량 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "cqty", i)
-            it.A05_평균단가 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "pamt", i)
-            it.A06_총매입금액 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "mamt", i)
+            it.A03_잔고수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "jqty", i))
+            it.A04_청산가능수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "cqty", i))
+            it.A05_평균단가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "pamt", i))
+            it.A06_총매입금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "mamt", i))
             it.A07_매매구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medocd", i)
-            it.A08_매매손익 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik", i)
-            it.A09_처리순번 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sysprocseq", i)
-            it.A10_현재가 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "price", i)
-            it.A11_평가금액 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "appamt", i)
+            it.A08_매매손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik", i))
+            it.A09_처리순번 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sysprocseq", i))
+            it.A10_현재가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "price", i))
+            it.A11_평가금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "appamt", i))
             it.A12_평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik1", i))
-            it.A13_수익율 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sunikrt", i)
+            it.A13_수익율 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sunikrt", i))
             List잔고.Add(it)
         Next
 
-        If 매도증거금조회Flag = False And Form1.chk_모의투자연결.Checked = False Then 매도증거금조회()
-
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
+
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
+        Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+
+        구매가능수량조회(callcode, callprice)
+
+        '계좌정보를 갖고오고 난 후 2초 후에 Timer를 통해 구매가능개수를 가져온다 - 초당 TR 리미트 때문에 타이머로 구현함 - 1초에 1개만 가능하여 콜은 여기서 하고 풋은 타이머로 구현함
+
+        If Form1.Timer구매가능개수찾기.Enabled = False Then
+            Form1.Timer구매가능개수찾기.Interval = 2000
+            Form1.Timer구매가능개수찾기.Enabled = True
+            Console.WriteLine("타이머 스타트")
+        End If
 
     End Sub
 
@@ -479,30 +491,32 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
         If nSuccess < 0 Then MessageBox.Show(" XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
 
-        Add_Log("일반", "XAQuery_구매가능수량조회 매수 진입")
+        Console.WriteLine("일반", "XAQuery_구매가능수량조회 매수 진입")
 
     End Sub
 
     'XAQuery_구매가능수량조회
     Private Sub XAQuery_구매가능수량조회_ReceiveData(ByVal szTrCode As String)
 
-        Add_Log("일반", "XAQuery_구매가능수량조회 Received 이벤트 진입")
+        'Add_Log("일반", "XAQuery_구매가능수량조회 Received 이벤트 진입")
 
         Dim 종목코드 As String = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock1", "FnoIsuNo", 0)
         Dim 종목구분 As String = Left(종목코드, 1) '"2" - 콜, "3" - 풋
 
-        Dim 선물옵션현재가 As Single = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "FnoNowPrc", 0)
-        Dim 주문가능수량 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleQty", 0)
-        Dim 신규주문가능수량 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "NewOrdAbleQty", 0)
-        Dim 청산주문가능수량 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "LqdtOrdAbleQty", 0)
-        Dim 사용예정증거금액 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMgn", 0)
-        Dim 사용예정현금증거금액 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0)
-        Dim 주문가능금액 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0)
-        Dim 현금주문가능금액 As Long = XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "MnyOrdAbleAmt", 0)
+        Dim 선물옵션현재가 As Single = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "FnoNowPrc", 0))
+        Dim 주문가능수량 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleQty", 0))
+        Dim 신규주문가능수량 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "NewOrdAbleQty", 0))
+        Dim 청산주문가능수량 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "LqdtOrdAbleQty", 0))
+        Dim 사용예정증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMgn", 0))
+        Dim 사용예정현금증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0))
+        Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
+        Dim 현금주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "MnyOrdAbleAmt", 0))
 
         If 종목구분 = "2" Then
+            If 콜구매가능개수 <> 신규주문가능수량 Then Add_Log("일반", "콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
             콜구매가능개수 = 신규주문가능수량
         ElseIf 종목구분 = "3" Then
+            If 풋구매가능개수 <> 신규주문가능수량 Then Add_Log("일반", "풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
             풋구매가능개수 = 신규주문가능수량
         Else
             Add_Log("에러", "XAQuery_구매가능수량조회_ReceiveData에서 종목명이 비었거나 이상함")
@@ -518,7 +532,7 @@ Module realtime_ebest
         str += ", 주문가능금액=" & Format(주문가능금액, "###,###,###,#00")
         str += ", 현금주문가능금액=" & Format(현금주문가능금액, "###,###,###,#00")
 
-        Add_Log("일반", str)
+        Console.WriteLine(str)
 
     End Sub
 
