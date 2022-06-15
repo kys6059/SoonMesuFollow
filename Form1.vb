@@ -1041,9 +1041,9 @@ Public Class Form1
 
     End Sub
 
-    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
-        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
-    End Sub
+    '    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
+    '        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
+    '    End Sub
 
     Private Sub Hscroll_1_ValueChanged(sender As Object, e As EventArgs) Handles Hscroll_1.ValueChanged
         If currentIndex >= 0 Then
