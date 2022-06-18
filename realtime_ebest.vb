@@ -1,4 +1,6 @@
-﻿Imports XA_DATASETLib
+﻿Option Explicit On
+
+Imports XA_DATASETLib
 Imports XA_SESSIONLib
 
 Structure buytemplete '---------------------------------- 더 이상 사용하지 않음
@@ -163,12 +165,19 @@ Module realtime_ebest
 
     Private Sub XAQuery_계좌조회_ReceiveData(ByVal szTrCode As String)
 
-        주문가능금액 = XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "OrdAbleAmt", 0) '주문가능금액
-        인출가능금액 = XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "WthdwAbleAmt", 0)
+        주문가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "OrdAbleAmt", 0)) '주문가능금액
+        인출가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "WthdwAbleAmt", 0))
 
         If TargetDate > 0 Then
             선물옵션_잔고평가_이동평균조회()
             'Add_Log("일반", "계좌조회Receive")
+            '계좌정보를 갖고오고 난 후 8초 후에 Timer를 통해 구매가능개수를 가져온다 - 초당 TR 리미트 때문에 타이머로 구현함 - 1초에 1개만 가능
+
+            If Form1.Timer구매가능개수찾기.Enabled = False Then
+                Form1.Timer구매가능개수찾기.Interval = 8000
+                Form1.Timer구매가능개수찾기.Enabled = True
+                Console.WriteLine("타이머 1번 스타트")
+            End If
         End If
 
 
@@ -232,19 +241,7 @@ Module realtime_ebest
 
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
-        Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
 
-        구매가능수량조회(callcode, callprice)
-
-        '계좌정보를 갖고오고 난 후 2초 후에 Timer를 통해 구매가능개수를 가져온다 - 초당 TR 리미트 때문에 타이머로 구현함 - 1초에 1개만 가능하여 콜은 여기서 하고 풋은 타이머로 구현함
-
-        If Form1.Timer구매가능개수찾기.Enabled = False Then
-            Form1.Timer구매가능개수찾기.Interval = 2000
-            Form1.Timer구매가능개수찾기.Enabled = True
-            Console.WriteLine("타이머 스타트")
-        End If
 
     End Sub
 
@@ -372,8 +369,8 @@ Module realtime_ebest
 
             Dim it As buytemplete = New buytemplete
             it.B01_주문일 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdDt", i)
-            it.B02_주문번호 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdNo", i)
-            it.B03_원주문번호 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrgOrdNo", i)
+            it.B02_주문번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdNo", i))
+            it.B03_원주문번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrgOrdNo", i))
             it.B04_주문시각 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdTime", i)
             it.B05_종목코드 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "FnoIsuNo", i)
 
@@ -381,19 +378,19 @@ Module realtime_ebest
             it.B07_매매구분 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "BnsTpNm", i)
             it.B08_정정취소구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "MrcTpNm", i)
             it.B09_호가유형 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "FnoOrdprcPtnNm", i)
-            it.B10_주문가 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdPrc", i)
+            it.B10_주문가 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdPrc", i))
 
-            it.B11_주문수량 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdQty", i)
+            it.B11_주문수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdQty", i))
             it.B12_주문구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdTpNm", i)
             it.B13_체결구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecTpNm", i)
-            it.B14_체결가 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecPrc", i)
-            it.B15_체결수량 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecQty", i)
+            it.B14_체결가 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecPrc", i))
+            it.B15_체결수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecQty", i))
 
             it.B16_약정시각 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "CtrctTime", i)
-            it.B17_약정번호 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "CtrctNo", i)
-            it.B18_체결번호 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecNo", i)
+            it.B17_약정번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "CtrctNo", i))
+            it.B18_체결번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecNo", i))
             it.B19_매매손익 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "BnsplAmt", i)
-            it.B20_미체결수량 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "UnercQty", i)
+            it.B20_미체결수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "UnercQty", i))
 
             BuyList.Add(it)
 
@@ -420,7 +417,7 @@ Module realtime_ebest
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "00")   '호가유형 지정가 00, 시장가 03
+        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
@@ -442,7 +439,7 @@ Module realtime_ebest
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "00")   '호가유형 지정가 00, 시장가 03
+        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
@@ -463,7 +460,7 @@ Module realtime_ebest
         Dim 주문수량 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0)
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        Dim str As String = "주문접수 : OrdNo = " & OrdNo.ToString() & ", 종목코드 = " & 종목코드 & ", 심플종목코드 = " & 심플종목코드 & ", 주문가격 = " & 주문가격.ToString() & ", 주문수량 = " & 주문수량.ToString() & ", 매수매도구분 = " & 매수매도구분
+        Dim str As String = "주문접수 : OrdNo = " & OrdNo.ToString() & ", 종목코드 = " & 종목코드 & ", 주문가격 = " & 주문가격.ToString() & ", 주문수량 = " & 주문수량.ToString() & ", 매수매도구분 = " & 매수매도구분
 
         Add_Log("일반", str)
 
@@ -486,7 +483,7 @@ Module realtime_ebest
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "00")   '호가유형 지정가 00, 시장가 03
+        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
 
         Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
         If nSuccess < 0 Then Add_Log("일반", " XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
@@ -510,7 +507,6 @@ Module realtime_ebest
         Dim 사용예정증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMgn", 0))
         Dim 사용예정현금증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0))
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
-        Dim 현금주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "MnyOrdAbleAmt", 0))
 
         If 종목구분 = "2" Then
             If 콜구매가능개수 <> 신규주문가능수량 Then Add_Log("일반", "콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
@@ -530,10 +526,28 @@ Module realtime_ebest
         str += ", 사용예정증거금액=" & Format(사용예정증거금액, "###,###,###,#00")
         str += ", 사용예정현금증거금액=" & Format(사용예정현금증거금액, "###,###,###,#00")
         str += ", 주문가능금액=" & Format(주문가능금액, "###,###,###,#00")
-        str += ", 현금주문가능금액=" & Format(현금주문가능금액, "###,###,###,#00")
 
         'Console.WriteLine(str)
 
     End Sub
+
+    Public Function 매도실행호출(ByVal callput As Integer) As Boolean
+
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim code As String = Data(selectedJongmokIndex(callput)).Code(callput)
+        Dim price As Single = Data(selectedJongmokIndex(callput)).price(callput, tempIndex, 3)
+        Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
+        Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
+
+        If 최소구매가능개수 > 2 And 구매가능대비비율 > 0 Then
+            Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
+            Dim count As Integer = Math.Truncate(singleCount)
+            한종목매도(code, price, count)
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
 End Module

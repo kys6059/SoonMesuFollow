@@ -888,12 +888,31 @@ Public Class Form1
     Private Sub Timer구매가능개수찾기_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기.Tick
 
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+        Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
+        Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+
+        구매가능수량조회(callcode, callprice)
+
+        If Timer구매가능개수찾기_2.Enabled = False Then
+            Timer구매가능개수찾기_2.Interval = 2000
+            Timer구매가능개수찾기_2.Enabled = True
+            Console.WriteLine("타이머 2번 스타트")
+        End If
+
+        Timer구매가능개수찾기.Enabled = False
+
+    End Sub
+
+    Private Sub Timer구매가능개수찾기_2_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기_2.Tick
+
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
         Dim putcode As String = Data(selectedJongmokIndex(1)).Code(1)
         Dim putprice As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
 
         구매가능수량조회(putcode, putprice)
+        선물옵션_잔고평가_이동평균조회()
 
-        Timer구매가능개수찾기.Enabled = False
+        Timer구매가능개수찾기_2.Enabled = False
 
     End Sub
 
@@ -1174,8 +1193,8 @@ Public Class Form1
 
         Dim 손절비율() As String = {"1.12", "1.14", "1.16", "1.18", "1.20", "1.22", "1.24", "1.26"}
         Dim 익절비율() As String = {"0.3", "0.76"}
-        '        Dim 발생Index() As String = {"0", "2"}
-        '       Dim TimeoutTime() As String = {"1520", "1510", "1500"}
+        Dim 발생Index() As String = {"0", "1"}
+        Dim TimeoutTime() As String = {"1520", "1525"}
         'Dim 기준가격() As String = {"2.3", "2.6", "2.9"}
 
         If SimulationTotalShinhoList Is Nothing Then
@@ -1186,15 +1205,19 @@ Public Class Form1
 
         cnt = 0
 
-        For a = 0 To 손절비율.Length - 1
-            For b = 0 To 익절비율.Length - 1
+        For a = 0 To 발생Index.Length - 1
+            For b = 0 To TimeoutTime.Length - 1
 
-                txt_손절매비율.Text = 손절비율(a)
-                txt_익절목표.Text = 익절비율(b)
+                'txt_손절매비율.Text = 손절비율(a)
+                'txt_익절목표.Text = 익절비율(b)
+
+                txt_양매도Target시간Index.Text = 발생Index(a)
+                txt_신호TimeOut시간.Text = TimeoutTime(b)
+                Simulation_조건 = "cnt_" + cnt.ToString() + "_occur_" + 발생Index(a) + "_expire_" + TimeoutTime(b)
 
                 'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
+                'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b)
 
-                Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b)
                 Console.WriteLine(Simulation_조건)
                 Add_Log("시뮬레이션 진행 : ", Simulation_조건)
                 자동반복계산로직(cnt)
@@ -1331,51 +1354,17 @@ Public Class Form1
         Next
     End Sub
 
-
-
     Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
 
         If 진짜할건지확인() = False Then Return
-
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
-        Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
-        Dim count As Integer = 1
-
-        Dim 구매가능대비비율 As Single = Val(txt_구매가능대비비율.Text)
-
-        Dim 최소구매가능개수 = Math.Min(콜구매가능개수, 풋구매가능개수)
-
-        If 최소구매가능개수 > 1 And 구매가능대비비율 > 0 Then
-
-            count = 최소구매가능개수 * 구매가능대비비율
-            한종목매도(code, price, count)
-        Else
-            Add_Log("일반", "콜 매도 시 최소구매가능개수 부족")
-        End If
-
+        If 매도실행호출(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
 
     End Sub
 
     Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
 
         If 진짜할건지확인() = False Then Return
-
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
-        Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
-        Dim count As Integer = 1
-        Dim 구매가능대비비율 As Single = Val(txt_구매가능대비비율.Text)
-        Dim 최소구매가능개수 = Math.Min(콜구매가능개수, 풋구매가능개수)
-
-        If 최소구매가능개수 > 1 And 구매가능대비비율 > 0 Then
-
-            count = 최소구매가능개수 * 구매가능대비비율
-            한종목매도(code, price, count)
-        Else
-            Add_Log("일반", "풋 매도 시 최소구매가능개수 부족")
-        End If
-
+        If 매도실행호출(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
 
     End Sub
 
@@ -1434,10 +1423,8 @@ Public Class Form1
         Add_Log("일반", "전체 환매수를 눌렀음 현재 잔고의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
-
             Dim it As 잔고Type = List잔고(i)
             한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-
         Next
     End Sub
 

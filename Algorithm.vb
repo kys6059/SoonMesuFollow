@@ -62,12 +62,22 @@ Module Algorithm
 
             Dim shinho As ShinhoType = ShinhoList(i)
 
-            '신호 현재 상태가 1이면
             If shinho.A33_현재상태 = 1 Then
 
                 If shinho.A06_신호ID = "S" Then
+
                     IsContinueShinho_S(shinho)
                     ShinhoList(i) = shinho
+
+                    If shinho.A33_현재상태 = 0 Then   '1이었다가 다시 0이 되면 환매를 수행함
+
+                        For j As Integer = 0 To List잔고.Count - 1
+                            Dim it As 잔고Type = List잔고(j)
+                            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                        Next
+
+                    End If
+
                 End If
 
             End If
@@ -124,10 +134,17 @@ Module Algorithm
 
     Public Function CalcAlrotithmAll() As Boolean '전체 알고리즘을 계산한다 - 일단 양매도 S 알고리즘만 먼저 적용함
 
-
         양매도TargetIndex = Val(Form1.txt_양매도Target시간Index.Text)
 
-        Dim ret As Boolean = CalcAlgorithm_S() '양매도 조건 검지
+        Dim ret As Boolean = CalcAlgorithm_S() '양매도 조건 검지  ------------------------------------ 양매도 조건 검지 시 매도 실행
+        If ret = True Then
+            If EBESTisConntected = True Then
+                If Form1.chk_양매도실행.Checked = True Then
+                    매도실행호출(0)
+                    매도실행호출(1)
+                End If
+            End If
+        End If
 
         Return ret
 
@@ -156,7 +173,7 @@ Module Algorithm
         Dim tempIndex = GetMaxIndex() 'curreuntIndex가 79일 때 0이어서 이상동작하는 거 방지하는 코드
 
         If tempIndex <> 양매도TargetIndex Then Return False '양매도는 정해진 시간에 수행하고 시간이 아니라면 아래를 수행하지 않는다
-        If AlreadyOccured("S", occurType.oneShot) = True Then Return False  '한번이라도 이미 발생했다면 다시 발생하지 않는다
+        'If AlreadyOccured("S", occurType.oneShot) = True Then Return False  '한번이라도 이미 발생했다면 다시 발생하지 않는다  ------------ 연속해서 여러번 사는 방법으로 변경하여 이미 발생 조건을 삭제함
 
         '타겟시간 시가가 0보다 크면 무조건 양매도를 친다
         If Data(callSelectedIndex).price(0, tempIndex, 0) > 0 And Data(putSelectedIndex).price(1, tempIndex, 0) > 0 Then
@@ -235,7 +252,5 @@ Module Algorithm
         Return shinho
 
     End Function
-
-
 
 End Module

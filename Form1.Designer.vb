@@ -122,6 +122,8 @@ Partial Class Form1
         Me.btn_call_매수 = New System.Windows.Forms.Button()
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
         Me.Timer구매가능개수찾기 = New System.Windows.Forms.Timer(Me.components)
+        Me.Timer구매가능개수찾기_2 = New System.Windows.Forms.Timer(Me.components)
+        Me.Timer3 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -1382,6 +1384,9 @@ Partial Class Form1
         'Timer구매가능개수찾기
         '
         '
+        'Timer구매가능개수찾기_2
+        '
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -1533,5 +1538,6 @@ Partial Class Form1
     Friend WithEvents txt_구매가능대비비율 As RichTextBox
     Friend WithEvents chk_양매도실행 As CheckBox
     Friend WithEvents Timer구매가능개수찾기 As Timer
-
+    Friend WithEvents Timer구매가능개수찾기_2 As Timer
+    Friend WithEvents Timer3 As Timer
 End Class
