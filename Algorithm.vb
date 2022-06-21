@@ -106,7 +106,6 @@ Module Algorithm
                     Next
                 End If
             End If
-
         Next
     End Sub
 
