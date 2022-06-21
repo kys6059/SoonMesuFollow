@@ -540,7 +540,7 @@ Public Class Form1
         Dim defaultWidth As Integer
         Dim i, j As Integer
 
-        defaultWidth = 45
+        defaultWidth = 44
 
         grd_selected.Columns.Clear()
         grd_selected.Rows.Clear()
@@ -582,14 +582,14 @@ Public Class Form1
         grd_selected.Columns(2).Width = defaultWidth
         grd_selected.Columns(3).Width = defaultWidth
         grd_selected.Columns(4).Width = defaultWidth
-        grd_selected.Columns(5).Width = defaultWidth + 15
+        grd_selected.Columns(5).Width = defaultWidth + 5
         grd_selected.Columns(6).Width = defaultWidth
         grd_selected.Columns(7).Width = defaultWidth
         grd_selected.Columns(8).Width = defaultWidth
         grd_selected.Columns(9).Width = defaultWidth
-        grd_selected.Columns(10).Width = defaultWidth + 15
-        grd_selected.Columns(11).Width = defaultWidth + 20
-        grd_selected.Columns(12).Width = defaultWidth + 20
+        grd_selected.Columns(10).Width = defaultWidth + 5
+        grd_selected.Columns(11).Width = defaultWidth + 15
+        grd_selected.Columns(12).Width = defaultWidth + 15
 
         grd_selected.Columns(5).DefaultCellStyle.BackColor = Color.Yellow
         grd_selected.Columns(10).DefaultCellStyle.BackColor = Color.Yellow
@@ -888,16 +888,19 @@ Public Class Form1
     Private Sub Timer구매가능개수찾기_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기.Tick
 
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
-        Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+        If tempIndex >= 0 Then
+            Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
+            Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
 
-        구매가능수량조회(callcode, callprice)
+            구매가능수량조회(callcode, callprice)
 
-        If Timer구매가능개수찾기_2.Enabled = False Then
-            Timer구매가능개수찾기_2.Interval = 2000
-            Timer구매가능개수찾기_2.Enabled = True
-            Console.WriteLine("타이머 2번 스타트")
+            If Timer구매가능개수찾기_2.Enabled = False Then
+                Timer구매가능개수찾기_2.Interval = 2000
+                Timer구매가능개수찾기_2.Enabled = True
+                Console.WriteLine("타이머 2번 스타트")
+            End If
         End If
+
 
         Timer구매가능개수찾기.Enabled = False
 
@@ -906,11 +909,14 @@ Public Class Form1
     Private Sub Timer구매가능개수찾기_2_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기_2.Tick
 
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim putcode As String = Data(selectedJongmokIndex(1)).Code(1)
-        Dim putprice As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
+        If tempIndex >= 0 Then
+            Dim putcode As String = Data(selectedJongmokIndex(1)).Code(1)
+            Dim putprice As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
 
-        구매가능수량조회(putcode, putprice)
-        선물옵션_잔고평가_이동평균조회()
+            구매가능수량조회(putcode, putprice)
+            선물옵션_잔고평가_이동평균조회()
+        End If
+
 
         Timer구매가능개수찾기_2.Enabled = False
 
@@ -948,17 +954,14 @@ Public Class Form1
             txt_손절매비율.Text = "1.2"
             Label15.Text = "손절매비율(3일이하)"
         ElseIf 남은날짜 > 3 And 남은날짜 <= 10 Then
-            txt_손절매비율.Text = "1.16"
+            txt_손절매비율.Text = "1.17"
             Label15.Text = "손절매비율(10일이하)"
         Else
-            txt_손절매비율.Text = "1.12"
+            txt_손절매비율.Text = "1.14"
             Label15.Text = "손절매비율(10일초과)"
         End If
 
         txt_실험조건.Text = "A" + strToday
-        Dim str As String = "1.1.0_20220602"
-
-        txt_programversion.Text = str
 
         currentIndex = -1
 
@@ -1231,7 +1234,10 @@ Public Class Form1
     End Sub
 
     Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
+        이베스트로그인함수()
+    End Sub
 
+    Private Sub 이베스트로그인함수()
         Dim nServerType As Integer
         Dim strServerAddress, password As String
 
@@ -1262,7 +1268,6 @@ Public Class Form1
             Add_Log("일반", "이베스트 로그인 성공 at " + strServerAddress)
 
         End If
-
     End Sub
 
     Public Sub Display계좌정보()
@@ -1312,16 +1317,16 @@ Public Class Form1
         grd_잔고조회.Columns(0).Width = defaultWidth + 15
         grd_잔고조회.Columns(1).Width = defaultWidth
         grd_잔고조회.Columns(2).Width = defaultWidth
-        grd_잔고조회.Columns(3).Width = defaultWidth + 20
+        grd_잔고조회.Columns(3).Width = defaultWidth + 15
         grd_잔고조회.Columns(4).Width = defaultWidth
-        grd_잔고조회.Columns(5).Width = defaultWidth + 20
+        grd_잔고조회.Columns(5).Width = defaultWidth + 15
         grd_잔고조회.Columns(6).Width = defaultWidth
-        grd_잔고조회.Columns(7).Width = defaultWidth + 20
+        grd_잔고조회.Columns(7).Width = defaultWidth
         grd_잔고조회.Columns(8).Width = defaultWidth
         grd_잔고조회.Columns(9).Width = defaultWidth
-        grd_잔고조회.Columns(10).Width = defaultWidth + 20
-        grd_잔고조회.Columns(11).Width = defaultWidth + 20
-        grd_잔고조회.Columns(12).Width = defaultWidth + 20
+        grd_잔고조회.Columns(10).Width = defaultWidth + 15
+        grd_잔고조회.Columns(11).Width = defaultWidth + 15
+        grd_잔고조회.Columns(12).Width = defaultWidth + 15
 
         grd_잔고조회.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
@@ -1336,7 +1341,6 @@ Public Class Form1
         If List잔고 Is Nothing Then Return
 
         For i As Integer = 0 To List잔고.Count - 1
-
             grd_잔고조회.Rows(i).Cells(0).Value = List잔고(i).A01_종복번호
             grd_잔고조회.Rows(i).Cells(1).Value = List잔고(i).A02_구분
             grd_잔고조회.Rows(i).Cells(2).Value = Format(List잔고(i).A03_잔고수량, "###,###,###,##0")
@@ -1350,8 +1354,23 @@ Public Class Form1
             grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
-
         Next
+
+        If List잔고.Count = 2 Then
+            Dim 수익율 As Single = (List잔고(0).A13_수익율 + List잔고(1).A13_수익율) / 2
+            grd_잔고조회.Rows(2).Cells(5).Value = Format(List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액, "###,###,###,##0")
+            grd_잔고조회.Rows(2).Cells(11).Value = Format(List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익, "###,###,###,##0")
+            grd_잔고조회.Rows(2).Cells(12).Value = Format(수익율, "##0.00")
+
+            If 수익율 > 0 Then
+                grd_잔고조회.Rows(2).Cells(12).Style.BackColor = Color.Yellow
+                grd_잔고조회.Rows(2).Cells(12).Style.ForeColor = Color.Red
+            Else
+                grd_잔고조회.Rows(2).Cells(12).Style.BackColor = Color.LightGreen
+                grd_잔고조회.Rows(2).Cells(12).Style.ForeColor = Color.Black
+            End If
+        End If
+
     End Sub
 
     Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
@@ -1370,18 +1389,21 @@ Public Class Form1
 
     Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
-        Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
+        If tempIndex >= 0 Then
+            Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
+            Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
 
-        구매가능수량조회(code, price)
+            구매가능수량조회(code, price)
+        End If
     End Sub
 
     Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_put_구매가능수.Click
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
-        Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
-
-        구매가능수량조회(code, price)
+        If tempIndex >= 0 Then
+            Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
+            Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
+            구매가능수량조회(code, price)
+        End If
     End Sub
 
     Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_call_매수.Click
@@ -1440,4 +1462,40 @@ Public Class Form1
         End If
     End Function
 
+    Private Sub btn_인덱스업_Click(sender As Object, e As EventArgs) Handles btn_인덱스업.Click
+        Dim 현재양매도Index As Integer = Val(txt_양매도Target시간Index.Text)
+        If 현재양매도Index < 30 Then
+            Dim 신규양매도index As Integer = 현재양매도Index + 1
+            txt_양매도Target시간Index.Text = 신규양매도index.ToString()
+        End If
+    End Sub
+
+    Private Sub btn_인덱스다운_Click(sender As Object, e As EventArgs) Handles btn_인덱스다운.Click
+        Dim 현재양매도Index As Integer = Val(txt_양매도Target시간Index.Text)
+        If 현재양매도Index > 0 Then
+            Dim 신규양매도index As Integer = 현재양매도Index - 1
+            txt_양매도Target시간Index.Text = 신규양매도index.ToString()
+        End If
+    End Sub
+
+    Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs) Handles btn_아침시작버튼.Click
+
+        Dim ret As Boolean
+        ret = realTime_Start()
+        txt_TargetDate.Text = TargetDate
+
+        이베스트로그인함수()
+
+        If btn_TimerStart.Text = "START" Then
+            Timer1.Interval = 1000
+            Timer1.Enabled = True
+            btn_TimerStart.Text = "STOP"
+            timerCount = 0
+        Else
+            Timer1.Enabled = False
+            btn_TimerStart.Text = "START"
+            label_timerCounter.Text = "---"
+        End If
+
+    End Sub
 End Class
