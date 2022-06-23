@@ -135,12 +135,14 @@ Module Module_common
         mingap = 1000.0
         tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
 
+        Dim 설정Index As Integer = Val(Form1.txt_양매도Target시간Index.Text)
+        Dim 최종Index As Integer = Math.Min(tempIndex, 설정Index)
 
-        '장이 끝나는 시간 기준이 아니라 장 시작시간 기준으로 변경함
+        '현재Index와 설정Index 중 작은 값 적용
         For i = 0 To TotalCount
 
-            If Data(i).price(callput, 0, 0) > 0 And Data(i).price(callput, 0, 0) < 3.0 Then
-                gap = Math.Abs(Data(i).price(callput, 0, 3) - JongmokTargetPrice)
+            If Data(i).price(callput, 최종Index, 0) > 0 And Data(i).price(callput, 최종Index, 0) < 3.0 Then
+                gap = Math.Abs(Data(i).price(callput, 최종Index, 3) - JongmokTargetPrice)
                 If gap < mingap Then
                     mingap = gap
                     temptarget = i

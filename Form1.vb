@@ -842,7 +842,7 @@ Public Class Form1
             selectedJongmokIndex(0) = selectedIndex - 1
             chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
             Clac_DisplayAllGrid()
-
+            Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
         End If
     End Sub
 
@@ -855,7 +855,7 @@ Public Class Form1
             selectedJongmokIndex(1) = selectedIndex - 1
             chk_ChangeTargetIndex.Checked = False
             Clac_DisplayAllGrid()
-
+            Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
         End If
 
     End Sub

@@ -75,6 +75,10 @@ Module realtime_ebest
 
     Public 콜구매가능개수 As Integer = 0
     Public 풋구매가능개수 As Integer = 0
+    Public 콜최대구매개수 As Integer = 0
+    Public 풋최대구매개수 As Integer = 0
+    Public 콜현재환매개수 As Integer = 0
+    Public 풋현재환매개수 As Integer = 0
 
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
@@ -237,9 +241,23 @@ Module realtime_ebest
             it.A12_평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik1", i))
             it.A13_수익율 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sunikrt", i))
             List잔고.Add(it)
+
+            '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
+            Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+
+            If callput = "2" Then
+                If 콜최대구매개수 < it.A03_잔고수량 Then 콜최대구매개수 = it.A03_잔고수량
+                Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+            Else
+                If 풋최대구매개수 < it.A03_잔고수량 Then 풋최대구매개수 = it.A03_잔고수량
+                Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+            End If
+
+
         Next
 
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
+
 
 
 
@@ -460,7 +478,7 @@ Module realtime_ebest
         Dim 주문수량 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0)
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        Dim str As String = "주문접수 : OrdNo = " & OrdNo.ToString() & ", 종목코드 = " & 종목코드 & ", 주문가격 = " & 주문가격.ToString() & ", 주문수량 = " & 주문수량.ToString() & ", 매수매도구분 = " & 매수매도구분
+        Dim str As String = "주문No = " & OrdNo.ToString() & ", 코드 = " & 종목코드 & ", 가격 = " & 주문가격.ToString() & ", 수량 = " & 주문수량.ToString() & ", 구분 = " & 매수매도구분
 
         Add_Log("일반", str)
 

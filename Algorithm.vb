@@ -70,7 +70,44 @@ Module Algorithm
                     ShinhoList(i) = shinho
 
                     If shinho.A33_현재상태 = 0 Then   '1이었다가 다시 0이 되면 환매를 수행함
+                        If List잔고 IsNot Nothing Then
+                            For j As Integer = 0 To List잔고.Count - 1
 
+                                Dim it As 잔고Type = List잔고(j)
+                                Dim count As Integer = 0
+                                If it.A03_잔고수량 > 10 Then
+                                    Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
+                                    Dim singleCount As Single = it.A03_잔고수량 * 구매가능대비비율
+                                    count = Math.Ceiling(singleCount)
+
+                                    If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
+                                        count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
+                                        콜현재환매개수 = 콜현재환매개수 + count
+                                    Else
+                                        count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
+                                        풋현재환매개수 = 풋현재환매개수 + count
+                                    End If
+
+                                Else
+                                    If Mid(it.A01_종복번호, 1, 1) = "2" Then
+                                        count = Math.Min(it.A03_잔고수량, 콜최대구매개수 - 콜현재환매개수)
+                                        콜현재환매개수 = 콜현재환매개수 + count
+                                    Else
+                                        count = Math.Min(it.A03_잔고수량, 풋최대구매개수 - 풋현재환매개수)
+                                        풋현재환매개수 = 풋현재환매개수 + count
+                                    End If
+                                End If
+                                한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                                Add_Log("일반", "1-0에서 매수 호출됨 개수 = " & count.ToString())
+                            Next
+
+                        End If
+                    End If
+
+                End If
+            Else    '신호가 죽고 난 후 잔고가 아직 남아있을 대 처리루틴
+                If shinho.A06_신호ID = "S" Then
+                    If List잔고 IsNot Nothing Then
                         For j As Integer = 0 To List잔고.Count - 1
 
                             Dim it As 잔고Type = List잔고(j)
@@ -79,31 +116,26 @@ Module Algorithm
                                 Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
                                 Dim singleCount As Single = it.A03_잔고수량 * 구매가능대비비율
                                 count = Math.Ceiling(singleCount)
+                                If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
+                                    count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
+                                    콜현재환매개수 = 콜현재환매개수 + count
+                                Else
+                                    count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
+                                    풋현재환매개수 = 풋현재환매개수 + count
+                                End If
                             Else
-                                count = it.A03_잔고수량
+                                If Mid(it.A01_종복번호, 1, 1) = "2" Then
+                                    count = Math.Min(it.A03_잔고수량, 콜최대구매개수 - 콜현재환매개수)
+                                    콜현재환매개수 = 콜현재환매개수 + count
+                                Else
+                                    count = Math.Min(it.A03_잔고수량, 풋최대구매개수 - 풋현재환매개수)
+                                    풋현재환매개수 = 풋현재환매개수 + count
+                                End If
                             End If
                             한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                            Add_Log("일반", "신호가 죽고난 후 잔고 존재 시 매수됨 count = " & count.ToString())
                         Next
-
                     End If
-
-                End If
-            Else    '신호가 죽고 난 후 잔고가 아직 남아있을 대 처리루틴
-                If shinho.A06_신호ID = "S" Then
-                    For j As Integer = 0 To List잔고.Count - 1
-
-                        Dim it As 잔고Type = List잔고(j)
-                        Dim count As Integer = 0
-                        If it.A03_잔고수량 > 10 Then
-                            Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
-                            Dim singleCount As Single = it.A03_잔고수량 * 구매가능대비비율
-                            count = Math.Ceiling(singleCount)
-                        Else
-                            count = it.A03_잔고수량
-                        End If
-                        한종목매수(it.A01_종복번호, it.A10_현재가, count)
-                        Add_Log("일반", "신호가 죽고난 후 잔고 존재 시 매수")
-                    Next
                 End If
             End If
         Next
@@ -146,7 +178,7 @@ Module Algorithm
         End If
 
         'time limit 체크
-        If Val(Data(shinho.A11_콜인덱스).ctime(currentIndex)) >= Val(shinho.A40_TimeoutTime) Then
+        If Val(Data(shinho.A11_콜인덱스).ctime(currentIndex)) >= Val(shinho.A40_TimeoutTime) + 5 Then
             shinho.A33_현재상태 = 0
             shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
