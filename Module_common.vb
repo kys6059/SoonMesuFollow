@@ -126,7 +126,6 @@ Module Module_common
 
     End Sub
 
-
     Public Function CalcTargetJonhmokIndex(ByVal callput As Integer) As Integer
 
         Dim temptarget, i, tempIndex As Integer
