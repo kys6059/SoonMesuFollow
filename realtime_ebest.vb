@@ -246,11 +246,15 @@ Module realtime_ebest
             Dim callput As String = Mid(it.A01_종복번호, 1, 1)
 
             If callput = "2" Then
-                If 콜최대구매개수 < it.A03_잔고수량 Then 콜최대구매개수 = it.A03_잔고수량
-                Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+                If 콜최대구매개수 < it.A03_잔고수량 Then
+                    콜최대구매개수 = it.A03_잔고수량
+                    Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+                End If
             Else
-                If 풋최대구매개수 < it.A03_잔고수량 Then 풋최대구매개수 = it.A03_잔고수량
-                Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+                If 풋최대구매개수 < it.A03_잔고수량 Then
+                    풋최대구매개수 = it.A03_잔고수량
+                    Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+                End If
             End If
 
 
@@ -478,7 +482,7 @@ Module realtime_ebest
         Dim 주문수량 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0)
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        Dim str As String = "주문No = " & OrdNo.ToString() & ", 코드 = " & 종목코드 & ", 가격 = " & 주문가격.ToString() & ", 수량 = " & 주문수량.ToString() & ", 구분 = " & 매수매도구분
+        Dim str As String = "주문No = " & OrdNo.ToString() & ",코드 = " & 종목코드 & ",가격 = " & Format(주문가격, "#0.00") & ",수량 = " & 주문수량.ToString() & ",구분 = " & 매수매도구분
 
         Add_Log("일반", str)
 

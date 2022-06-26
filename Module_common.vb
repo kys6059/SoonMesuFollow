@@ -136,6 +136,7 @@ Module Module_common
 
         Dim 설정Index As Integer = Val(Form1.txt_양매도Target시간Index.Text)
         Dim 최종Index As Integer = Math.Min(tempIndex, 설정Index)
+        최종Index = Math.Max(최종Index, 0)
 
         '현재Index와 설정Index 중 작은 값 적용
         For i = 0 To TotalCount
