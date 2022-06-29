@@ -452,23 +452,29 @@ Module realtime_ebest
 
     Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer)
 
-        If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
-        XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
+        If count > 0 Then
 
-        Dim adjustPrice As Single = price + 0.1
+            If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
+            XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
+            Dim adjustPrice As Single = price + 0.1
 
-        Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
-        If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
-        Add_Log("일반", "한종목 매수 진입")
+            Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
+            If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
+
+            Add_Log("일반", "한종목 매수 진입")
+        Else
+            Add_Log("일반", code & " 0개 매수가 호출됨")
+        End If
+
 
     End Sub
 
@@ -478,11 +484,11 @@ Module realtime_ebest
 
         Dim 종목코드 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "FnoIsuNo", 0)
         Dim 심플종목코드 As String = Mid(종목코드, 6, 3) '290 같이 마지막 3자리
-        Dim 주문가격 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "FnoOrdPrc", 0)
+        Dim 주문가격 As Single = Math.Round(Val(XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "FnoOrdPrc", 0)), 2)
         Dim 주문수량 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0)
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        Dim str As String = "주문No = " & OrdNo.ToString() & ",코드 = " & 종목코드 & ",가격 = " & Format(주문가격, "#0.00") & ",수량 = " & 주문수량.ToString() & ",구분 = " & 매수매도구분
+        Dim str As String = "주문No = " & OrdNo.ToString() & ",코드 = " & 종목코드 & ",가격 = " & 주문가격.ToString() & ",수량 = " & 주문수량.ToString() & ",구분 = " & 매수매도구분
 
         Add_Log("일반", str)
 

@@ -1360,7 +1360,7 @@ Public Class Form1
 
             grd_잔고조회.Rows(2).Cells(5).Value = Format(List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액, "###,###,###,##0")
             grd_잔고조회.Rows(2).Cells(11).Value = Format(List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익, "###,###,###,##0")
-            Dim 수익율 As Single = (List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익) / (List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액) * 100
+            Dim 수익율 As Single = (List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익) / (List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액)
             grd_잔고조회.Rows(2).Cells(12).Value = Format(수익율, "##0.0%")
 
             If 수익율 > 0 Then
