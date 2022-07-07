@@ -1481,9 +1481,9 @@ Public Class Form1
 
     Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs) Handles btn_아침시작버튼.Click
 
-        Dim ret As Boolean
-        ret = realTime_Start()
-        txt_TargetDate.Text = TargetDate
+        'Dim ret As Boolean
+        'ret = realTime_Start()
+        'txt_TargetDate.Text = TargetDate
 
         이베스트로그인함수()
 
