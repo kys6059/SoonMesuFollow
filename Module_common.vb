@@ -49,25 +49,21 @@ Structure SumDatSetType
 End Structure
 
 
-'해야할 일 정리 ------------------- 20220211
+Structure ListTemplate
+    Dim HangSaGa As String '콜풋
+    Dim Code() As String '콜풋
+    Dim price(,) As Single '콜풋, 시고저종
+    Dim 거래량() As Long '콜풋
+    Dim 시간가치() As Single
 
-'그래프 그리기 ------------------------------
-'설정 - 입력 항목들 만들기  ------------------------------- 완료
-'실시간 타이머 넣기 --------------------------------------- 완료 (화면 그리는데 시간이 많이 걸려서 좀 느림)
-'DB에 저장, 불러오기
-'신호 넣기
-'특정 날짜 Data 가져오기 기능 추가 ------------------------ 완료 (월물이 바뀌는 날은 안됨, CYBOS에서 data가 지난달거는 조회 안됨)
-'일정 시간 후 자동 저장 기능 ---- Timer에 구현함
+    Public Sub Initialize()
+        ReDim Code(1)
+        ReDim price(1, 3)  '콜풋, 시고저종
+        ReDim 거래량(1) '콜풋
+        ReDim 시간가치(1) '콜풋
+    End Sub
 
-'해야할 일 정리 ------------------- 20220306
-
-'그래프 그리기 ------------------------------ Y축 넣기가 이상함, 합계 넣기, Annotation 넣기
-'설정 - 입력 항목들 만들기  ------------------------------- 완료
-'실시간 타이머 넣기 --------------------------------------- 완료 (화면 그리는데 시간이 많이 걸려서 좀 느림)
-'DB에 저장, 불러오기 -------------------------------------- 개별 가져오기는 완료, 단 한꺼번에 가져와서 밀고 당기는 거는 너무 느려서 개선 필요
-'신호 넣기
-'특정 날짜 Data 가져오기 기능 추가 ------------------------ 완료 (월물이 바뀌는 날은 안됨, CYBOS에서 data가 지난달거는 조회 안됨)
-'일정 시간 후 자동 저장 기능 ---- Timer에 구현 필요
+End Structure
 
 
 Module Module_common
@@ -90,6 +86,9 @@ Module Module_common
     Public timerCount As Integer
     Public timerMaxInterval As Integer
 
+    Public optionList As List(Of ListTemplate)  '제일 왼쪽 grid에 표시될 option List 
+
+
 
     Public Sub InitDataStructure()
 
@@ -108,13 +107,19 @@ Module Module_common
         LowerLimt = Val(Form1.txt_LowerLimit.Text)
         timeIndex = 0
         timerCount = 0 '16초마다 돌아가는 타이머 주기
-        timerMaxInterval = 16 '16초보다 크면 실행함
+        timerMaxInterval = 7 '7초보다 크면 0으로 바꿈
         currentIndex = -1
         timeIndex = -1
 
         JongmokTargetPrice = Val(Form1.txt_JongmokTargetPrice.Text)
         selectedJongmokIndex(0) = -1
         selectedJongmokIndex(1) = -1
+
+        If optionList Is Nothing Then
+            optionList = New List(Of ListTemplate)
+        Else
+            optionList.Clear()
+        End If
 
         If ShinhoList Is Nothing Then
             ShinhoList = New List(Of ShinhoType)
@@ -164,8 +169,8 @@ Module Module_common
         For j As Integer = 0 To currentIndex
 
             '합계 계산
-            If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
-                If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedPutIndex).price(1, j, 0) > 0 Then
+            If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedputIndex).ctime(j)) Then
+                If Data(selectedCallIndex).price(0, j, 0) > 0 And Data(selectedputIndex).price(1, j, 0) > 0 Then
                     SumDataSet.siSum(j) = Data(selectedCallIndex).price(0, j, 0) + Data(selectedputIndex).price(1, j, 0)
                     SumDataSet.jongSum(j) = Data(selectedCallIndex).price(0, j, 3) + Data(selectedputIndex).price(1, j, 3)
                 End If

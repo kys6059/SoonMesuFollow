@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_RealTimeStart = New System.Windows.Forms.Button()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
@@ -150,7 +150,7 @@ Partial Class Form1
         Me.btn_RealTimeStart.Name = "btn_RealTimeStart"
         Me.btn_RealTimeStart.Size = New System.Drawing.Size(109, 80)
         Me.btn_RealTimeStart.TabIndex = 0
-        Me.btn_RealTimeStart.Text = "대신 연결"
+        Me.btn_RealTimeStart.Text = "EBEST_Option가져오기"
         Me.btn_RealTimeStart.UseVisualStyleBackColor = True
         '
         'grid1
@@ -415,16 +415,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend1)
+        ChartArea5.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend5)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1847, 164)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series1)
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series5)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1225, 885)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
@@ -1240,7 +1240,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(164, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.2.3_20220629"
+        Me.txt_programversion.Text = "0.1.1_20220708"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex

@@ -61,6 +61,8 @@ Module realtime_ebest
     Dim XAQuery_선물옵션_잔고평가_이동평균조회 As XAQuery = New XAQuery
     Dim XAQuery_매수매도 As XAQuery = New XAQuery
     Dim XAQuery_구매가능수량조회 As XAQuery = New XAQuery
+    Dim XAQuery_현재날짜조회 As XAQuery = New XAQuery
+    Dim XAQuery_전체종목조회 As XAQuery = New XAQuery
 
     Public Const g_strServerAddress As String = "hts.etrade.co.kr"
     Public 거래비밀번호 As String = "3487"
@@ -91,6 +93,8 @@ Module realtime_ebest
         AddHandler XAQuery_체결정보조회.ReceiveData, AddressOf XAQuery_체결정보조회_ReceiveData '-----------------------------------------------------------------이벤트 등록
         AddHandler XAQuery_매수매도.ReceiveData, AddressOf XAQuery_매수매도_ReceiveData '-----------------------------------------------------------------매수매도 이벤트 등록
         AddHandler XAQuery_구매가능수량조회.ReceiveData, AddressOf XAQuery_구매가능수량조회_ReceiveData '구매가능 수량 조회
+        AddHandler XAQuery_현재날짜조회.ReceiveData, AddressOf XAQuery_현재날짜조회_ReceiveData
+        AddHandler XAQuery_전체종목조회.ReceiveData, AddressOf XAQuery_전체종목조회_ReceiveData
     End Sub
 
 
@@ -146,6 +150,8 @@ Module realtime_ebest
             Add_Log("일반", "Login Event 수신 완료")
             EBESTisConntected = True
             계좌조회() '계좌조회 호출
+
+            Form1.Ebest_realTime_Start()
 
         End If
 
@@ -577,5 +583,95 @@ Module realtime_ebest
         End If
 
     End Function
+
+    Public Sub XAQuery_현재날짜조회함수()
+
+        If XAQuery_현재날짜조회 Is Nothing Then XAQuery_현재날짜조회 = New XAQuery
+        XAQuery_현재날짜조회.ResFileName = "c:\ebest\xingApi\res\t0167.res"
+
+        XAQuery_현재날짜조회.SetFieldData("t0167InBlock", "id", 0, "f92887") 'id
+
+        Dim nSuccess As Integer = XAQuery_현재날짜조회.Request(False)
+        If nSuccess < 0 Then Add_Log("일반", " XAQuery_현재날짜조회 오류: " & nSuccess.ToString())
+
+    End Sub
+
+
+    Private Sub XAQuery_현재날짜조회_ReceiveData(ByVal szTrCode As String)
+
+        Dim 오늘날짜 As Integer = Val(XAQuery_현재날짜조회.GetFieldData("t0167OutBlock", "dt", 0))
+
+        If 오늘날짜 > 0 Then
+            TargetDate = 오늘날짜
+            '전체 종목 조회
+            XAQuery_전체종목조회함수()
+        End If
+
+        Add_Log("일반", "EBEST 오늘날짜는 " & 오늘날짜.ToString())
+    End Sub
+
+    Public Sub XAQuery_전체종목조회함수()
+        If XAQuery_전체종목조회 Is Nothing Then XAQuery_전체종목조회 = New XAQuery
+        XAQuery_전체종목조회.ResFileName = "c:\ebest\xingApi\res\t2301.res"
+
+        Dim 구분 As String = "G" 'G" 정규, M:미니, W:위클리
+
+        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, "20" & sMonth)
+        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "gubun", 0, 구분)
+
+        Dim nSuccess As Integer = XAQuery_전체종목조회.Request(False)
+        If nSuccess < 0 Then Add_Log("일반", " XAQuery_전체종목조회 오류: " & nSuccess.ToString())
+
+    End Sub
+
+    Private Sub XAQuery_전체종목조회_ReceiveData(ByVal szTrCode As String)
+
+        Dim callCount As Long = XAQuery_전체종목조회.GetBlockCount("t2301OutBlock1")
+        Dim putCount As Long = XAQuery_전체종목조회.GetBlockCount("t2301OutBlock2")
+
+        Dim highLimit As Single = Val(Form1.txt_UpperLimit.Text)
+        Dim lowLimit As Single = Val(Form1.txt_LowerLimit.Text)
+        Dim retCount As Integer = 0
+
+        If callCount = putCount And callCount > 0 Then
+            For i As Integer = 0 To callCount - 1
+
+                Dim it As ListTemplate = New ListTemplate
+                it.Initialize()
+
+                it.HangSaGa = XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "actprice", i) '행사가
+
+                it.Code(0) = XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "optcode", i) '콜옵션코드
+                it.price(0, 0) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "open", i))
+                it.price(0, 1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "high", i))
+                it.price(0, 2) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "low", i))
+                it.price(0, 3) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "price", i))
+                it.거래량(0) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "volume", i))
+                it.시간가치(0) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock1", "timevl", i))
+
+                it.Code(1) = XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "optcode", i) '콜옵션코드
+                it.price(1, 0) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "open", i))
+                it.price(1, 1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "high", i))
+                it.price(1, 2) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "low", i))
+                it.price(1, 3) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "price", i))
+                it.거래량(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "volume", i))
+                it.시간가치(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "timevl", i))
+
+                If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 모두 범위안에 들어오면
+                    optionList.Add(it)
+                    retCount += 1
+                End If
+
+            Next
+
+            TotalCount = retCount
+            Add_Log("일반", "옵션 종목 TotalCount =  " & TotalCount.ToString())
+            If TotalCount > 0 Then
+                Form1.Timer_Change()
+            End If
+
+        End If
+
+    End Sub
 
 End Module

@@ -5,13 +5,31 @@ Imports System.Windows.Forms.DataVisualization.Charting
 Public Class Form1
 
     Private Sub btn_RealTimeStart_Click(sender As Object, e As EventArgs) Handles btn_RealTimeStart.Click
-        Dim ret As Boolean
 
-        ret = realTime_Start()
-
-        txt_TargetDate.Text = TargetDate
+        이베스트로그인함수()
 
     End Sub
+
+    '현재날짜를 가져와서 TargetDate에 넣는다
+    ' isRealFlag = True로 세팅한다
+    '종목카운트를 계산하고 최대 25(?) 종목만 뽑는다
+    '시간 리스트를 구조체이 미리 입력한다
+    '5분데이터를 가져오고
+    'Clac_DisplayAllGrid를 수행한다
+
+    '로그인이 되면 불려지는 함수
+    Public Sub Ebest_realTime_Start()
+
+        InitDataStructure()
+        InitObject()
+
+        '프로그램 상 오늘 날짜를 가져온다
+        XAQuery_현재날짜조회함수()
+
+
+
+    End Sub
+
 
     Private Function realTime_Start() As Boolean
 
@@ -63,10 +81,7 @@ Public Class Form1
 
     Private Sub Clac_DisplayAllGrid()         'selectedJongmokIndex 계산
 
-        If selectedJongmokIndex(0) < 0 Or chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
-            selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
-            selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
-        End If
+
 
         SetScrolData() '타임 스크롤의 최대최소값을 지정한다
 
@@ -865,20 +880,55 @@ Public Class Form1
         timerCount = timerCount + 1
         label_timerCounter.Text = timerCount.ToString()
 
-        If timerCount >= timerMaxInterval Then
+        If timerCount >= timerMaxInterval Then timerCount = 0
 
-            timerCount = 0
+        '계좌정보 가져오기
+        'If EBESTisConntected = True Then 계좌조회()
 
-            '계좌정보 가져오기
-            If EBESTisConntected = True Then 계좌조회()
+        '옵션 정보 가져와서 화면 표시
+        'GetAllData()
+        Clac_DisplayAllGrid()
 
-            '옵션 정보 가져와서 화면 표시
-            GetAllData()
-            Clac_DisplayAllGrid()
+        'DB에 자동 저장 기능 추가 필요
 
-            'DB에 자동 저장 기능 추가 필요
 
-        End If
+        Select Case timerCount
+            Case 1
+                If selectedJongmokIndex(0) < 0 Or chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
+                    selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
+                    selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
+                End If
+
+            Case 2
+
+            Case 3
+
+            Case 4
+
+            Case 5
+
+            Case 6
+
+            Case Else
+                Console.WriteLine("Timer1 값은 " & timerCount.ToString())
+        End Select
+
+
+
+        '1초 : 만약 selected가 미확정이라면 종목 선정
+        '만약 selected가 되었다면  -------------------- 콜 현재 종목 가져오기
+
+        '2 : 풋 현재 종목 가져오기
+
+        '3 : 계좌가져오기 
+
+        '4 : 현재 구매내역 가져오기
+
+        '5 : 콜 구매가능갯수 가져오기
+
+        '6 : 풋 구매가능갯수 가져오기 - 이어서 Clac_DisplayAllGrid() 계산하기
+
+
 
 
     End Sub
@@ -922,8 +972,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
-
+    Public Sub Timer_Change()
         If btn_TimerStart.Text = "START" Then
             Timer1.Interval = 1000
             Timer1.Enabled = True
@@ -934,6 +983,11 @@ Public Class Form1
             btn_TimerStart.Text = "START"
             label_timerCounter.Text = "---"
         End If
+    End Sub
+
+    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
+
+        Timer_Change()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1487,16 +1541,9 @@ Public Class Form1
 
         이베스트로그인함수()
 
-        If btn_TimerStart.Text = "START" Then
-            Timer1.Interval = 1000
-            Timer1.Enabled = True
-            btn_TimerStart.Text = "STOP"
-            timerCount = 0
-        Else
-            Timer1.Enabled = False
-            btn_TimerStart.Text = "START"
-            label_timerCounter.Text = "---"
-        End If
+        Timer_Change()
 
     End Sub
+
+
 End Class
