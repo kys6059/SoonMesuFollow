@@ -64,7 +64,7 @@ Module Module_common
     '전역변수 선언
     Public Data() As DataSet  '-------------------- 전체가 들어있는 자료형
     Public SumDataSet As SumDatSetType
-    Public TargetDate As Integer
+    Public TargetDate As Long
     Public sMonth As String
     Public Interval As Integer
     Public TotalJongMokCount As Integer
@@ -403,5 +403,22 @@ Module Module_common
         Form1.txt_Log.Refresh()
 
     End Sub
+
+    Public Function FindIndexFormTime(ByVal strTime As String) As Integer
+
+        Dim si, bun As Integer
+
+        If Len(strTime) = 4 Then
+            si = Val(Mid(strTime, 1, 2))
+            bun = Val(Mid(strTime, 3, 2))
+        ElseIf Len(strTime) = 3 Then
+            si = Val(Mid(strTime, 1, 1))
+            bun = Val(Mid(strTime, 2, 2))
+        Else
+            MsgBox("시간이 안맞음. 현재 시간이 " & strTime & "으로 나옴")
+            FindIndexFormTime = -1
+        End If
+        FindIndexFormTime = (((si - 9) * (60 / Interval)) + (bun / Interval)) - 1
+    End Function
 
 End Module

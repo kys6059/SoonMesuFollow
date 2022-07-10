@@ -498,12 +498,18 @@ Module realtime_ebest
 
         Dim callput As Integer
 
-        Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1) '
+        Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1)
 
         If callputstriong = "2" Then
             callput = 0
         Else
             callput = 1
+        End If
+
+        Dim targetDatelong As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "date", 0))
+
+        If targetDatelong <> TargetDate Then
+            TargetDate = targetDatelong
         End If
 
         Data(callput).어제시고저종(0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jisiga", 0))

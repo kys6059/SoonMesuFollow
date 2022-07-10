@@ -759,7 +759,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        txt_TableName.Text = "option_190628"
+        txt_TableName.Text = "option_weekly"
 
         Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
