@@ -122,65 +122,9 @@ Module DBHandler
     '일일 데이터를 빅쿼리에 저장한다
     Public Function InsertTargetDateData(ByVal iDate As Integer) As Integer
 
-        Dim retCount As Integer = 0
-        Dim i, callput As Integer
-        Dim iFlag As Integer
-        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
-        Dim 영보다큰갯수 As Integer = 0
-        Dim dateaset_id = "option5"
-        Dim table_id = Form1.txt_TableName.Text
 
 
-        For callput = 0 To 1
-            For i = 0 To TotalCount - 1
-                For j = 0 To currentIndex
-                    If Data(i).price(callput, j, 0) > 0 Then
-                        영보다큰갯수 += 1
-                    End If
-                Next
-            Next
-        Next
-
-        Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
-
-        For callput = 0 To 1
-            For i = 0 To TotalCount - 1
-                For j = 0 To currentIndex
-
-                    If callput = 0 Then
-                        iFlag = 1
-                    Else
-                        iFlag = 6
-                    End If
-
-                    If Data(i).price(callput, j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
-
-                        rows(retCount) = New BigQueryInsertRow '(retCount) 여기에 (retCount)이게 붙으면 배열의 크기만큼 잡는건데 이건 아닌거 같아서 일단 제거하고 살펴보기로 함 (20220601)
-                        rows(retCount).Add("cdate", iDate)
-                        rows(retCount).Add("index", i)
-                        rows(retCount).Add("hangsaga", Data(i).HangSaGa)
-                        rows(retCount).Add("iFlag", iFlag)
-                        rows(retCount).Add("ctime", Data(i).ctime(j))
-                        rows(retCount).Add("interval", Interval)
-                        rows(retCount).Add("si", Data(i).price(callput, j, 0))
-                        rows(retCount).Add("go", Data(i).price(callput, j, 1))
-                        rows(retCount).Add("jue", Data(i).price(callput, j, 2))
-                        rows(retCount).Add("jong", Data(i).price(callput, j, 3))
-                        rows(retCount).Add("volume", Data(i).거래량(callput, j))
-
-                        retCount += 1
-                    End If
-                Next
-            Next
-        Next
-
-        client.InsertRows(dateaset_id, table_id, rows)
-
-        Dim str As String = iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
-        Console.WriteLine(str)
-        Add_Log("일반", str)
-
-        Return retCount
+        Return 0
     End Function
 
 
@@ -223,76 +167,7 @@ Module DBHandler
     '날짜를 입력받아 Data구조체에다가 입력하는 함수
     Public Function GetDailyRawData(ByVal iDate As Integer) As Integer
 
-        Dim client As BigQueryClient
-        Dim job As BigQueryJob
-        tableName = MakeTableName()
-        Dim query As String = "select * from " + tableName + " where cdate = " + iDate.ToString() + " order by cdate, iFlag, `index`, ctime"
-        Dim cnt As Integer = 0
-        Dim jongmokIndex As Integer = -1
-
-        Console.WriteLine("query = " + query)
-
-        Try
-            client = BigQueryClient.Create(projectID)
-            job = client.CreateQueryJob(query, Nothing)
-
-            job.PollUntilCompleted()
-
-            Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
-
-            For Each row In client.GetQueryResults(job.Reference)
-
-                '값을 읽어온다
-                Dim tempDate As Integer = Val(row("cdate"))
-                Dim index As Integer = Val(row("index"))
-                Dim hangsaga As Integer = Val(row("hangsaga"))
-                Dim iFlag As Integer = Val(row("iFlag"))
-                Dim ctime As Integer = Val(row("ctime"))
-                Dim interval As Integer = Val(row("interval"))
-                Dim si As Single = Val(row("si"))
-                Dim go As Single = Val(row("go"))
-                Dim jue As Single = Val(row("jue"))
-                Dim jong As Single = Val(row("jong"))
-                Dim volume As Integer = Val(row("volume"))
-
-                Dim callput As Integer
-                If iFlag = 1 Then
-                    callput = 0
-                ElseIf iFlag = 6 Then
-                    callput = 1
-                Else
-                    Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
-                    callput = 0
-                End If
-
-                If index <> jongmokIndex Then
-                    jongmokIndex = index
-                    '시간입력
-                    SetTimeDataForDataForDBData(Data, jongmokIndex)
-                    Data(jongmokIndex).HangSaGa = hangsaga
-                End If
-
-                Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
-                currentIndex = Math.Max(currentIndex, iIndex)
-                timeIndex = Math.Max(timeIndex, currentIndex + 1)
-
-                Data(jongmokIndex).price(callput, iIndex, 0) = si
-                Data(jongmokIndex).price(callput, iIndex, 1) = go
-                Data(jongmokIndex).price(callput, iIndex, 2) = jue
-                Data(jongmokIndex).price(callput, iIndex, 3) = jong
-                Data(jongmokIndex).거래량(callput, iIndex) = volume
-
-                cnt += 1
-            Next
-
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
-
-        Console.WriteLine("Row 개수는 " + cnt.ToString())
-
-
-        Return jongmokIndex + 1
+        Return 0
 
     End Function
 
@@ -402,61 +277,7 @@ Module DBHandler
     '인수로 받은 날의 데이터를 자료구조로 올린다
     Public Function GetDataFromDBHandler(ByVal iDate As Integer) As Integer
 
-        Dim cnt As Integer = 0
-        Dim jongmokIndex As Integer = -1
-
-        Dim iList = DBTotalRawDataList.Item(iDate)
-
-        For Each row In iList
-
-            '값을 읽어온다
-            Dim tempDate As Integer = Val(row("cdate"))
-            Dim index As Integer = Val(row("index"))
-            Dim hangsaga As Integer = Val(row("hangsaga"))
-            Dim iFlag As Integer = Val(row("iFlag"))
-            Dim ctime As Integer = Val(row("ctime"))
-            Dim interval As Integer = Val(row("interval"))
-            Dim si As Single = Val(row("si"))
-            Dim go As Single = Val(row("go"))
-            Dim jue As Single = Val(row("jue"))
-            Dim jong As Single = Val(row("jong"))
-            Dim volume As Integer = Val(row("volume"))
-
-            If ctime <= 1535 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
-
-                Dim callput As Integer
-                If iFlag = 1 Then
-                    callput = 0
-                ElseIf iFlag = 6 Then
-                    callput = 1
-                Else
-                    Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
-                    callput = 0
-                End If
-
-                If index <> jongmokIndex Then
-                    jongmokIndex = index
-                    '시간입력
-                    SetTimeDataForDataForDBData(Data, jongmokIndex)
-                    Data(jongmokIndex).HangSaGa = hangsaga
-                End If
-
-                Dim iIndex As Integer = FindIndexFormTime(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
-                currentIndex = Math.Max(currentIndex, iIndex)
-                timeIndex = Math.Max(timeIndex, currentIndex + 1)
-
-                Data(jongmokIndex).price(callput, iIndex, 0) = si
-                Data(jongmokIndex).price(callput, iIndex, 1) = go
-                Data(jongmokIndex).price(callput, iIndex, 2) = jue
-                Data(jongmokIndex).price(callput, iIndex, 3) = jong
-                Data(jongmokIndex).거래량(callput, iIndex) = volume
-
-                cnt += 1
-            End If
-
-        Next
-
-        Return jongmokIndex + 1
+        Return 0
     End Function
 
 End Module

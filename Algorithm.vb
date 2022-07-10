@@ -97,7 +97,7 @@ Module Algorithm
                                         풋현재환매개수 = 풋현재환매개수 + count
                                     End If
                                 End If
-                                한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                                한종목매수(it.A01_종복번호, count)
                                 Add_Log("일반", "1-0에서 매수 호출됨 개수 = " & count.ToString())
                             Next
 
@@ -132,7 +132,7 @@ Module Algorithm
                                     풋현재환매개수 = 풋현재환매개수 + count
                                 End If
                             End If
-                            한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                            한종목매수(it.A01_종복번호, count)
                             Add_Log("일반", "신호가 죽고난 후 잔고 존재 시 매수됨 count = " & count.ToString())
                         Next
                     End If
@@ -145,8 +145,19 @@ Module Algorithm
 
         Dim 콜현재가, 풋현재가, 합계가격 As Single
 
-        콜현재가 = Data(shinho.A11_콜인덱스).price(0, currentIndex, 3)
-        풋현재가 = Data(shinho.A21_풋인덱스).price(1, currentIndex, 3)
+        If shinho.A11_콜인덱스 = selectedJongmokIndex(0) Then
+            콜현재가 = Data(0).price(currentIndex, 3)
+        Else
+            Add_Log("에러", "선택된 index와 shinho.A11_콜인덱스가 다름 " & selectedJongmokIndex(0).ToString() & ":" & shinho.A11_콜인덱스.ToString())
+            Return
+        End If
+
+        If shinho.A21_풋인덱스 = selectedJongmokIndex(1) Then
+            풋현재가 = Data(1).price(currentIndex, 3)
+        Else
+            Add_Log("에러", "선택된 index와 shinho.A21_풋인덱스가 다름 " & selectedJongmokIndex(1).ToString() & ":" & shinho.A21_풋인덱스.ToString())
+            Return
+        End If
 
         If 콜현재가 <= 0 Then Return
         If 풋현재가 <= 0 Then Return
@@ -162,7 +173,7 @@ Module Algorithm
             shinho.A34_이익률 = (shinho.A32_현재합계가격 / shinho.A31_신호합계가격)
 
             shinho.A33_현재상태 = 0
-            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A41_매도시간 = Data(0).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
             shinho.A43_매도사유 = "son"
 
@@ -172,15 +183,15 @@ Module Algorithm
             shinho.A34_이익률 = (shinho.A32_현재합계가격 / shinho.A31_신호합계가격)
 
             shinho.A33_현재상태 = 0
-            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A41_매도시간 = Data(0).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
             shinho.A43_매도사유 = "ik"
         End If
 
         'time limit 체크
-        If Val(Data(shinho.A11_콜인덱스).ctime(currentIndex)) >= Val(shinho.A40_TimeoutTime) + 5 Then
+        If Val(Data(0).ctime(currentIndex)) >= Val(shinho.A40_TimeoutTime) + 5 Then
             shinho.A33_현재상태 = 0
-            shinho.A41_매도시간 = Data(shinho.A11_콜인덱스).ctime(currentIndex)
+            shinho.A41_매도시간 = Data(0).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
             shinho.A43_매도사유 = "timeout"
         End If
@@ -224,23 +235,19 @@ Module Algorithm
     Private Function CalcAlgorithm_S() As Boolean
 
         Dim ShinhoID As String = "S"
-        Dim callSelectedIndex As Integer = selectedJongmokIndex(0)
-        Dim putSelectedIndex As Integer = selectedJongmokIndex(1)
-
         Dim tempIndex = GetMaxIndex() 'curreuntIndex가 79일 때 0이어서 이상동작하는 거 방지하는 코드
 
         If tempIndex <> 양매도TargetIndex Then Return False '양매도는 정해진 시간에 수행하고 시간이 아니라면 아래를 수행하지 않는다
-        'If AlreadyOccured("S", occurType.oneShot) = True Then Return False  '한번이라도 이미 발생했다면 다시 발생하지 않는다  ------------ 연속해서 여러번 사는 방법으로 변경하여 이미 발생 조건을 삭제함
 
         '타겟시간 시가가 0보다 크면 무조건 양매도를 친다
-        If Data(callSelectedIndex).price(0, tempIndex, 0) > 0 And Data(putSelectedIndex).price(1, tempIndex, 0) > 0 Then
+        If Data(0).price(tempIndex, 0) > 0 And Data(1).price(tempIndex, 0) > 0 Then
 
             If AlreadyOccured("S", occurType.oneShot) = False Then   '위에서 이미발생 조건을 확인하지 않으니 신호가 여러개 등록되는 문제가 발생한 거 같음.(나중에 오후에 신호리스트 루프를 돌면서 매수함) True를 리턴해서 매도는 여러번 하더라도 신호는 1개만 등록되도록 변경함. 20220629
 
                 '"S신호 발생"
-                Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(callSelectedIndex).ctime(tempIndex), ShinhoID, 1, callSelectedIndex, putSelectedIndex)
+                Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
                 ShinhoList.Add(shinho)
-                Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220629")
+                Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
 
             End If
 
@@ -266,24 +273,27 @@ Module Algorithm
         shinho.A07신호차수 = 신호차수
 
         shinho.A11_콜인덱스 = callSelectedIndex
-        shinho.A12_콜행사가 = Data(callSelectedIndex).HangSaGa
 
-        shinho.A16_콜종목코드 = Data(callSelectedIndex).Code(0)
+        Dim calloption As ListTemplate = optionList(callSelectedIndex)
+        Dim putoption As ListTemplate = optionList(putSelectedIndex)
+
+        shinho.A12_콜행사가 = calloption.HangSaGa
+        shinho.A16_콜종목코드 = calloption.Code(0)
 
         shinho.A21_풋인덱스 = putSelectedIndex
-        shinho.A22_풋행사가 = Data(putSelectedIndex).HangSaGa
-        shinho.A26_풋종목코드 = Data(callSelectedIndex).Code(1)
+        shinho.A22_풋행사가 = putoption.HangSaGa
+        shinho.A26_풋종목코드 = putoption.Code(1)
 
         If isRealFlag = True Then  '실시간에서는 해당 라인의 종가를 가져오고 시뮬레이션에서는 해당라인의 시가 - 0.01 틱으로 처리한다 (매도 시)
-            shinho.A13_콜신호발생가격 = Data(callSelectedIndex).price(0, index, 3)
-            shinho.A14_콜매수가격 = Data(callSelectedIndex).price(0, index, 3) - 0.01 '한틱정도 슬리피지
-            shinho.A23_풋신호발생가격 = Data(putSelectedIndex).price(1, index, 3)
-            shinho.A24_풋매수가격 = Data(putSelectedIndex).price(1, index, 3) - 0.01
+            shinho.A13_콜신호발생가격 = Data(0).price(index, 3)
+            shinho.A14_콜매수가격 = Data(0).price(index, 3) - 0.01 '한틱정도 슬리피지
+            shinho.A23_풋신호발생가격 = Data(1).price(index, 3)
+            shinho.A24_풋매수가격 = Data(1).price(index, 3) - 0.01
         Else
-            shinho.A13_콜신호발생가격 = Data(callSelectedIndex).price(0, index, 0)
-            shinho.A14_콜매수가격 = Data(callSelectedIndex).price(0, index, 0) - 0.01 '한틱정도 슬리피지
-            shinho.A23_풋신호발생가격 = Data(putSelectedIndex).price(1, index, 0)
-            shinho.A24_풋매수가격 = Data(putSelectedIndex).price(1, index, 0) - 0.01
+            shinho.A13_콜신호발생가격 = Data(0).price(index, 0)
+            shinho.A14_콜매수가격 = Data(0).price(index, 0) - 0.01 '한틱정도 슬리피지
+            shinho.A23_풋신호발생가격 = Data(1).price(index, 0)
+            shinho.A24_풋매수가격 = Data(1).price(index, 0) - 0.01
         End If
 
         shinho.A31_신호합계가격 = shinho.A13_콜신호발생가격 + shinho.A23_풋신호발생가격

@@ -4,11 +4,6 @@ Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class Form1
 
-    Private Sub btn_RealTimeStart_Click(sender As Object, e As EventArgs) Handles btn_RealTimeStart.Click
-
-        이베스트로그인함수()
-
-    End Sub
 
     '현재날짜를 가져와서 TargetDate에 넣는다
     ' isRealFlag = True로 세팅한다
@@ -17,61 +12,13 @@ Public Class Form1
     '5분데이터를 가져오고
     'Clac_DisplayAllGrid를 수행한다
 
-    '로그인이 되면 불려지는 함수
+    '로그인 Data가 Received 되면 불려지는 함수
     Public Sub Ebest_realTime_Start()
 
         InitDataStructure()
-        InitObject()
-
-        '프로그램 상 오늘 날짜를 가져온다
-        XAQuery_현재날짜조회함수()
-
-
+        XAQuery_현재날짜조회함수() '프로그램 상 오늘 날짜를 가져온다
 
     End Sub
-
-
-    Private Function realTime_Start() As Boolean
-
-        InitDataStructure()
-        InitObject()
-
-        Dim ConnectionState = FindTargetDate() '현재 사이보스에 접속된 상태라면
-
-        isRealFlag = True '실시간 로직임을 기억한다
-
-        If ConnectionState = True Then
-
-            TotalCount = GetTotalJongmokCount()
-
-            Do While TotalCount > 25                  '15초당 60개 TR 제한을 고려하여 최대 각 28개만 받아온다
-                UpperLimit = UpperLimit - 0.15
-                LowerLimt = LowerLimt + 0.05
-
-                TotalCount = GetTotalJongmokCount()
-            Loop
-
-            Dim tempMonth As Integer
-            tempMonth = TargetDate Mod 20000000
-            tempMonth = tempMonth / 100
-
-            If TotalCount > 0 And (sMonth - tempMonth) <= 1 Then
-
-                SetTimeDataForData(Data) '미리 data구조체에 시간을 다 입력해 놓는다. 카운트만큼
-
-                GetAllData() '대신으로부터 Data 가져오기
-                Clac_DisplayAllGrid()
-
-            Else
-                MsgBox("가져올 수 있는 종목이 없습니다")
-            End If
-        Else
-            MsgBox("사이보스에 연결되지 않았습니다")
-        End If
-
-        Return False
-
-    End Function
 
     Public Sub DrawScrollData()
 
@@ -79,9 +26,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Clac_DisplayAllGrid()         'selectedJongmokIndex 계산
-
-
+    Private Sub Clac_DisplayAllGrid()
 
         SetScrolData() '타임 스크롤의 최대최소값을 지정한다
 
@@ -126,25 +71,23 @@ Public Class Form1
 
             tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
 
-            cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
-            cmb_selectedJongmokIndex_1.Items.Add(" ")
-            For i As Integer = 0 To TotalCount - 1
-                Dim str As String
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(0, tempIndex, 3).ToString() & ")-" & 콜구매가능개수.ToString()
-                cmb_selectedJongmokIndex_0.Items.Add(str)
-                str = i.ToString() & ". 행사가 : " & Data(i).HangSaGa & " (" & Data(i).price(1, tempIndex, 3).ToString() & ")-" & 풋구매가능개수.ToString()
-                cmb_selectedJongmokIndex_1.Items.Add(str)
-            Next
+            Dim calloption As ListTemplate = optionList(selectedJongmokIndex(0))
+            Dim putoption As ListTemplate = optionList(selectedJongmokIndex(1))
 
-            cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
-            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
+            Dim str As String
+            str = selectedJongmokIndex(0).ToString() & ". 행사가 : " & calloption.HangSaGa & " (" & Data(0).price(tempIndex, 3).ToString() & ")-" & 콜구매가능개수.ToString()
+            cmb_selectedJongmokIndex_0.Items.Add(str)
+            str = selectedJongmokIndex(1).ToString() & ". 행사가 : " & putoption.HangSaGa & " (" & Data(1).price(tempIndex, 3).ToString() & ")-" & 풋구매가능개수.ToString()
+            cmb_selectedJongmokIndex_1.Items.Add(str)
+
+            cmb_selectedJongmokIndex_1.SelectedIndex = cmb_selectedJongmokIndex_1.Items.Count - 1
+            cmb_selectedJongmokIndex_0.SelectedIndex = cmb_selectedJongmokIndex_0.Items.Count - 1
 
             If chk_화면끄기.Checked = False Then
                 grd_selected.Visible = False
                 grid1.Visible = False
                 InitFirstGrid()
                 DrawGrid1Data()
-                DrawColorAll()
 
                 InitDrawSelectedGird()
                 DrawSelectedData()
@@ -160,7 +103,6 @@ Public Class Form1
             '오늘날짜를 DBDate 텍스트박스에 넣기
             txt_DBDate.Text = TargetDate
             lbl_ScrolValue.Text = "CurrentIndex : " & currentIndex.ToString() & ", Time = " & Data(0).ctime(currentIndex)
-
 
         End If
 
@@ -194,42 +136,42 @@ Public Class Form1
                 For i = 0 To tempindex
 
                     '                main Series 입력
-                    retindex = txt_ebest_id.Series(CandlestrickSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).price(callput, i, 1)) '고가를 처음 넣는다
-                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(1) = Data(selectedJongmokIndex(callput)).price(callput, i, 2) '저가
-                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(2) = Data(selectedJongmokIndex(callput)).price(callput, i, 0) '시가
-                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(3) = Data(selectedJongmokIndex(callput)).price(callput, i, 3) '종가
+                    retindex = txt_ebest_id.Series(CandlestrickSeries).Points.AddXY(i, Data(callput).price(i, 1)) '고가를 처음 넣는다
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(1) = Data(callput).price(i, 2) '저가
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(2) = Data(callput).price(i, 0) '시가
+                    txt_ebest_id.Series(CandlestrickSeries).Points(retindex).YValues(3) = Data(callput).price(i, 3) '종가
 
-                    If Data(selectedJongmokIndex(callput)).price(callput, i, 0) < Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then '시가보다 종가가 크면 
+                    If Data(callput).price(i, 0) < Data(callput).price(i, 3) Then '시가보다 종가가 크면 
                         txt_ebest_id.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
                         txt_ebest_id.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
-                    ElseIf Data(selectedJongmokIndex(callput)).price(callput, i, 0) > Data(selectedJongmokIndex(callput)).price(callput, i, 3) Then
+                    ElseIf Data(callput).price(i, 0) > Data(callput).price(i, 3) Then
                         txt_ebest_id.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
                         txt_ebest_id.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
                     End If
 
-                    Dim str As String = "시간:" & Data(0).ctime(i) & vbCrLf & "시가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 0) & vbCrLf & "종가:" & Data(selectedJongmokIndex(callput)).price(callput, i, 3)
+                    Dim str As String = "시간:" & Data(0).ctime(i) & vbCrLf & "시가:" & Data(callput).price(i, 0) & vbCrLf & "종가:" & Data(callput).price(i, 3)
                     txt_ebest_id.Series(CandlestrickSeries).Points(retindex).ToolTip = str
 
 
                     'Annotation 추가 - 고가저가
                     Dim annstr As String
-                    If Data(selectedJongmokIndex(callput)).price(callput, i, 1) = Data(selectedJongmokIndex(callput)).Small(callput, 1) Then
-                        annstr = "고가 최저가:" & Data(selectedJongmokIndex(callput)).Small(callput, 1).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
+                    If Data(callput).price(i, 1) = Data(callput).Small(1) Then
+                        annstr = "고가 최저가:" & Data(callput).Small(1).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
                         AddAnnotation(callput, i, annstr, 0)
                     End If
 
-                    If Data(selectedJongmokIndex(callput)).price(callput, i, 2) = Data(selectedJongmokIndex(callput)).Big(callput, 2) Then
-                        annstr = "저가 최고가:" & Data(selectedJongmokIndex(callput)).Big(callput, 2).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
+                    If Data(callput).price(i, 2) = Data(callput).Big(2) Then
+                        annstr = "저가 최고가:" & Data(callput).Big(2).ToString() & vbCr & vbLf & i.ToString() & "(" & Data(0).ctime(i) & ")"
                         AddAnnotation(callput, i, annstr, 1)
                     End If
 
                     'high Line 입력
-                    txt_ebest_id.Series(UpperSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Big(callput, 2)) '저가중의 고가를 입력한다
+                    txt_ebest_id.Series(UpperSeries).Points.AddXY(i, Data(callput).Big(2)) '저가중의 고가를 입력한다
                     'low Line 입력
-                    txt_ebest_id.Series(LowerSeries).Points.AddXY(i, Data(selectedJongmokIndex(callput)).Small(callput, 1)) '고가 중의 저가를 입력한다
+                    txt_ebest_id.Series(LowerSeries).Points.AddXY(i, Data(callput).Small(1)) '고가 중의 저가를 입력한다
 
-                    If maxValue < Data(selectedJongmokIndex(callput)).price(callput, i, 1) Then maxValue = Data(selectedJongmokIndex(callput)).price(callput, i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                    If minValue > Data(selectedJongmokIndex(callput)).price(callput, i, 2) Then minValue = Data(selectedJongmokIndex(callput)).price(callput, i, 2)
+                    If maxValue < Data(callput).price(i, 1) Then maxValue = Data(callput).price(i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                    If minValue > Data(callput).price(i, 2) Then minValue = Data(callput).price(i, 2)
 
                 Next
                 'Chart1.Series(CandlestrickSeries).ToolTip = Format("0.00", "#VALY") '이렇게 하면 시리즈 전체에 같은 형태의 ToopTip을 추가할 수 있으나 Point 각각 입력하는 방식을 선택했다
@@ -301,6 +243,7 @@ Public Class Form1
             txt_ebest_id.ChartAreas("SUMGraph").AxisY.Interval = 0.1
 
         End If
+
     End Sub
 
     Private Sub AddAnnotation(ByVal callput As Integer, ByVal index As Integer, ByVal targetStr As String, ByVal targetCase As Integer)
@@ -402,19 +345,17 @@ Public Class Form1
 
     Private Sub DrawColor_Selected()
 
-        Dim i, j, k, callput As Integer
+        Dim j, k, callput As Integer
         Dim color As Integer
         Dim point As Integer
 
         For callput = 0 To 1
 
-            i = selectedJongmokIndex(callput)
-
             For k = 0 To 3
 
                 For j = 0 To currentIndex - 1
 
-                    color = ItsColor(i, callput, j, k)
+                    color = ItsColor(callput, j, k)
                     If callput = 0 Then
                         point = 1
                     Else
@@ -435,32 +376,6 @@ Public Class Form1
             If SumDataSet.jongmin = SumDataSet.jongSum(j) Then DrawColorOne(j, 12, 1, grd_selected)
         Next
 
-    End Sub
-
-    Private Sub DrawColorAll()
-        Dim i, j, k, callput As Integer
-        Dim color As Integer
-        Dim point As Integer
-
-        For callput = 0 To 1
-            For i = 0 To TotalCount - 1
-                For k = 0 To 3
-                    For j = 0 To currentIndex - 1
-
-
-                        color = ItsColor(i, callput, j, k)
-                        If callput = 0 Then
-                            point = 1
-                        Else
-                            point = 6
-                        End If
-
-                        DrawColorOne(j, i * 10 + point + k, color, grid1)
-
-                    Next
-                Next
-            Next
-        Next
     End Sub
 
     Private Sub DrawColorOne(i As Integer, j As Integer, colorNum As Integer, ByRef grd As DataGridView)
@@ -688,291 +603,147 @@ Public Class Form1
 
         End If
 
-        grd_ShinHo.Refresh()
+        'grd_ShinHo.Refresh()
 
     End Sub
 
     Private Sub DrawSelectedData()
-        Dim selectedCallIndex, selectedPutIndex, j As Integer
 
-        selectedCallIndex = selectedJongmokIndex(0)
-        selectedPutIndex = selectedJongmokIndex(1)
+        For j As Integer = 0 To currentIndex
 
-        For j = 0 To currentIndex
-
-            If Val(Data(selectedCallIndex).ctime(j)) > 0 Then
-                If Data(selectedCallIndex).price(0, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 콜
-                    grd_selected.Rows(j).Cells(1).Value = Data(selectedCallIndex).price(0, j, 0)
-                    grd_selected.Rows(j).Cells(2).Value = Data(selectedCallIndex).price(0, j, 1)
-                    grd_selected.Rows(j).Cells(3).Value = Data(selectedCallIndex).price(0, j, 2)
-                    grd_selected.Rows(j).Cells(4).Value = Data(selectedCallIndex).price(0, j, 3)
-                    grd_selected.Rows(j).Cells(5).Value = Data(selectedCallIndex).거래량(0, j).ToString()
+            If Val(Data(0).ctime(j)) > 0 Then
+                If Data(0).price(j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 콜
+                    grd_selected.Rows(j).Cells(1).Value = Data(0).price(j, 0)
+                    grd_selected.Rows(j).Cells(2).Value = Data(0).price(j, 1)
+                    grd_selected.Rows(j).Cells(3).Value = Data(0).price(j, 2)
+                    grd_selected.Rows(j).Cells(4).Value = Data(0).price(j, 3)
+                    grd_selected.Rows(j).Cells(5).Value = Data(0).거래량(j).ToString()
                 End If
             End If
 
-            If Val(Data(selectedPutIndex).ctime(j)) > 0 Then
-                If Data(selectedPutIndex).price(1, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 풋
-                    grd_selected.Rows(j).Cells(6).Value = Data(selectedPutIndex).price(1, j, 0)
-                    grd_selected.Rows(j).Cells(7).Value = Data(selectedPutIndex).price(1, j, 1)
-                    grd_selected.Rows(j).Cells(8).Value = Data(selectedPutIndex).price(1, j, 2)
-                    grd_selected.Rows(j).Cells(9).Value = Data(selectedPutIndex).price(1, j, 3)
-                    grd_selected.Rows(j).Cells(10).Value = Data(selectedPutIndex).거래량(1, j).ToString()
+            If Val(Data(1).ctime(j)) > 0 Then
+                If Data(1).price(j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 풋
+                    grd_selected.Rows(j).Cells(6).Value = Data(1).price(j, 0)
+                    grd_selected.Rows(j).Cells(7).Value = Data(1).price(j, 1)
+                    grd_selected.Rows(j).Cells(8).Value = Data(1).price(j, 2)
+                    grd_selected.Rows(j).Cells(9).Value = Data(1).price(j, 3)
+                    grd_selected.Rows(j).Cells(10).Value = Data(1).거래량(j).ToString()
                 End If
             End If
 
             '시가 종가 합계 적용
-            If Val(Data(selectedCallIndex).ctime(j)) = Val(Data(selectedPutIndex).ctime(j)) Then
+            If Val(Data(0).ctime(j)) = Val(Data(1).ctime(j)) Then
                 If SumDataSet.siSum(j) > 0 Then
                     grd_selected.Rows(j).Cells(11).Value = SumDataSet.siSum(j)
                     grd_selected.Rows(j).Cells(12).Value = SumDataSet.jongSum(j)
                 End If
             End If
         Next
-
     End Sub
 
     Private Sub InitFirstGrid()
-        Dim jongMok As String
-        Dim i, j As Integer
 
         grid1.Columns.Clear()
         grid1.Rows.Clear()
 
         '전체 크기 지정
-        grid1.ColumnCount = TotalCount * 10 + 1
-        grid1.RowCount = timeIndex
+        grid1.ColumnCount = 7
+        grid1.RowCount = TotalCount
 
-        grid1.Columns(0).HeaderText = "No"
-        grid1.Columns(TotalCount * 10).HeaderText = "시간"
+        For i As Integer = 0 To 6
+            grid1.Columns(i).Width = 70
+            grid1.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grid1.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
 
-        grid1.Columns(0).Width = 40
-        grid1.Columns(TotalCount * 10).Width = 40
+        grid1.Columns(0).HeaderText = "시간가치"
+        grid1.Columns(1).HeaderText = "시가"
+        grid1.Columns(2).HeaderText = "종가"
+        grid1.Columns(3).HeaderText = "행사가"
+        grid1.Columns(4).HeaderText = "시간가치"
+        grid1.Columns(5).HeaderText = "시가"
+        grid1.Columns(6).HeaderText = "종가"
 
-        grid1.Columns(0).HeaderText = "No"
-        grid1.Columns(0).Width = 30
-        grid1.RowHeadersWidth = 70
-
+        grid1.Columns(3).DefaultCellStyle.BackColor = Color.Yellow
         grid1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-        'Row HeaderCell에 시간을 넣는다
-        For j = 0 To timeIndex - 1 '-1을 하면 currentIndex와 같아진다
-            grid1.Rows(j).HeaderCell.Value = Data(0).ctime(j)
-            grid1.Rows(j).Height = 21 '전체 Row 높이 지정
-
-            grid1.Rows(j).Cells(0).Value = j
-
-            grid1.Rows(j).Cells(TotalCount * 10).Value = Data(0).ctime(j)
+        For i As Integer = 0 To TotalCount - 1
+            grid1.Rows(i).HeaderCell.Value = i.ToString()
         Next
 
-
-        For i = 0 To TotalCount - 1
-            jongMok = Data(i).HangSaGa
-
-            grid1.Columns(i * 10 + 1).HeaderText = "시"
-            grid1.Columns(i * 10 + 2).HeaderText = "고"
-            grid1.Columns(i * 10 + 3).HeaderText = "저"
-            grid1.Columns(i * 10 + 4).HeaderText = "종"
-            grid1.Columns(i * 10 + 5).HeaderText = jongMok
-            grid1.Columns(i * 10 + 5).DefaultCellStyle.BackColor = Color.Yellow
-            grid1.Columns(i * 10 + 6).HeaderText = "시"
-            grid1.Columns(i * 10 + 7).HeaderText = "고"
-            grid1.Columns(i * 10 + 8).HeaderText = "저"
-            grid1.Columns(i * 10 + 9).HeaderText = "종"
-
-            grid1.Columns(i * 10 + 1).Width = 50
-            grid1.Columns(i * 10 + 2).Width = 50
-            grid1.Columns(i * 10 + 3).Width = 50
-            grid1.Columns(i * 10 + 4).Width = 50
-            grid1.Columns(i * 10 + 5).Width = 50
-            grid1.Columns(i * 10 + 6).Width = 50
-            grid1.Columns(i * 10 + 7).Width = 50
-            grid1.Columns(i * 10 + 8).Width = 50
-            grid1.Columns(i * 10 + 9).Width = 50
-
-            'grd_selected.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 1).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 2).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 3).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 4).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 5).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 6).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 7).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 8).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid1.Columns(i * 10 + 9).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-
-            'dataGridView1.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable ------------ 이걸해야 중앙정렬이 정상적으로 됨
-            grid1.Columns(i * 10 + 1).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 2).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 3).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 4).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 5).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 6).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 7).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 8).SortMode = DataGridViewColumnSortMode.NotSortable
-            grid1.Columns(i * 10 + 9).SortMode = DataGridViewColumnSortMode.NotSortable
-        Next
-
-        For i = 0 To TotalCount - 2
-            grid1.Columns(i * 10 + 10).Width = 10
-        Next
+        grid1.RowHeadersWidth = 50
 
     End Sub
 
     Private Sub DrawGrid1Data()
-        Dim i, j As Integer
 
-        For i = 0 To TotalCount - 1
-            For j = 0 To currentIndex
-
-                If Val(Data(i).ctime(j)) > 0 Then
-
-                    grid1.Rows(j).Cells(i * 10 + 5).Value = Data(i).HangSaGa
-
-                    If Data(i).price(0, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 콜
-
-                        grid1.Rows(j).Cells(i * 10 + 1).Value = Data(i).price(0, j, 0)
-                        grid1.Rows(j).Cells(i * 10 + 2).Value = Data(i).price(0, j, 1)
-                        grid1.Rows(j).Cells(i * 10 + 3).Value = Data(i).price(0, j, 2)
-                        grid1.Rows(j).Cells(i * 10 + 4).Value = Data(i).price(0, j, 3)
-                    End If
-
-                    If Data(i).price(1, j, 0) > 0 Then  '시가가 0보다 크면 입력, 즉 4개다 데이터가 있을 때만 입력 - 풋
-                        grid1.Rows(j).Cells(i * 10 + 6).Value = Data(i).price(1, j, 0)
-                        grid1.Rows(j).Cells(i * 10 + 7).Value = Data(i).price(1, j, 1)
-                        grid1.Rows(j).Cells(i * 10 + 8).Value = Data(i).price(1, j, 2)
-                        grid1.Rows(j).Cells(i * 10 + 9).Value = Data(i).price(1, j, 3)
-                    End If
-
-                End If
-            Next
+        For i As Integer = 0 To TotalCount - 1
+            Dim it As ListTemplate = optionList(i)
+            grid1.Rows(i).Cells(0).Value = Format(it.시간가치(0), "##0.00")
+            grid1.Rows(i).Cells(1).Value = Format(it.price(0, 0), "##0.00")
+            grid1.Rows(i).Cells(2).Value = Format(it.price(0, 3), "##0.00")
+            grid1.Rows(i).Cells(3).Value = it.HangSaGa
+            grid1.Rows(i).Cells(4).Value = Format(it.시간가치(1), "##0.00")
+            grid1.Rows(i).Cells(5).Value = Format(it.price(1, 0), "##0.00")
+            grid1.Rows(i).Cells(6).Value = Format(it.price(1, 3), "##0.00")
         Next
-    End Sub
 
-    Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
-
-        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
-
-        If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
-
-            selectedJongmokIndex(0) = selectedIndex - 1
-            chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
-            Clac_DisplayAllGrid()
-            Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
-        End If
-    End Sub
-
-    Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
-
-        Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
-
-        If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
-
-            selectedJongmokIndex(1) = selectedIndex - 1
-            chk_ChangeTargetIndex.Checked = False
-            Clac_DisplayAllGrid()
-            Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
-        End If
+        grid1.Rows(selectedJongmokIndex(0)).Cells(2).Style.BackColor = Color.LightGreen
+        grid1.Rows(selectedJongmokIndex(1)).Cells(6).Style.BackColor = Color.LightGreen
+        grid1.Rows(selectedJongmokIndex(0)).Cells(2).Style.ForeColor = Color.Black
+        grid1.Rows(selectedJongmokIndex(1)).Cells(6).Style.ForeColor = Color.Black
 
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
-        timerCount = timerCount + 1
+
         label_timerCounter.Text = timerCount.ToString()
-
-        If timerCount >= timerMaxInterval Then timerCount = 0
-
-        '계좌정보 가져오기
-        'If EBESTisConntected = True Then 계좌조회()
-
-        '옵션 정보 가져와서 화면 표시
-        'GetAllData()
-        Clac_DisplayAllGrid()
 
         'DB에 자동 저장 기능 추가 필요
 
-
         Select Case timerCount
+            Case 0
+                If EBESTisConntected = True Then XAQuery_전체종목조회함수() ' +  Received면 콜 분봉 조회
+
             Case 1
-                If selectedJongmokIndex(0) < 0 Or chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
-                    selectedJongmokIndex(0) = CalcTargetJonhmokIndex(0)
-                    selectedJongmokIndex(1) = CalcTargetJonhmokIndex(1)
-                End If
+                If EBESTisConntected = True Then 계좌조회()
 
             Case 2
+                If EBESTisConntected = True Then 구매가능수량조회(0)
 
             Case 3
+                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수(1)
 
             Case 4
+                If EBESTisConntected = True Then 구매가능수량조회(1)
 
             Case 5
+                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
 
-            Case 6
+            Case 7
+                If EBESTisConntected = True Then Clac_DisplayAllGrid()
 
             Case Else
-                Console.WriteLine("Timer1 값은 " & timerCount.ToString())
+                If EBESTisConntected = True Then Console.WriteLine("Timer1 값은 " & timerCount.ToString())
         End Select
 
-
-
-        '1초 : 만약 selected가 미확정이라면 종목 선정
-        '만약 selected가 되었다면  -------------------- 콜 현재 종목 가져오기
-
-        '2 : 풋 현재 종목 가져오기
-
-        '3 : 계좌가져오기 
-
-        '4 : 현재 구매내역 가져오기
-
-        '5 : 콜 구매가능갯수 가져오기
-
-        '6 : 풋 구매가능갯수 가져오기 - 이어서 Clac_DisplayAllGrid() 계산하기
-
-
-
-
-    End Sub
-
-    '계좌정보를 갖고오고 난 후 2초 후에 Timer를 통해 구매가능개수를 가져온다 - 아마 1초에 1개만 조회 가능한 듯
-
-    Private Sub Timer구매가능개수찾기_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기.Tick
-
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        If tempIndex >= 0 Then
-            Dim callcode As String = Data(selectedJongmokIndex(0)).Code(0)
-            Dim callprice As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
-
-            구매가능수량조회(callcode, callprice)
-
-            If Timer구매가능개수찾기_2.Enabled = False Then
-                Timer구매가능개수찾기_2.Interval = 2000
-                Timer구매가능개수찾기_2.Enabled = True
-                Console.WriteLine("타이머 2번 스타트")
-            End If
-        End If
-
-
-        Timer구매가능개수찾기.Enabled = False
-
-    End Sub
-
-    Private Sub Timer구매가능개수찾기_2_Tick(sender As Object, e As EventArgs) Handles Timer구매가능개수찾기_2.Tick
-
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        If tempIndex >= 0 Then
-            Dim putcode As String = Data(selectedJongmokIndex(1)).Code(1)
-            Dim putprice As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
-
-            구매가능수량조회(putcode, putprice)
-            선물옵션_잔고평가_이동평균조회()
-        End If
-
-
-        Timer구매가능개수찾기_2.Enabled = False
+        timerCount = timerCount + 1
+        If timerCount >= timerMaxInterval Then timerCount = 0
 
     End Sub
 
     Public Sub Timer_Change()
+        If btn_TimerStart.Text = "START" Then
+            Timer1.Interval = 1000
+            Timer1.Enabled = True
+            btn_TimerStart.Text = "STOP"
+            timerCount = 0
+        End If
+    End Sub
+
+    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
+
         If btn_TimerStart.Text = "START" Then
             Timer1.Interval = 1000
             Timer1.Enabled = True
@@ -983,11 +754,7 @@ Public Class Form1
             btn_TimerStart.Text = "START"
             label_timerCounter.Text = "---"
         End If
-    End Sub
 
-    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
-
-        Timer_Change()
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1047,39 +814,6 @@ Public Class Form1
 
     End Sub
 
-    '하루씩 DB에서 읽어오는 방식 샘플  -- 현재는 사용하지 않고 전체를 딕셔너리에 넣는 방식을 적용함
-    Private Sub sample_btn_SelectDB_Click()
-        Dim dateCount As Integer
-
-        dateCount = GetDateList() '이걸하면 DBDateList() 배열에 전역변수 DateList를 입력한다
-
-        Add_Log("", "DB 전체 일 수는 " + dateCount.ToString() + " 일")
-
-        If dateCount > 0 Then
-            DBDate_HScrollBar.Maximum = dateCount - 1
-            DBDate_HScrollBar.LargeChange = 1
-
-            DBDate_HScrollBar.Refresh()
-
-            InitDataStructure()
-            isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
-
-            gTargetDateIndex = 0 '이것도 전역변수
-            TargetDate = DBDateList(gTargetDateIndex)
-
-            TotalCount = GetDailyRawData(TargetDate) '이걸하면 Data() 구조체에 해당하는 날짜의 data를 집어넣는다
-
-            If TotalCount > 0 Then
-
-                Clac_DisplayAllGrid()
-
-            End If
-
-        Else
-            MsgBox("DB에 데이터가 없습니다")
-        End If
-    End Sub
-
     Private Sub btn_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_SelectDB.Click
         Dim dateCount As Integer
 
@@ -1116,10 +850,6 @@ Public Class Form1
         End If
 
     End Sub
-
-    '    Private Sub grd_selected_Scroll(sender As Object, e As ScrollEventArgs) Handles grd_selected.Scroll
-    '        grid1.FirstDisplayedScrollingRowIndex = grd_selected.FirstDisplayedScrollingRowIndex
-    '    End Sub
 
     Private Sub Hscroll_1_ValueChanged(sender As Object, e As EventArgs) Handles Hscroll_1.ValueChanged
         If currentIndex >= 0 Then
@@ -1445,19 +1175,16 @@ Public Class Form1
     Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
         If tempIndex >= 0 Then
-            Dim code As String = Data(selectedJongmokIndex(0)).Code(0)
-            Dim price As Single = Data(selectedJongmokIndex(0)).price(0, tempIndex, 3)
 
-            구매가능수량조회(code, price)
+            구매가능수량조회(0)
         End If
     End Sub
 
     Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_put_구매가능수.Click
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
         If tempIndex >= 0 Then
-            Dim code As String = Data(selectedJongmokIndex(1)).Code(1)
-            Dim price As Single = Data(selectedJongmokIndex(1)).price(1, tempIndex, 3)
-            구매가능수량조회(code, price)
+
+            구매가능수량조회(1)
         End If
     End Sub
 
@@ -1471,7 +1198,7 @@ Public Class Form1
             Dim it As 잔고Type = List잔고(i)
             Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
             If 종목구분 = "2" Then
-                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                한종목매수(it.A01_종복번호, it.A03_잔고수량)
             End If
         Next
 
@@ -1487,7 +1214,7 @@ Public Class Form1
             Dim it As 잔고Type = List잔고(i)
             Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
             If 종목구분 = "3" Then
-                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                한종목매수(it.A01_종복번호, it.A03_잔고수량)
             End If
         Next
 
@@ -1501,7 +1228,7 @@ Public Class Form1
 
         For i As Integer = 0 To List잔고.Count - 1
             Dim it As 잔고Type = List잔고(i)
-            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            한종목매수(it.A01_종복번호, it.A03_잔고수량)
         Next
     End Sub
 
@@ -1517,31 +1244,11 @@ Public Class Form1
         End If
     End Function
 
-    Private Sub btn_인덱스업_Click(sender As Object, e As EventArgs) Handles btn_인덱스업.Click
-        Dim 현재양매도Index As Integer = Val(txt_양매도Target시간Index.Text)
-        If 현재양매도Index < 30 Then
-            Dim 신규양매도index As Integer = 현재양매도Index + 1
-            txt_양매도Target시간Index.Text = 신규양매도index.ToString()
-        End If
-    End Sub
 
-    Private Sub btn_인덱스다운_Click(sender As Object, e As EventArgs) Handles btn_인덱스다운.Click
-        Dim 현재양매도Index As Integer = Val(txt_양매도Target시간Index.Text)
-        If 현재양매도Index > 0 Then
-            Dim 신규양매도index As Integer = 현재양매도Index - 1
-            txt_양매도Target시간Index.Text = 신규양매도index.ToString()
-        End If
-    End Sub
 
     Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs) Handles btn_아침시작버튼.Click
 
-        'Dim ret As Boolean
-        'ret = realTime_Start()
-        'txt_TargetDate.Text = TargetDate
-
         이베스트로그인함수()
-
-        Timer_Change()
 
     End Sub
 

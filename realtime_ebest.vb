@@ -55,14 +55,13 @@ End Structure
 Module realtime_ebest
 
     Dim XASession1 As XASession = New XASession
-    Dim XAQuery_매도증거금조회 As XAQuery = New XAQuery
     Dim XAQuery_계좌조회 As XAQuery = New XAQuery
-    Dim XAQuery_체결정보조회 As XAQuery = New XAQuery
     Dim XAQuery_선물옵션_잔고평가_이동평균조회 As XAQuery = New XAQuery
     Dim XAQuery_매수매도 As XAQuery = New XAQuery
     Dim XAQuery_구매가능수량조회 As XAQuery = New XAQuery
     Dim XAQuery_현재날짜조회 As XAQuery = New XAQuery
     Dim XAQuery_전체종목조회 As XAQuery = New XAQuery
+    Dim XAQuery_EBEST_분봉데이터호출 As XAQuery = New XAQuery
 
     Public Const g_strServerAddress As String = "hts.etrade.co.kr"
     Public 거래비밀번호 As String = "3487"
@@ -89,12 +88,11 @@ Module realtime_ebest
         AddHandler XASession1.Login, AddressOf XASession1_Login   'VB에서 이벤트를 등록하는 방식임 --- 매우 중요
         AddHandler XAQuery_계좌조회.ReceiveData, AddressOf XAQuery_계좌조회_ReceiveData '-----------------------------------------------------------------이벤트 등록
         AddHandler XAQuery_선물옵션_잔고평가_이동평균조회.ReceiveData, AddressOf XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData '-----------------------------------------------------------------이벤트 등록
-        AddHandler XAQuery_매도증거금조회.ReceiveData, AddressOf XAQuery_매도증거금조회_ReceiveData  '-----------------------------------------------------------------이벤트 등록
-        AddHandler XAQuery_체결정보조회.ReceiveData, AddressOf XAQuery_체결정보조회_ReceiveData '-----------------------------------------------------------------이벤트 등록
         AddHandler XAQuery_매수매도.ReceiveData, AddressOf XAQuery_매수매도_ReceiveData '-----------------------------------------------------------------매수매도 이벤트 등록
         AddHandler XAQuery_구매가능수량조회.ReceiveData, AddressOf XAQuery_구매가능수량조회_ReceiveData '구매가능 수량 조회
         AddHandler XAQuery_현재날짜조회.ReceiveData, AddressOf XAQuery_현재날짜조회_ReceiveData
         AddHandler XAQuery_전체종목조회.ReceiveData, AddressOf XAQuery_전체종목조회_ReceiveData
+        AddHandler XAQuery_EBEST_분봉데이터호출.ReceiveData, AddressOf XAQuery_EBEST_분봉데이터호출_ReceiveData
     End Sub
 
 
@@ -169,8 +167,6 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_계좌조회.Request(False)
         If nSuccess < 0 Then Add_Log("일반", "계좌조회() 함수호출 시 오류: " & nSuccess.ToString())
 
-
-        'Add_Log("일반", "계좌 조회시작")
     End Sub
 
     Private Sub XAQuery_계좌조회_ReceiveData(ByVal szTrCode As String)
@@ -179,17 +175,8 @@ Module realtime_ebest
         인출가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "WthdwAbleAmt", 0))
 
         If TargetDate > 0 Then
-            선물옵션_잔고평가_이동평균조회()
-            'Add_Log("일반", "계좌조회Receive")
-            '계좌정보를 갖고오고 난 후 8초 후에 Timer를 통해 구매가능개수를 가져온다 - 초당 TR 리미트 때문에 타이머로 구현함 - 1초에 1개만 가능
 
-            If Form1.Timer구매가능개수찾기.Enabled = False Then
-                Form1.Timer구매가능개수찾기.Interval = 8000
-                Form1.Timer구매가능개수찾기.Enabled = True
-                Console.WriteLine("타이머 1번 스타트")
-            End If
         End If
-
 
     End Sub
 
@@ -208,8 +195,6 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.Request(False)
         If nSuccess < 0 Then Add_Log("일반", " 선물옵션_잔고평가_이동평균조회 오류: " & nSuccess.ToString())
 
-        'Add_Log("일반", "선물옵션_잔고평가 진입")
-
     End Sub
 
     Private Sub XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData(ByVal szTrCode As String)
@@ -220,7 +205,6 @@ Module realtime_ebest
             List잔고.Clear()
         End If
 
-        'Add_Log("일반", "XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
         Console.WriteLine("XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
 
         평가종합.매매손익합계 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tdtsunik", 0))
@@ -268,185 +252,19 @@ Module realtime_ebest
 
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
-
-
-
     End Sub
 
 
-    '더이상 사용하지 않음 - 주문가능수량으로 대체함
-    Public Sub 매도증거금조회()
-        Dim nSuccess As Integer
-        Dim yyyy, tempMonth As String
-
-        If XAQuery_매도증거금조회 Is Nothing Then XAQuery_매도증거금조회 = New XAQuery
-
-        XAQuery_매도증거금조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOBQ10800.res"    '매도증거금 조회
-        yyyy = "20" + Left(sMonth, 2)
-
-        tempMonth = Mid(Data(0).Code(0), 5, 1)
-
-        'Inblok채우기
-        Call XAQuery_매도증거금조회.SetFieldData("CFOBQ10800InBlock1", "RecCnt", 0, 1)                  '레코드갯수 1
-        Call XAQuery_매도증거금조회.SetFieldData("CFOBQ10800InBlock1", "PrdgrpClssCode", 0, "01")      '상품군코드 - 고정
-        Call XAQuery_매도증거금조회.SetFieldData("CFOBQ10800InBlock1", "ClssGrpCode", 0, "501")                '기초자산코드 - KOSPI200 - 501
-
-        Call XAQuery_매도증거금조회.SetFieldData("CFOBQ10800InBlock1", "BaseYear", 0, yyyy)         '기준연도
-        Call XAQuery_매도증거금조회.SetFieldData("CFOBQ10800InBlock1", "FstmmTpCode", 0, tempMonth)         '최근월물구분
-
-        nSuccess = XAQuery_매도증거금조회.Request(False)
-
-        If nSuccess < 0 Then
-            Add_Log("일반", " 체결정보조회 전송오류: " & nSuccess.ToString())
-        Else
-            Add_Log("일반", "매도증거금 조회 시작 - 성공 nSuccess = " & nSuccess.ToString())
-        End If
-
-    End Sub
-
-    '더이상 사용하지 않음 - 주문가능수량으로 대체함
-    Private Sub XAQuery_매도증거금조회_ReceiveData(ByVal szTrCode As String)
-
-        Add_Log("일반", "매도증거금 조회 이벤트 진입")
-
-        Dim count As Integer = XAQuery_매도증거금조회.GetBlockCount("CFOBQ10800OutBlock2")        ' Occurs 의 갯수를 구한다.
-
-        Dim tempCode As String
-        Dim tempPrice, 옵션가격증거금, Total증거금 As Long
-
-        For i As Integer = 0 To count - 1
-            tempCode = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "FnoIsuNo", i) '콜 종목코드 가져오기
-            tempPrice = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "OrdMgn1", i) '콜 증거금 가져오기 - 순위험증거금
-            옵션가격증거금 = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "BasePrc2", i) * 250000 '옵션가격증거금은 기준가 * 250000으로 계산함
-            Total증거금 = tempPrice + 옵션가격증거금
-
-            For j = 0 To TotalCount - 1
-                If Data(j).Code(0) = tempCode Then
-                    Data(j).증거금(0) = Total증거금
-                    Exit For
-                End If
-            Next
-
-            tempCode = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "FnoIsuNo0", i) '풋 종목코드 가져오기
-            tempPrice = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "OrdMgn2", i) '풋 증거금 가져오기 - 순위험증거금
-            옵션가격증거금 = XAQuery_매도증거금조회.GetFieldData("CFOBQ10800OutBlock2", "BasePrc2", i) * 250000 '옵션가격증거금은 기준가 * 250000으로 계산함
-            Total증거금 = tempPrice + 옵션가격증거금
-
-            For j = 0 To TotalCount - 1
-                If Data(j).Code(1) = tempCode Then
-                    Data(j).증거금(1) = Total증거금
-                    Exit For
-                End If
-            Next
-
-        Next
-
-        If count > 0 Then
-            Add_Log("일반", "증거금 조회 완료")
-            매도증거금조회Flag = True
-        Else
-            Add_Log("일반", "증거금 조회실패 - 카운트가 0(모의투자에서는 제공하지 않음)")
-            매도증거금조회Flag = False
-        End If
-
-    End Sub
-
-    '이건 예전 방식임 - 더이상 사용하지 않음 20220604
-    '선물옵션_잔고평가_이동평균조회 이게 새로 나온 거 같고 이게 좋아보여서 다시 구현함 
-    Public Sub 체결정보조회()
-
-        If XAQuery_체결정보조회 Is Nothing Then XAQuery_체결정보조회 = New XAQuery
-        XAQuery_체결정보조회.ResFileName = "c:\ebest\xingApi\res\CFOAQ00600.res"  '체결정보조회
-
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "RecCnt", 0, 1)                  '레코드갯수 1
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "AcntNo", 0, strAccountNum)      '계좌번호
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "InptPwd", 0, 거래비밀번호)                '비밀먼호
-
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "QrySrtDt", 0, TargetDate.ToString())         '시작일
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "QryEndDt", 0, TargetDate.ToString())         '종료일
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "FnoClssCode", 0, "00")          '선물옵션 분류코드 00 전체 11 선물 22 옵션
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "PrdgrpCode", 0, "00")           '상품군코드 00 전체 01 주가지수 02 개별주식 03 가공채권 04 통화 05 상품 06 금리
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "PrdtExecTpCode", 0, "0")        '체결 구분  0 전체 1 체결 2 미체결
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "StnlnSeqTp", 0, "4")            '정렬순서 3:역순 4: 정순
-        XAQuery_체결정보조회.SetFieldData("CFOAQ00600InBlock1", "CommdaCode", 0, "99")           '통신매체코드 99로 고정
-
-
-
-        Dim nSuccess As Integer = XAQuery_체결정보조회.Request(False)
-        If nSuccess < 0 Then Add_Log("일반", " 체결정보조회 오류: " & nSuccess.ToString())
-
-    End Sub
-    Private Sub XAQuery_체결정보조회_ReceiveData(ByVal szTrCode As String)
-
-        If BuyList Is Nothing Then BuyList = New List(Of buytemplete)
-
-        Dim orderCount As Long = XAQuery_체결정보조회.GetBlockCount("CFOAQ00600OutBlock3")        ' Occurs 의 갯수를 구한다.
-
-        If orderCount > 0 Then
-            If BuyList.Count > 0 Then
-
-                Dim 첫번째체결정보주문시가 As String = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdTime", 0)
-                If BuyList(0).B04_주문시각 = 첫번째체결정보주문시가 Then  '10개가 넘으면 나누어서 들어오는데, 첫번째 들어오는 row의 주문시각이 기존 리스트의 첫번째와 같은 시간이면 기존 리스트를 삭제하고 밑에서 다시 입력한다
-                    BuyList.Clear()
-                End If
-
-            End If
-        End If
-
-        For i As Integer = 0 To orderCount - 1
-
-            Dim it As buytemplete = New buytemplete
-            it.B01_주문일 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdDt", i)
-            it.B02_주문번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdNo", i))
-            it.B03_원주문번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrgOrdNo", i))
-            it.B04_주문시각 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdTime", i)
-            it.B05_종목코드 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "FnoIsuNo", i)
-
-            it.B06_종목명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "IsuNm", i)
-            it.B07_매매구분 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "BnsTpNm", i)
-            it.B08_정정취소구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "MrcTpNm", i)
-            it.B09_호가유형 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "FnoOrdprcPtnNm", i)
-            it.B10_주문가 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdPrc", i))
-
-            it.B11_주문수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdQty", i))
-            it.B12_주문구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "OrdTpNm", i)
-            it.B13_체결구분명 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecTpNm", i)
-            it.B14_체결가 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecPrc", i))
-            it.B15_체결수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecQty", i))
-
-            it.B16_약정시각 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "CtrctTime", i)
-            it.B17_약정번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "CtrctNo", i))
-            it.B18_체결번호 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "ExecNo", i))
-            it.B19_매매손익 = XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "BnsplAmt", i)
-            it.B20_미체결수량 = Val(XAQuery_체결정보조회.GetFieldData("CFOAQ00600OutBlock3", "UnercQty", i))
-
-            BuyList.Add(it)
-
-        Next
-
-        If XAQuery_체결정보조회.IsNext = 1 Then   ' 체결건수가 10건이 넘어서 다음에 또 있다고 나오면 true로request하면 다음걸 또 받아온다
-
-            Dim nSuccess As Integer = XAQuery_체결정보조회.Request(True)
-            If nSuccess < 0 Then Add_Log("일반", " 체결정보조회 전송오류: " & nSuccess.ToString())
-
-        End If
-
-    End Sub
-
-
-    Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer)
+    Public Sub 한종목매도(ByVal code As String, ByVal count As Integer)
 
         If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
         XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
-
-        Dim adjustPrice As Single = price - 0.1
 
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
@@ -456,21 +274,18 @@ Module realtime_ebest
 
     End Sub
 
-    Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer)
+    Public Sub 한종목매수(ByVal code As String, ByVal count As Integer)
 
         If count > 0 Then
 
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = price + 0.1
-
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
-            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
             Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
@@ -500,11 +315,12 @@ Module realtime_ebest
 
     End Sub
 
-    Public Sub 구매가능수량조회(ByVal code As String, ByVal price As Single)
-
-        Dim adjustPrice As Single = price - 0.1
+    Public Sub 구매가능수량조회(ByVal callput As Integer)
 
         'If 주문가능금액 = 0 Then 주문가능금액 = 100000000  - 이렇게 해도 주문가능수량은 0이었음. 매도 가능계좌가 아니라서 그럴 수도 있음
+
+        Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+        Dim code As String = it.Code(callput)
 
         If XAQuery_구매가능수량조회 Is Nothing Then XAQuery_구매가능수량조회 = New XAQuery
         XAQuery_구매가능수량조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOAQ10100.res"
@@ -516,7 +332,6 @@ Module realtime_ebest
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 1.0)                '비율값
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
         XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
 
         Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
@@ -565,24 +380,6 @@ Module realtime_ebest
 
     End Sub
 
-    Public Function 매도실행호출(ByVal callput As Integer) As Boolean
-
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim code As String = Data(selectedJongmokIndex(callput)).Code(callput)
-        Dim price As Single = Data(selectedJongmokIndex(callput)).price(callput, tempIndex, 3)
-        Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
-        Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
-
-        If 최소구매가능개수 > 2 And 구매가능대비비율 > 0 Then
-            Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
-            Dim count As Integer = Math.Truncate(singleCount)
-            한종목매도(code, price, count)
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
 
     Public Sub XAQuery_현재날짜조회함수()
 
@@ -603,11 +400,11 @@ Module realtime_ebest
 
         If 오늘날짜 > 0 Then
             TargetDate = 오늘날짜
-            '전체 종목 조회
-            XAQuery_전체종목조회함수()
+            sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
+            Form1.Timer_Change()
         End If
 
-        Add_Log("일반", "EBEST 오늘날짜는 " & 오늘날짜.ToString())
+        Add_Log("일반", "EBEST 오늘날짜는 " & 오늘날짜.ToString() & ", sMonth = " & sMonth)
     End Sub
 
     Public Sub XAQuery_전체종목조회함수()
@@ -633,6 +430,8 @@ Module realtime_ebest
         Dim lowLimit As Single = Val(Form1.txt_LowerLimit.Text)
         Dim retCount As Integer = 0
 
+        optionList.Clear()
+
         If callCount = putCount And callCount > 0 Then
             For i As Integer = 0 To callCount - 1
 
@@ -657,7 +456,7 @@ Module realtime_ebest
                 it.거래량(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "volume", i))
                 it.시간가치(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "timevl", i))
 
-                If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 모두 범위안에 들어오면
+                If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 둘 중 하나가 범위안에 들어오면
                     optionList.Add(it)
                     retCount += 1
                 End If
@@ -665,13 +464,89 @@ Module realtime_ebest
             Next
 
             TotalCount = retCount
-            Add_Log("일반", "옵션 종목 TotalCount =  " & TotalCount.ToString())
-            If TotalCount > 0 Then
-                Form1.Timer_Change()
-            End If
+
+            SetSelectedIndex()
+            XAQuery_EBEST_분봉데이터호출함수(0)                 '콜 그래프 Data 호출
+
+            Console.WriteLine("옵션 종목 Count =  " & optionList.Count.ToString())
 
         End If
 
     End Sub
+
+    Public Sub XAQuery_EBEST_분봉데이터호출함수(ByVal capplut As Integer)
+        't8415 
+        If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
+
+        Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
+        Dim code As String = it.Code(capplut)
+
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "5")
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "100")
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate)
+        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N")
+
+        Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
+        If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
+    End Sub
+
+
+    Private Sub XAQuery_EBEST_분봉데이터호출_ReceiveData(ByVal szTrCode As String)
+
+        Dim callput As Integer
+
+        Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1) '
+
+        If callputstriong = "2" Then
+            callput = 0
+        Else
+            callput = 1
+        End If
+
+        Data(callput).어제시고저종(0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jisiga", 0))
+        Data(callput).어제시고저종(1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jihigh", 0))
+        Data(callput).어제시고저종(2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jilow", 0))
+        Data(callput).어제시고저종(3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jiclose", 0))
+
+        Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8415OutBlock1")
+
+        timeIndex = Count   'Time의 Count
+        currentIndex = timeIndex - 1
+
+        For i As Integer = 0 To Count - 1
+            Data(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+            Data(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+            Data(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+            Data(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+            Data(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+            Data(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+        Next
+
+    End Sub
+
+
+    Public Function 매도실행호출(ByVal callput As Integer) As Boolean
+
+        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+
+        Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+
+        Dim code As String = it.Code(callput)
+        Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
+        Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
+
+        If 최소구매가능개수 > 2 And 구매가능대비비율 > 0 Then
+            Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
+            Dim count As Integer = Math.Truncate(singleCount)
+            한종목매도(code, count)
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
 End Module
