@@ -97,7 +97,7 @@ Module Algorithm
                                         풋현재환매개수 = 풋현재환매개수 + count
                                     End If
                                 End If
-                                한종목매수(it.A01_종복번호, count)
+                                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
                                 Add_Log("일반", "1-0에서 매수 호출됨 개수 = " & count.ToString())
                             Next
 
@@ -132,7 +132,7 @@ Module Algorithm
                                     풋현재환매개수 = 풋현재환매개수 + count
                                 End If
                             End If
-                            한종목매수(it.A01_종복번호, count)
+                            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
                             Add_Log("일반", "신호가 죽고난 후 잔고 존재 시 매수됨 count = " & count.ToString())
                         Next
                     End If

@@ -61,6 +61,8 @@ Public Class Form1
     Private Sub RedrawAll()
 
         Dim tempIndex As Integer
+        InitFirstGrid()
+        DrawGrid1Data()
 
         If currentIndex >= 0 Then
 
@@ -86,8 +88,8 @@ Public Class Form1
             If chk_화면끄기.Checked = False Then
                 grd_selected.Visible = False
                 grid1.Visible = False
-                InitFirstGrid()
-                DrawGrid1Data()
+                'InitFirstGrid()
+                'DrawGrid1Data()
 
                 InitDrawSelectedGird()
                 DrawSelectedData()
@@ -118,7 +120,7 @@ Public Class Form1
     Private Sub DrawWinFormGraph()
         Dim i, callput, tempindex, retindex As Integer '
 
-        If currentIndex > 0 Then
+        If currentIndex >= 0 Then
 
             For i = 0 To txt_ebest_id.Series.Count - 1
                 txt_ebest_id.Series(i).Points.Clear()
@@ -1198,7 +1200,7 @@ Public Class Form1
             Dim it As 잔고Type = List잔고(i)
             Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
             If 종목구분 = "2" Then
-                한종목매수(it.A01_종복번호, it.A03_잔고수량)
+                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
             End If
         Next
 
@@ -1214,7 +1216,7 @@ Public Class Form1
             Dim it As 잔고Type = List잔고(i)
             Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
             If 종목구분 = "3" Then
-                한종목매수(it.A01_종복번호, it.A03_잔고수량)
+                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
             End If
         Next
 
@@ -1228,7 +1230,7 @@ Public Class Form1
 
         For i As Integer = 0 To List잔고.Count - 1
             Dim it As 잔고Type = List잔고(i)
-            한종목매수(it.A01_종복번호, it.A03_잔고수량)
+            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
         Next
     End Sub
 

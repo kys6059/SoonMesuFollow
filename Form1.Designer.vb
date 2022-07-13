@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -402,16 +402,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend1)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1668, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series1)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1225, 885)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
@@ -1267,7 +1267,7 @@ Partial Class Form1
         Me.txt_UpperLimit.Name = "txt_UpperLimit"
         Me.txt_UpperLimit.Size = New System.Drawing.Size(164, 24)
         Me.txt_UpperLimit.TabIndex = 5
-        Me.txt_UpperLimit.Text = "5.0"
+        Me.txt_UpperLimit.Text = "7.0"
         Me.txt_UpperLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label4
@@ -1290,7 +1290,7 @@ Partial Class Form1
         Me.txt_LowerLimit.Name = "txt_LowerLimit"
         Me.txt_LowerLimit.Size = New System.Drawing.Size(164, 24)
         Me.txt_LowerLimit.TabIndex = 7
-        Me.txt_LowerLimit.Text = "0.1"
+        Me.txt_LowerLimit.Text = "0.05"
         Me.txt_LowerLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label5
