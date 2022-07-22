@@ -727,7 +727,7 @@ Public Class Form1
                 If EBESTisConntected = True Then Clac_DisplayAllGrid()
 
             Case Else
-                If EBESTisConntected = True Then Console.WriteLine("Timer1 값은 " & timerCount.ToString())
+
         End Select
 
         timerCount = timerCount + 1
