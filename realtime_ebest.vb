@@ -205,7 +205,7 @@ Module realtime_ebest
             List잔고.Clear()
         End If
 
-        Console.WriteLine("XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
+        'Console.WriteLine("XAQuery_선물옵션_잔고평가_이동평균조회_ReceiveData 이벤트 진입")
 
         평가종합.매매손익합계 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tdtsunik", 0))
         평가종합.cts_expcode = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "cts_expcode", 0)
@@ -555,7 +555,7 @@ Module realtime_ebest
     Public Function 매도실행호출(ByVal callput As Integer) As Boolean
 
         Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim price As Single = Data(selectedJongmokIndex(callput)).price(tempIndex, 3)
+        Dim price As Single = Data(callput).price(tempIndex, 3)
         Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
 
         Dim code As String = it.Code(callput)

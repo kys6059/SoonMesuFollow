@@ -74,7 +74,9 @@ Module Module_common
     Public UpperLimit, LowerLimt As Single
     Public timeIndex As Integer '시간이 내려감에따라 증가하는 인덱스  - 항상 초기화 필요(DB에서 가져올 때, 대신에서 가져올때)
     Public currentIndex As Integer '시뮬레이션할 때 현재커서 위치를 나타냄
+    Public 콜선택된행사가(1) As String
     Public selectedJongmokIndex(1) As Integer
+
     Public JongmokTargetPrice As Single  '기준이 되는 targetprice - default 2.0
     Public timerCount As Integer
     Public timerMaxInterval As Integer
@@ -124,6 +126,16 @@ Module Module_common
 
     End Sub
 
+    Public Function 인덱스로부터행사가찾기(ByVal index As Integer) As String
+
+        Dim it As ListTemplate = optionList(index)
+        Dim 행사가 As String = it.HangSaGa
+        Return 행사가
+
+    End Function
+
+
+
     '리턴값은 최소갭일 때의 상대방 인덱스, 그 때 최소갭은 ByRef 방식으로 리턴한다. 
     Public Function CalcTargetJonhmokIndex(ByVal callput As Integer, ByVal TargetPrice As Single, ByRef mingap As Single) As Integer
 
@@ -158,7 +170,10 @@ Module Module_common
 
 
     Public Sub SetSelectedIndex()
+
         If selectedJongmokIndex(0) < 0 Or Form1.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
+
+            Console.WriteLine("종목인덱스 변경 진입selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString())
 
             Dim Targetprice As Single = Val(Form1.txt_JongmokTargetPrice.Text)
             Dim calltempMinGap As Single = 1100.0
@@ -188,8 +203,36 @@ Module Module_common
                 selectedJongmokIndex(1) = putTempSelectedIndex
             End If
 
+            '여기다가 행사가 추출하는 로직 추가함
+            콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
+            콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
+
         End If
+
+        '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
+        Dim index1 As Integer
+        index1 = 행사가로부터인덱스찾기(콜선택된행사가(0))
+        If index1 >= 0 Then selectedJongmokIndex(0) = index1
+
+        index1 = 행사가로부터인덱스찾기(콜선택된행사가(1))
+        If index1 >= 0 Then selectedJongmokIndex(1) = index1
+
+
     End Sub
+
+    Public Function 행사가로부터인덱스찾기(ByVal hangsaga As String) As Integer
+
+        For i As Integer = 0 To optionList.Count - 1
+            Dim it As ListTemplate = optionList(i)
+            If it.HangSaGa = hangsaga Then
+                Return i
+            End If
+        Next
+
+
+        Return -1
+
+    End Function
 
     Public Sub CalcSumPrice()
 
