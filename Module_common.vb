@@ -1,5 +1,11 @@
 ﻿Option Explicit On
 
+'선택종목 바꾸는 기능
+'자동 저장 ----------------------------------------- 완료 20220723
+'아이콘 바꾸기
+'DB 불러오기
+
+
 Structure DataSet  '2개만 만든다. 0번은 콜, 1번은 풋으로 한다
 
     Dim HangSaGa As String

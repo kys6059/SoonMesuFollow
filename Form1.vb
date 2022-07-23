@@ -48,6 +48,18 @@ Public Class Form1
 
         DrawGraph() '그래프 그리기
 
+        If chk_AutoSave.Checked = True And EBESTisConntected = True Then '자동 저장 기능 
+            If currentIndex >= 79 Then
+
+                chk_AutoSave.Checked = False
+
+                Dim random As New Random
+                Timer_AutoSave111.Interval = random.Next(1000, 300000)
+                Timer_AutoSave111.Enabled = True
+
+            End If
+        End If
+
     End Sub
 
     Private Sub SetScrolData()
@@ -72,18 +84,22 @@ Public Class Form1
             cmb_selectedJongmokIndex_1.Items.Clear()
 
             tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+            cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
+            cmb_selectedJongmokIndex_1.Items.Add(" ")
 
-            Dim calloption As ListTemplate = optionList(selectedJongmokIndex(0))
-            Dim putoption As ListTemplate = optionList(selectedJongmokIndex(1))
+            For i As Integer = 0 To optionList.Count - 1
 
-            Dim str As String
-            str = selectedJongmokIndex(0).ToString() & ". 행사가 : " & calloption.HangSaGa & " (" & Data(0).price(tempIndex, 3).ToString() & ")-" & 콜구매가능개수.ToString()
-            cmb_selectedJongmokIndex_0.Items.Add(str)
-            str = selectedJongmokIndex(1).ToString() & ". 행사가 : " & putoption.HangSaGa & " (" & Data(1).price(tempIndex, 3).ToString() & ")-" & 풋구매가능개수.ToString()
-            cmb_selectedJongmokIndex_1.Items.Add(str)
+                Dim it As ListTemplate = optionList(i)
+                Dim str As String
+                str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(0, 3) & ")"
+                cmb_selectedJongmokIndex_0.Items.Add(str)
+                str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(1, 3) & ")"
+                cmb_selectedJongmokIndex_1.Items.Add(str)
 
-            cmb_selectedJongmokIndex_1.SelectedIndex = cmb_selectedJongmokIndex_1.Items.Count - 1
-            cmb_selectedJongmokIndex_0.SelectedIndex = cmb_selectedJongmokIndex_0.Items.Count - 1
+            Next
+
+            cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
+            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
 
             If chk_화면끄기.Checked = False Then
                 grd_selected.Visible = False
@@ -1254,5 +1270,38 @@ Public Class Form1
 
     End Sub
 
+    Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
+        Add_Log("일반", "자동 저장 호출됨")
+        AutoSave()
+        Timer_AutoSave111.Enabled = False
+    End Sub
 
+    Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
+        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
+
+        If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
+
+            selectedJongmokIndex(0) = selectedIndex - 1
+            '여기다가 행사가 추출하는 로직 추가함
+            콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
+            chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
+            Clac_DisplayAllGrid()
+            Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+        End If
+    End Sub
+
+    Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
+        Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
+
+        If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
+
+            selectedJongmokIndex(1) = selectedIndex - 1
+            '여기다가 행사가 추출하는 로직 추가함
+
+            콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
+            chk_ChangeTargetIndex.Checked = False
+            Clac_DisplayAllGrid()
+            Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
+        End If
+    End Sub
 End Class

@@ -23,9 +23,9 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -124,6 +124,7 @@ Partial Class Form1
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -352,6 +353,8 @@ Partial Class Form1
         'chk_AutoSave
         '
         Me.chk_AutoSave.AutoSize = True
+        Me.chk_AutoSave.Checked = True
+        Me.chk_AutoSave.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_AutoSave.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_AutoSave.Location = New System.Drawing.Point(4, 4)
         Me.chk_AutoSave.Name = "chk_AutoSave"
@@ -402,16 +405,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend1)
+        ChartArea3.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend3)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1668, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series1)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series3)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1225, 885)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
@@ -1386,6 +1389,10 @@ Partial Class Form1
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(346, 217)
         Me.TableLayoutPanel2.TabIndex = 4
         '
+        'Timer_AutoSave111
+        '
+        Me.Timer_AutoSave111.Interval = 10000
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -1537,4 +1544,5 @@ Partial Class Form1
     Friend WithEvents Label7 As Label
     Friend WithEvents Label8 As Label
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents Timer_AutoSave111 As Timer
 End Class
