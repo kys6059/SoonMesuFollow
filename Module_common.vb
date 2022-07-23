@@ -136,24 +136,40 @@ Module Module_common
 
 
 
-    '리턴값은 최소갭일 때의 상대방 인덱스, 그 때 최소갭은 ByRef 방식으로 리턴한다. 
-    Public Function CalcTargetJonhmokIndex(ByVal callput As Integer, ByVal TargetPrice As Single, ByRef mingap As Single) As Integer
+    '4방향 모두 검사하는 방식으로 변경함 
+    Public Function CalcTargetJonhmokIndex(ByVal callput As Integer, ByVal 방향 As Single) As Integer
 
-        Dim tempGap As Single
-        Dim retIndex As Integer
+
+        Dim temptarget As Integer = -1
+        Dim TargetPrice As Single = Val(Form1.txt_JongmokTargetPrice.Text)
+        Dim mingap As Single = 1000.0
 
         For i As Integer = 0 To optionList.Count - 1
 
             Dim it As ListTemplate = optionList(i)
-            tempGap = Math.Abs(it.price(callput, 3) - TargetPrice)
-            If mingap > tempGap And it.price(callput, 3) > 0 Then
-                mingap = tempGap
-                retIndex = i
+
+            If 방향 = 0 Then
+                If it.price(callput, 3) > 0 And it.price(callput, 3) < TargetPrice Then
+                    Dim gap = Math.Abs(it.price(callput, 3) / TargetPrice - 1)
+                    If gap < mingap Then
+                        mingap = gap
+                        temptarget = i
+                    End If
+                End If
+
+            Else
+                If it.price(callput, 3) > 0 And it.price(callput, 3) >= TargetPrice Then
+                    Dim gap = Math.Abs(it.price(callput, 3) / TargetPrice - 1)
+                    If gap < mingap Then
+                        mingap = gap
+                        temptarget = i
+                    End If
+                End If
             End If
 
         Next
 
-        Return retIndex
+        Return temptarget
 
     End Function
 
@@ -177,36 +193,32 @@ Module Module_common
             Console.WriteLine("종목인덱스 변경 진입selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString())
 
             Dim Targetprice As Single = Val(Form1.txt_JongmokTargetPrice.Text)
-            Dim calltempMinGap As Single = 1100.0
-            Dim puttempMinGap As Single = 1100.0
+            Dim targetCallIndex As Single = 1100.0
+            Dim targetPutIndex As Single = 1100.0
+            Dim minGap As Single = 1100.0
 
-            Dim callTempSelectedIndex = CalcTargetJonhmokIndex(0, Targetprice, calltempMinGap)
-            Dim putTempSelectedIndex = CalcTargetJonhmokIndex(1, Targetprice, puttempMinGap)
+            For i As Integer = 0 To 1
+                For j As Integer = 0 To 1
+                    Dim callTempSelectedIndex As Integer = CalcTargetJonhmokIndex(0, i)
+                    Dim putTempSelectedIndex As Integer = CalcTargetJonhmokIndex(1, j)
 
-            Dim callprice = GetCurrentPrice(0, callTempSelectedIndex, 3)
-            Dim putprice = GetCurrentPrice(1, putTempSelectedIndex, 3)
+                    Dim callprice = GetCurrentPrice(0, callTempSelectedIndex, 3)
+                    Dim putprice = GetCurrentPrice(1, putTempSelectedIndex, 3)
 
-            If callprice > 0 And putprice > 0 Then
-                Dim calltempMinGap2 As Single = 1100.0
-                Dim puttempMinGap2 As Single = 1100.0
-                Dim cIndex = CalcTargetJonhmokIndex(0, putprice, calltempMinGap2)
-                Dim pIndex = CalcTargetJonhmokIndex(1, callprice, puttempMinGap2)
+                    If callprice > 0 And putprice > 0 Then
+                        Dim gap = Math.Abs(callprice / putprice - 1)
+                        If minGap > gap Then
+                            minGap = gap
+                            targetCallIndex = callTempSelectedIndex
+                            targetPutIndex = putTempSelectedIndex
+                        End If
+                    End If
 
-                If calltempMinGap2 < puttempMinGap2 Then
-                    selectedJongmokIndex(0) = cIndex
-                    selectedJongmokIndex(1) = putTempSelectedIndex
-                Else
-                    selectedJongmokIndex(0) = callTempSelectedIndex
-                    selectedJongmokIndex(1) = pIndex
-                End If
-            Else
-                selectedJongmokIndex(0) = callTempSelectedIndex
-                selectedJongmokIndex(1) = putTempSelectedIndex
-            End If
-
+                Next
+            Next
             '여기다가 행사가 추출하는 로직 추가함
-            콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
-            콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
+            콜선택된행사가(0) = 인덱스로부터행사가찾기(targetCallIndex)
+            콜선택된행사가(1) = 인덱스로부터행사가찾기(targetPutIndex)
 
         End If
 
@@ -218,7 +230,6 @@ Module Module_common
         index1 = 행사가로부터인덱스찾기(콜선택된행사가(1))
         If index1 >= 0 Then selectedJongmokIndex(1) = index1
 
-
     End Sub
 
     Public Function 행사가로부터인덱스찾기(ByVal hangsaga As String) As Integer
@@ -229,7 +240,6 @@ Module Module_common
                 Return i
             End If
         Next
-
 
         Return -1
 
