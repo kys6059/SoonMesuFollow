@@ -77,56 +77,54 @@ Public Class Form1
             InitFirstGrid()
             DrawGrid1Data()
 
-        End If
+            If currentIndex >= 0 Then
 
-        If currentIndex >= 0 Then
+                'grd_selected 조절하기
+                'combo에 전체 종목을 Add한다 인덱스, 행사가, 현재가격
+                cmb_selectedJongmokIndex_0.Items.Clear()
+                cmb_selectedJongmokIndex_1.Items.Clear()
 
-            'grd_selected 조절하기
-            'combo에 전체 종목을 Add한다 인덱스, 행사가, 현재가격
-            cmb_selectedJongmokIndex_0.Items.Clear()
-            cmb_selectedJongmokIndex_1.Items.Clear()
+                tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+                cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
+                cmb_selectedJongmokIndex_1.Items.Add(" ")
 
-            tempIndex = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-            cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
-            cmb_selectedJongmokIndex_1.Items.Add(" ")
+                For i As Integer = 0 To optionList.Count - 1
 
-            For i As Integer = 0 To optionList.Count - 1
+                    Dim it As ListTemplate = optionList(i)
+                    Dim str As String
+                    str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(0, 3) & ")"
+                    cmb_selectedJongmokIndex_0.Items.Add(str)
+                    str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(1, 3) & ")"
+                    cmb_selectedJongmokIndex_1.Items.Add(str)
 
-                Dim it As ListTemplate = optionList(i)
-                Dim str As String
-                str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(0, 3) & ")"
-                cmb_selectedJongmokIndex_0.Items.Add(str)
-                str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(1, 3) & ")"
-                cmb_selectedJongmokIndex_1.Items.Add(str)
+                Next
 
-            Next
+                cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
+                cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
 
-            cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
-            cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
+                If chk_화면끄기.Checked = False Then
+                    grd_selected.Visible = False
+                    grid1.Visible = False
+                    'InitFirstGrid()
+                    'DrawGrid1Data()
 
-            If chk_화면끄기.Checked = False Then
-                grd_selected.Visible = False
-                grid1.Visible = False
-                'InitFirstGrid()
-                'DrawGrid1Data()
+                    InitDrawSelectedGird()
+                    DrawSelectedData()
+                    DrawColor_Selected()            '색깔 실제로 grid에 입히기
+                    grd_selected.Visible = True
+                    grid1.Visible = True
 
-                InitDrawSelectedGird()
-                DrawSelectedData()
-                DrawColor_Selected()            '색깔 실제로 grid에 입히기
-                grd_selected.Visible = True
-                grid1.Visible = True
+                End If
+
+                InitShinHoGird()
+                DrawShinhoGridData() '신호를 추가한다
+
+                '오늘날짜를 DBDate 텍스트박스에 넣기
+                txt_DBDate.Text = TargetDate
+                lbl_ScrolValue.Text = "CurrentIndex : " & currentIndex.ToString() & ", Time = " & Data(0).ctime(currentIndex)
 
             End If
-
-            InitShinHoGird()
-            DrawShinhoGridData() '신호를 추가한다
-
-            '오늘날짜를 DBDate 텍스트박스에 넣기
-            txt_DBDate.Text = TargetDate
-            lbl_ScrolValue.Text = "CurrentIndex : " & currentIndex.ToString() & ", Time = " & Data(0).ctime(currentIndex)
-
         End If
-
     End Sub
 
     '차트 관련 Reference
