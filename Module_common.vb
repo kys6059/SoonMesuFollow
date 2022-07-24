@@ -1,9 +1,10 @@
 ﻿Option Explicit On
 
-'선택종목 바꾸는 기능
+'선택종목 바꾸는 기능  ----------------------------- 완료 20220723
 '자동 저장 ----------------------------------------- 완료 20220723
-'아이콘 바꾸기
+'아이콘 바꾸기 ------------------------------------- 완료 20220723
 'DB 불러오기
+'위클리옵션 불러오기 기능
 
 
 Structure DataSet  '2개만 만든다. 0번은 콜, 1번은 풋으로 한다
@@ -480,5 +481,51 @@ Module Module_common
         End If
         FindIndexFormTime = (((si - 9) * (60 / Interval)) + (bun / Interval)) - 1
     End Function
+
+    Public Sub 월물_위클리옵션판단(ByVal 남은날짜 As Integer)
+
+        Dim txt월물 As String = sMonth
+        Dim txtweekly As String = "G"
+
+        Dim today As Date = Now()
+        Dim strThisMonth As String = Format(today, "yyMM")
+        Dim sCase As String
+
+
+        If 남은날짜 < 7 Then  '옵션월물을 적용한다
+
+            txt월물 = sMonth
+            txtweekly = "G"
+            sCase = "7일미만"
+
+        ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
+
+            txt월물 = sMonth
+            txtweekly = "W1"
+            sCase = "14일미만"
+        ElseIf 남은날짜 >= 14 And 남은날짜 < 28 Then
+
+            '계산 로직 적용해야 함
+            '월물도 무조건 disMonth하면 안됨 만약 8월 1일이 금요일이라면 7월물이 적용되어야 함
+            txt월물 = sMonth
+            txtweekly = "G"
+            sCase = "14~28일미만"
+
+        Else '28일 초과는 무조건 3주차 
+
+            txt월물 = strThisMonth
+            txtweekly = "W3"
+            sCase = "28일이상"
+
+        End If
+
+
+
+        Form1.txt_월물.Text = txt월물
+        Form1.txt_week_정규.Text = txtweekly
+
+        Add_Log("설정", "월물 = " & txt월물 & ", Week/정규 = " & txtweekly & ", 남은날짜 = " & 남은날짜.ToString() & ", CASE = " & sCase)
+
+    End Sub
 
 End Module

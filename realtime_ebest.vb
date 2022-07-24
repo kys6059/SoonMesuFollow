@@ -325,25 +325,28 @@ Module realtime_ebest
 
         'If 주문가능금액 = 0 Then 주문가능금액 = 100000000  - 이렇게 해도 주문가능수량은 0이었음. 매도 가능계좌가 아니라서 그럴 수도 있음
 
-        Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
-        Dim code As String = it.Code(callput)
+        If optionList.Count > 0 Then
+            Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+            Dim code As String = it.Code(callput)
 
-        If XAQuery_구매가능수량조회 Is Nothing Then XAQuery_구매가능수량조회 = New XAQuery
-        XAQuery_구매가능수량조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOAQ10100.res"
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RecCnt", 0, 1)   '레코드카운트
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "QryTp", 0, "1")                '조회구분
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 주문가능금액)                '주문금액
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 1.0)                '비율값
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
-        XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
+            If XAQuery_구매가능수량조회 Is Nothing Then XAQuery_구매가능수량조회 = New XAQuery
+            XAQuery_구매가능수량조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOAQ10100.res"
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RecCnt", 0, 1)   '레코드카운트
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "QryTp", 0, "1")                '조회구분
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 주문가능금액)                '주문금액
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 1.0)                '비율값
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
 
-        Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
-        If nSuccess < 0 Then Add_Log("일반", " XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
+            Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
+            If nSuccess < 0 Then Add_Log("일반", " XAQuery_구매가능수량조회 오류: " & nSuccess.ToString())
 
-        'Console.WriteLine("일반", "XAQuery_구매가능수량조회 매수 진입")
+            'Console.WriteLine("일반", "XAQuery_구매가능수량조회 매수 진입")
+        End If
+
 
     End Sub
 
@@ -417,9 +420,10 @@ Module realtime_ebest
         If XAQuery_전체종목조회 Is Nothing Then XAQuery_전체종목조회 = New XAQuery
         XAQuery_전체종목조회.ResFileName = "c:\ebest\xingApi\res\t2301.res"
 
-        Dim 구분 As String = "G" 'G" 정규, M:미니, W:위클리
+        Dim 월물 As String = Form1.txt_월물.Text
+        Dim 구분 As String = Form1.txt_week_정규.Text 'G" 정규, M:미니, W:위클리
 
-        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, "20" & sMonth)
+        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, "20" & 월물)
         XAQuery_전체종목조회.SetFieldData("t2301InBlock", "gubun", 0, 구분)
 
         Dim nSuccess As Integer = XAQuery_전체종목조회.Request(False)
@@ -485,18 +489,21 @@ Module realtime_ebest
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
         XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
 
-        Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
-        Dim code As String = it.Code(capplut)
+        If optionList.Count > 0 Then
+            Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
+            Dim code As String = it.Code(capplut)
 
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "5")
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "100")
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate)
-        XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "5")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "100")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate)
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N")
 
-        Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
-        If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
+            Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
+            If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
+        End If
+
     End Sub
 
 

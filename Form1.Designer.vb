@@ -23,9 +23,10 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.grid1 = New System.Windows.Forms.DataGridView()
         Me.grd_selected = New System.Windows.Forms.DataGridView()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -125,6 +126,11 @@ Partial Class Form1
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
+        Me.TableLayoutPanel9 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.txt_월물 = New System.Windows.Forms.RichTextBox()
+        Me.txt_week_정규 = New System.Windows.Forms.RichTextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -139,6 +145,7 @@ Partial Class Form1
         CType(Me.grd_잔고조회, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLP_BuySell.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.TableLayoutPanel9.SuspendLayout()
         Me.SuspendLayout()
         '
         'grid1
@@ -405,16 +412,16 @@ Partial Class Form1
         '
         'txt_ebest_id
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.txt_ebest_id.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.txt_ebest_id.Legends.Add(Legend1)
         Me.txt_ebest_id.Location = New System.Drawing.Point(1668, 168)
         Me.txt_ebest_id.Name = "txt_ebest_id"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.txt_ebest_id.Series.Add(Series1)
         Me.txt_ebest_id.Size = New System.Drawing.Size(1225, 885)
         Me.txt_ebest_id.TabIndex = 13
         Me.txt_ebest_id.Text = "Chart1"
@@ -760,7 +767,7 @@ Partial Class Form1
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334!))
         Me.TableLayoutPanel7.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel7.Size = New System.Drawing.Size(500, 122)
+        Me.TableLayoutPanel7.Size = New System.Drawing.Size(500, 108)
         Me.TableLayoutPanel7.TabIndex = 19
         '
         'txt_ebest_id1
@@ -775,7 +782,7 @@ Partial Class Form1
         'txt_ebest인증비밀번호
         '
         Me.txt_ebest인증비밀번호.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_ebest인증비밀번호.Location = New System.Drawing.Point(148, 84)
+        Me.txt_ebest인증비밀번호.Location = New System.Drawing.Point(148, 74)
         Me.txt_ebest인증비밀번호.Name = "txt_ebest인증비밀번호"
         Me.txt_ebest인증비밀번호.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txt_ebest인증비밀번호.Size = New System.Drawing.Size(138, 21)
@@ -785,7 +792,7 @@ Partial Class Form1
         'txt_ebest_pwd
         '
         Me.txt_ebest_pwd.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_ebest_pwd.Location = New System.Drawing.Point(148, 44)
+        Me.txt_ebest_pwd.Location = New System.Drawing.Point(148, 39)
         Me.txt_ebest_pwd.Name = "txt_ebest_pwd"
         Me.txt_ebest_pwd.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.txt_ebest_pwd.Size = New System.Drawing.Size(138, 21)
@@ -800,7 +807,7 @@ Partial Class Form1
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"
-        Me.chk_모의투자연결.Size = New System.Drawing.Size(203, 33)
+        Me.chk_모의투자연결.Size = New System.Drawing.Size(203, 28)
         Me.chk_모의투자연결.TabIndex = 21
         Me.chk_모의투자연결.Text = "모의투자서버"
         Me.chk_모의투자연결.UseVisualStyleBackColor = True
@@ -809,10 +816,10 @@ Partial Class Form1
         '
         Me.Label21.AutoSize = True
         Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label21.Location = New System.Drawing.Point(4, 83)
+        Me.Label21.Location = New System.Drawing.Point(4, 73)
         Me.Label21.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label21.Name = "Label21"
-        Me.Label21.Size = New System.Drawing.Size(137, 36)
+        Me.Label21.Size = New System.Drawing.Size(137, 32)
         Me.Label21.TabIndex = 6
         Me.Label21.Text = "공인인증서 암호"
         Me.Label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -821,10 +828,10 @@ Partial Class Form1
         '
         Me.Label18.AutoSize = True
         Me.Label18.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label18.Location = New System.Drawing.Point(4, 43)
+        Me.Label18.Location = New System.Drawing.Point(4, 38)
         Me.Label18.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(137, 35)
+        Me.Label18.Size = New System.Drawing.Size(137, 30)
         Me.Label18.TabIndex = 3
         Me.Label18.Text = "PWD"
         Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -836,7 +843,7 @@ Partial Class Form1
         Me.Label16.Location = New System.Drawing.Point(4, 3)
         Me.Label16.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(137, 35)
+        Me.Label16.Size = New System.Drawing.Size(137, 30)
         Me.Label16.TabIndex = 1
         Me.Label16.Text = "ID"
         Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -845,10 +852,10 @@ Partial Class Form1
         '
         Me.btn_이베스트로그인.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_이베스트로그인.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_이베스트로그인.Location = New System.Drawing.Point(293, 44)
+        Me.btn_이베스트로그인.Location = New System.Drawing.Point(293, 39)
         Me.btn_이베스트로그인.Name = "btn_이베스트로그인"
         Me.TableLayoutPanel7.SetRowSpan(Me.btn_이베스트로그인, 2)
-        Me.btn_이베스트로그인.Size = New System.Drawing.Size(203, 74)
+        Me.btn_이베스트로그인.Size = New System.Drawing.Size(203, 65)
         Me.btn_이베스트로그인.TabIndex = 20
         Me.btn_이베스트로그인.Text = "이베스트 로그인"
         Me.btn_이베스트로그인.UseVisualStyleBackColor = True
@@ -1187,7 +1194,7 @@ Partial Class Form1
         Me.btn_아침시작버튼.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btn_아침시작버튼.Location = New System.Drawing.Point(131, 8)
         Me.btn_아침시작버튼.Name = "btn_아침시작버튼"
-        Me.btn_아침시작버튼.Size = New System.Drawing.Size(206, 123)
+        Me.btn_아침시작버튼.Size = New System.Drawing.Size(206, 109)
         Me.btn_아침시작버튼.TabIndex = 25
         Me.btn_아침시작버튼.Text = "이베스트 시작버튼"
         Me.btn_아침시작버튼.UseVisualStyleBackColor = False
@@ -1393,11 +1400,84 @@ Partial Class Form1
         '
         Me.Timer_AutoSave111.Interval = 10000
         '
+        'TableLayoutPanel9
+        '
+        Me.TableLayoutPanel9.ColumnCount = 4
+        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel9.Controls.Add(Me.txt_week_정규, 3, 0)
+        Me.TableLayoutPanel9.Controls.Add(Me.Label28, 2, 0)
+        Me.TableLayoutPanel9.Controls.Add(Me.Label25, 0, 0)
+        Me.TableLayoutPanel9.Controls.Add(Me.txt_월물, 1, 0)
+        Me.TableLayoutPanel9.Location = New System.Drawing.Point(131, 123)
+        Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
+        Me.TableLayoutPanel9.RowCount = 1
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel9.Size = New System.Drawing.Size(446, 36)
+        Me.TableLayoutPanel9.TabIndex = 26
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label25.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label25.Location = New System.Drawing.Point(1, 1)
+        Me.Label25.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(109, 34)
+        Me.Label25.TabIndex = 0
+        Me.Label25.Text = "월물"
+        Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label28.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label28.Location = New System.Drawing.Point(223, 1)
+        Me.Label28.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(109, 34)
+        Me.Label28.TabIndex = 2
+        Me.Label28.Text = "Week/정규"
+        Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_월물
+        '
+        Me.txt_월물.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_월물.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_월물.ForeColor = System.Drawing.SystemColors.MenuHighlight
+        Me.txt_월물.Location = New System.Drawing.Point(114, 3)
+        Me.txt_월물.Name = "txt_월물"
+        Me.txt_월물.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.txt_월물.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+        Me.txt_월물.Size = New System.Drawing.Size(105, 30)
+        Me.txt_월물.TabIndex = 3
+        Me.txt_월물.Text = ""
+        '
+        'txt_week_정규
+        '
+        Me.txt_week_정규.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_week_정규.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_week_정규.ForeColor = System.Drawing.SystemColors.MenuHighlight
+        Me.txt_week_정규.Location = New System.Drawing.Point(336, 3)
+        Me.txt_week_정규.Multiline = False
+        Me.txt_week_정규.Name = "txt_week_정규"
+        Me.txt_week_정규.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.txt_week_정규.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+        Me.txt_week_정규.Size = New System.Drawing.Size(107, 30)
+        Me.txt_week_정규.TabIndex = 4
+        Me.txt_week_정규.Text = ""
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(2914, 1277)
+        Me.Controls.Add(Me.TableLayoutPanel9)
         Me.Controls.Add(Me.btn_아침시작버튼)
         Me.Controls.Add(Me.TLP_BuySell)
         Me.Controls.Add(Me.grd_잔고조회)
@@ -1417,6 +1497,7 @@ Partial Class Form1
         Me.Controls.Add(Me.grd_selected)
         Me.Controls.Add(Me.grid1)
         Me.Controls.Add(Me.TableLayoutPanel2)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Form1"
@@ -1442,6 +1523,8 @@ Partial Class Form1
         Me.TLP_BuySell.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
+        Me.TableLayoutPanel9.ResumeLayout(False)
+        Me.TableLayoutPanel9.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1545,4 +1628,9 @@ Partial Class Form1
     Friend WithEvents Label8 As Label
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents Timer_AutoSave111 As Timer
+    Friend WithEvents TableLayoutPanel9 As TableLayoutPanel
+    Friend WithEvents txt_week_정규 As RichTextBox
+    Friend WithEvents Label28 As Label
+    Friend WithEvents Label25 As Label
+    Friend WithEvents txt_월물 As RichTextBox
 End Class

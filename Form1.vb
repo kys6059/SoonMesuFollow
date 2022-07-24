@@ -73,8 +73,11 @@ Public Class Form1
     Private Sub RedrawAll()
 
         Dim tempIndex As Integer
-        InitFirstGrid()
-        DrawGrid1Data()
+        If optionList.Count > 0 Then
+            InitFirstGrid()
+            DrawGrid1Data()
+
+        End If
 
         If currentIndex >= 0 Then
 
@@ -777,6 +780,8 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+
+
         txt_TableName.Text = "option_weekly"
 
         Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
@@ -787,7 +792,10 @@ Public Class Form1
         Dim strToday As String = Format(today, "yyMMdd")
         Dim lDate As Long = Val(strToday)
         Dim 월물 As Long = getsMonth(lDate)
+        sMonth = 월물
         Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+
+        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
 
         If 남은날짜 <= 3 Then  '남은날짜가 작으면 0.15로 바꾼다
             txt_손절매비율.Text = "1.2"
