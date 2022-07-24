@@ -127,10 +127,10 @@ Partial Class Form1
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel9 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label25 = New System.Windows.Forms.Label()
-        Me.Label28 = New System.Windows.Forms.Label()
-        Me.txt_월물 = New System.Windows.Forms.RichTextBox()
         Me.txt_week_정규 = New System.Windows.Forms.RichTextBox()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.txt_월물 = New System.Windows.Forms.RichTextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -1415,48 +1415,9 @@ Partial Class Form1
         Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
         Me.TableLayoutPanel9.RowCount = 1
         Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
         Me.TableLayoutPanel9.Size = New System.Drawing.Size(446, 36)
         Me.TableLayoutPanel9.TabIndex = 26
-        '
-        'Label25
-        '
-        Me.Label25.AutoSize = True
-        Me.Label25.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label25.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label25.Location = New System.Drawing.Point(1, 1)
-        Me.Label25.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(109, 34)
-        Me.Label25.TabIndex = 0
-        Me.Label25.Text = "월물"
-        Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label28
-        '
-        Me.Label28.AutoSize = True
-        Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label28.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label28.Location = New System.Drawing.Point(223, 1)
-        Me.Label28.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(109, 34)
-        Me.Label28.TabIndex = 2
-        Me.Label28.Text = "Week/정규"
-        Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'txt_월물
-        '
-        Me.txt_월물.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_월물.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_월물.ForeColor = System.Drawing.SystemColors.MenuHighlight
-        Me.txt_월물.Location = New System.Drawing.Point(114, 3)
-        Me.txt_월물.Name = "txt_월물"
-        Me.txt_월물.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-        Me.txt_월물.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txt_월물.Size = New System.Drawing.Size(105, 30)
-        Me.txt_월물.TabIndex = 3
-        Me.txt_월물.Text = ""
         '
         'txt_week_정규
         '
@@ -1471,6 +1432,45 @@ Partial Class Form1
         Me.txt_week_정규.Size = New System.Drawing.Size(107, 30)
         Me.txt_week_정규.TabIndex = 4
         Me.txt_week_정규.Text = ""
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label28.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label28.Location = New System.Drawing.Point(223, 1)
+        Me.Label28.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(109, 34)
+        Me.Label28.TabIndex = 2
+        Me.Label28.Text = "Week/정규"
+        Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label25.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label25.Location = New System.Drawing.Point(1, 1)
+        Me.Label25.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label25.Name = "Label25"
+        Me.Label25.Size = New System.Drawing.Size(109, 34)
+        Me.Label25.TabIndex = 0
+        Me.Label25.Text = "월물"
+        Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_월물
+        '
+        Me.txt_월물.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_월물.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_월물.ForeColor = System.Drawing.SystemColors.MenuHighlight
+        Me.txt_월물.Location = New System.Drawing.Point(114, 3)
+        Me.txt_월물.Name = "txt_월물"
+        Me.txt_월물.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.txt_월물.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
+        Me.txt_월물.Size = New System.Drawing.Size(105, 30)
+        Me.txt_월물.TabIndex = 3
+        Me.txt_월물.Text = ""
         '
         'Form1
         '

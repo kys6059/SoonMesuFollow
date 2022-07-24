@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{FD8150FC-8006-4376-9219-3B3037822432}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>cybos_option.My.MyApplication</StartupObject>
-    <RootNamespace>cybos_option</RootNamespace>
-    <AssemblyName>cybos_option</AssemblyName>
+    <StartupObject>EBEST_BOTHSELL.My.MyApplication</StartupObject>
+    <RootNamespace>EBEST_BOTHSELL</RootNamespace>
+    <AssemblyName>EBEST_BOTHSELL</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -41,7 +41,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>cybos_option.xml</DocumentationFile>
+    <DocumentationFile>EBEST_BOTHSELL.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -51,7 +51,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>cybos_option.xml</DocumentationFile>
+    <DocumentationFile>EBEST_BOTHSELL.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
