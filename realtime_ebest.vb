@@ -335,7 +335,7 @@ Module realtime_ebest
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "QryTp", 0, "1")                '조회구분
-            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 주문가능금액)                '주문금액
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 주문가능금액 * 0.2)                '주문금액
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 1.0)                '비율값
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
@@ -423,7 +423,7 @@ Module realtime_ebest
         Dim 월물 As String = Form1.txt_월물.Text
         Dim 구분 As String = Form1.txt_week_정규.Text 'G" 정규, M:미니, W:위클리
 
-        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, "20" & 월물)
+        XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, 월물)
         XAQuery_전체종목조회.SetFieldData("t2301InBlock", "gubun", 0, 구분)
 
         Dim nSuccess As Integer = XAQuery_전체종목조회.Request(False)
