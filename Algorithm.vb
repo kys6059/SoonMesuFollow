@@ -145,6 +145,8 @@ Module Algorithm
 
         Dim 콜현재가, 풋현재가, 합계가격 As Single
 
+
+
         If shinho.A11_콜인덱스 = selectedJongmokIndex(0) Then
             콜현재가 = Data(0).price(currentIndex, 3)
         Else

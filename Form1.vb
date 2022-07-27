@@ -39,6 +39,14 @@ Public Class Form1
         Dim 신호발생flag As Boolean = CalcAlrotithmAll()
         If 신호발생flag = True Then
             chk_ChangeTargetIndex.Checked = False '양매도 당시의 기준종목이 변경되지 않도록 고정한다
+
+            Dim it1 As ListTemplate = optionList(0)
+            행사가끝 = Val(it1.HangSaGa)
+
+            Dim temp As Integer = optionList.Count - 1
+            Dim it2 As ListTemplate = optionList(temp)
+            행사가시작 = Val(it2.HangSaGa)
+
         End If
 
         If chk_화면끄기.Checked = False Then

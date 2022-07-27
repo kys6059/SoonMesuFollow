@@ -237,6 +237,22 @@ Module Module_common
         index1 = 행사가로부터인덱스찾기(콜선택된행사가(1))
         If index1 >= 0 Then selectedJongmokIndex(1) = index1
 
+        If ShinhoList.Count > 0 Then
+
+            Dim shinho As ShinhoType = ShinhoList(0)
+
+            If shinho.A11_콜인덱스 <> selectedJongmokIndex(0) Then
+                Dim Index As Integer = 행사가로부터인덱스찾기(shinho.A12_콜행사가)
+                selectedJongmokIndex(0) = Index
+            End If
+
+            If shinho.A21_풋인덱스 <> selectedJongmokIndex(1) Then
+                Dim Index As Integer = 행사가로부터인덱스찾기(shinho.A22_풋행사가)
+                selectedJongmokIndex(1) = Index
+            End If
+
+        End If
+
     End Sub
 
     Public Function 행사가로부터인덱스찾기(ByVal hangsaga As String) As Integer

@@ -84,6 +84,10 @@ Module realtime_ebest
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
 
+    Public 행사가시작 As Single = -1
+    Public 행사가끝 As Single = -1
+
+
     Private Sub Add_여러가지Handler()
         AddHandler XASession1.Login, AddressOf XASession1_Login   'VB에서 이벤트를 등록하는 방식임 --- 매우 중요
         AddHandler XAQuery_계좌조회.ReceiveData, AddressOf XAQuery_계좌조회_ReceiveData '-----------------------------------------------------------------이벤트 등록
@@ -262,7 +266,9 @@ Module realtime_ebest
 
         Dim adjustPrice As Single = price - 0.1
 
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
+
+
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
@@ -284,7 +290,7 @@ Module realtime_ebest
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = price + 0.1
+            Dim adjustPrice As Single = price + 1.1
 
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
@@ -466,12 +472,29 @@ Module realtime_ebest
                 it.거래량(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "volume", i))
                 it.시간가치(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "timevl", i))
 
-                If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 둘 중 하나가 범위안에 들어오면
-                    optionList.Add(it)
-                    retCount += 1
+                If Form1.chk_ChangeTargetIndex.Checked = True Then   '바꿀 수 있을 대는 바꾼다
+                    If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 둘 중 하나가 범위안에 들어오면
+                        optionList.Add(it)
+                        retCount += 1
+                    End If
+                Else
+                    If 행사가시작 < 0 Then '아직 신호에서 확정되지 않았으면 바꾼다
+                        If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 둘 중 하나가 범위안에 들어오면
+                            optionList.Add(it)
+                            retCount += 1
+                        End If
+                    Else '신호가 뜨고 확정이 되었으면 행사가시작과 끝 범위안에 있는 것만 추가한다
+                        If Val(it.HangSaGa) >= 행사가시작 And Val(it.HangSaGa) <= 행사가끝 Then
+                            optionList.Add(it)
+                            retCount += 1
+                        End If
+                    End If
                 End If
 
+
             Next
+
+
 
             TotalCount = retCount
 
@@ -483,6 +506,7 @@ Module realtime_ebest
         End If
 
     End Sub
+
 
     Public Sub XAQuery_EBEST_분봉데이터호출함수(ByVal capplut As Integer)
         't8415 
