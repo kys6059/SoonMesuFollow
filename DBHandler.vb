@@ -390,6 +390,7 @@ Module DBHandler
         Next
 
         Return callput_1 + 1
+
     End Function
 
     Public Sub AutoSave()

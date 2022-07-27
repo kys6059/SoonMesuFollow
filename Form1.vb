@@ -56,7 +56,7 @@ Public Class Form1
 
         DrawGraph() '그래프 그리기
 
-        If chk_AutoSave.Checked = True And EBESTisConntected = True Then '자동 저장 기능 
+        If chk_AutoSave.Checked = True And isRealFlag = True Then '자동 저장 기능 
             If currentIndex >= 79 Then
 
                 chk_AutoSave.Checked = False
@@ -864,6 +864,7 @@ Public Class Form1
 
             InitDataStructure()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+            chk_양매도실행.Checked = False
 
             gTargetDateIndex = 0 '이것도 전역변수
             TargetDate = DBDateList(gTargetDateIndex)
@@ -872,7 +873,7 @@ Public Class Form1
             TotalCount = GetDataFromDBHandler(TargetDate)
 
             If TotalCount > 0 Then
-
+                MakeOptinList()
                 Clac_DisplayAllGrid()
 
             End If
@@ -997,7 +998,7 @@ Public Class Form1
             txt_손절매비율.Refresh()
 
             If TotalCount > 0 Then
-
+                MakeOptinList()
                 Clac_DisplayAllGrid()
 
             End If

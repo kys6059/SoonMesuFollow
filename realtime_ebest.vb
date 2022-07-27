@@ -151,6 +151,7 @@ Module realtime_ebest
 
             Add_Log("일반", "Login Event 수신 완료")
             EBESTisConntected = True
+            isRealFlag = True
             계좌조회() '계좌조회 호출
 
             Form1.Ebest_realTime_Start()
