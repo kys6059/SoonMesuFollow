@@ -550,4 +550,40 @@ Module Module_common
 
     End Sub
 
+    'DB로부터 읽은 Data로부터 OptionList를 만들어낸다
+    '이 때 Data 안에는 2개 밖에 없을거기 때문에 Option List도 2개가 된다 0번 - 콜, 1번 풋
+    Public Sub MakeOptinList()
+
+        optionList.Clear()
+
+        For i As Integer = 0 To TotalCount - 1
+
+            If currentIndex > 0 Then
+
+                Dim it As ListTemplate = New ListTemplate
+                it.Initialize()
+
+                Dim max As Single = Single.MinValue
+                Dim min As Single = Single.MaxValue
+
+                For j As Integer = 0 To currentIndex - 1
+                    If Data(i).price(j, 1) > max Then max = Data(i).price(j, 1)
+                    If Data(i).price(j, 2) < min Then min = Data(i).price(j, 2)
+                Next
+
+                it.HangSaGa = Data(i).HangSaGa '행사가
+                it.price(i, 0) = Data(i).price(0, 0)
+                it.price(i, 1) = max
+                it.price(i, 2) = min
+                it.price(i, 3) = Data(i).price(currentIndex, 3)
+
+                optionList.Add(it)
+
+            End If
+
+            selectedJongmokIndex(i) = i
+        Next
+
+    End Sub
+
 End Module
