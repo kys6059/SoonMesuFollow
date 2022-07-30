@@ -157,7 +157,7 @@ Module Module_common
 
             If 방향 = 0 Then
                 If it.price(callput, 3) > 0 And it.price(callput, 3) < TargetPrice Then
-                    Dim gap = Math.Abs(it.price(callput, 3) / TargetPrice - 1)
+                    Dim gap = Math.Abs(it.price(callput, 3) - TargetPrice)
                     If gap < mingap Then
                         mingap = gap
                         temptarget = i
@@ -166,7 +166,7 @@ Module Module_common
 
             Else
                 If it.price(callput, 3) > 0 And it.price(callput, 3) >= TargetPrice Then
-                    Dim gap = Math.Abs(it.price(callput, 3) / TargetPrice - 1)
+                    Dim gap = Math.Abs(it.price(callput, 3) - TargetPrice)
                     If gap < mingap Then
                         mingap = gap
                         temptarget = i
@@ -197,7 +197,9 @@ Module Module_common
 
         If selectedJongmokIndex(0) < 0 Or Form1.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
 
-            Console.WriteLine("종목인덱스 변경 진입selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString())
+            Dim str As String = "종목인덱스 변경 진입 - selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString()
+
+            Console.WriteLine(str)
 
             Dim Targetprice As Single = Val(Form1.txt_JongmokTargetPrice.Text)
             Dim targetCallIndex As Single = 1100.0
@@ -513,17 +515,18 @@ Module Module_common
             txt월물 = "20" & sMonth
             txtweekly = "G"
             sCase = "7일미만"
-
+            Form1.txt_JongmokTargetPrice.Text = "2.3"
         ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
 
             txt월물 = "W1"
             txtweekly = "W"
             sCase = "14일미만"
+            Form1.txt_JongmokTargetPrice.Text = "2.0"
         ElseIf 남은날짜 >= 14 And 남은날짜 < 28 Then
 
             Dim 목요일count As Integer = 0
 
-            For i As Integer = 1 To today.Day
+            For i As Integer = 1 To today.Day - 1
                 Dim tempdate As Date = New Date(today.Year, today.Month, i)
                 If Weekday(tempdate) = 5 Then
                     목요일count = 목요일count + 1
@@ -534,13 +537,13 @@ Module Module_common
             txtweekly = "W"
 
             sCase = "14~28일미만"
-
+            Form1.txt_JongmokTargetPrice.Text = "2.0"
         Else '28일 초과는 무조건 3주차 
 
             txt월물 = "W3"
             txtweekly = "W"
             sCase = "28일이상"
-
+            Form1.txt_JongmokTargetPrice.Text = "2.0"
         End If
 
         Form1.txt_월물.Text = txt월물
