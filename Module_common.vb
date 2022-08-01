@@ -87,6 +87,7 @@ Module Module_common
     Public JongmokTargetPrice As Single  '기준이 되는 targetprice - default 2.0
     Public timerCount As Integer
     Public timerMaxInterval As Integer
+    Public ReceiveCount As Integer '잔고를 수신할 때마다 1씩 증가 시킨다. 이걸 이용해서 3 이상일 때 알고리즘을 판정한다.
 
     Public optionList As List(Of ListTemplate)  '제일 왼쪽 grid에 표시될 option List 
 

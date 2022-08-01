@@ -240,12 +240,12 @@ Module realtime_ebest
             '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
             Dim callput As String = Mid(it.A01_종복번호, 1, 1)
 
-            If callput = "2" Then
+            If callput = "2" And it.A02_구분 = "매도" Then
                 If 콜최대구매개수 < it.A03_잔고수량 Then
                     콜최대구매개수 = it.A03_잔고수량
                     Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
                 End If
-            Else
+            ElseIf callput = "3" And it.A02_구분 = "매도" Then
                 If 풋최대구매개수 < it.A03_잔고수량 Then
                     풋최대구매개수 = it.A03_잔고수량
                     Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
@@ -254,6 +254,8 @@ Module realtime_ebest
 
 
         Next
+
+        ReceiveCount += 1
 
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
@@ -265,7 +267,7 @@ Module realtime_ebest
         If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
         XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-        Dim adjustPrice As Single = Math.Max(price - 1.0, 0.5)
+        Dim adjustPrice As Single = Math.Max(price - 1.0, 0.1)
 
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
@@ -278,7 +280,7 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
         If nSuccess < 0 Then Add_Log("일반", " 한종목매도 오류: " & nSuccess.ToString())
 
-        Add_Log("일반", "한종목 매도 진입")
+        Add_Log("일반", "매도 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
 
     End Sub
 
@@ -291,18 +293,45 @@ Module realtime_ebest
 
             Dim adjustPrice As Single = price + 1.1
 
+            Dim 여기서최대매수개수 As Long = 0
+
+            Dim callput As String = Mid(code, 1, 1)
+
+            If callput = "2" Then
+
+                여기서최대매수개수 = Math.Max(count - 콜현재환매개수, 0)
+
+                If 여기서최대매수개수 > 0 Then
+                    콜현재환매개수 += 여기서최대매수개수
+                Else
+                    Add_Log("에러", "콜현재환매개수 초과 매수가 들어옴")
+                    Return
+                End If
+
+            ElseIf callput = "3" Then
+                여기서최대매수개수 = Math.Max(count - 풋현재환매개수, 0)
+
+                If 여기서최대매수개수 > 0 Then
+                    풋현재환매개수 += 여기서최대매수개수
+                Else
+                    Add_Log("에러", "풋현재환매개수 초과 매수가 들어옴")
+                    Return
+                End If
+
+            End If
+
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
-            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, 여기서최대매수개수) ' 주문수량 long타입
 
             Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
             If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
 
-            Add_Log("일반", "한종목 매수 진입")
+            Add_Log("일반", "매수 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
         Else
             Add_Log("일반", code & " 0개 매수가 호출됨")
         End If
@@ -372,13 +401,24 @@ Module realtime_ebest
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
 
         If 종목구분 = "2" Then
-            If 콜구매가능개수 <> 신규주문가능수량 Then Add_Log("일반", "콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
-            콜구매가능개수 = 신규주문가능수량
+
+            If 콜구매가능개수 <> 신규주문가능수량 Then
+                콜구매가능개수 = 신규주문가능수량
+                If Val(Form1.txt_양매도Target시간Index.Text) <= currentIndex Then
+                    Add_Log("일반", "코드 : " & 종목코드 & ", 콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                End If
+
+            End If
+
         ElseIf 종목구분 = "3" Then
-            If 풋구매가능개수 <> 신규주문가능수량 Then Add_Log("일반", "풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
-            풋구매가능개수 = 신규주문가능수량
-        Else
-            Add_Log("에러", "XAQuery_구매가능수량조회_ReceiveData에서 종목명이 비었거나 이상함")
+
+            If 풋구매가능개수 <> 신규주문가능수량 Then
+                풋구매가능개수 = 신규주문가능수량
+                If Val(Form1.txt_양매도Target시간Index.Text) <= currentIndex Then
+                    Add_Log("일반", "코드 : " & 종목코드 & ", 풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                End If
+
+            End If
         End If
 
         Dim str As String = "구매가능수량조회 선물옵션현재가 =" & 선물옵션현재가.ToString()

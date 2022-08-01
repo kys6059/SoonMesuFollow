@@ -246,14 +246,33 @@ Module Algorithm
         '타겟시간 시가가 0보다 크면 무조건 양매도를 친다
         If Data(0).price(tempIndex, 0) > 0 And Data(1).price(tempIndex, 0) > 0 Then
 
-            If AlreadyOccured("S", occurType.oneShot) = False Then   '위에서 이미발생 조건을 확인하지 않으니 신호가 여러개 등록되는 문제가 발생한 거 같음.(나중에 오후에 신호리스트 루프를 돌면서 매수함) True를 리턴해서 매도는 여러번 하더라도 신호는 1개만 등록되도록 변경함. 20220629
+            If isRealFlag = True Then
 
-                '"S신호 발생"
-                Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
-                ShinhoList.Add(shinho)
-                Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
+                If ReceiveCount > 2 Then
+
+                    If AlreadyOccured("S", occurType.oneShot) = False Then   '위에서 이미발생 조건을 확인하지 않으니 신호가 여러개 등록되는 문제가 발생한 거 같음.(나중에 오후에 신호리스트 루프를 돌면서 매수함) True를 리턴해서 매도는 여러번 하더라도 신호는 1개만 등록되도록 변경함. 20220629
+
+                        '"S신호 발생"
+                        Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
+                        ShinhoList.Add(shinho)
+                        Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
+
+                    End If
+
+                End If
+
+            Else
+                If AlreadyOccured("S", occurType.oneShot) = False Then   '위에서 이미발생 조건을 확인하지 않으니 신호가 여러개 등록되는 문제가 발생한 거 같음.(나중에 오후에 신호리스트 루프를 돌면서 매수함) True를 리턴해서 매도는 여러번 하더라도 신호는 1개만 등록되도록 변경함. 20220629
+
+                    '"S신호 발생"
+                    Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
+                    ShinhoList.Add(shinho)
+                    Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
+
+                End If
 
             End If
+
 
         End If
 

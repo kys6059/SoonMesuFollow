@@ -28,6 +28,8 @@ Public Class Form1
 
     Private Sub Clac_DisplayAllGrid()
 
+        lbl_ReceiveCounter.Text = "수신횟수 = " & ReceiveCount.ToString()
+
         SetScrolData() '타임 스크롤의 최대최소값을 지정한다
 
         CalcSumPrice() '콜풋 시가종가의 합계를 구한다
@@ -678,7 +680,7 @@ Public Class Form1
         grid1.RowCount = TotalCount
 
         For i As Integer = 0 To 6
-            grid1.Columns(i).Width = 70
+            grid1.Columns(i).Width = 68
             grid1.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
             grid1.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
         Next
@@ -735,6 +737,7 @@ Public Class Form1
 
             Case 1
                 If EBESTisConntected = True Then 계좌조회()
+                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
 
             Case 2
                 If EBESTisConntected = True Then 구매가능수량조회(0)
@@ -746,7 +749,7 @@ Public Class Form1
                 If EBESTisConntected = True Then 구매가능수량조회(1)
 
             Case 5
-                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
+
 
             Case 7
                 If EBESTisConntected = True Then Clac_DisplayAllGrid()
@@ -786,7 +789,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-
+        ReceiveCount = 0
 
         txt_TableName.Text = "option_weekly"
 
@@ -1052,6 +1055,7 @@ Public Class Form1
 
     Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
         이베스트로그인함수()
+        ReceiveCount = 0
     End Sub
 
     Private Sub 이베스트로그인함수()
@@ -1261,7 +1265,12 @@ Public Class Form1
 
         For i As Integer = 0 To List잔고.Count - 1
             Dim it As 잔고Type = List잔고(i)
-            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            If it.A02_구분 = "매도" Then
+                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            Else
+                한종목매도(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            End If
+
         Next
     End Sub
 
@@ -1282,6 +1291,7 @@ Public Class Form1
     Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs) Handles btn_아침시작버튼.Click
 
         이베스트로그인함수()
+        ReceiveCount = 0
 
     End Sub
 
