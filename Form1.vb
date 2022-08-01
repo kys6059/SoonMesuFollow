@@ -813,7 +813,7 @@ Public Class Form1
             txt_손절매비율.Text = "1.17"
             Label15.Text = "손절매비율(10일이하)"
         Else
-            txt_손절매비율.Text = "1.14"
+            txt_손절매비율.Text = "1.17"
             Label15.Text = "손절매비율(10일초과)"
         End If
 

@@ -516,13 +516,13 @@ Module Module_common
             txt월물 = "20" & sMonth
             txtweekly = "G"
             sCase = "7일미만"
-            Form1.txt_JongmokTargetPrice.Text = "2.3"
+
         ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
 
             txt월물 = "W1"
             txtweekly = "W"
             sCase = "14일미만"
-            Form1.txt_JongmokTargetPrice.Text = "2.0"
+
         ElseIf 남은날짜 >= 14 And 남은날짜 < 28 Then
 
             Dim 목요일count As Integer = 0
@@ -538,13 +538,13 @@ Module Module_common
             txtweekly = "W"
 
             sCase = "14~28일미만"
-            Form1.txt_JongmokTargetPrice.Text = "2.0"
+
         Else '28일 초과는 무조건 3주차 
 
             txt월물 = "W3"
             txtweekly = "W"
             sCase = "28일이상"
-            Form1.txt_JongmokTargetPrice.Text = "2.0"
+
         End If
 
         Form1.txt_월물.Text = txt월물

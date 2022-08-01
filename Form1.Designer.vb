@@ -65,6 +65,7 @@ Partial Class Form1
         Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
         Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.lbl_ScrolValue = New System.Windows.Forms.Label()
         Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_전체조건반복 = New System.Windows.Forms.Button()
@@ -131,7 +132,6 @@ Partial Class Form1
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
-        Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -646,6 +646,19 @@ Partial Class Form1
         Me.TableLayoutPanel5.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel5.Size = New System.Drawing.Size(277, 116)
         Me.TableLayoutPanel5.TabIndex = 17
+        '
+        'lbl_ReceiveCounter
+        '
+        Me.lbl_ReceiveCounter.AutoSize = True
+        Me.lbl_ReceiveCounter.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ReceiveCounter.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.lbl_ReceiveCounter.Location = New System.Drawing.Point(3, 78)
+        Me.lbl_ReceiveCounter.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.lbl_ReceiveCounter.Name = "lbl_ReceiveCounter"
+        Me.lbl_ReceiveCounter.Size = New System.Drawing.Size(271, 36)
+        Me.lbl_ReceiveCounter.TabIndex = 18
+        Me.lbl_ReceiveCounter.Text = "0"
+        Me.lbl_ReceiveCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_ScrolValue
         '
@@ -1474,19 +1487,6 @@ Partial Class Form1
         Me.txt_월물.Size = New System.Drawing.Size(105, 30)
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
-        '
-        'lbl_ReceiveCounter
-        '
-        Me.lbl_ReceiveCounter.AutoSize = True
-        Me.lbl_ReceiveCounter.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_ReceiveCounter.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_ReceiveCounter.Location = New System.Drawing.Point(3, 78)
-        Me.lbl_ReceiveCounter.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.lbl_ReceiveCounter.Name = "lbl_ReceiveCounter"
-        Me.lbl_ReceiveCounter.Size = New System.Drawing.Size(271, 36)
-        Me.lbl_ReceiveCounter.TabIndex = 18
-        Me.lbl_ReceiveCounter.Text = "0"
-        Me.lbl_ReceiveCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Form1
         '

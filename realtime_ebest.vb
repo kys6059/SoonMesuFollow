@@ -255,8 +255,6 @@ Module realtime_ebest
 
         Next
 
-        ReceiveCount += 1
-
         Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
     End Sub
@@ -601,6 +599,7 @@ Module realtime_ebest
         If Count <= 1 Then
             If 거래량AtFirst > 0 Then
                 timeIndex = Count   'Time의 Count
+
             Else
                 timeIndex = 0
             End If
@@ -609,6 +608,10 @@ Module realtime_ebest
         End If
         currentIndex = timeIndex - 1
 
+        '장전에 무수히 +가 되면 안되니 장 시작 후 풋코드를 받으면 ReceiveCount를 증가시킨다
+        If currentIndex >= 0 And callput = 1 Then
+            ReceiveCount += 1
+        End If
 
         For i As Integer = 0 To Count - 1
             Data(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
