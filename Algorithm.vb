@@ -240,6 +240,7 @@ Module Algorithm
 
         Dim ShinhoID As String = "S"
         Dim tempIndex = GetMaxIndex() 'curreuntIndex가 79일 때 0이어서 이상동작하는 거 방지하는 코드
+        Dim ret As Boolean = False
 
         If tempIndex <> 양매도TargetIndex Then Return False '양매도는 정해진 시간에 수행하고 시간이 아니라면 아래를 수행하지 않는다
 
@@ -255,8 +256,8 @@ Module Algorithm
                         '"S신호 발생"
                         Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
                         ShinhoList.Add(shinho)
-                        Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
-
+                        Add_Log("일반", "양매도 신호 isRealFlag = " & isRealFlag.ToString() & ", ReceiveCount = " & ReceiveCount.ToString())
+                        ret = True
                     End If
 
                 End If
@@ -267,8 +268,8 @@ Module Algorithm
                     '"S신호 발생"
                     Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
                     ShinhoList.Add(shinho)
-                    Add_Log("일반", "양매도 신호 등록함 - 수정 at 20220709")
-
+                    Add_Log("일반", "양매도 신호 isRealFlag = " & isRealFlag.ToString() & ", ReceiveCount = " & ReceiveCount.ToString())
+                    ret = True
                 End If
 
             End If
@@ -276,7 +277,7 @@ Module Algorithm
 
         End If
 
-        Return True
+        Return ret
 
     End Function
 
