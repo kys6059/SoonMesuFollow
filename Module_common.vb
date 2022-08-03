@@ -476,7 +476,7 @@ Module Module_common
         tDate = Format(Now(), "MM-dd hh:mm:ss")
 
         If currentIndex > 0 Then
-            Form1.txt_Log.Text = tDate & Data(0).ctime(currentIndex) & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
+            Form1.txt_Log.Text = tDate & " " & Data(0).ctime(currentIndex) & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
         Else
             Form1.txt_Log.Text = tDate & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
         End If

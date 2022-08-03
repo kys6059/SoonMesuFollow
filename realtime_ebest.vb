@@ -291,49 +291,21 @@ Module realtime_ebest
 
             Dim adjustPrice As Single = price + 1.1
 
-            Dim 여기서최대매수개수 As Long = 0
-
-            Dim callput As String = Mid(code, 1, 1)
-
-            If callput = "2" Then
-
-                여기서최대매수개수 = Math.Max(count - 콜현재환매개수, 0)
-
-                If 여기서최대매수개수 > 0 Then
-                    콜현재환매개수 += 여기서최대매수개수
-                Else
-                    Add_Log("에러", "콜현재환매개수 초과 매수가 들어옴")
-                    Return
-                End If
-
-            ElseIf callput = "3" Then
-                여기서최대매수개수 = Math.Max(count - 풋현재환매개수, 0)
-
-                If 여기서최대매수개수 > 0 Then
-                    풋현재환매개수 += 여기서최대매수개수
-                Else
-                    Add_Log("에러", "풋현재환매개수 초과 매수가 들어옴")
-                    Return
-                End If
-
-            End If
-
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
-            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, 여기서최대매수개수) ' 주문수량 long타입
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
             Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
             If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
 
             Add_Log("일반", "매수 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
         Else
-            Add_Log("일반", code & " 0개 매수가 호출됨")
+            Add_Log("일반", code & " 0개 매수가 호출됨" & " Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
         End If
-
 
     End Sub
 

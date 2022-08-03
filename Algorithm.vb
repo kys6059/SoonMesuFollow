@@ -75,7 +75,9 @@ Module Algorithm
 
                                 Dim it As 잔고Type = List잔고(j)
                                 Dim count As Integer = 0
+
                                 If it.A03_잔고수량 > 10 Then
+
                                     Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
                                     Dim singleCount As Single = it.A03_잔고수량 * 구매가능대비비율
                                     count = Math.Ceiling(singleCount)
@@ -97,7 +99,7 @@ Module Algorithm
                                         풋현재환매개수 = 풋현재환매개수 + count
                                     End If
                                 End If
-                                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                                If count > 0 Then 한종목매수(it.A01_종복번호, it.A10_현재가, count)
                                 Add_Log("일반", "1-0에서 매수 호출됨 개수 = " & count.ToString())
                             Next
 
@@ -106,12 +108,15 @@ Module Algorithm
 
                 End If
             Else    '신호가 죽고 난 후 잔고가 아직 남아있을 대 처리루틴
+                Dim str As String
                 If shinho.A06_신호ID = "S" Then
                     If List잔고 IsNot Nothing Then
                         For j As Integer = 0 To List잔고.Count - 1
 
                             Dim it As 잔고Type = List잔고(j)
+
                             Dim count As Integer = 0
+
                             If it.A03_잔고수량 > 10 Then
                                 Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
                                 Dim singleCount As Single = it.A03_잔고수량 * 구매가능대비비율
@@ -119,21 +124,25 @@ Module Algorithm
                                 If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
                                     count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
                                     콜현재환매개수 = 콜현재환매개수 + count
+                                    str = " 10초과 콜최대개수 = " & 콜최대구매개수.ToString() & ", 콜환매개수 = " & 콜현재환매개수.ToString()
                                 Else
                                     count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                                     풋현재환매개수 = 풋현재환매개수 + count
+                                    str = " 10초과 풋최대개수 = " & 풋최대구매개수.ToString() & ", 풋현재환매개수 = " & 풋현재환매개수.ToString()
                                 End If
                             Else
                                 If Mid(it.A01_종복번호, 1, 1) = "2" Then
                                     count = Math.Min(it.A03_잔고수량, 콜최대구매개수 - 콜현재환매개수)
                                     콜현재환매개수 = 콜현재환매개수 + count
+                                    str = " 10이하 콜최대개수 = " & 콜최대구매개수.ToString() & ", 콜환매개수 = " & 콜현재환매개수.ToString()
                                 Else
                                     count = Math.Min(it.A03_잔고수량, 풋최대구매개수 - 풋현재환매개수)
                                     풋현재환매개수 = 풋현재환매개수 + count
+                                    str = " 10이하 풋최대개수 = " & 풋최대구매개수.ToString() & ", 풋환매개수 = " & 풋현재환매개수.ToString()
                                 End If
                             End If
-                            한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-                            Add_Log("일반", "신호가 죽고난 후 잔고 존재 시 매수됨 count = " & count.ToString())
+                            If count > 0 Then 한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                            Add_Log("", "신호무 count = " & count.ToString() & str & ", 종목 = " & it.A01_종복번호)
                         Next
                     End If
                 End If
@@ -210,7 +219,7 @@ Module Algorithm
         If ret = True Then
             If EBESTisConntected = True Then
                 If Form1.chk_양매도실행.Checked = True Then
-                    If 평가종합.매매손익합계 = 0 Then     '신호와 같은 라인에서 사고 팔리면 그 후 자동으로 또 사지는 걸 방지하는 코드, 매매손익합계는 한번 청산해야지만 0보다 크게 된다
+                    If 콜현재환매개수 = 0 And 풋현재환매개수 = 0 Then     '신호와 같은 라인에서 사고 팔리면 그 후 자동으로 또 사지는 걸 방지하는 코드
                         매도실행호출(0)
                         매도실행호출(1)
                     End If
@@ -257,8 +266,10 @@ Module Algorithm
                         Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
                         ShinhoList.Add(shinho)
                         Add_Log("일반", "양매도 신호 isRealFlag = " & isRealFlag.ToString() & ", ReceiveCount = " & ReceiveCount.ToString())
-                        ret = True
+
                     End If
+
+                    ret = True
 
                 End If
 
@@ -269,11 +280,12 @@ Module Algorithm
                     Dim shinho As ShinhoType = MakeShinho(tempIndex, Data(0).ctime(tempIndex), ShinhoID, 1, selectedJongmokIndex(0), selectedJongmokIndex(1))
                     ShinhoList.Add(shinho)
                     Add_Log("일반", "양매도 신호 isRealFlag = " & isRealFlag.ToString() & ", ReceiveCount = " & ReceiveCount.ToString())
-                    ret = True
+
                 End If
 
-            End If
+                ret = True
 
+            End If
 
         End If
 
