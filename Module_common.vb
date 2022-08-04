@@ -206,26 +206,35 @@ Module Module_common
             Dim targetCallIndex As Single = 1100.0
             Dim targetPutIndex As Single = 1100.0
             Dim minGap As Single = 1100.0
+            Dim 최종목표인덱스(1) As Integer
+            Dim i, j As Integer
 
-            For i As Integer = 0 To 1
-                For j As Integer = 0 To 1
-                    Dim callTempSelectedIndex As Integer = CalcTargetJonhmokIndex(0, i)
-                    Dim putTempSelectedIndex As Integer = CalcTargetJonhmokIndex(1, j)
 
-                    Dim callprice = GetCurrentPrice(0, callTempSelectedIndex, 3)
-                    Dim putprice = GetCurrentPrice(1, putTempSelectedIndex, 3)
+            For i = 0 To 1 '방향
 
-                    If callprice > 0 And putprice > 0 Then
-                        Dim gap = Math.Abs(callprice / putprice - 1)
-                        If minGap > gap Then
-                            minGap = gap
-                            targetCallIndex = callTempSelectedIndex
-                            targetPutIndex = putTempSelectedIndex
-                        End If
+                Dim 목표인덱스 As Integer = CalcTargetJonhmokIndex(0, i)
+                Dim 목표가격 As Single = GetCurrentPrice(0, 목표인덱스, 3)
+
+                For j = 0 To 1 '반대편의 방향
+
+                    Dim 반대목표인덱스 As Integer = CalcTargetJonhmokIndex(1, j)
+                    Dim 반대목표가격 As Single = GetCurrentPrice(1, 반대목표인덱스, 3)
+
+                    Dim gap As Single = Math.Abs(목표가격 - 반대목표가격)
+                    Dim str10 As String = String.Format("콜목표인덱스={0}, 콜가격 = {1}, 풋목표인덱스={2}, 풋가격 = {3}, gap = {4}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, gap)
+                    Add_Log("탐색", str10)
+
+                    If minGap > gap Then
+                        Add_Log("SET ", str10)
+                        minGap = gap
+                        targetCallIndex = 목표인덱스
+                        targetPutIndex = 반대목표인덱스
                     End If
 
                 Next
+
             Next
+
             '여기다가 행사가 추출하는 로직 추가함
             콜선택된행사가(0) = 인덱스로부터행사가찾기(targetCallIndex)
             콜선택된행사가(1) = 인덱스로부터행사가찾기(targetPutIndex)
@@ -237,8 +246,9 @@ Module Module_common
         index1 = 행사가로부터인덱스찾기(콜선택된행사가(0))
         If index1 >= 0 Then selectedJongmokIndex(0) = index1
 
-        index1 = 행사가로부터인덱스찾기(콜선택된행사가(1))
-        If index1 >= 0 Then selectedJongmokIndex(1) = index1
+        Dim index2 As Integer
+        index2 = 행사가로부터인덱스찾기(콜선택된행사가(1))
+        If index2 >= 0 Then selectedJongmokIndex(1) = index2
 
         If ShinhoList.Count > 0 Then
 
