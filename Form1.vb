@@ -806,16 +806,7 @@ Public Class Form1
 
         월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
 
-        If 남은날짜 <= 3 Then  '남은날짜가 작으면 0.15로 바꾼다
-            txt_손절매비율.Text = "1.2"
-            Label15.Text = "손절매비율(3일이하)"
-        ElseIf 남은날짜 > 3 And 남은날짜 <= 10 Then
-            txt_손절매비율.Text = "1.17"
-            Label15.Text = "손절매비율(10일이하)"
-        Else
-            txt_손절매비율.Text = "1.17"
-            Label15.Text = "손절매비율(10일초과)"
-        End If
+        손절매수준설정(남은날짜)
 
         txt_실험조건.Text = "A" + strToday
 
@@ -1330,5 +1321,44 @@ Public Class Form1
             Clac_DisplayAllGrid()
             Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
         End If
+    End Sub
+
+    Private Sub 손절매수준설정(ByVal 남은날짜 As Integer)
+
+        남은날짜 = 남은날짜 Mod 7
+
+        If 남은날짜 <= 0 Then  '남은날짜가 작으면 0.15로 바꾼다
+            txt_손절매비율.Text = "1.23"
+            Label15.Text = "손절매비율(만기일)"
+        ElseIf 남은날짜 > 0 And 남은날짜 <= 2 Then
+            txt_손절매비율.Text = "1.20"
+            Label15.Text = "손절율(2일이하)"
+        Else
+            txt_손절매비율.Text = "1.17"
+            Label15.Text = "손절율(3일이상)"
+        End If
+
+        txt_손절매비율.Refresh()
+
+
+        Dim ikjulstring As String
+
+        Select Case 남은날짜
+            Case 0
+                ikjulstring = "0.6"
+            Case 1
+                ikjulstring = "0.87"
+            Case 2
+                ikjulstring = "0.75"
+            Case 3
+                ikjulstring = "0.8"
+            Case 6
+                ikjulstring = "0.85"
+            Case Else
+                ikjulstring = "0.8"
+        End Select
+        txt_익절목표.Text = ikjulstring
+        txt_익절목표.Refresh()
+
     End Sub
 End Class
