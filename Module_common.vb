@@ -221,11 +221,11 @@ Module Module_common
                     Dim 반대목표가격 As Single = GetCurrentPrice(1, 반대목표인덱스, 3)
 
                     Dim gap As Single = Math.Abs(목표가격 - 반대목표가격)
-                    Dim str10 As String = String.Format("콜목표인덱스={0}, 콜가격 = {1}, 풋목표인덱스={2}, 풋가격 = {3}, gap = {4}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, gap)
-                    Add_Log("탐색", str10)
+                    Dim str10 As String = String.Format("cprice = {1}, pprice = {3},cIndex={0},  pIndex={2},  gap = {4}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, Math.Round(gap, 2))
+                    If ReceiveCount > 0 Then Add_Log("탐색", str10)
 
                     If minGap > gap Then
-                        Add_Log("SET ", str10)
+                        If ReceiveCount > 0 Then Add_Log("SET ", str10)
                         minGap = gap
                         targetCallIndex = 목표인덱스
                         targetPutIndex = 반대목표인덱스

@@ -901,6 +901,8 @@ Public Class Form1
 
         Dim i As Integer
 
+        chk_양매도실행.Checked = False
+
         chk_화면끄기.Checked = True
         For i = 0 To timeIndex - 1
             currentIndex = i
