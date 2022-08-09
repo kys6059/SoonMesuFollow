@@ -327,7 +327,10 @@ Module realtime_ebest
 
     Public Sub 구매가능수량조회(ByVal callput As Integer)
 
-        'If 주문가능금액 = 0 Then 주문가능금액 = 100000000  - 이렇게 해도 주문가능수량은 0이었음. 매도 가능계좌가 아니라서 그럴 수도 있음
+        '모의투자에서는 QryTp 일반/금액/비율이 동작하지 않음
+        '실계좌에서는 금액으로 동작하는 거 확인하 (20220809)
+
+        Dim 투자비율반영금액 As Long = Math.Round(주문가능금액 * Val(Form1.txt_투자비율.Text))
 
         If optionList.Count > 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
@@ -335,14 +338,15 @@ Module realtime_ebest
 
             If XAQuery_구매가능수량조회 Is Nothing Then XAQuery_구매가능수량조회 = New XAQuery
             XAQuery_구매가능수량조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOAQ10100.res"
-            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RecCnt", 0, 1)   '레코드카운트
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RecCnt", 0, "1")   '레코드카운트
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
-            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "QryTp", 0, "1")                '조회구분
-            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 주문가능금액 * 0.2)                '주문금액
-            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 1.0)                '비율값
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "QryTp", 0, "2")                 '1-일반, 2-금액 3 - 비율
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "OrdAmt", 0, 투자비율반영금액)                '주문금액
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RatVal", 0, 0.5)                '비율값
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
+            XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdPrc", 0, it.price(callput, 3))   '매수금액
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
 
             Dim nSuccess As Integer = XAQuery_구매가능수량조회.Request(False)
@@ -400,7 +404,7 @@ Module realtime_ebest
         str += ", 사용예정현금증거금액=" & Format(사용예정현금증거금액, "###,###,###,#00")
         str += ", 주문가능금액=" & Format(주문가능금액, "###,###,###,#00")
 
-        'Console.WriteLine(str)
+        Console.WriteLine(str)
 
     End Sub
 

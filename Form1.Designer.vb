@@ -132,6 +132,7 @@ Partial Class Form1
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
+        Me.txt_투자비율 = New System.Windows.Forms.TextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -445,6 +446,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.Controls.Add(Me.txt_익절목표, 1, 1)
         Me.TableLayoutPanel4.Controls.Add(Me.Label15, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_손절매비율, 1, 0)
+        Me.TableLayoutPanel4.Controls.Add(Me.txt_투자비율, 1, 6)
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(362, 1058)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 7
@@ -482,7 +484,7 @@ Partial Class Form1
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(165, 34)
         Me.Label9.TabIndex = 12
-        Me.Label9.Text = "---"
+        Me.Label9.Text = "투자비율"
         Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label10
@@ -1488,6 +1490,17 @@ Partial Class Form1
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
         '
+        'txt_투자비율
+        '
+        Me.txt_투자비율.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_투자비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_투자비율.Location = New System.Drawing.Point(176, 184)
+        Me.txt_투자비율.Name = "txt_투자비율"
+        Me.txt_투자비율.Size = New System.Drawing.Size(138, 25)
+        Me.txt_투자비율.TabIndex = 14
+        Me.txt_투자비율.Text = "1.0"
+        Me.txt_투자비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -1650,4 +1663,5 @@ Partial Class Form1
     Friend WithEvents Label25 As Label
     Friend WithEvents txt_월물 As RichTextBox
     Friend WithEvents lbl_ReceiveCounter As Label
+    Friend WithEvents txt_투자비율 As TextBox
 End Class
