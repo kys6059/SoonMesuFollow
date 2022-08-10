@@ -62,6 +62,7 @@ Partial Class Form1
         Me.txt_익절목표 = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txt_손절매비율 = New System.Windows.Forms.TextBox()
+        Me.txt_투자비율 = New System.Windows.Forms.TextBox()
         Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
         Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
@@ -132,7 +133,6 @@ Partial Class Form1
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
-        Me.txt_투자비율 = New System.Windows.Forms.TextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -603,6 +603,17 @@ Partial Class Form1
         Me.txt_손절매비율.Text = "1.2"
         Me.txt_손절매비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
+        'txt_투자비율
+        '
+        Me.txt_투자비율.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_투자비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_투자비율.Location = New System.Drawing.Point(176, 184)
+        Me.txt_투자비율.Name = "txt_투자비율"
+        Me.txt_투자비율.Size = New System.Drawing.Size(138, 25)
+        Me.txt_투자비율.TabIndex = 14
+        Me.txt_투자비율.Text = "1.0"
+        Me.txt_투자비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'grd_ShinHo
         '
         Me.grd_ShinHo.AllowUserToAddRows = False
@@ -1070,7 +1081,7 @@ Partial Class Form1
         Me.Label26.Name = "Label26"
         Me.Label26.Size = New System.Drawing.Size(152, 32)
         Me.Label26.TabIndex = 37
-        Me.Label26.Text = "구매가능 대비 비율"
+        Me.Label26.Text = "통신 1회당 매도비율"
         Me.Label26.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txt_구매가능대비비율
@@ -1120,21 +1131,21 @@ Partial Class Form1
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매도, 2, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매수, 1, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_구매가능수, 0, 0)
-        Me.TLP_BuySell.Location = New System.Drawing.Point(1268, 1059)
+        Me.TLP_BuySell.Location = New System.Drawing.Point(1268, 1148)
         Me.TLP_BuySell.Name = "TLP_BuySell"
         Me.TLP_BuySell.RowCount = 2
         Me.TLP_BuySell.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLP_BuySell.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLP_BuySell.Size = New System.Drawing.Size(555, 206)
+        Me.TLP_BuySell.Size = New System.Drawing.Size(555, 117)
         Me.TLP_BuySell.TabIndex = 24
         '
         'btn_put_매도
         '
         Me.btn_put_매도.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_put_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_매도.Location = New System.Drawing.Point(280, 106)
+        Me.btn_put_매도.Location = New System.Drawing.Point(280, 62)
         Me.btn_put_매도.Name = "btn_put_매도"
-        Me.btn_put_매도.Size = New System.Drawing.Size(131, 96)
+        Me.btn_put_매도.Size = New System.Drawing.Size(131, 51)
         Me.btn_put_매도.TabIndex = 6
         Me.btn_put_매도.Text = "풋 매도"
         Me.btn_put_매도.UseVisualStyleBackColor = True
@@ -1143,9 +1154,9 @@ Partial Class Form1
         '
         Me.btn_put_매수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_put_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_매수.Location = New System.Drawing.Point(142, 106)
+        Me.btn_put_매수.Location = New System.Drawing.Point(142, 62)
         Me.btn_put_매수.Name = "btn_put_매수"
-        Me.btn_put_매수.Size = New System.Drawing.Size(131, 96)
+        Me.btn_put_매수.Size = New System.Drawing.Size(131, 51)
         Me.btn_put_매수.TabIndex = 5
         Me.btn_put_매수.Text = "풋 환매수"
         Me.btn_put_매수.UseVisualStyleBackColor = True
@@ -1154,9 +1165,9 @@ Partial Class Form1
         '
         Me.btn_put_구매가능수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btn_put_구매가능수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_구매가능수.Location = New System.Drawing.Point(4, 106)
+        Me.btn_put_구매가능수.Location = New System.Drawing.Point(4, 62)
         Me.btn_put_구매가능수.Name = "btn_put_구매가능수"
-        Me.btn_put_구매가능수.Size = New System.Drawing.Size(131, 96)
+        Me.btn_put_구매가능수.Size = New System.Drawing.Size(131, 51)
         Me.btn_put_구매가능수.TabIndex = 4
         Me.btn_put_구매가능수.Text = "풋 구매가능"
         Me.btn_put_구매가능수.UseVisualStyleBackColor = True
@@ -1168,7 +1179,7 @@ Partial Class Form1
         Me.btn_전체정리.Location = New System.Drawing.Point(418, 4)
         Me.btn_전체정리.Name = "btn_전체정리"
         Me.TLP_BuySell.SetRowSpan(Me.btn_전체정리, 2)
-        Me.btn_전체정리.Size = New System.Drawing.Size(133, 198)
+        Me.btn_전체정리.Size = New System.Drawing.Size(133, 109)
         Me.btn_전체정리.TabIndex = 3
         Me.btn_전체정리.Text = "전체 정리"
         Me.btn_전체정리.UseVisualStyleBackColor = True
@@ -1179,7 +1190,7 @@ Partial Class Form1
         Me.btn_call_매도.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btn_call_매도.Location = New System.Drawing.Point(280, 4)
         Me.btn_call_매도.Name = "btn_call_매도"
-        Me.btn_call_매도.Size = New System.Drawing.Size(131, 95)
+        Me.btn_call_매도.Size = New System.Drawing.Size(131, 51)
         Me.btn_call_매도.TabIndex = 2
         Me.btn_call_매도.Text = "콜 매도"
         Me.btn_call_매도.UseVisualStyleBackColor = True
@@ -1190,7 +1201,7 @@ Partial Class Form1
         Me.btn_call_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btn_call_매수.Location = New System.Drawing.Point(142, 4)
         Me.btn_call_매수.Name = "btn_call_매수"
-        Me.btn_call_매수.Size = New System.Drawing.Size(131, 95)
+        Me.btn_call_매수.Size = New System.Drawing.Size(131, 51)
         Me.btn_call_매수.TabIndex = 1
         Me.btn_call_매수.Text = "콜 환매수"
         Me.btn_call_매수.UseVisualStyleBackColor = True
@@ -1201,7 +1212,7 @@ Partial Class Form1
         Me.btn_call_구매가능수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.btn_call_구매가능수.Location = New System.Drawing.Point(4, 4)
         Me.btn_call_구매가능수.Name = "btn_call_구매가능수"
-        Me.btn_call_구매가능수.Size = New System.Drawing.Size(131, 95)
+        Me.btn_call_구매가능수.Size = New System.Drawing.Size(131, 51)
         Me.btn_call_구매가능수.TabIndex = 0
         Me.btn_call_구매가능수.Text = "콜 구매가능"
         Me.btn_call_구매가능수.UseVisualStyleBackColor = True
@@ -1225,7 +1236,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(164, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "0.9.9_20220806"
+        Me.txt_programversion.Text = "1.0.0_20220810"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1489,17 +1500,6 @@ Partial Class Form1
         Me.txt_월물.Size = New System.Drawing.Size(105, 30)
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
-        '
-        'txt_투자비율
-        '
-        Me.txt_투자비율.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_투자비율.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_투자비율.Location = New System.Drawing.Point(176, 184)
-        Me.txt_투자비율.Name = "txt_투자비율"
-        Me.txt_투자비율.Size = New System.Drawing.Size(138, 25)
-        Me.txt_투자비율.TabIndex = 14
-        Me.txt_투자비율.Text = "1.0"
-        Me.txt_투자비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Form1
         '
