@@ -198,7 +198,7 @@ Module Module_common
 
         If selectedJongmokIndex(0) < 0 Or Form1.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
 
-            Dim str As String = "종목인덱스 변경 진입 - selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString()
+            Dim str As String = "SetSelectedIndex 진입 - selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form1.chk_ChangeTargetIndex.Checked = " & Form1.chk_ChangeTargetIndex.Checked.ToString()
 
             Console.WriteLine(str)
 
@@ -208,6 +208,7 @@ Module Module_common
             Dim minGap As Single = 1100.0
             Dim 최종목표인덱스(1) As Integer
             Dim i, j As Integer
+            Dim str10 As String = ""
 
 
             For i = 0 To 1 '방향
@@ -221,12 +222,20 @@ Module Module_common
                     Dim 반대목표가격 As Single = GetCurrentPrice(1, 반대목표인덱스, 3)
 
                     Dim gap As Single = Math.Abs(목표가격 - 반대목표가격)
-                    Dim str10 As String = String.Format("cprice = {1}, pprice = {3},cIndex={0},  pIndex={2},  gap = {4}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, Math.Round(gap, 2))
+                    Dim dist1 As Single = Math.Abs(목표가격 - Targetprice)
+                    Dim dist2 As Single = Math.Abs(반대목표가격 - Targetprice)
+                    Dim dist_avg As Single = (dist1 + dist2) / 2
+                    Dim gap_dist As Single = Math.Round(gap + dist_avg, 2)
+                    str10 = String.Format("cp= {1}, pp= {3},cIn={0}, pIn={2}, gap= {4}, dist={5},gap+dist= {6}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, Math.Round(gap, 2), Math.Round(dist_avg, 2), gap_dist)
+
+                    Console.WriteLine(str10)
+
+                    '                     str10 = String.Format("cprice = {1}, pprice = {3},cIndex={0},  pIndex={2},  gap = {4}", 목표인덱스, 목표가격, 반대목표인덱스, 반대목표가격, Math.Round(gap, 2))
                     'If ReceiveCount > 0 Then Add_Log("탐색", str10)
 
-                    If minGap > gap Then
-                        If ReceiveCount > 0 Then Add_Log("SET ", str10)
-                        minGap = gap
+                    If minGap > gap_dist Then
+                        If ReceiveCount > 0 Then Add_Log("SET", str10)
+                        minGap = gap_dist
                         targetCallIndex = 목표인덱스
                         targetPutIndex = 반대목표인덱스
                     End If

@@ -1326,38 +1326,52 @@ Public Class Form1
     Private Sub 손절매수준설정(ByVal 남은날짜 As Integer)
 
         남은날짜 = 남은날짜 Mod 7
+        Dim isWeekly As Boolean = False
+        Dim ikjulstring As String = "0.6"
+        Dim 손절비율 As String = "1.18"
+        Dim 기준가격 As String = "2.0"
 
-        If 남은날짜 <= 0 Then  '남은날짜가 작으면 0.15로 바꾼다
-            txt_손절매비율.Text = "1.23"
-            Label15.Text = "손절매비율(만기일)"
-        ElseIf 남은날짜 > 0 And 남은날짜 <= 2 Then
-            txt_손절매비율.Text = "1.20"
-            Label15.Text = "손절율(2일이하)"
+        If txt_week_정규.Text = "W" Then isWeekly = True
+
+        If isWeekly = True Then
+            Select Case 남은날짜
+                Case 0
+                    기준가격 = "1.6"
+                    손절비율 = "1.20"
+                    ikjulstring = "0.35"
+                Case 1
+                    기준가격 = "1.7"
+                Case 2
+                    기준가격 = "1.7"
+                Case 3
+                    기준가격 = "1.8"
+                Case 6
+                    기준가격 = "1.9"
+            End Select
         Else
-            txt_손절매비율.Text = "1.17"
-            Label15.Text = "손절율(3일이상)"
+            Select Case 남은날짜
+                Case 0
+                    기준가격 = "1.8"
+                    손절비율 = "1.20"
+                    ikjulstring = "0.35"
+                Case 1
+                    기준가격 = "1.9"
+                Case 2
+                    기준가격 = "2.0"
+                Case 3
+                    기준가격 = "2.1"
+                Case 6
+                    기준가격 = "2.2"
+            End Select
         End If
 
-        txt_손절매비율.Refresh()
 
-
-        Dim ikjulstring As String
-
-        Select Case 남은날짜
-            Case 0
-                ikjulstring = "0.6"
-            Case 1
-                ikjulstring = "0.87"
-            Case 2
-                ikjulstring = "0.75"
-            Case 3
-                ikjulstring = "0.8"
-            Case 6
-                ikjulstring = "0.85"
-            Case Else
-                ikjulstring = "0.8"
-        End Select
+        txt_손절매비율.Text = 손절비율
+        txt_JongmokTargetPrice.Text = 기준가격
         txt_익절목표.Text = ikjulstring
+
+        txt_손절매비율.Refresh()
+        txt_JongmokTargetPrice.Refresh()
         txt_익절목표.Refresh()
 
     End Sub

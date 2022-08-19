@@ -600,7 +600,7 @@ Partial Class Form1
         Me.txt_손절매비율.Name = "txt_손절매비율"
         Me.txt_손절매비율.Size = New System.Drawing.Size(138, 24)
         Me.txt_손절매비율.TabIndex = 1
-        Me.txt_손절매비율.Text = "1.2"
+        Me.txt_손절매비율.Text = "1.18"
         Me.txt_손절매비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'txt_투자비율
@@ -1352,7 +1352,7 @@ Partial Class Form1
         Me.txt_JongmokTargetPrice.Name = "txt_JongmokTargetPrice"
         Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(164, 24)
         Me.txt_JongmokTargetPrice.TabIndex = 9
-        Me.txt_JongmokTargetPrice.Text = "2.3"
+        Me.txt_JongmokTargetPrice.Text = "2.0"
         Me.txt_JongmokTargetPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label6
