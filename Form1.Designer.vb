@@ -204,11 +204,11 @@ Partial Class Form1
         Me.TableLayoutPanel1.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Label1, 2, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(593, 133)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(638, 127)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(811, 36)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(840, 36)
         Me.TableLayoutPanel1.TabIndex = 3
         '
         'cmb_selectedJongmokIndex_1
@@ -216,9 +216,9 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_1.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(506, 3)
+        Me.cmb_selectedJongmokIndex_1.Location = New System.Drawing.Point(523, 3)
         Me.cmb_selectedJongmokIndex_1.Name = "cmb_selectedJongmokIndex_1"
-        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(302, 23)
+        Me.cmb_selectedJongmokIndex_1.Size = New System.Drawing.Size(314, 23)
         Me.cmb_selectedJongmokIndex_1.TabIndex = 3
         '
         'lbl_1
@@ -230,7 +230,7 @@ Partial Class Form1
         Me.lbl_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lbl_1.Location = New System.Drawing.Point(3, 0)
         Me.lbl_1.Name = "lbl_1"
-        Me.lbl_1.Size = New System.Drawing.Size(92, 36)
+        Me.lbl_1.Size = New System.Drawing.Size(95, 36)
         Me.lbl_1.TabIndex = 0
         Me.lbl_1.Text = "Call"
         Me.lbl_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -242,9 +242,9 @@ Partial Class Form1
         Me.Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label1.Location = New System.Drawing.Point(408, 0)
+        Me.Label1.Location = New System.Drawing.Point(422, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(92, 36)
+        Me.Label1.Size = New System.Drawing.Size(95, 36)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Put"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -254,9 +254,9 @@ Partial Class Form1
         Me.cmb_selectedJongmokIndex_0.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmb_selectedJongmokIndex_0.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.cmb_selectedJongmokIndex_0.FormattingEnabled = True
-        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(101, 3)
+        Me.cmb_selectedJongmokIndex_0.Location = New System.Drawing.Point(104, 3)
         Me.cmb_selectedJongmokIndex_0.Name = "cmb_selectedJongmokIndex_0"
-        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(301, 23)
+        Me.cmb_selectedJongmokIndex_0.Size = New System.Drawing.Size(312, 23)
         Me.cmb_selectedJongmokIndex_0.TabIndex = 2
         '
         'Timer1
@@ -832,8 +832,6 @@ Partial Class Form1
         'chk_모의투자연결
         '
         Me.chk_모의투자연결.AutoSize = True
-        Me.chk_모의투자연결.Checked = True
-        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"
@@ -1237,7 +1235,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(164, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.0.1_20220820"
+        Me.txt_programversion.Text = "1.1.0_20220821"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1441,7 +1439,7 @@ Partial Class Form1
         Me.TableLayoutPanel9.Controls.Add(Me.Label28, 2, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.Label25, 0, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.txt_월물, 1, 0)
-        Me.TableLayoutPanel9.Location = New System.Drawing.Point(131, 123)
+        Me.TableLayoutPanel9.Location = New System.Drawing.Point(186, 127)
         Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
         Me.TableLayoutPanel9.RowCount = 1
         Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -1505,9 +1503,9 @@ Partial Class Form1
         'btn_순매수데이터백업
         '
         Me.btn_순매수데이터백업.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_순매수데이터백업.Location = New System.Drawing.Point(1272, 1057)
+        Me.btn_순매수데이터백업.Location = New System.Drawing.Point(1268, 50)
         Me.btn_순매수데이터백업.Name = "btn_순매수데이터백업"
-        Me.btn_순매수데이터백업.Size = New System.Drawing.Size(206, 68)
+        Me.btn_순매수데이터백업.Size = New System.Drawing.Size(206, 71)
         Me.btn_순매수데이터백업.TabIndex = 27
         Me.btn_순매수데이터백업.Text = "순매수데이터 백업"
         Me.btn_순매수데이터백업.UseVisualStyleBackColor = True

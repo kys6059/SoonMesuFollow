@@ -619,6 +619,11 @@ Module realtime_ebest
                 일분옵션데이터(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
             Next
 
+            If callput = 1 Then 'DB 저장 로직
+                InsertTargetDateData_1분(TargetDate) '1분데이터 저장
+                Insert순매수이력데이터(TargetDate) '개인, 기관, 외국인, 코스피지수 저장 30초 주기
+            End If
+
         End If
 
     End Sub

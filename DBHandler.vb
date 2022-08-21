@@ -396,6 +396,12 @@ Module DBHandler
     Public Sub AutoSave()
 
         If currentIndex >= 78 Then
+
+            '타이머를 끈다
+            Form1.Timer1.Enabled = False
+            Form1.btn_TimerStart.Text = "START"
+            Form1.label_timerCounter.Text = "---"
+
             Dim tempTargetDate As Integer = Val(Form1.txt_DBDate.Text)
 
             If tempTargetDate > 20000000 Then
@@ -408,10 +414,117 @@ Module DBHandler
 
             If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
                 InsertTargetDateData(tempTargetDate)
+
+                Threading.Thread.Sleep(2000)
+                XAQuery_EBEST_순매수현황조회함수()
+
+                Threading.Thread.Sleep(2000)
+                XAQuery_EBEST_분봉데이터호출함수_1분(0)
+
+                Threading.Thread.Sleep(2000)
+                XAQuery_EBEST_분봉데이터호출함수_1분(1)
+
+                '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
+
             Else
                 Add_Log("일반", tempTargetDate.ToString() & " 날에는 이미 등록되어 있습니다")
             End If
         End If
+
+    End Sub
+
+    '일일 1분 데이터를 빅쿼리에 저장한다 20220821 추가
+    Public Function InsertTargetDateData_1분(ByVal iDate As Integer) As Integer
+
+        Dim retCount As Integer = 0
+        Dim i, callput As Integer
+        Dim iFlag As Integer
+        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
+        Dim 영보다큰갯수 As Integer = 0
+        Dim dateaset_id = "option5"
+        Dim table_id = "option_one_minute"   '1분데이터가 저장되는 테이블 이름
+
+        iDate = iDate Mod 20000000
+
+        For callput = 0 To 1
+            For j = 0 To 399
+                If 일분옵션데이터(callput).price(j, 0) > 0 Then
+                    영보다큰갯수 += 1
+                End If
+            Next
+        Next
+
+        Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
+
+        For callput = 0 To 1
+
+            Dim hangsaga As Integer = Val(일분옵션데이터(callput).HangSaGa)
+
+            For j = 0 To 399
+
+                If callput = 0 Then
+                    iFlag = 1
+                Else
+                    iFlag = 6
+                End If
+
+                If 일분옵션데이터(callput).price(j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
+
+                    rows(retCount) = New BigQueryInsertRow
+                    rows(retCount).Add("cdate", iDate)
+                    rows(retCount).Add("index", 0)
+                    rows(retCount).Add("hangsaga", hangsaga)
+                    rows(retCount).Add("iFlag", iFlag)
+                    rows(retCount).Add("ctime", 일분옵션데이터(i).ctime(j))
+                    rows(retCount).Add("interval", 1)
+                    rows(retCount).Add("si", 일분옵션데이터(callput).price(j, 0))
+                    rows(retCount).Add("go", 일분옵션데이터(callput).price(j, 1))
+                    rows(retCount).Add("jue", 일분옵션데이터(callput).price(j, 2))
+                    rows(retCount).Add("jong", 일분옵션데이터(callput).price(j, 3))
+                    rows(retCount).Add("volume", 일분옵션데이터(callput).거래량(j))
+
+                    retCount += 1
+                End If
+            Next
+        Next
+
+
+        client.InsertRows(dateaset_id, table_id, rows)
+
+        Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+        Console.WriteLine(str)
+        Add_Log("일반", str)
+
+        Return retCount
+    End Function
+
+    '순매수이력데이터를 저장한다 - 장종료 후 809건이었음 20220821 추가
+    Public Sub Insert순매수이력데이터(ByVal iDate As Integer)
+
+        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
+        Dim dateaset_id = "option5"
+        Dim table_id = "soonMeSuTable"   '순매수데이터가 저장되는 테이블 이름
+
+        iDate = iDate Mod 20000000
+
+        Dim rows(순매수리스트카운트 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
+
+        For j = 0 To 순매수리스트카운트 - 1
+            rows(j) = New BigQueryInsertRow
+            rows(j).Add("cdate", iDate)
+            rows(j).Add("ctime", Val(순매수리스트(j).sTime))
+            rows(j).Add("indamount", 순매수리스트(j).개인순매수)
+            rows(j).Add("sysamount", 순매수리스트(j).기관순매수)
+            rows(j).Add("foramount", 순매수리스트(j).외국인순매수)
+            rows(j).Add("kigamount", 순매수리스트(j).연기금순매수)
+            rows(j).Add("kospiIndex", 순매수리스트(j).코스피지수)
+        Next
+
+        client.InsertRows(dateaset_id, table_id, rows)
+
+        Dim str As String = "주체별 순매수 이력 저장 : " & iDate.ToString() & " 해당 날짜 " & 순매수리스트카운트.ToString() & " 개의 row가 등록"
+        Console.WriteLine(str)
+        Add_Log("일반", str)
 
     End Sub
 

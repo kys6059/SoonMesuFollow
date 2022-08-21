@@ -64,7 +64,7 @@ Public Class Form1
                 chk_AutoSave.Checked = False
 
                 Dim random As New Random
-                Timer_AutoSave111.Interval = random.Next(1000, 300000)
+                Timer_AutoSave111.Interval = random.Next(1000, 60000)
                 Timer_AutoSave111.Enabled = True
 
             End If
@@ -1388,9 +1388,9 @@ Public Class Form1
 
         XAQuery_EBEST_분봉데이터호출함수_1분(1)
 
-        Threading.Thread.Sleep(5000)
+        Threading.Thread.Sleep(10000)
 
-        'DB 저장 로직
+
 
 
 
