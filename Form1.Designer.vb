@@ -133,6 +133,7 @@ Partial Class Form1
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
+        Me.btn_순매수데이터백업 = New System.Windows.Forms.Button()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -531,7 +532,7 @@ Partial Class Form1
         Me.txt_신호TimeOut시간.Name = "txt_신호TimeOut시간"
         Me.txt_신호TimeOut시간.Size = New System.Drawing.Size(136, 24)
         Me.txt_신호TimeOut시간.TabIndex = 7
-        Me.txt_신호TimeOut시간.Text = "1520"
+        Me.txt_신호TimeOut시간.Text = "1515"
         Me.txt_신호TimeOut시간.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label13
@@ -1236,7 +1237,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(164, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.0.0_20220810"
+        Me.txt_programversion.Text = "1.0.1_20220820"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1501,11 +1502,22 @@ Partial Class Form1
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
         '
+        'btn_순매수데이터백업
+        '
+        Me.btn_순매수데이터백업.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_순매수데이터백업.Location = New System.Drawing.Point(1272, 1057)
+        Me.btn_순매수데이터백업.Name = "btn_순매수데이터백업"
+        Me.btn_순매수데이터백업.Size = New System.Drawing.Size(206, 68)
+        Me.btn_순매수데이터백업.TabIndex = 27
+        Me.btn_순매수데이터백업.Text = "순매수데이터 백업"
+        Me.btn_순매수데이터백업.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3031, 1277)
+        Me.Controls.Add(Me.btn_순매수데이터백업)
         Me.Controls.Add(Me.TableLayoutPanel9)
         Me.Controls.Add(Me.btn_아침시작버튼)
         Me.Controls.Add(Me.TLP_BuySell)
@@ -1664,4 +1676,5 @@ Partial Class Form1
     Friend WithEvents txt_월물 As RichTextBox
     Friend WithEvents lbl_ReceiveCounter As Label
     Friend WithEvents txt_투자비율 As TextBox
+    Friend WithEvents btn_순매수데이터백업 As Button
 End Class

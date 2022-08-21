@@ -1329,7 +1329,7 @@ Public Class Form1
         Dim isWeekly As Boolean = False
         Dim ikjulstring As String = "0.6"
         Dim 손절비율 As String = "1.18"
-        Dim 기준가격 As String = "2.0"
+        Dim 기준가격 As String = "2.1"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
 
@@ -1373,6 +1373,26 @@ Public Class Form1
         txt_손절매비율.Refresh()
         txt_JongmokTargetPrice.Refresh()
         txt_익절목표.Refresh()
+
+    End Sub
+
+    Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_순매수데이터백업.Click
+
+        XAQuery_EBEST_순매수현황조회함수()
+
+        Threading.Thread.Sleep(2000)
+
+        XAQuery_EBEST_분봉데이터호출함수_1분(0)
+
+        Threading.Thread.Sleep(2000)
+
+        XAQuery_EBEST_분봉데이터호출함수_1분(1)
+
+        Threading.Thread.Sleep(5000)
+
+        'DB 저장 로직
+
+
 
     End Sub
 End Class

@@ -31,6 +31,21 @@ Structure DataSet  '2개만 만든다. 0번은 콜, 1번은 풋으로 한다
 
 End Structure
 
+Structure 일분데이터템플릿
+
+    Dim HangSaGa As String
+    Dim Code As String
+    Dim ctime() As String  '시간 100개 콜풋 구분 없음
+    Dim price(,) As Single '시간index, 시고저종
+    Dim 거래량() As Long ' 100개
+
+    Public Sub Initialize()
+        ReDim ctime(400) '
+        ReDim price(400, 3)  '콜풋, 시간, 시고저종
+        ReDim 거래량(400) '1분단위는 약 396개임
+    End Sub
+End Structure
+
 Structure SumDatSetType
     Dim siSum() As Single
     Dim jongSum() As Single
@@ -65,6 +80,16 @@ Structure ListTemplate
     End Sub
 End Structure
 
+Structure 순매수탬플릿
+    Dim sDate As String
+    Dim sTime As String
+    Dim 외국인순매수 As Long
+    Dim 개인순매수 As Long
+    Dim 기관순매수 As Long
+    Dim 연기금순매수 As Long
+    Dim 코스피지수 As Single
+End Structure
+
 
 Module Module_common
 
@@ -91,13 +116,21 @@ Module Module_common
 
     Public optionList As List(Of ListTemplate)  '제일 왼쪽 grid에 표시될 option List 
 
-
+    '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
+    Public 일분옵션데이터() As 일분데이터템플릿
+    Public 순매수리스트() As 순매수탬플릿
+    Public 순매수리스트카운트 As Integer '순매수리스트 카운트
 
     Public Sub InitDataStructure()
+
+        '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
+        ReDim 순매수리스트(999) '외국인 순매수금액이 커지면 코스피 지수 상승하는 상황을 고려하는 리스트
+        ReDim 일분옵션데이터(1)
 
         ReDim Data(1) '2개만 만들고 콜은 0번, 풋은 항상 1번이다
         For i As Integer = 0 To 1
             Data(i).Initialize()
+            일분옵션데이터(i).Initialize()
         Next
 
         SumDataSet.Initialze() '콜풋 합계 data를 위한 dataset
@@ -130,8 +163,6 @@ Module Module_common
             ShinhoList.Clear()
         End If
 
-
-
     End Sub
 
     Public Function 인덱스로부터행사가찾기(ByVal index As Integer) As String
@@ -141,8 +172,6 @@ Module Module_common
         Return 행사가
 
     End Function
-
-
 
     '4방향 모두 검사하는 방식으로 변경함 
     Public Function CalcTargetJonhmokIndex(ByVal callput As Integer, ByVal 방향 As Single) As Integer

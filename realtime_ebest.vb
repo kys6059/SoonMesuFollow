@@ -62,6 +62,7 @@ Module realtime_ebest
     Dim XAQuery_현재날짜조회 As XAQuery = New XAQuery
     Dim XAQuery_전체종목조회 As XAQuery = New XAQuery
     Dim XAQuery_EBEST_분봉데이터호출 As XAQuery = New XAQuery
+    Dim XAQuery_EBEST_순매수현황조회 As XAQuery = New XAQuery
 
     Public Const g_strServerAddress As String = "hts.etrade.co.kr"
     Public 거래비밀번호 As String = "3487"
@@ -97,6 +98,7 @@ Module realtime_ebest
         AddHandler XAQuery_현재날짜조회.ReceiveData, AddressOf XAQuery_현재날짜조회_ReceiveData
         AddHandler XAQuery_전체종목조회.ReceiveData, AddressOf XAQuery_전체종목조회_ReceiveData
         AddHandler XAQuery_EBEST_분봉데이터호출.ReceiveData, AddressOf XAQuery_EBEST_분봉데이터호출_ReceiveData
+        AddHandler XAQuery_EBEST_순매수현황조회.ReceiveData, AddressOf XAQuery_EBEST_순매수현황조회_ReceiveData
     End Sub
 
 
@@ -547,9 +549,7 @@ Module realtime_ebest
     Private Sub XAQuery_EBEST_분봉데이터호출_ReceiveData(ByVal szTrCode As String)
 
         Dim callput As Integer
-
         Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1)
-
         If callputstriong = "2" Then
             callput = 0
         Else
@@ -569,34 +569,57 @@ Module realtime_ebest
 
         Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8415OutBlock1")
 
+        Dim iTime As Integer = Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", 0), 4))
+        Dim 나머지 As Integer = iTime Mod 5
 
-        Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", 0))
-        'EBEST는 장 시작전에도 1개가 들어와서 이렇게 1개만 들어올 때 장 전인지를 거래량으로 판단한다
-        If Count <= 1 Then
-            If 거래량AtFirst > 0 Then
-                timeIndex = Count   'Time의 Count
+        If 나머지 = 0 Then '5분주기 데이터는 기존 데이터에 그대로 저장한다
 
+            Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", 0))
+            'EBEST는 장 시작전에도 1개가 들어와서 이렇게 1개만 들어올 때 장 전인지를 거래량으로 판단한다
+            If Count <= 1 Then
+                If 거래량AtFirst > 0 Then
+                    timeIndex = Count   'Time의 Count
+
+                Else
+                    timeIndex = 0
+                End If
             Else
-                timeIndex = 0
+                timeIndex = Count   'Time의 Count
             End If
-        Else
-            timeIndex = Count   'Time의 Count
-        End If
-        currentIndex = timeIndex - 1
+            currentIndex = timeIndex - 1
 
-        '장전에 무수히 +가 되면 안되니 장 시작 후 풋코드를 받으면 ReceiveCount를 증가시킨다
-        If currentIndex >= 0 And callput = 1 Then
-            ReceiveCount += 1
-        End If
+            '장전에 무수히 +가 되면 안되니 장 시작 후 풋코드를 받으면 ReceiveCount를 증가시킨다
+            If currentIndex >= 0 And callput = 1 Then
+                ReceiveCount += 1
+            End If
 
-        For i As Integer = 0 To Count - 1
-            Data(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-            Data(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-            Data(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-            Data(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-            Data(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-            Data(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
-        Next
+            For i As Integer = 0 To Count - 1
+                Data(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+                Data(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+                Data(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+                Data(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+                Data(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+                Data(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+            Next
+
+        Else  '1분봉이면 1분 데이터에 저장한다
+
+            Add_Log("일반", "나머지는 ___________" & 나머지.ToString() & ", Count = " & Count.ToString() & ", 콜풋은 " & callput.ToString())
+            Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+
+            일분옵션데이터(callput).Code = it.Code(callput)
+            일분옵션데이터(callput).HangSaGa = it.HangSaGa
+
+            For i As Integer = 0 To Count - 1
+                일분옵션데이터(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+                일분옵션데이터(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+                일분옵션데이터(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+                일분옵션데이터(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+                일분옵션데이터(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+                일분옵션데이터(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+            Next
+
+        End If
 
     End Sub
 
@@ -621,5 +644,60 @@ Module realtime_ebest
         End If
 
     End Function
+
+    Public Sub XAQuery_EBEST_분봉데이터호출함수_1분(ByVal capplut As Integer)
+        't8415 
+        If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
+
+        If optionList.Count > 0 Then
+            Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
+            Dim code As String = it.Code(capplut)
+
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "500") '비압축모델인 경우 최대 500건 - 8.3시간
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate) '종료일자
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N") '비압축모델 N
+
+            Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
+            If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
+        End If
+
+    End Sub
+
+    Public Sub XAQuery_EBEST_순매수현황조회함수()
+        If XAQuery_EBEST_순매수현황조회 Is Nothing Then XAQuery_EBEST_순매수현황조회 = New XAQuery
+        XAQuery_EBEST_순매수현황조회.ResFileName = "c:\ebest\xingApi\res\t1621.res"
+
+        XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "upcode", 0, "001") '업종코드 : 코스피 001
+        XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "nmin", 0, "1")   '분
+        XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "cnt", 0, "999")               '갯수 : 30초마다 하나씩 들어와서 하루에 최대 810건 정도 들어 있음 999건으로 조회하면 다 들어옴
+        XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "bgubun", 0, "0")               '0:당일, 1:전일
+
+        Dim nSuccess As Integer = XAQuery_EBEST_순매수현황조회.Request(False)
+        If nSuccess < 0 Then Add_Log("일반", "XAQuery_EBEST_순매수현황조회() 함수호출 시 오류: " & nSuccess.ToString())
+    End Sub
+
+    Private Sub XAQuery_EBEST_순매수현황조회_ReceiveData(ByVal szTrCode As String)
+
+        순매수리스트카운트 = XAQuery_EBEST_순매수현황조회.GetBlockCount("t1621OutBlock1")
+
+        ReDim 순매수리스트(순매수리스트카운트 - 1)
+
+        For i As Integer = 0 To 순매수리스트카운트 - 1
+            순매수리스트(순매수리스트카운트 - 1 - i).sDate = XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "date", i)
+            순매수리스트(순매수리스트카운트 - 1 - i).sTime = XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "time", i)
+            순매수리스트(순매수리스트카운트 - 1 - i).개인순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "indmsamt", i))   '개인순매수 대금
+            순매수리스트(순매수리스트카운트 - 1 - i).외국인순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "formsamt", i))   '외국인
+            순매수리스트(순매수리스트카운트 - 1 - i).기관순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "sysmsamt", i))   '기관계
+            순매수리스트(순매수리스트카운트 - 1 - i).연기금순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "monmsamt", i))   '기금
+            순매수리스트(순매수리스트카운트 - 1 - i).코스피지수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "upclose", i)) '코스피지수
+        Next
+
+        Add_Log("일반", "순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
+
+    End Sub
 
 End Module
