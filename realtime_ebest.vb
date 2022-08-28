@@ -328,12 +328,32 @@ Module realtime_ebest
 
         If intordno > 0 Then '주문번호가 0보다 클 때만 현재환매갯수의 값을 바꾼다 '가끔 주문이 거부되어 0으로 들어오는 현상 확인됨 20220826
             If 매수매도구분 = "2" Then         '매수라면
-                If callput = "2" Then '콜이라면
-                    환매개수string = String.Format("-매수,콜환매 {0} to {1} ", 콜현재환매개수, 콜현재환매개수 + 주문수량)
-                    콜현재환매개수 = 콜현재환매개수 + 주문수량
-                Else
-                    환매개수string = String.Format("-매수,풋환매 {0} to {1} ", 풋현재환매개수, 풋현재환매개수 + 주문수량)
-                    풋현재환매개수 = 풋현재환매개수 + 주문수량
+
+                If List잔고 IsNot Nothing Then
+
+                    Dim 매도종목매치 As Boolean = False
+
+                    For i As Integer = 0 To List잔고.Count - 1
+
+                        Dim it As 잔고Type = List잔고(i)
+                        If it.A02_구분 = "매도" And it.A01_종복번호 = 종목코드 Then
+                            매도종목매치 = True
+                            Exit For
+                        End If
+
+                    Next
+
+                    If 매도종목매치 = True Then
+                        If callput = "2" Then '콜이라면
+                            환매개수string = String.Format("-매수,콜환매 {0} to {1} ", 콜현재환매개수, 콜현재환매개수 + 주문수량)
+                            콜현재환매개수 = 콜현재환매개수 + 주문수량
+                        Else
+                            환매개수string = String.Format("-매수,풋환매 {0} to {1} ", 풋현재환매개수, 풋현재환매개수 + 주문수량)
+                            풋현재환매개수 = 풋현재환매개수 + 주문수량
+                        End If
+                    End If
+
+
                 End If
             End If
         End If

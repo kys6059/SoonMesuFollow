@@ -1224,7 +1224,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(153, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.1_20220828"
+        Me.txt_programversion.Text = "1.1.2_20220828"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
