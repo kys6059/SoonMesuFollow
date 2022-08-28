@@ -314,15 +314,31 @@ Module realtime_ebest
     Private Sub XAQuery_매수매도_ReceiveData(ByVal szTrCode As String)
 
         Dim OrdNo As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock2", "OrdNo", 0)
-
         Dim 종목코드 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "FnoIsuNo", 0)
         Dim 심플종목코드 As String = Mid(종목코드, 6, 3) '290 같이 마지막 3자리
         Dim 주문가격 As Single = Math.Round(Val(XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "FnoOrdPrc", 0)), 2)
-        Dim 주문수량 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0)
+        Dim 주문수량 As Integer = Val(XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0))
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        Dim str As String = "주문No = " & OrdNo.ToString() & ",코드 = " & 종목코드 & ",가격 = " & 주문가격.ToString() & ",수량 = " & 주문수량.ToString() & ",구분 = " & 매수매도구분
+        '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
+        Dim callput As String = Mid(종목코드, 1, 1)
+        Dim 환매개수string As String = ""
 
+        Dim intordno As Integer = Val(OrdNo)
+
+        If intordno > 0 Then '주문번호가 0보다 클 때만 현재환매갯수의 값을 바꾼다 '가끔 주문이 거부되어 0으로 들어오는 현상 확인됨 20220826
+            If 매수매도구분 = "2" Then         '매수라면
+                If callput = "2" Then '콜이라면
+                    환매개수string = String.Format("-매수,콜환매 {0} to {1} ", 콜현재환매개수, 콜현재환매개수 + 주문수량)
+                    콜현재환매개수 = 콜현재환매개수 + 주문수량
+                Else
+                    환매개수string = String.Format("-매수,풋환매 {0} to {1} ", 풋현재환매개수, 풋현재환매개수 + 주문수량)
+                    풋현재환매개수 = 풋현재환매개수 + 주문수량
+                End If
+            End If
+        End If
+
+        Dim str As String = "주문No=" & OrdNo.ToString() & ",코드=" & 종목코드 & ",가격=" & 주문가격.ToString() & ",수량=" & 주문수량.ToString() & ",구분=" & 매수매도구분 & 환매개수string
         Add_Log("일반", str)
 
     End Sub

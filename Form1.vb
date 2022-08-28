@@ -729,8 +729,6 @@ Public Class Form1
 
         label_timerCounter.Text = timerCount.ToString()
 
-        'DB에 자동 저장 기능 추가 필요
-
         Select Case timerCount
             Case 0
                 If EBESTisConntected = True Then XAQuery_전체종목조회함수() ' +  Received면 콜 분봉 조회
@@ -1153,6 +1151,8 @@ Public Class Form1
     Private Sub Draw_grd_잔고조회()
 
         If List잔고 Is Nothing Then Return
+        Dim 총매입금액 As Long = 0
+        Dim 평가손익 As Long = 0
 
         For i As Integer = 0 To List잔고.Count - 1
             grd_잔고조회.Rows(i).Cells(0).Value = List잔고(i).A01_종복번호
@@ -1168,36 +1168,41 @@ Public Class Form1
             grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
+
+            총매입금액 += List잔고(i).A06_총매입금액
+            평가손익 += List잔고(i).A12_평가손익
+
         Next
 
-        If List잔고.Count = 2 Then
-
-            grd_잔고조회.Rows(2).Cells(5).Value = Format(List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액, "###,###,###,##0")
-            grd_잔고조회.Rows(2).Cells(11).Value = Format(List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익, "###,###,###,##0")
-            Dim 수익율 As Single = (List잔고(0).A12_평가손익 + List잔고(1).A12_평가손익) / (List잔고(0).A06_총매입금액 + List잔고(1).A06_총매입금액)
-            grd_잔고조회.Rows(2).Cells(12).Value = Format(수익율, "##0.0%")
+        Dim rawCount As Integer = List잔고.Count
+        Dim 수익율 As Single = 평가손익 / 총매입금액
+        If rawCount > 0 Then
+            grd_잔고조회.Rows(rawCount).Cells(5).Value = Format(총매입금액, "###,###,###,##0")
+            grd_잔고조회.Rows(rawCount).Cells(11).Value = Format(평가손익, "###,###,###,##0")
+            grd_잔고조회.Rows(rawCount).Cells(12).Value = Format(수익율, "##0.0%")
 
             If 수익율 > 0 Then
-                grd_잔고조회.Rows(2).Cells(12).Style.BackColor = Color.Yellow
-                grd_잔고조회.Rows(2).Cells(12).Style.ForeColor = Color.Red
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.Yellow
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Red
             Else
-                grd_잔고조회.Rows(2).Cells(12).Style.BackColor = Color.LightGreen
-                grd_잔고조회.Rows(2).Cells(12).Style.ForeColor = Color.Black
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.LightGreen
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Black
             End If
         End If
+
 
     End Sub
 
     Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
 
-        If 진짜할건지확인() = False Then Return
+        If 진짜할건지확인("매매") = False Then Return
         If 매도실행호출(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
 
     End Sub
 
     Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
 
-        If 진짜할건지확인() = False Then Return
+        If 진짜할건지확인("매매") = False Then Return
         If 매도실행호출(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
 
     End Sub
@@ -1220,15 +1225,18 @@ Public Class Form1
 
     Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_call_매수.Click
 
-        If 진짜할건지확인() = False Then Return
+        If 진짜할건지확인("매매") = False Then Return
+        If List잔고 Is Nothing Then Return
 
         Add_Log("일반", "콜 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
             Dim it As 잔고Type = List잔고(i)
-            Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
-            If 종목구분 = "2" Then
-                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            If it.A02_구분 = "매도" Then
+                Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
+                If 종목구분 = "2" Then
+                    한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                End If
             End If
         Next
 
@@ -1236,15 +1244,18 @@ Public Class Form1
 
     Private Sub btn_put_매수_Click(sender As Object, e As EventArgs) Handles btn_put_매수.Click
 
-        If 진짜할건지확인() = False Then Return
+        If 진짜할건지확인("매매") = False Then Return
+        If List잔고 Is Nothing Then Return
 
         Add_Log("일반", "풋 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
             Dim it As 잔고Type = List잔고(i)
-            Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
-            If 종목구분 = "3" Then
-                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+            If it.A02_구분 = "매도" Then
+                Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
+                If 종목구분 = "3" Then
+                    한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
+                End If
             End If
         Next
 
@@ -1252,8 +1263,8 @@ Public Class Form1
 
     Private Sub btn_전체정리_Click(sender As Object, e As EventArgs) Handles btn_전체정리.Click
 
-        If 진짜할건지확인() = False Then Return
-
+        If 진짜할건지확인("매매") = False Then Return
+        If List잔고 Is Nothing Then Return
         Add_Log("일반", "전체 환매수를 눌렀음 현재 잔고의 갯수: " & List잔고.Count.ToString())
 
         For i As Integer = 0 To List잔고.Count - 1
@@ -1267,10 +1278,10 @@ Public Class Form1
         Next
     End Sub
 
-    Public Function 진짜할건지확인() As Boolean
+    Public Function 진짜할건지확인(str As String) As Boolean
 
         Dim dr As DialogResult
-        dr = MessageBox.Show("진짜 매매할건가?", "매매여부", MessageBoxButtons.YesNo)
+        dr = MessageBox.Show("진짜 " & str & "할건가?", str & "여부", MessageBoxButtons.YesNo)
 
         If dr = DialogResult.No Then
             Return False
@@ -1279,14 +1290,12 @@ Public Class Form1
         End If
     End Function
 
+    '   Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs)
 
+    '      이베스트로그인함수()
+    '      ReceiveCount = 0
 
-    Private Sub btn_아침시작버튼_Click(sender As Object, e As EventArgs) Handles btn_아침시작버튼.Click
-
-        이베스트로그인함수()
-        ReceiveCount = 0
-
-    End Sub
+    '  End Sub
 
     Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
         Add_Log("일반", "자동 저장 호출됨")
@@ -1329,11 +1338,26 @@ Public Class Form1
         Dim isWeekly As Boolean = False
         Dim ikjulstring As String = "0.6"
         Dim 손절비율 As String = "1.18"
-        Dim 기준가격 As String = "2.1"
+        Dim 기준가격 As String = "1.7"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         If isWeekly = True Then
+            Select Case 남은날짜
+                Case 0
+                    기준가격 = "1.5"
+                    손절비율 = "1.20"
+                    ikjulstring = "0.35"
+                Case 1
+                    기준가격 = "1.7"
+                Case 2
+                    기준가격 = "1.7"
+                Case 3
+                    기준가격 = "1.7"
+                Case 6
+                    기준가격 = "1.7"
+            End Select
+        Else
             Select Case 남은날짜
                 Case 0
                     기준가격 = "1.6"
@@ -1342,26 +1366,11 @@ Public Class Form1
                 Case 1
                     기준가격 = "1.7"
                 Case 2
-                    기준가격 = "1.7"
+                    기준가격 = "1.8"
                 Case 3
                     기준가격 = "1.8"
                 Case 6
-                    기준가격 = "1.9"
-            End Select
-        Else
-            Select Case 남은날짜
-                Case 0
                     기준가격 = "1.8"
-                    손절비율 = "1.20"
-                    ikjulstring = "0.35"
-                Case 1
-                    기준가격 = "1.9"
-                Case 2
-                    기준가격 = "2.0"
-                Case 3
-                    기준가격 = "2.1"
-                Case 6
-                    기준가격 = "2.2"
             End Select
         End If
 
@@ -1377,21 +1386,6 @@ Public Class Form1
     End Sub
 
     Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_순매수데이터백업.Click
-
-        XAQuery_EBEST_순매수현황조회함수()
-
-        Threading.Thread.Sleep(2000)
-
-        XAQuery_EBEST_분봉데이터호출함수_1분(0)
-
-        Threading.Thread.Sleep(2000)
-
-        XAQuery_EBEST_분봉데이터호출함수_1분(1)
-
-        Threading.Thread.Sleep(10000)
-
-
-
 
 
     End Sub

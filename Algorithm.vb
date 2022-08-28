@@ -59,6 +59,7 @@ Module Algorithm
     Public Sub 신호현재상태확인하기()
 
         For i As Integer = 0 To ShinhoList.Count - 1
+            Dim str As String = ""
 
             Dim shinho As ShinhoType = ShinhoList(i)
 
@@ -84,23 +85,22 @@ Module Algorithm
 
                                     If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
                                         count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
-                                        콜현재환매개수 = 콜현재환매개수 + count
+                                        str = "신호해제-10초과 콜최대=" & 콜최대구매개수.ToString() & ", 콜환매=" & 콜현재환매개수.ToString() & ",count=" & count.ToString() & ",종목=" & it.A01_종복번호
                                     Else
                                         count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
-                                        풋현재환매개수 = 풋현재환매개수 + count
+                                        str = "신호해제-10초과 풋최대=" & 풋최대구매개수.ToString() & ", 풋환매=" & 풋현재환매개수.ToString() & ",count = " & count.ToString() & ",종목= " & it.A01_종복번호
                                     End If
-
                                 Else
                                     If Mid(it.A01_종복번호, 1, 1) = "2" Then
                                         count = Math.Min(it.A03_잔고수량, 콜최대구매개수 - 콜현재환매개수)
-                                        콜현재환매개수 = 콜현재환매개수 + count
+                                        str = "신호해제-10이하 콜최대=" & 콜최대구매개수.ToString() & ",콜환매=" & 콜현재환매개수.ToString() & "count = " & count.ToString() & ",종목=" & it.A01_종복번호
                                     Else
                                         count = Math.Min(it.A03_잔고수량, 풋최대구매개수 - 풋현재환매개수)
-                                        풋현재환매개수 = 풋현재환매개수 + count
+                                        str = "신호해제-10이하 풋최대=" & 풋최대구매개수.ToString() & ", 풋환매=" & 풋현재환매개수.ToString() & "count=" & count.ToString() & ",종목=" & it.A01_종복번호
                                     End If
                                 End If
                                 If count > 0 Then 한종목매수(it.A01_종복번호, it.A10_현재가, count)
-                                Add_Log("일반", "1-0에서 매수 호출됨 개수 = " & count.ToString())
+                                Add_Log("", str)
                             Next
 
                         End If
@@ -108,7 +108,7 @@ Module Algorithm
 
                 End If
             Else    '신호가 죽고 난 후 잔고가 아직 남아있을 대 처리루틴
-                Dim str As String
+
                 If shinho.A06_신호ID = "S" Then
                     If List잔고 IsNot Nothing Then
                         For j As Integer = 0 To List잔고.Count - 1
@@ -123,26 +123,22 @@ Module Algorithm
                                 count = Math.Ceiling(singleCount)
                                 If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
                                     count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
-                                    콜현재환매개수 = 콜현재환매개수 + count
-                                    str = " 10초과 콜최대개수 = " & 콜최대구매개수.ToString() & ", 콜환매개수 = " & 콜현재환매개수.ToString()
+                                    str = "신호종환매-10초과 콜최대=" & 콜최대구매개수.ToString() & ", 콜환매=" & 콜현재환매개수.ToString() & ",count=" & count.ToString() & ",종목=" & it.A01_종복번호
                                 Else
                                     count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
-                                    풋현재환매개수 = 풋현재환매개수 + count
-                                    str = " 10초과 풋최대개수 = " & 풋최대구매개수.ToString() & ", 풋현재환매개수 = " & 풋현재환매개수.ToString()
+                                    str = "신호종환매-10초과 풋최대=" & 풋최대구매개수.ToString() & ", 풋환매=" & 풋현재환매개수.ToString() & ",count = " & count.ToString() & ",종목= " & it.A01_종복번호
                                 End If
                             Else
                                 If Mid(it.A01_종복번호, 1, 1) = "2" Then
                                     count = Math.Min(it.A03_잔고수량, 콜최대구매개수 - 콜현재환매개수)
-                                    콜현재환매개수 = 콜현재환매개수 + count
-                                    str = " 10이하 콜최대개수 = " & 콜최대구매개수.ToString() & ", 콜환매개수 = " & 콜현재환매개수.ToString()
+                                    str = "신호종환매-10이하 콜최대=" & 콜최대구매개수.ToString() & ",콜환매=" & 콜현재환매개수.ToString() & "count = " & count.ToString() & ",종목=" & it.A01_종복번호
                                 Else
                                     count = Math.Min(it.A03_잔고수량, 풋최대구매개수 - 풋현재환매개수)
-                                    풋현재환매개수 = 풋현재환매개수 + count
-                                    str = " 10이하 풋최대개수 = " & 풋최대구매개수.ToString() & ", 풋환매개수 = " & 풋현재환매개수.ToString()
+                                    str = "신호종 환매-10이하 풋최대=" & 풋최대구매개수.ToString() & ", 풋환매=" & 풋현재환매개수.ToString() & "count=" & count.ToString() & ",종목=" & it.A01_종복번호
                                 End If
                             End If
                             If count > 0 Then 한종목매수(it.A01_종복번호, it.A10_현재가, count)
-                            Add_Log("", "신호무 count = " & count.ToString() & str & ", 종목 = " & it.A01_종복번호)
+                            Add_Log("", Str)
                         Next
                     End If
                 End If
