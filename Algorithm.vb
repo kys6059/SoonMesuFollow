@@ -151,21 +151,8 @@ Module Algorithm
 
         Dim 콜현재가, 풋현재가, 합계가격 As Single
 
-
-
-        If shinho.A11_콜인덱스 = selectedJongmokIndex(0) Then
-            콜현재가 = Data(0).price(currentIndex, 3)
-        Else
-            Add_Log("에러", "선택된 index와 shinho.A11_콜인덱스가 다름 " & selectedJongmokIndex(0).ToString() & ":" & shinho.A11_콜인덱스.ToString())
-            Return
-        End If
-
-        If shinho.A21_풋인덱스 = selectedJongmokIndex(1) Then
-            풋현재가 = Data(1).price(currentIndex, 3)
-        Else
-            Add_Log("에러", "선택된 index와 shinho.A21_풋인덱스가 다름 " & selectedJongmokIndex(1).ToString() & ":" & shinho.A21_풋인덱스.ToString())
-            Return
-        End If
+        콜현재가 = Data(0).price(currentIndex, 3)
+        풋현재가 = Data(1).price(currentIndex, 3)
 
         If 콜현재가 <= 0 Then Return
         If 풋현재가 <= 0 Then Return

@@ -291,16 +291,13 @@ Module Module_common
         If ShinhoList.Count > 0 Then
 
             Dim shinho As ShinhoType = ShinhoList(0)
+            Dim index As Integer
 
-            If shinho.A11_콜인덱스 <> selectedJongmokIndex(0) Then
-                Dim Index As Integer = 행사가로부터인덱스찾기(shinho.A12_콜행사가)
-                selectedJongmokIndex(0) = Index
-            End If
+            index = 행사가로부터인덱스찾기(shinho.A12_콜행사가)
+            selectedJongmokIndex(0) = index
 
-            If shinho.A21_풋인덱스 <> selectedJongmokIndex(1) Then
-                Dim Index As Integer = 행사가로부터인덱스찾기(shinho.A22_풋행사가)
-                selectedJongmokIndex(1) = Index
-            End If
+            index = 행사가로부터인덱스찾기(shinho.A22_풋행사가)
+            selectedJongmokIndex(1) = index
 
         End If
 
