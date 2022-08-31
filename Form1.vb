@@ -1007,8 +1007,8 @@ Public Class Form1
 
         Dim 손절비율() As String = {"1.12", "1.14", "1.16", "1.18", "1.20", "1.22", "1.24", "1.26"}
         Dim 익절비율() As String = {"0.3", "0.76"}
-        Dim 발생Index() As String = {"0", "1"}
-        Dim TimeoutTime() As String = {"1520", "1525"}
+        Dim 발생Index() As String = {"0"}
+        Dim TimeoutTime() As String = {"1100", "1130", "1200", "1230", "1300", "1330", "1400", "1430", "1500", "1515"}
         'Dim 기준가격() As String = {"2.3", "2.6", "2.9"}
 
         If SimulationTotalShinhoList Is Nothing Then
@@ -1027,6 +1027,7 @@ Public Class Form1
 
                 txt_양매도Target시간Index.Text = 발생Index(a)
                 txt_신호TimeOut시간.Text = TimeoutTime(b)
+                txt_신호TimeOut시간.Refresh()
                 Simulation_조건 = "cnt_" + cnt.ToString() + "_occur_" + 발생Index(a) + "_expire_" + TimeoutTime(b)
 
                 'Simulation_조건 = "cnt_" + cnt.ToString() + "_son_" + 손절비율(a) + "_ik_" + 익절비율(b) + "_Index_" + 발생Index(c) + "_Timeout_" + TimeoutTime(d) + "_price_" + 기준가격(e)
@@ -1034,7 +1035,7 @@ Public Class Form1
 
                 Console.WriteLine(Simulation_조건)
                 Add_Log("시뮬레이션 진행 : ", Simulation_조건)
-                자동반복계산로직(cnt)
+                '자동반복계산로직(cnt)
                 cnt += 1
 
             Next
@@ -1338,7 +1339,8 @@ Public Class Form1
         Dim isWeekly As Boolean = False
         Dim ikjulstring As String = "0.6"
         Dim 손절비율 As String = "1.18"
-        Dim 기준가격 As String = "1.7"
+        Dim 기준가격 As String = "1.6"
+        Dim timeoutTime As String = "1515"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
 
@@ -1349,13 +1351,15 @@ Public Class Form1
                     손절비율 = "1.20"
                     ikjulstring = "0.35"
                 Case 1
-                    기준가격 = "1.7"
+                    기준가격 = "1.6"
+                    timeoutTime = "1250"
                 Case 2
-                    기준가격 = "1.7"
+                    기준가격 = "1.6"
+                    timeoutTime = "1250"
                 Case 3
-                    기준가격 = "1.7"
+                    기준가격 = "1.6"
                 Case 6
-                    기준가격 = "1.7"
+                    기준가격 = "1.6"
             End Select
         Else
             Select Case 남은날짜
@@ -1365,12 +1369,14 @@ Public Class Form1
                     ikjulstring = "0.35"
                 Case 1
                     기준가격 = "1.7"
+                    timeoutTime = "1250"
                 Case 2
-                    기준가격 = "1.8"
+                    기준가격 = "1.7"
+                    timeoutTime = "1250"
                 Case 3
-                    기준가격 = "1.8"
+                    기준가격 = "1.7"
                 Case 6
-                    기준가격 = "1.8"
+                    기준가격 = "1.7"
             End Select
         End If
 
@@ -1378,11 +1384,12 @@ Public Class Form1
         txt_손절매비율.Text = 손절비율
         txt_JongmokTargetPrice.Text = 기준가격
         txt_익절목표.Text = ikjulstring
+        txt_신호TimeOut시간.Text = timeoutTime
 
         txt_손절매비율.Refresh()
         txt_JongmokTargetPrice.Refresh()
         txt_익절목표.Refresh()
-
+        txt_신호TimeOut시간.Refresh()
     End Sub
 
     Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_순매수데이터백업.Click

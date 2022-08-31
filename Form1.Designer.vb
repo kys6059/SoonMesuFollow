@@ -133,6 +133,7 @@ Partial Class Form1
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
         Me.btn_순매수데이터백업 = New System.Windows.Forms.Button()
+        Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -447,6 +448,7 @@ Partial Class Form1
         Me.TableLayoutPanel4.Controls.Add(Me.Label15, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_손절매비율, 1, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_투자비율, 1, 6)
+        Me.TableLayoutPanel4.Controls.Add(Me.chk_중간청산, 1, 4)
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(332, 632)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 7
@@ -508,7 +510,7 @@ Partial Class Form1
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(159, 33)
         Me.Label11.TabIndex = 8
-        Me.Label11.Text = "---"
+        Me.Label11.Text = "중간청산 비율"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label12
@@ -577,7 +579,7 @@ Partial Class Form1
         Me.txt_익절목표.Name = "txt_익절목표"
         Me.txt_익절목표.Size = New System.Drawing.Size(132, 24)
         Me.txt_익절목표.TabIndex = 3
-        Me.txt_익절목표.Text = "0.3"
+        Me.txt_익절목표.Text = "0.6"
         Me.txt_익절목표.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label15
@@ -831,6 +833,8 @@ Partial Class Form1
         'chk_모의투자연결
         '
         Me.chk_모의투자연결.AutoSize = True
+        Me.chk_모의투자연결.Checked = True
+        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"
@@ -1224,7 +1228,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(153, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.3_20220829"
+        Me.txt_programversion.Text = "1.1.4_20220831"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1499,6 +1503,20 @@ Partial Class Form1
         Me.btn_순매수데이터백업.Text = "테스트"
         Me.btn_순매수데이터백업.UseVisualStyleBackColor = True
         '
+        'chk_중간청산
+        '
+        Me.chk_중간청산.AutoSize = True
+        Me.chk_중간청산.Checked = True
+        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_중간청산.Location = New System.Drawing.Point(170, 140)
+        Me.chk_중간청산.Name = "chk_중간청산"
+        Me.chk_중간청산.Size = New System.Drawing.Size(132, 27)
+        Me.chk_중간청산.TabIndex = 15
+        Me.chk_중간청산.Text = "중간청산-50%"
+        Me.chk_중간청산.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -1662,4 +1680,5 @@ Partial Class Form1
     Friend WithEvents lbl_ReceiveCounter As Label
     Friend WithEvents txt_투자비율 As TextBox
     Friend WithEvents btn_순매수데이터백업 As Button
+    Friend WithEvents chk_중간청산 As CheckBox
 End Class
