@@ -63,6 +63,7 @@ Partial Class Form1
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txt_손절매비율 = New System.Windows.Forms.TextBox()
         Me.txt_투자비율 = New System.Windows.Forms.TextBox()
+        Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
         Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
         Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
@@ -102,11 +103,11 @@ Partial Class Form1
         Me.grd_잔고조회 = New System.Windows.Forms.DataGridView()
         Me.TLP_BuySell = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_put_매도 = New System.Windows.Forms.Button()
-        Me.btn_put_매수 = New System.Windows.Forms.Button()
+        Me.btn_매수를청산 = New System.Windows.Forms.Button()
         Me.btn_put_구매가능수 = New System.Windows.Forms.Button()
         Me.btn_전체정리 = New System.Windows.Forms.Button()
         Me.btn_call_매도 = New System.Windows.Forms.Button()
-        Me.btn_call_매수 = New System.Windows.Forms.Button()
+        Me.btn_매도를청산 = New System.Windows.Forms.Button()
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
         Me.Timer구매가능개수찾기 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer구매가능개수찾기_2 = New System.Windows.Forms.Timer(Me.components)
@@ -133,7 +134,6 @@ Partial Class Form1
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
         Me.btn_순매수데이터백업 = New System.Windows.Forms.Button()
-        Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -616,6 +616,20 @@ Partial Class Form1
         Me.txt_투자비율.Text = "1.0"
         Me.txt_투자비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
+        'chk_중간청산
+        '
+        Me.chk_중간청산.AutoSize = True
+        Me.chk_중간청산.Checked = True
+        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_중간청산.Location = New System.Drawing.Point(170, 140)
+        Me.chk_중간청산.Name = "chk_중간청산"
+        Me.chk_중간청산.Size = New System.Drawing.Size(132, 27)
+        Me.chk_중간청산.TabIndex = 15
+        Me.chk_중간청산.Text = "중간청산-50%"
+        Me.chk_중간청산.UseVisualStyleBackColor = True
+        '
         'grd_ShinHo
         '
         Me.grd_ShinHo.AllowUserToAddRows = False
@@ -833,8 +847,6 @@ Partial Class Form1
         'chk_모의투자연결
         '
         Me.chk_모의투자연결.AutoSize = True
-        Me.chk_모의투자연결.Checked = True
-        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"
@@ -1128,11 +1140,11 @@ Partial Class Form1
         Me.TLP_BuySell.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLP_BuySell.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLP_BuySell.Controls.Add(Me.btn_put_매도, 2, 1)
-        Me.TLP_BuySell.Controls.Add(Me.btn_put_매수, 1, 1)
+        Me.TLP_BuySell.Controls.Add(Me.btn_매수를청산, 1, 1)
         Me.TLP_BuySell.Controls.Add(Me.btn_put_구매가능수, 0, 1)
         Me.TLP_BuySell.Controls.Add(Me.btn_전체정리, 3, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매도, 2, 0)
-        Me.TLP_BuySell.Controls.Add(Me.btn_call_매수, 1, 0)
+        Me.TLP_BuySell.Controls.Add(Me.btn_매도를청산, 1, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_구매가능수, 0, 0)
         Me.TLP_BuySell.Location = New System.Drawing.Point(1146, 1065)
         Me.TLP_BuySell.Name = "TLP_BuySell"
@@ -1153,16 +1165,16 @@ Partial Class Form1
         Me.btn_put_매도.Text = "풋 매도"
         Me.btn_put_매도.UseVisualStyleBackColor = True
         '
-        'btn_put_매수
+        'btn_매수를청산
         '
-        Me.btn_put_매수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_put_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_put_매수.Location = New System.Drawing.Point(157, 62)
-        Me.btn_put_매수.Name = "btn_put_매수"
-        Me.btn_put_매수.Size = New System.Drawing.Size(146, 51)
-        Me.btn_put_매수.TabIndex = 5
-        Me.btn_put_매수.Text = "풋 환매수"
-        Me.btn_put_매수.UseVisualStyleBackColor = True
+        Me.btn_매수를청산.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_매수를청산.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_매수를청산.Location = New System.Drawing.Point(157, 62)
+        Me.btn_매수를청산.Name = "btn_매수를청산"
+        Me.btn_매수를청산.Size = New System.Drawing.Size(146, 51)
+        Me.btn_매수를청산.TabIndex = 5
+        Me.btn_매수를청산.Text = "매수를 청산"
+        Me.btn_매수를청산.UseVisualStyleBackColor = True
         '
         'btn_put_구매가능수
         '
@@ -1198,16 +1210,16 @@ Partial Class Form1
         Me.btn_call_매도.Text = "콜 매도"
         Me.btn_call_매도.UseVisualStyleBackColor = True
         '
-        'btn_call_매수
+        'btn_매도를청산
         '
-        Me.btn_call_매수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_call_매수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_call_매수.Location = New System.Drawing.Point(157, 4)
-        Me.btn_call_매수.Name = "btn_call_매수"
-        Me.btn_call_매수.Size = New System.Drawing.Size(146, 51)
-        Me.btn_call_매수.TabIndex = 1
-        Me.btn_call_매수.Text = "콜 환매수"
-        Me.btn_call_매수.UseVisualStyleBackColor = True
+        Me.btn_매도를청산.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_매도를청산.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_매도를청산.Location = New System.Drawing.Point(157, 4)
+        Me.btn_매도를청산.Name = "btn_매도를청산"
+        Me.btn_매도를청산.Size = New System.Drawing.Size(146, 51)
+        Me.btn_매도를청산.TabIndex = 1
+        Me.btn_매도를청산.Text = "매도를 청산"
+        Me.btn_매도를청산.UseVisualStyleBackColor = True
         '
         'btn_call_구매가능수
         '
@@ -1228,7 +1240,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(153, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.4_20220831"
+        Me.txt_programversion.Text = "1.1.5_20220902"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1503,20 +1515,6 @@ Partial Class Form1
         Me.btn_순매수데이터백업.Text = "테스트"
         Me.btn_순매수데이터백업.UseVisualStyleBackColor = True
         '
-        'chk_중간청산
-        '
-        Me.chk_중간청산.AutoSize = True
-        Me.chk_중간청산.Checked = True
-        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_중간청산.Location = New System.Drawing.Point(170, 140)
-        Me.chk_중간청산.Name = "chk_중간청산"
-        Me.chk_중간청산.Size = New System.Drawing.Size(132, 27)
-        Me.chk_중간청산.TabIndex = 15
-        Me.chk_중간청산.Text = "중간청산-50%"
-        Me.chk_중간청산.UseVisualStyleBackColor = True
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -1640,11 +1638,11 @@ Partial Class Form1
     Friend WithEvents grd_잔고조회 As DataGridView
     Friend WithEvents TLP_BuySell As TableLayoutPanel
     Friend WithEvents btn_put_매도 As Button
-    Friend WithEvents btn_put_매수 As Button
+    Friend WithEvents btn_매수를청산 As Button
     Friend WithEvents btn_put_구매가능수 As Button
     Friend WithEvents btn_전체정리 As Button
     Friend WithEvents btn_call_매도 As Button
-    Friend WithEvents btn_call_매수 As Button
+    Friend WithEvents btn_매도를청산 As Button
     Friend WithEvents btn_call_구매가능수 As Button
     Friend WithEvents Label24 As Label
     Friend WithEvents lbl_계좌번호 As Label

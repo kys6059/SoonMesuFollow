@@ -302,7 +302,7 @@ Module Algorithm
 
     End Function
 
-    Private Sub 청산실행(청산비율 As Single)
+    Public Sub 청산실행(청산비율 As Single)
 
         If EBESTisConntected = False Then Return
 
@@ -330,9 +330,11 @@ Module Algorithm
 
                     If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
                         count = Math.Min(콜여기서의청산갯수, it.A03_잔고수량)
+                        count = Math.Min(count, 풋구매가능개수) '잔고부족으로 안 팔릴 수 있어서 잔고를 감안하여 구매 가능개수만큼만 매수한다
                         str = String.Format("청산 콜 최대 ={0},현재환매={1},청산비율={2},실제청산개수={3},종목={4}", 콜최대구매개수, 콜현재환매개수, 청산비율, count, it.A01_종복번호)
                     Else
                         count = Math.Min(풋여기서의청산갯수, it.A03_잔고수량)
+                        count = Math.Min(count, 콜구매가능개수) '잔고부족으로 안 팔릴 수 있어서 잔고를 감안하여 구매 가능개수만큼만 매수한다
                         str = String.Format("청산 풋 최대 ={0},현재환매={1},청산비율={2},실제청산개수={3},종목={4}", 풋최대구매개수, 풋현재환매개수, 청산비율, count, it.A01_종복번호)
                     End If
 
@@ -340,7 +342,46 @@ Module Algorithm
                         count = Math.Min(count, 8) '한번에 최대 8개만 청산한다
                         str = str & "-8개로 조정"
                     End If
-                    If count > 0 Then 한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                    If count > 0 Then
+                        한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                        Add_Log("", str)
+                    End If
+
+                End If
+            Next
+        End If
+
+    End Sub
+
+    Public Sub 청산실행_매수를(청산비율 As Single)
+
+        If EBESTisConntected = False Then Return
+
+        Dim str As String
+
+        If List잔고 IsNot Nothing Then
+            For j As Integer = 0 To List잔고.Count - 1
+
+                Dim it As 잔고Type = List잔고(j)
+                Dim count As Integer = 0
+
+                If it.A02_구분 = "매수" Then
+
+                    If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜일 때
+                        count = it.A03_잔고수량
+
+                        str = String.Format("매수청산 콜 최대 ={0},현재환매={1},청산비율={2},실제청산개수={3},종목={4}", 콜최대구매개수, 콜현재환매개수, 청산비율, count, it.A01_종복번호)
+                    Else
+                        count = it.A03_잔고수량
+
+                        str = String.Format("매수청산 풋 최대 ={0},현재환매={1},청산비율={2},실제청산개수={3},종목={4}", 풋최대구매개수, 풋현재환매개수, 청산비율, count, it.A01_종복번호)
+                    End If
+
+                    If count > 8 Then
+                        count = Math.Min(count, 8) '한번에 최대 8개만 청산한다
+                        str = str & "-8개로 조정"
+                    End If
+                    If count > 0 Then 한종목매도(it.A01_종복번호, it.A10_현재가, count)
                     Add_Log("", str)
                 End If
             Next

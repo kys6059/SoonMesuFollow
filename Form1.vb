@@ -891,6 +891,7 @@ Public Class Form1
         Dim i As Integer
 
         chk_양매도실행.Checked = False
+        chk_중간청산.Checked = False
 
         chk_화면끄기.Checked = True
         For i = 0 To timeIndex - 1
@@ -905,6 +906,9 @@ Public Class Form1
     End Sub
 
     Private Sub btn_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_동일조건반복.Click
+
+        chk_양매도실행.Checked = False
+        chk_중간청산.Checked = False
 
         If SimulationTotalShinhoList Is Nothing Then
             SimulationTotalShinhoList = New List(Of ShinhoType)
@@ -1002,6 +1006,9 @@ Public Class Form1
     End Sub
 
     Private Sub btn_전체조건반복_Click(sender As Object, eee As EventArgs) Handles btn_전체조건반복.Click
+
+        chk_양매도실행.Checked = False
+        chk_중간청산.Checked = False
 
         Dim a, b, cnt As Integer
 
@@ -1224,41 +1231,25 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_call_매수.Click
+    Private Sub btn_call_매수_Click(sender As Object, e As EventArgs) Handles btn_매도를청산.Click
 
         If 진짜할건지확인("매매") = False Then Return
         If List잔고 Is Nothing Then Return
 
-        Add_Log("일반", "콜 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
+        Add_Log("일반", "btn_매도를청산을 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
-        For i As Integer = 0 To List잔고.Count - 1
-            Dim it As 잔고Type = List잔고(i)
-            If it.A02_구분 = "매도" Then
-                Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
-                If 종목구분 = "2" Then
-                    한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-                End If
-            End If
-        Next
+        청산실행(1.0)
 
     End Sub
 
-    Private Sub btn_put_매수_Click(sender As Object, e As EventArgs) Handles btn_put_매수.Click
+    Private Sub btn_put_매수_Click(sender As Object, e As EventArgs) Handles btn_매수를청산.Click
 
         If 진짜할건지확인("매매") = False Then Return
         If List잔고 Is Nothing Then Return
 
-        Add_Log("일반", "풋 환매수를 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
+        Add_Log("일반", "btn_매수를청산을 눌렀음 현재 잔고 종류의 갯수: " & List잔고.Count.ToString())
 
-        For i As Integer = 0 To List잔고.Count - 1
-            Dim it As 잔고Type = List잔고(i)
-            If it.A02_구분 = "매도" Then
-                Dim 종목구분 As String = Strings.Left(it.A01_종복번호, 1) '"2" - 콜, "3" - 풋
-                If 종목구분 = "3" Then
-                    한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-                End If
-            End If
-        Next
+        청산실행_매수를(1.0)
 
     End Sub
 
@@ -1268,15 +1259,9 @@ Public Class Form1
         If List잔고 Is Nothing Then Return
         Add_Log("일반", "전체 환매수를 눌렀음 현재 잔고의 갯수: " & List잔고.Count.ToString())
 
-        For i As Integer = 0 To List잔고.Count - 1
-            Dim it As 잔고Type = List잔고(i)
-            If it.A02_구분 = "매도" Then
-                한종목매수(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-            Else
-                한종목매도(it.A01_종복번호, it.A10_현재가, it.A03_잔고수량)
-            End If
+        청산실행(1.0)
+        청산실행_매수를(1.0)
 
-        Next
     End Sub
 
     Public Function 진짜할건지확인(str As String) As Boolean
