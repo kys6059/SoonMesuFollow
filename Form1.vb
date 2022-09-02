@@ -887,7 +887,7 @@ Public Class Form1
     End Sub
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
-
+        당일반복중_flag = True
         Dim i As Integer
 
         chk_양매도실행.Checked = False
@@ -903,12 +903,14 @@ Public Class Form1
         Clac_DisplayAllGrid()
 
         Add_Log("일반", "당일 자동반복 완료")
+        당일반복중_flag = False
     End Sub
 
     Private Sub btn_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_동일조건반복.Click
 
         chk_양매도실행.Checked = False
         chk_중간청산.Checked = False
+        당일반복중_flag = True
 
         If SimulationTotalShinhoList Is Nothing Then
             SimulationTotalShinhoList = New List(Of ShinhoType)
@@ -918,13 +920,14 @@ Public Class Form1
 
         자동반복계산로직(0)
         Add_Log("자동 반복 계산로직 완료", "")
+        당일반복중_flag = False
 
     End Sub
 
     Private Sub 자동반복계산로직(ByVal cnt As Integer)
 
         isRealFlag = False
-
+        당일반복중_flag = True
         For i As Integer = 0 To DBTotalDateCount - 1
 
             DBDate_HScrollBar.Value = i     ' 이 안에서도 Clac_DisplayAllGrid  호출하지만 그건 그날짜 data의 첫번째만 호출하는 것임
@@ -957,6 +960,8 @@ Public Class Form1
             SimulationTotalShinhoList.Clear()
 
         End If
+
+        당일반복중_flag = False
 
     End Sub
 

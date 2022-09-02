@@ -120,6 +120,7 @@ Module Module_common
     Public 일분옵션데이터() As 일분데이터템플릿
     Public 순매수리스트() As 순매수탬플릿
     Public 순매수리스트카운트 As Integer '순매수리스트 카운트
+    Public 당일반복중_flag As Boolean = False '당일 반복 중에 매수를 수십회 하는 문제를 해결하기 위해 당일 반복 전후에 Flag를 설정하여 청산에서 확인한다
 
     Public Sub InitDataStructure()
 

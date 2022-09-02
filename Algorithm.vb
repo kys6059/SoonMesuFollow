@@ -305,6 +305,7 @@ Module Algorithm
     Public Sub 청산실행(청산비율 As Single)
 
         If EBESTisConntected = False Then Return
+        If 당일반복중_flag = True Then Return
 
         Dim 콜여기서의청산갯수 As Integer
         Dim 풋여기서의청산갯수 As Integer
@@ -356,6 +357,7 @@ Module Algorithm
     Public Sub 청산실행_매수를(청산비율 As Single)
 
         If EBESTisConntected = False Then Return
+        If 당일반복중_flag = True Then Return
 
         Dim str As String
 
