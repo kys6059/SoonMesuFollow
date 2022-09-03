@@ -12,11 +12,20 @@ Module DBHandler
     Public DBTotalRawDataList As Dictionary(Of Integer, List(Of BigQueryRow))
     Public gTargetDateIndex As Integer
 
-    Public Function MakeTableName() As String
+    '1분Data를 위한 자료구조 추가 20220903
+    Public DBTotalRawDataList_1min As Dictionary(Of Integer, List(Of BigQueryRow))
+    Public DBTotalDateCount_1min As Integer
+    Public DBDateList_1Min() As Integer
+
+    Public gTargetDateIndex_1min As Integer  '-------------------------------------------- 이건 순매수테이블과 공용으로 활용한다
+
+    Public DBTotalRawDataList_순매수 As Dictionary(Of Integer, List(Of BigQueryRow))
+
+
+    Public Function MakeTableName(ByVal tableName As String) As String
 
         Dim str As String
-        str = DataSetName + Form1.txt_TableName.Text + " "
-
+        str = DataSetName + tableName + " "
         Return str
 
     End Function
@@ -26,7 +35,7 @@ Module DBHandler
 
         Dim client As BigQueryClient
 
-        tableName = MakeTableName()
+        tableName = MakeTableName(Form1.txt_TableName.Text)
 
         Dim query As String = "select count(*) as cnt from " + tableName + " Where cdate = " + iDate.ToString()
         Dim cnt As Integer = -1
@@ -193,7 +202,7 @@ Module DBHandler
         Dim client As BigQueryClient
         Dim job As BigQueryJob
 
-        tableName = MakeTableName()
+        tableName = MakeTableName(Form1.txt_TableName.Text)
         Dim query As String = "select distinct(cdate) as cdate from " + tableName + " order by cdate "
 
         Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
@@ -258,11 +267,11 @@ Module DBHandler
 
     '빅쿼리 DB에 들어있는 전체 data를 가져온다  
     '왜냐하면 하루씩 가져오면 너무 느려진다 
-    Public Function GetRawData(ByVal dateLimitText As String) As Integer
+    Public Function GetRawData(ByVal dateLimitText As String, ByVal tableNameStr As String) As Integer
 
         Dim client As BigQueryClient
         Dim job As BigQueryJob
-        tableName = MakeTableName()
+        tableName = MakeTableName(tableNameStr)
         Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate, iFlag, `index`, ctime  "
         Dim cnt As Integer = 0
         Dim dateCount As Integer = 0
@@ -528,4 +537,263 @@ Module DBHandler
 
     End Sub
 
+
+    Public Function GetRawData_1min(ByVal dateLimitText As String, ByVal tableNameStr As String) As Integer
+
+        Dim client As BigQueryClient
+        Dim job As BigQueryJob
+        tableName = MakeTableName(tableNameStr)
+        Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate, iFlag, `index`, ctime  "
+        Dim cnt As Integer = 0
+        Dim dateCount As Integer = 0
+
+        Dim prevDate As Integer = 0
+
+        If DBTotalRawDataList_1min Is Nothing Then
+            DBTotalRawDataList_1min = New Dictionary(Of Integer, List(Of BigQueryRow))
+        Else
+            DBTotalRawDataList_1min.Clear()
+        End If
+        Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
+
+        Try
+            client = BigQueryClient.Create(projectID)
+            job = client.CreateQueryJob(query, Nothing)
+
+            job.PollUntilCompleted()
+            Add_Log("SQL = ", query)
+            Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
+
+            Dim list = New List(Of BigQueryRow)
+
+            For Each row In client.GetQueryResults(job.Reference)
+
+                '값을 읽어온다
+                Dim tempDate As Integer = Val(row("cdate"))
+
+                If tempDate <> prevDate Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
+
+                    If prevDate <> 0 Then
+
+                        dateCount += 1
+
+                        DBTotalRawDataList_1min.Add(prevDate, list)
+                        datelist.Add(prevDate)
+
+                        list = Nothing
+                        list = New List(Of BigQueryRow)
+                    End If
+
+                    prevDate = tempDate
+
+                End If
+
+
+                '중간에는 Data()에 모아놓는다
+                list.Add(row)
+                cnt += 1
+            Next
+
+            If dateCount > 0 Then '마지막 날짜까지 가져온다
+
+                dateCount += 1
+
+                DBTotalRawDataList_1min.Add(prevDate, list)
+                datelist.Add(prevDate)
+
+            End If
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+        DBDateList_1min = datelist.ToArray()
+        DBTotalDateCount_1min = dateCount
+        Return dateCount
+
+    End Function
+
+    '1분데이터 인수로 받은 날의 데이터를 자료구조로 올린다 - -------------------- 1분
+    Public Function GetDataFromDBHandler_1Min(ByVal iDate As Integer) As Integer
+        Dim cnt As Integer = 0
+        Dim callput_1 As Integer = -1
+
+        Dim iList = DBTotalRawDataList_1min.Item(iDate)
+
+        For Each row In iList
+
+            '값을 읽어온다
+            Dim tempDate As Integer = Val(row("cdate"))
+            Dim index As Integer = Val(row("index"))
+            Dim hangsaga As Integer = Val(row("hangsaga"))
+            Dim iFlag As Integer = Val(row("iFlag"))
+            Dim ctime As Integer = Val(row("ctime"))
+            Dim interval As Integer = Val(row("interval"))
+            Dim si As Single = Val(row("si"))
+            Dim go As Single = Val(row("go"))
+            Dim jue As Single = Val(row("jue"))
+            Dim jong As Single = Val(row("jong"))
+            Dim volume As Integer = Val(row("volume"))
+
+            If ctime <= 1530 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
+
+                Dim callput As Integer
+                If iFlag = 1 Then
+                    callput = 0
+                ElseIf iFlag = 6 Then
+                    callput = 1
+                Else
+                    Console.WriteLine(iDate + " 날에 iFlag가 0인게 섞여있음")
+                    callput = 0
+                End If
+
+                If callput <> callput_1 Then   ' 콜이 쭉 들오오고 나서, 풋이 들어올 때 Data(0), Data(1) 번에 각각 시간을 미리 입력한다
+                    callput_1 = callput
+                    '시간입력
+                    SetTimeDataForDataForDBData_1Min(일분옵션데이터, callput)
+                    일분옵션데이터(callput).HangSaGa = hangsaga
+                End If
+
+                Dim iIndex As Integer = FindIndexFormTime_1Min(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
+                currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
+                timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
+
+                일분옵션데이터(callput).price(iIndex, 0) = si
+                일분옵션데이터(callput).price(iIndex, 1) = go
+                일분옵션데이터(callput).price(iIndex, 2) = jue
+                일분옵션데이터(callput).price(iIndex, 3) = jong
+                일분옵션데이터(callput).거래량(iIndex) = volume
+
+                cnt += 1
+            End If
+
+        Next
+
+        Return callput_1 + 1
+
+    End Function
+
+    '1분데이터를 위해 별도로 함수를 만든다
+    Public Sub SetTimeDataForDataForDBData_1Min(ByRef tempData() As 일분데이터템플릿, ByVal jongmokIndex As Integer)
+        Dim si, bun As Integer
+        Dim strTemp As String
+        Dim totalTimeCount, num As Integer
+
+        Dim interval_1min As Integer = 1
+        totalTimeCount = 400
+
+        For num = 1 To totalTimeCount
+
+            si = Int(num / 60) + 9
+            bun = Int(num Mod 60)
+
+            si = si * 100 + bun
+            strTemp = Str(si)
+            tempData(jongmokIndex).ctime(num - 1) = strTemp '그리드 왼쪽 기준 시간의 값을 입력한다. 이건 나중에 SearchLine에서 쓰인다
+        Next
+
+    End Sub
+
+    Public Function GetRawData_순매수(ByVal dateLimitText As String, ByVal tableNameStr As String) As Integer
+
+        Dim client As BigQueryClient
+        Dim job As BigQueryJob
+        tableName = MakeTableName(tableNameStr)
+        Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate,  ctime  "
+        Dim cnt As Integer = 0
+        Dim dateCount As Integer = 0
+
+        Dim prevDate As Integer = 0
+
+        If DBTotalRawDataList_순매수 Is Nothing Then
+            DBTotalRawDataList_순매수 = New Dictionary(Of Integer, List(Of BigQueryRow))
+        Else
+            DBTotalRawDataList_순매수.Clear()
+        End If
+        Dim datelist As Collections.Generic.List(Of Integer) = New Collections.Generic.List(Of Integer)
+
+        Try
+            client = BigQueryClient.Create(projectID)
+            job = client.CreateQueryJob(query, Nothing)
+
+            job.PollUntilCompleted()
+            Add_Log("SQL = ", query)
+            Dim row_cnt As Integer = client.GetQueryResults(job.Reference).Count
+
+            Dim list = New List(Of BigQueryRow)
+
+            For Each row In client.GetQueryResults(job.Reference)
+
+                '값을 읽어온다
+                Dim tempDate As Integer = Val(row("cdate"))
+
+                If tempDate <> prevDate Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
+
+                    If prevDate <> 0 Then
+                        dateCount += 1
+                        DBTotalRawDataList_순매수.Add(prevDate, list)
+                        datelist.Add(prevDate)
+                        list = Nothing
+                        list = New List(Of BigQueryRow)
+                    End If
+
+                    prevDate = tempDate
+
+                End If
+
+
+                '중간에는 Data()에 모아놓는다
+                list.Add(row)
+                cnt += 1
+            Next
+
+            If dateCount > 0 Then '마지막 날짜까지 가져온다
+
+                dateCount += 1
+
+                DBTotalRawDataList_순매수.Add(prevDate, list)
+                datelist.Add(prevDate)
+
+            End If
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+
+        Return dateCount
+
+    End Function
+
+    '순매수 데이터를 순매수구조체로 올리는 함수 - 인수로 받은 날의 데이터를 자료구조로 올린다 
+    Public Function Get순매수데이터(ByVal iDate As Integer) As Integer
+
+        Dim iList = DBTotalRawDataList_순매수.Item(iDate)
+        Dim iIndex As Integer = 0
+        For Each row In iList
+
+            '값을 읽어온다
+            Dim tempDate As Integer = Val(row("cdate"))
+            Dim ctime As Integer = Val(row("ctime"))
+            Dim 개인순매수 As Single = Val(row("indamount"))
+            Dim 기관순매수 As Single = Val(row("sysamount"))
+            Dim 외국인순매수 As Single = Val(row("foramount"))
+            Dim 연기금순매수 As Single = Val(row("kigamount"))
+            Dim 코스피지수 As Integer = Val(row("kospiindex"))
+
+            순매수리스트(iIndex).sDate = tempDate
+            순매수리스트(iIndex).sTime = ctime
+            순매수리스트(iIndex).개인순매수 = 개인순매수
+            순매수리스트(iIndex).기관순매수 = 기관순매수
+            순매수리스트(iIndex).외국인순매수 = 외국인순매수
+            순매수리스트(iIndex).연기금순매수 = 연기금순매수
+            순매수리스트(iIndex).코스피지수 = 코스피지수
+            순매수리스트(iIndex).외국인_연기금_순매수 = 외국인순매수 + 연기금순매수
+            iIndex += 1
+
+        Next
+
+        Return iIndex
+
+    End Function
 End Module

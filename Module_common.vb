@@ -1,12 +1,5 @@
 ﻿Option Explicit On
 
-'선택종목 바꾸는 기능  ----------------------------- 완료 20220723
-'자동 저장 ----------------------------------------- 완료 20220723
-'아이콘 바꾸기 ------------------------------------- 완료 20220723
-'DB 불러오기
-'위클리옵션 불러오기 기능 -------------------------- 완료 20220727
-
-
 Structure DataSet  '2개만 만든다. 0번은 콜, 1번은 풋으로 한다
 
     Dim HangSaGa As String
@@ -29,21 +22,6 @@ Structure DataSet  '2개만 만든다. 0번은 콜, 1번은 풋으로 한다
         ReDim 어제시고저종(3) '시간대별 거래량을 기록해야 해서 100개가 필요함
     End Sub
 
-End Structure
-
-Structure 일분데이터템플릿
-
-    Dim HangSaGa As String
-    Dim Code As String
-    Dim ctime() As String  '시간 100개 콜풋 구분 없음
-    Dim price(,) As Single '시간index, 시고저종
-    Dim 거래량() As Long ' 100개
-
-    Public Sub Initialize()
-        ReDim ctime(400) '
-        ReDim price(400, 3)  '콜풋, 시간, 시고저종
-        ReDim 거래량(400) '1분단위는 약 396개임
-    End Sub
 End Structure
 
 Structure SumDatSetType
@@ -80,15 +58,7 @@ Structure ListTemplate
     End Sub
 End Structure
 
-Structure 순매수탬플릿
-    Dim sDate As String
-    Dim sTime As String
-    Dim 외국인순매수 As Long
-    Dim 개인순매수 As Long
-    Dim 기관순매수 As Long
-    Dim 연기금순매수 As Long
-    Dim 코스피지수 As Single
-End Structure
+
 
 
 Module Module_common
@@ -116,10 +86,7 @@ Module Module_common
 
     Public optionList As List(Of ListTemplate)  '제일 왼쪽 grid에 표시될 option List 
 
-    '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
-    Public 일분옵션데이터() As 일분데이터템플릿
-    Public 순매수리스트() As 순매수탬플릿
-    Public 순매수리스트카운트 As Integer '순매수리스트 카운트
+
     Public 당일반복중_flag As Boolean = False '당일 반복 중에 매수를 수십회 하는 문제를 해결하기 위해 당일 반복 전후에 Flag를 설정하여 청산에서 확인한다
 
     Public Sub InitDataStructure()

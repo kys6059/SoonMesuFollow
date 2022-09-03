@@ -843,7 +843,7 @@ Public Class Form1
 
         Add_Log("일반", "전체 Data 취합 Click")
 
-        dateCount = GetRawData(txt_DB_Date_Limit.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
+        dateCount = GetRawData(txt_DB_Date_Limit.Text, txt_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
         Add_Log("일반", "전체 Data 취합 끝. 날짜수는 " + dateCount.ToString())
 
         Add_Log("", "DB 전체 일 수는 " + dateCount.ToString() + " 일")
@@ -1382,8 +1382,9 @@ Public Class Form1
         txt_신호TimeOut시간.Refresh()
     End Sub
 
-    Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_순매수데이터백업.Click
+    Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_TEST.Click
 
+        Form2.Show()
 
     End Sub
 End Class

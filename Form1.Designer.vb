@@ -133,7 +133,7 @@ Partial Class Form1
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
-        Me.btn_순매수데이터백업 = New System.Windows.Forms.Button()
+        Me.btn_TEST = New System.Windows.Forms.Button()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -1505,22 +1505,22 @@ Partial Class Form1
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
         '
-        'btn_순매수데이터백업
+        'btn_TEST
         '
-        Me.btn_순매수데이터백업.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_순매수데이터백업.Location = New System.Drawing.Point(2209, 16)
-        Me.btn_순매수데이터백업.Name = "btn_순매수데이터백업"
-        Me.btn_순매수데이터백업.Size = New System.Drawing.Size(163, 39)
-        Me.btn_순매수데이터백업.TabIndex = 27
-        Me.btn_순매수데이터백업.Text = "테스트"
-        Me.btn_순매수데이터백업.UseVisualStyleBackColor = True
+        Me.btn_TEST.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_TEST.Location = New System.Drawing.Point(2209, 16)
+        Me.btn_TEST.Name = "btn_TEST"
+        Me.btn_TEST.Size = New System.Drawing.Size(163, 39)
+        Me.btn_TEST.TabIndex = 27
+        Me.btn_TEST.Text = "Form2 열기"
+        Me.btn_TEST.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3031, 1277)
-        Me.Controls.Add(Me.btn_순매수데이터백업)
+        Me.Controls.Add(Me.btn_TEST)
         Me.Controls.Add(Me.TableLayoutPanel9)
         Me.Controls.Add(Me.TLP_BuySell)
         Me.Controls.Add(Me.grd_잔고조회)
@@ -1677,6 +1677,6 @@ Partial Class Form1
     Friend WithEvents txt_월물 As RichTextBox
     Friend WithEvents lbl_ReceiveCounter As Label
     Friend WithEvents txt_투자비율 As TextBox
-    Friend WithEvents btn_순매수데이터백업 As Button
+    Friend WithEvents btn_TEST As Button
     Friend WithEvents chk_중간청산 As CheckBox
 End Class
