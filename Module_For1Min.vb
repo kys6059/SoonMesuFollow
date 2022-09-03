@@ -32,8 +32,13 @@ Module Module_For1Min
     Public 순매수리스트() As 순매수탬플릿
     Public 순매수리스트카운트 As Integer '순매수리스트 카운트
 
+    Public KOSPI_MIN, KOSPI_MAX, KOSPI_CUR As Single
+
     Public currentIndex_1MIn As Integer = -1
     Public timeIndex_1Min As Integer
+
+    Public currentIndex_순매수 As Integer = -1
+    Public timeIndex_순매수 As Integer = -1
 
     Public Sub InitDataStructure_1Min()
 
@@ -44,8 +49,16 @@ Module Module_For1Min
             일분옵션데이터(i).Initialize()
         Next
 
+        KOSPI_MIN = 0
+        KOSPI_MAX = 0
+        KOSPI_CUR = 0
+
         TargetDate = 0
         currentIndex_1MIn = -1
+        timeIndex_1Min = -1
+
+        currentIndex_순매수 = -1
+        timeIndex_순매수 = -1
 
     End Sub
 
@@ -66,5 +79,47 @@ Module Module_For1Min
         End If
         Return (((si - 9) * (60 / Interval_1)) + (bun / Interval_1)) - 1
     End Function
+
+    Public Function 순매수리스트의인덱스찾기(iTime As Integer) As Integer
+
+        '930, 901 이렇게 들어온다
+        Dim ret As Integer = -1
+        If iTime = 901 Then
+            ret = 0
+        Else
+            For i As Integer = 0 To 순매수리스트카운트 - 1
+
+                Dim 초 As Integer = Val(순매수리스트(i).sTime) Mod 100
+                If 초 = 0 Then   '30초짜리는 버린다
+
+                    Dim 시분 As Integer = Val(순매수리스트(i).sTime) / 100
+                    If 시분 = iTime Then
+                        ret = i
+                        Exit For
+                    End If
+
+                End If
+            Next
+        End If
+
+        Return ret
+
+    End Function
+
+    Public Function 순매수시간으로1MIN인덱스찾기(ByVal 순매수시간 As Integer) As Integer
+        Dim ret As Integer = -1
+
+        Dim 시분 As Integer = 순매수시간 / 100
+
+        For i As Integer = 0 To timeIndex_1Min - 1
+            If 시분 = Val(일분옵션데이터(0).ctime(i)) Then
+                ret = i
+                Exit For
+            End If
+        Next
+
+        Return ret
+    End Function
+
 
 End Module

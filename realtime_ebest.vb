@@ -743,7 +743,8 @@ Module realtime_ebest
             순매수리스트(순매수리스트카운트 - 1 - i).외국인순매수 = 외
             순매수리스트(순매수리스트카운트 - 1 - i).연기금순매수 = 연
         Next
-
+        timeIndex_순매수 = 순매수리스트카운트
+        currentIndex_순매수 = timeIndex_1Min - 1
         Add_Log("일반", "순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
 
     End Sub

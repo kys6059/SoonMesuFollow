@@ -741,7 +741,6 @@ Module DBHandler
 
                 End If
 
-
                 '중간에는 Data()에 모아놓는다
                 list.Add(row)
                 cnt += 1
@@ -779,7 +778,7 @@ Module DBHandler
             Dim 기관순매수 As Single = Val(row("sysamount"))
             Dim 외국인순매수 As Single = Val(row("foramount"))
             Dim 연기금순매수 As Single = Val(row("kigamount"))
-            Dim 코스피지수 As Integer = Val(row("kospiindex"))
+            Dim 코스피지수 As Single = Val(row("kospiindex"))
 
             순매수리스트(iIndex).sDate = tempDate
             순매수리스트(iIndex).sTime = ctime
@@ -793,6 +792,8 @@ Module DBHandler
 
         Next
 
+        timeIndex_순매수 = iIndex
+        currentIndex_순매수 = timeIndex_순매수 - 1
         Return iIndex
 
     End Function
