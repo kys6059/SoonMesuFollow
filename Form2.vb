@@ -40,10 +40,10 @@ Public Class Form2
             TargetDate = DBDateList_1Min(targetDateIndex_1min)
             sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
 
-            TotalCount = GetDataFromDBHandler_1Min(TargetDate)
+            Dim TotalCount1 As Integer = GetDataFromDBHandler_1Min(TargetDate)
             순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
 
-            If TotalCount > 0 And 순매수리스트카운트 > 0 Then
+            If TotalCount1 > 0 And 순매수리스트카운트 > 0 Then
                 'MakeOptinList()  이건 리스트를 만드는 기능인데 이건 매수할 때 필요가 없다. 
                 F2_Clac_DisplayAllGrid()
 

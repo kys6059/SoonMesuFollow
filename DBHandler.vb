@@ -67,11 +67,11 @@ Module DBHandler
         Dim dateaset_id = "option5"
         Dim table_id = "Option_ShinhoResultTable"
 
-        Dim totalCount As Integer = SimulationTotalShinhoList.Count - 1
+        Dim totalCount1 As Integer = SimulationTotalShinhoList.Count - 1
 
-        Dim rows(totalCount) As BigQueryInsertRow
+        Dim rows(totalCount1) As BigQueryInsertRow
 
-        For i As Integer = 0 To totalCount
+        For i As Integer = 0 To totalCount1
 
             Dim shinho As ShinhoType = SimulationTotalShinhoList(i)
 
