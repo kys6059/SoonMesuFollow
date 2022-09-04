@@ -1327,10 +1327,11 @@ Public Class Form1
 
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
-        Dim ikjulstring As String = "0.6"
-        Dim 손절비율 As String = "1.18"
+        Dim ikjulstring As String = "0.82"
+        Dim 손절비율 As String = "1.1"
         Dim 기준가격 As String = "1.6"
         Dim timeoutTime As String = "1515"
+        Dim 중간청산비율 As String = "0.9"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
 
@@ -1340,16 +1341,17 @@ Public Class Form1
                     기준가격 = "1.5"
                     손절비율 = "1.20"
                     ikjulstring = "0.35"
+                    중간청산비율 = "0.55"
                 Case 1
                     기준가격 = "1.6"
-                    timeoutTime = "1250"
+                    timeoutTime = "1300"
                 Case 2
                     기준가격 = "1.6"
-                    timeoutTime = "1250"
+                    timeoutTime = "1300"
                 Case 3
-                    기준가격 = "1.6"
+
                 Case 6
-                    기준가격 = "1.6"
+
             End Select
         Else
             Select Case 남은날짜
@@ -1357,12 +1359,13 @@ Public Class Form1
                     기준가격 = "1.6"
                     손절비율 = "1.20"
                     ikjulstring = "0.35"
+                    중간청산비율 = "0.55"
                 Case 1
                     기준가격 = "1.7"
-                    timeoutTime = "1250"
+                    timeoutTime = "1300"
                 Case 2
                     기준가격 = "1.7"
-                    timeoutTime = "1250"
+                    timeoutTime = "1300"
                 Case 3
                     기준가격 = "1.7"
                 Case 6
@@ -1375,11 +1378,14 @@ Public Class Form1
         txt_JongmokTargetPrice.Text = 기준가격
         txt_익절목표.Text = ikjulstring
         txt_신호TimeOut시간.Text = timeoutTime
+        txt_중간청산비율.Text = 중간청산비율
 
         txt_손절매비율.Refresh()
         txt_JongmokTargetPrice.Refresh()
         txt_익절목표.Refresh()
         txt_신호TimeOut시간.Refresh()
+        txt_중간청산비율.Refresh()
+
     End Sub
 
     Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_TEST.Click

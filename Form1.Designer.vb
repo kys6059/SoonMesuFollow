@@ -50,10 +50,8 @@ Partial Class Form1
         Me.txt_DB_Date_Limit = New System.Windows.Forms.TextBox()
         Me.txt_ebest_id = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
-        Me.chk_양매도실행 = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.txt_신호TimeOut시간 = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -63,7 +61,6 @@ Partial Class Form1
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txt_손절매비율 = New System.Windows.Forms.TextBox()
         Me.txt_투자비율 = New System.Windows.Forms.TextBox()
-        Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
         Me.grd_ShinHo = New System.Windows.Forms.DataGridView()
         Me.Hscroll_1 = New System.Windows.Forms.HScrollBar()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
@@ -134,6 +131,12 @@ Partial Class Form1
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
         Me.btn_TEST = New System.Windows.Forms.Button()
+        Me.TableLayoutPanel10 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_양매도실행 = New System.Windows.Forms.CheckBox()
+        Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.txt_중간청산비율 = New System.Windows.Forms.TextBox()
         CType(Me.grid1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -149,6 +152,7 @@ Partial Class Form1
         Me.TLP_BuySell.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel9.SuspendLayout()
+        Me.TableLayoutPanel10.SuspendLayout()
         Me.SuspendLayout()
         '
         'grid1
@@ -438,7 +442,6 @@ Partial Class Form1
         Me.TableLayoutPanel4.Controls.Add(Me.chk_양매도실행, 1, 5)
         Me.TableLayoutPanel4.Controls.Add(Me.Label9, 0, 6)
         Me.TableLayoutPanel4.Controls.Add(Me.Label10, 0, 5)
-        Me.TableLayoutPanel4.Controls.Add(Me.Label11, 0, 4)
         Me.TableLayoutPanel4.Controls.Add(Me.Label12, 0, 3)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_신호TimeOut시간, 1, 3)
         Me.TableLayoutPanel4.Controls.Add(Me.Label13, 0, 2)
@@ -448,7 +451,6 @@ Partial Class Form1
         Me.TableLayoutPanel4.Controls.Add(Me.Label15, 0, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_손절매비율, 1, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.txt_투자비율, 1, 6)
-        Me.TableLayoutPanel4.Controls.Add(Me.chk_중간청산, 1, 4)
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(332, 632)
         Me.TableLayoutPanel4.Name = "TableLayoutPanel4"
         Me.TableLayoutPanel4.RowCount = 7
@@ -462,20 +464,6 @@ Partial Class Form1
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel4.Size = New System.Drawing.Size(306, 245)
         Me.TableLayoutPanel4.TabIndex = 14
-        '
-        'chk_양매도실행
-        '
-        Me.chk_양매도실행.AutoSize = True
-        Me.chk_양매도실행.Checked = True
-        Me.chk_양매도실행.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_양매도실행.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_양매도실행.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_양매도실행.Location = New System.Drawing.Point(170, 174)
-        Me.chk_양매도실행.Name = "chk_양매도실행"
-        Me.chk_양매도실행.Size = New System.Drawing.Size(132, 27)
-        Me.chk_양매도실행.TabIndex = 13
-        Me.chk_양매도실행.Text = "양매도 실행"
-        Me.chk_양매도실행.UseVisualStyleBackColor = True
         '
         'Label9
         '
@@ -500,18 +488,6 @@ Partial Class Form1
         Me.Label10.TabIndex = 10
         Me.Label10.Text = "양매도 실행"
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(4, 137)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(159, 33)
-        Me.Label11.TabIndex = 8
-        Me.Label11.Text = "중간청산 비율"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label12
         '
@@ -615,20 +591,6 @@ Partial Class Form1
         Me.txt_투자비율.TabIndex = 14
         Me.txt_투자비율.Text = "1.0"
         Me.txt_투자비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'chk_중간청산
-        '
-        Me.chk_중간청산.AutoSize = True
-        Me.chk_중간청산.Checked = True
-        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.chk_중간청산.Location = New System.Drawing.Point(170, 140)
-        Me.chk_중간청산.Name = "chk_중간청산"
-        Me.chk_중간청산.Size = New System.Drawing.Size(132, 27)
-        Me.chk_중간청산.TabIndex = 15
-        Me.chk_중간청산.Text = "중간청산-50%"
-        Me.chk_중간청산.UseVisualStyleBackColor = True
         '
         'grd_ShinHo
         '
@@ -1240,7 +1202,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(153, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.5_20220902"
+        Me.txt_programversion.Text = "1.1.6_20220904"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
@@ -1515,11 +1477,96 @@ Partial Class Form1
         Me.btn_TEST.Text = "Form2 열기"
         Me.btn_TEST.UseVisualStyleBackColor = True
         '
+        'TableLayoutPanel10
+        '
+        Me.TableLayoutPanel10.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
+        Me.TableLayoutPanel10.ColumnCount = 2
+        Me.TableLayoutPanel10.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel10.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel10.Controls.Add(Me.txt_중간청산비율, 1, 1)
+        Me.TableLayoutPanel10.Controls.Add(Me.Label29, 0, 1)
+        Me.TableLayoutPanel10.Controls.Add(Me.Label27, 0, 0)
+        Me.TableLayoutPanel10.Controls.Add(Me.chk_중간청산, 1, 0)
+        Me.TableLayoutPanel10.Location = New System.Drawing.Point(647, 1065)
+        Me.TableLayoutPanel10.Name = "TableLayoutPanel10"
+        Me.TableLayoutPanel10.RowCount = 3
+        Me.TableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel10.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel10.Size = New System.Drawing.Size(320, 101)
+        Me.TableLayoutPanel10.TabIndex = 28
+        '
+        'chk_양매도실행
+        '
+        Me.chk_양매도실행.AutoSize = True
+        Me.chk_양매도실행.Checked = True
+        Me.chk_양매도실행.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_양매도실행.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_양매도실행.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_양매도실행.Location = New System.Drawing.Point(170, 174)
+        Me.chk_양매도실행.Name = "chk_양매도실행"
+        Me.chk_양매도실행.Size = New System.Drawing.Size(132, 27)
+        Me.chk_양매도실행.TabIndex = 13
+        Me.chk_양매도실행.Text = "양매도 실행"
+        Me.chk_양매도실행.UseVisualStyleBackColor = True
+        '
+        'chk_중간청산
+        '
+        Me.chk_중간청산.AutoSize = True
+        Me.chk_중간청산.Checked = True
+        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_중간청산.Location = New System.Drawing.Point(163, 4)
+        Me.chk_중간청산.Name = "chk_중간청산"
+        Me.chk_중간청산.Size = New System.Drawing.Size(153, 26)
+        Me.chk_중간청산.TabIndex = 16
+        Me.chk_중간청산.Text = "중간청산 허용"
+        Me.chk_중간청산.UseVisualStyleBackColor = True
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = True
+        Me.Label27.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label27.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label27.Location = New System.Drawing.Point(2, 2)
+        Me.Label27.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label27.Name = "Label27"
+        Me.Label27.Size = New System.Drawing.Size(156, 30)
+        Me.Label27.TabIndex = 17
+        Me.Label27.Text = "중간청산 허용"
+        Me.Label27.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label29
+        '
+        Me.Label29.AutoSize = True
+        Me.Label29.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label29.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label29.Location = New System.Drawing.Point(2, 35)
+        Me.Label29.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label29.Name = "Label29"
+        Me.Label29.Size = New System.Drawing.Size(156, 30)
+        Me.Label29.TabIndex = 18
+        Me.Label29.Text = "중간청산 비율"
+        Me.Label29.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_중간청산비율
+        '
+        Me.txt_중간청산비율.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.txt_중간청산비율.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_중간청산비율.Location = New System.Drawing.Point(163, 38)
+        Me.txt_중간청산비율.Name = "txt_중간청산비율"
+        Me.txt_중간청산비율.Size = New System.Drawing.Size(153, 24)
+        Me.txt_중간청산비율.TabIndex = 20
+        Me.txt_중간청산비율.Text = "0.9"
+        Me.txt_중간청산비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(3031, 1277)
+        Me.Controls.Add(Me.TableLayoutPanel10)
         Me.Controls.Add(Me.btn_TEST)
         Me.Controls.Add(Me.TableLayoutPanel9)
         Me.Controls.Add(Me.TLP_BuySell)
@@ -1568,6 +1615,8 @@ Partial Class Form1
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel9.ResumeLayout(False)
         Me.TableLayoutPanel9.PerformLayout()
+        Me.TableLayoutPanel10.ResumeLayout(False)
+        Me.TableLayoutPanel10.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1648,11 +1697,9 @@ Partial Class Form1
     Friend WithEvents lbl_계좌번호 As Label
     Friend WithEvents Label26 As Label
     Friend WithEvents txt_구매가능대비비율 As RichTextBox
-    Friend WithEvents chk_양매도실행 As CheckBox
     Friend WithEvents Timer구매가능개수찾기 As Timer
     Friend WithEvents Timer구매가능개수찾기_2 As Timer
     Friend WithEvents Timer3 As Timer
-    Friend WithEvents Label11 As Label
     Friend WithEvents Label9 As Label
     Friend WithEvents txt_programversion As TextBox
     Friend WithEvents chk_ChangeTargetIndex As CheckBox
@@ -1678,5 +1725,10 @@ Partial Class Form1
     Friend WithEvents lbl_ReceiveCounter As Label
     Friend WithEvents txt_투자비율 As TextBox
     Friend WithEvents btn_TEST As Button
+    Friend WithEvents chk_양매도실행 As CheckBox
+    Friend WithEvents TableLayoutPanel10 As TableLayoutPanel
+    Friend WithEvents txt_중간청산비율 As TextBox
+    Friend WithEvents Label29 As Label
+    Friend WithEvents Label27 As Label
     Friend WithEvents chk_중간청산 As CheckBox
 End Class

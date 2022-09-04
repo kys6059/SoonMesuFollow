@@ -74,7 +74,7 @@ Module Algorithm
                         청산실행(1.0) '청산100%
                     Else '1이 유지될 때 
                         If Form1.chk_중간청산.Checked = True Then
-                            If Check중간청산() = True Then 청산실행(0.5)
+                            If shinho.A39_중간매도Flag = 1 Then 청산실행(0.5)
                         End If
                     End If
 
@@ -101,6 +101,8 @@ Module Algorithm
 
         shinho.A32_현재합계가격 = 합계가격
         shinho.A34_이익률 = (합계가격 / shinho.A31_신호합계가격)
+        Dim 중간청산비율 As Single = Val(Form1.txt_중간청산비율)
+
 
         If shinho.A35_손절기준가격 < 합계가격 Then '손절
 
@@ -121,6 +123,10 @@ Module Algorithm
             shinho.A41_매도시간 = Data(0).ctime(currentIndex)
             shinho.A42_매도Index = currentIndex
             shinho.A43_매도사유 = "ik"
+        ElseIf Form1.chk_중간청산.Checked = True Then
+            If shinho.A34_이익률 < 중간청산비율 Then
+                shinho.A39_중간매도Flag = 1
+            End If
         End If
 
         'time limit 체크
