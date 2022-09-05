@@ -101,7 +101,7 @@ Module Algorithm
 
         shinho.A32_현재합계가격 = 합계가격
         shinho.A34_이익률 = (합계가격 / shinho.A31_신호합계가격)
-        Dim 중간청산비율 As Single = Val(Form1.txt_중간청산비율)
+        Dim 중간청산비율 As Single = Val(Form1.txt_중간청산비율.Text)
 
 
         If shinho.A35_손절기준가격 < 합계가격 Then '손절
@@ -291,22 +291,6 @@ Module Algorithm
 
     End Function
 
-    Private Function Check중간청산() As Boolean
-        Dim ret As Boolean = False
-
-        Dim 중간청산시간 As Integer = 1230
-
-        If Val(Data(0).ctime(currentIndex)) >= 중간청산시간 + 5 Then
-
-            Dim shinho As ShinhoType = ShinhoList(0)
-            shinho.A39_중간매도Flag = 1
-            ShinhoList(0) = shinho
-            ret = True
-        End If
-
-        Return ret
-
-    End Function
 
     Public Sub 청산실행(청산비율 As Single)
 

@@ -675,7 +675,7 @@ Module realtime_ebest
         Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
         Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
 
-        If 최소구매가능개수 > 2 And 구매가능대비비율 > 0 Then
+        If 최소구매가능개수 > 3 And 구매가능대비비율 > 0 Then
             Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
             Dim count As Integer = Math.Truncate(singleCount)
             한종목매도(code, price, count)
