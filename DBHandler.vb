@@ -304,15 +304,13 @@ Module DBHandler
 
                     If prevDate <> 0 Then
 
-                        dateCount += 1
-
                         DBTotalRawDataList.Add(prevDate, list)
                         datelist.Add(prevDate)
 
                         list = Nothing
                         list = New List(Of BigQueryRow)
                     End If
-
+                    dateCount += 1
                     prevDate = tempDate
 
                 End If
@@ -364,7 +362,7 @@ Module DBHandler
             Dim jong As Single = Val(row("jong"))
             Dim volume As Integer = Val(row("volume"))
 
-            If ctime <= 1535 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
+            If ctime <= 1535 And ctime > 0 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함 'EBEST 데이터에는 ctime이 null인게 섞여 있어 0보다 큰거 확인 로직 추가
 
                 Dim callput As Integer
                 If iFlag = 1 Then
@@ -575,7 +573,7 @@ Module DBHandler
 
                     If prevDate <> 0 Then
 
-                        dateCount += 1
+
 
                         DBTotalRawDataList_1min.Add(prevDate, list)
                         datelist.Add(prevDate)
@@ -583,7 +581,7 @@ Module DBHandler
                         list = Nothing
                         list = New List(Of BigQueryRow)
                     End If
-
+                    dateCount += 1
                     prevDate = tempDate
 
                 End If
@@ -635,7 +633,7 @@ Module DBHandler
             Dim jong As Single = Val(row("jong"))
             Dim volume As Integer = Val(row("volume"))
 
-            If ctime <= 1530 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
+            If ctime <= 1530 And ctime > 0 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함
 
                 Dim callput As Integer
                 If iFlag = 1 Then
@@ -730,13 +728,13 @@ Module DBHandler
                 If tempDate <> prevDate Then 'Data의 처음이 아니고 날짜가 바뀌었다 - 앞에 모아놓은 것들 다 처리해서 Dic에 넣는다
 
                     If prevDate <> 0 Then
-                        dateCount += 1
+
                         DBTotalRawDataList_순매수.Add(prevDate, list)
                         datelist.Add(prevDate)
                         list = Nothing
                         list = New List(Of BigQueryRow)
                     End If
-
+                    dateCount += 1
                     prevDate = tempDate
 
                 End If
