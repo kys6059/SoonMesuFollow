@@ -9,12 +9,11 @@ Public Class Form2
 
     Private Sub btn_F2_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_F2_SelectDB.Click
 
-
-
         Add_Log("일반", "전체 Data 취합 Click")
 
         Dim dateCount As Integer = GetRawData_1min(txt_F2_DB_Date_Limit.Text, txt_F2_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
         Dim 순매수dateCount As Integer = GetRawData_순매수(txt_F2_DB_Date_Limit.Text, "soonMeSuTable") '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌 - 순매수리스트
+
         If dateCount <> 순매수dateCount Then
             Add_Log("에러", "1분 데이터 카운트와 순매수 DateCount가 다름" & dateCount.ToString() & " : " & 순매수dateCount.ToString())
             Return
@@ -22,32 +21,18 @@ Public Class Form2
 
         Add_Log("일반", "DB 전체 일 수는 " + dateCount.ToString() + " 일")
 
+        순매수데이터날짜수 = dateCount
 
-        If dateCount > 0 Then
+        If 순매수데이터날짜수 > 0 Then
 
-            HSc_F2_날짜조절.Maximum = dateCount - 1
+            HSc_F2_날짜조절.Maximum = 순매수데이터날짜수 - 1
             HSc_F2_날짜조절.LargeChange = 1
             HSc_F2_날짜조절.Refresh()
-            Dim str As String = String.Format("{0}일 중 {1}번째", dateCount, 0)
-            Lbl_F2_현재날짜Index.Text = str
-            Lbl_F2_현재날짜Index.Refresh()
 
-            InitDataStructure_1Min()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+            F2_TargetDateIndex = 0 'DB_날짜 인덱스임 (전역변수)
 
-            Dim targetDateIndex_1min As Integer = 0
-
-            TargetDate = DBDateList_1Min(targetDateIndex_1min)
-            sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
-
-            Dim TotalCount1 As Integer = GetDataFromDBHandler_1Min(TargetDate)
-            순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
-
-            If TotalCount1 > 0 And 순매수리스트카운트 > 0 Then
-                'MakeOptinList()  이건 리스트를 만드는 기능인데 이건 매수할 때 필요가 없다. 
-                F2_Clac_DisplayAllGrid()
-
-            End If
+            F2_날짜변경처리함수()
 
         Else
             MsgBox("DB에 데이터가 없습니다")
@@ -154,16 +139,16 @@ Public Class Form2
                 F2_Chart_순매수.Series(i).Points.Clear()
             Next
 
-
-
             Dim For_Series As String = "For_" + chartNumber.ToString()
             Dim For_Kig_Series As String = "For_Kig_" + chartNumber.ToString()
             Dim oneMinute_Series As String = "oneMinute_" + chartNumber.ToString()
+            Dim retIndex = 0
 
             For i As Integer = 0 To currentIndex_순매수
 
-                Dim retIndex = 0
                 retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수를 입력한다
+                F2_Chart_순매수.Series(For_Series).Points(retIndex).AxisLabel = Format("{0}", 순매수리스트(retIndex).sTime)
+
                 F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(retIndex, 순매수리스트(retIndex).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
                 F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(retIndex, 순매수리스트(retIndex).코스피지수) '오른쪽 이중축에 적용
 
@@ -192,5 +177,45 @@ Public Class Form2
                 F2_Clac_DisplayAllGrid()
             End If
         End If
+    End Sub
+
+    Private Sub HSc_F2_날짜조절_ValueChanged(sender As Object, e As EventArgs) Handles HSc_F2_날짜조절.ValueChanged
+
+        Dim newValue As Integer = HSc_F2_날짜조절.Value
+
+        If F2_TargetDateIndex <> newValue Then
+
+            InitDataStructure_1Min()
+            isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
+
+            F2_TargetDateIndex = newValue 'DB_날짜 인덱스임 (전역변수)
+            F2_날짜변경처리함수()
+        End If
+
+    End Sub
+
+    Private Sub F2_날짜변경처리함수()
+
+        InitDataStructure_1Min()
+
+        TargetDate = DBDateList_1Min(F2_TargetDateIndex)
+        sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
+
+        Dim TotalCount1 As Integer = GetDataFromDBHandler_1Min(TargetDate)
+        순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
+
+        If TotalCount1 > 0 And 순매수리스트카운트 > 0 Then
+            'MakeOptinList()  이건 리스트를 만드는 기능인데 이건 매수할 때 필요가 없다. 
+
+            '나중에 여기에 조건들 집어넣기 
+
+            F2_Clac_DisplayAllGrid()
+
+        End If
+
+        Dim str As String = String.Format("{0}일 중 {1}번째({2})", 순매수데이터날짜수, F2_TargetDateIndex + 1, TargetDate)
+        Lbl_F2_현재날짜Index.Text = str
+        Lbl_F2_현재날짜Index.Refresh()
+
     End Sub
 End Class

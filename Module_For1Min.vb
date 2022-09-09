@@ -40,6 +40,9 @@ Module Module_For1Min
     Public currentIndex_순매수 As Integer = -1
     Public timeIndex_순매수 As Integer = -1
 
+    Public F2_TargetDateIndex As Integer = 0 '-------------------------------------------- 이건 순매수테이블과 공용으로 활용한다
+    Public 순매수데이터날짜수 As Integer = 0
+
     Public Sub InitDataStructure_1Min()
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821

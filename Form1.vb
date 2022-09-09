@@ -982,24 +982,6 @@ Public Class Form1
 
             TotalCount = GetDataFromDBHandler(TargetDate) '이걸하면 딕셔너리의 data에서 해당 날짜의 Data를 가져온다
 
-            '날짜로부터 월물 계산하기
-            sMonth = getsMonth(TargetDate).ToString()
-
-            Dim 남은날짜 As Integer = getRemainDate(sMonth, TargetDate)
-
-            If 남은날짜 <= 3 Then  '남은날짜가 작으면 0.15로 바꾼다
-                txt_손절매비율.Text = "1.2"
-                Label15.Text = "손절매비율(3일이하)"
-            ElseIf 남은날짜 > 3 And 남은날짜 <= 10 Then
-                txt_손절매비율.Text = "1.16"
-                Label15.Text = "손절매비율(10일이하)"
-            Else
-                txt_손절매비율.Text = "1.12"
-                Label15.Text = "손절매비율(10일초과)"
-            End If
-
-            txt_손절매비율.Refresh()
-
             If TotalCount > 0 Then
                 MakeOptinList()
                 Clac_DisplayAllGrid()
@@ -1394,5 +1376,7 @@ Public Class Form1
 
     End Sub
 
+    Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
 
+    End Sub
 End Class

@@ -14,10 +14,9 @@ Module DBHandler
 
     '1분Data를 위한 자료구조 추가 20220903
     Public DBTotalRawDataList_1min As Dictionary(Of Integer, List(Of BigQueryRow))
-    Public DBTotalDateCount_1min As Integer
     Public DBDateList_1Min() As Integer
 
-    Public gTargetDateIndex_1min As Integer  '-------------------------------------------- 이건 순매수테이블과 공용으로 활용한다
+
 
     Public DBTotalRawDataList_순매수 As Dictionary(Of Integer, List(Of BigQueryRow))
 
@@ -573,8 +572,6 @@ Module DBHandler
 
                     If prevDate <> 0 Then
 
-
-
                         DBTotalRawDataList_1min.Add(prevDate, list)
                         datelist.Add(prevDate)
 
@@ -594,8 +591,6 @@ Module DBHandler
 
             If dateCount > 0 Then '마지막 날짜까지 가져온다
 
-                dateCount += 1
-
                 DBTotalRawDataList_1min.Add(prevDate, list)
                 datelist.Add(prevDate)
 
@@ -606,7 +601,6 @@ Module DBHandler
         End Try
 
         DBDateList_1min = datelist.ToArray()
-        DBTotalDateCount_1min = dateCount
         Return dateCount
 
     End Function
@@ -745,8 +739,6 @@ Module DBHandler
             Next
 
             If dateCount > 0 Then '마지막 날짜까지 가져온다
-
-                dateCount += 1
 
                 DBTotalRawDataList_순매수.Add(prevDate, list)
                 datelist.Add(prevDate)
