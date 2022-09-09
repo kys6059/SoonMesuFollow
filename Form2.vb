@@ -218,4 +218,71 @@ Public Class Form2
         Lbl_F2_현재날짜Index.Refresh()
 
     End Sub
+
+    Private currentMouseLocation As Point = Point.Empty
+    Private plotArea As RectangleF = RectangleF.Empty
+
+
+
+
+    Private Sub F2_Chart_순매수_MouseMove(sender As Object, e As MouseEventArgs) Handles F2_Chart_순매수.MouseMove
+        Me.currentMouseLocation = e.Location
+        F2_Chart_순매수.Invalidate()
+    End Sub
+
+    Private Sub F2_Chart_순매수_PostPaint(sender As Object, e As ChartPaintEventArgs) Handles F2_Chart_순매수.PostPaint
+
+        plotArea = F2_Chart_순매수.ChartAreas(0).Position.ToRectangleF
+
+        Dim currentChart As Chart = sender
+        Dim g As Graphics = e.ChartGraphics.Graphics
+
+        Dim pen As Pen = New Pen(Color.Red)
+        Dim font As Font = New Font("Arial", 11.0F)
+        Dim brush As Brush = New SolidBrush(Color.Green)
+
+        g.DrawLine(pen, plotArea.X, currentMouseLocation.Y, F2_Chart_순매수.Right, currentMouseLocation.Y)
+        g.DrawLine(pen, currentMouseLocation.X, plotArea.Y, currentMouseLocation.X, F2_Chart_순매수.Bottom)
+
+        'Y2축 Label
+        Dim y2LabelHeight As Integer = 20
+
+        Dim startY = currentMouseLocation.Y - y2LabelHeight - 2
+        If startY < plotArea.Y Then
+            startY = plotArea.Y
+        End If
+
+        Dim endY = currentMouseLocation.Y + y2LabelHeight - 2
+        If endY > (F2_Chart_순매수.Bottom) Then
+            startY = F2_Chart_순매수.Bottom - y2LabelHeight
+        End If
+
+        '외국인순매수
+        Dim yValuesingle As Single = F2_Chart_순매수.ChartAreas(0).AxisY.PixelPositionToValue(currentMouseLocation.Y)
+        If Not Single.IsNaN(yValuesingle) Then
+            Dim yValue As Long = Math.Round(yValuesingle)
+            g.DrawRectangle(pen, New Rectangle(F2_Chart_순매수.Left + 25, startY, 75, y2LabelHeight))
+            g.DrawString(yValue.ToString() & "억", font, brush, New PointF(F2_Chart_순매수.Left + 28, startY))
+        End If
+
+        '종합주가지수
+        Dim y2Value As Single = Math.Round(F2_Chart_순매수.ChartAreas(0).AxisY2.PixelPositionToValue(currentMouseLocation.Y), 2)
+        If Not Single.IsNaN(y2Value) Then
+            g.DrawRectangle(pen, New Rectangle(F2_Chart_순매수.Right - 100, startY, 75, y2LabelHeight))
+            g.DrawString(y2Value.ToString(), font, brush, New PointF(F2_Chart_순매수.Right - 97, startY))
+        End If
+
+        'X축 시간
+        Dim xValue As Single = F2_Chart_순매수.ChartAreas(0).AxisX.PixelPositionToValue(currentMouseLocation.X)
+        If Not Single.IsNaN(xValue) And xValue >= 0 Then
+            If 순매수리스트 IsNot Nothing Then
+                Dim xValueInt As Integer = Math.Round(xValue)
+                Dim xTime As String = 순매수리스트(xValueInt).sTime
+                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 80), F2_Chart_순매수.Bottom - 200, 77, 20))
+                g.DrawString(xTime, font, brush, New PointF(currentMouseLocation.X - 75, F2_Chart_순매수.Bottom - 198))
+            End If
+        End If
+
+
+    End Sub
 End Class
