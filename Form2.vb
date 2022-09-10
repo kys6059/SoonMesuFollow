@@ -44,6 +44,7 @@ Public Class Form2
 
         SetScrolData_F2()
         CalcColorData()        '최대최소 계산
+        CalcPIPData()          '대표선 계산
         DrawGraph()
 
     End Sub
@@ -117,6 +118,15 @@ Public Class Form2
             F2_Chart_순매수.Series(str).Color = Color.Magenta
             F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
 
+            str = "PIP_" + i.ToString()
+            F2_Chart_순매수.Series.Add(str)
+            F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+            F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            F2_Chart_순매수.Series(str).Color = Color.DarkRed
+            F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+            F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
+            F2_Chart_순매수.Series(str).BorderWidth = 3
+
             ''Lebel 설정 - 이건 소수점 2째자리까지만 표기하도록 하는 기능인거 같음 - 필요 없을 듯
             'txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
 
@@ -142,27 +152,37 @@ Public Class Form2
             Dim For_Series As String = "For_" + chartNumber.ToString()
             Dim For_Kig_Series As String = "For_Kig_" + chartNumber.ToString()
             Dim oneMinute_Series As String = "oneMinute_" + chartNumber.ToString()
+            Dim PIP_Series As String = "PIP_" + chartNumber.ToString()
             Dim retIndex = 0
 
             For i As Integer = 0 To currentIndex_순매수
 
-                retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수를 입력한다
+                F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수를 입력한다
                 F2_Chart_순매수.Series(For_Series).Points(retIndex).AxisLabel = Format("{0}", 순매수리스트(retIndex).sTime)
 
-                F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(retIndex, 순매수리스트(retIndex).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
-                F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(retIndex, 순매수리스트(retIndex).코스피지수) '오른쪽 이중축에 적용
+                F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, 순매수리스트(i).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
+                F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용
 
-                Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(retIndex).sTime, vbCrLf, 순매수리스트(retIndex).외국인순매수, vbCrLf, 순매수리스트(retIndex).외국인_연기금_순매수, vbCrLf, 순매수리스트(retIndex).코스피지수)
-                F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
-                F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
-                F2_Chart_순매수.Series(oneMinute_Series).Points(retIndex).ToolTip = str
-
-                'Dim retIndex As Integer = 순매수리스트의인덱스찾기(iTime) --- 코스피도 같은 순매수 데이터에 있기 때문에 이거 불필요함
+                Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, 순매수리스트(i).외국인_연기금_순매수, vbCrLf, 순매수리스트(i).코스피지수)
+                F2_Chart_순매수.Series(For_Series).Points(i).ToolTip = str
+                F2_Chart_순매수.Series(For_Kig_Series).Points(i).ToolTip = str
+                F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
 
             Next
 
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = KOSPI_MAX + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = KOSPI_MIN - 1
+
+            For i As Integer = 0 To PIP_Point_Lists.Length - 1
+
+                If PIP_Point_Lists(i).PointCount >= 2 Then   '2보다 작다는 말은 비어있다는 말이다
+                    For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
+                        Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
+                        F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, 순매수리스트(point).외국인_연기금_순매수)
+                    Next
+
+                End If
+            Next
 
         End If
 
@@ -219,10 +239,9 @@ Public Class Form2
 
     End Sub
 
+    'MouseMove 시 선과 숫자를 볼수있게 하는 기능 구현
     Private currentMouseLocation As Point = Point.Empty
     Private plotArea As RectangleF = RectangleF.Empty
-
-
 
 
     Private Sub F2_Chart_순매수_MouseMove(sender As Object, e As MouseEventArgs) Handles F2_Chart_순매수.MouseMove
@@ -278,8 +297,9 @@ Public Class Form2
             If 순매수리스트 IsNot Nothing Then
                 Dim xValueInt As Integer = Math.Round(xValue)
                 Dim xTime As String = 순매수리스트(xValueInt).sTime
-                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 80), F2_Chart_순매수.Bottom - 200, 77, 20))
-                g.DrawString(xTime, font, brush, New PointF(currentMouseLocation.X - 75, F2_Chart_순매수.Bottom - 198))
+                Dim Index_time As String = String.Format("{0}:{1}", xValueInt, xTime)
+                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 120), F2_Chart_순매수.Bottom - 200, 117, 20))
+                g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X - 75, F2_Chart_순매수.Bottom - 198))
             End If
         End If
 

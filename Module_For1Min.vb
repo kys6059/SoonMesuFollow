@@ -27,11 +27,17 @@ Module Module_For1Min
         End Sub
     End Structure
 
+    Structure PIP탬플릿
+        Dim PointCount As Integer
+        Dim 표준편차 As Double
+        Dim PoinIndexList As List(Of Integer)
+    End Structure
+
     '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
     Public 일분옵션데이터() As 일분데이터템플릿
     Public 순매수리스트() As 순매수탬플릿
     Public 순매수리스트카운트 As Integer '순매수리스트 카운트
-
+    Public PIP_Point_Lists() As PIP탬플릿
     Public KOSPI_MIN, KOSPI_MAX, KOSPI_CUR As Single
 
     Public currentIndex_1MIn As Integer = -1
@@ -44,7 +50,6 @@ Module Module_For1Min
     Public 순매수데이터날짜수 As Integer = 0
 
 
-
     Public Sub InitDataStructure_1Min()
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
@@ -53,6 +58,8 @@ Module Module_For1Min
         For i As Integer = 0 To 1
             일분옵션데이터(i).Initialize()
         Next
+
+        ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
 
         KOSPI_MIN = 0
         KOSPI_MAX = 0
@@ -125,6 +132,86 @@ Module Module_For1Min
 
         Return ret
     End Function
+
+    Public Sub CalcPIPData()          '대표선 계산
+
+        Dim pointCount = 10
+        Dim pipIndexList As List(Of Integer) = PIP_ED(currentIndex_순매수, pointCount)
+
+        PIP_Point_Lists(0).PointCount = pointCount
+        PIP_Point_Lists(0).PoinIndexList = pipIndexList
+
+    End Sub
+
+    Public Function PIP_ED(ByVal LastIndex As Integer, ByVal n As Integer) As List(Of Integer)
+
+        'rawData는 외국인순매수+연기금순매수값으로 한다
+        '9시 2분부터 값이 정상적으로 들어오기 때문에 0,1,2번 값은 버리고 3번인덱스부터 계산한다
+
+        LastIndex = Math.Min(LastIndex, 760) '759번째 인덱스가 1520분이다 항상 이때까지만 계산한다
+
+        Dim pipData(n) As Double
+
+        Dim pipIndexList As List(Of Integer) = New List(Of Integer)
+
+        pipIndexList.Add(3) 'PIP 1
+        pipIndexList.Add(LastIndex - 1) 'PIP 2
+
+        For pipCount As Integer = 2 To n - 1
+
+            Dim RightPipPoint = 1
+            Dim leftPipIndex = pipIndexList(RightPipPoint - 1)
+            Dim RightPipIndex = pipIndexList(RightPipPoint)
+
+            Dim maxDistance As Double = Double.MinValue
+            Dim maxDistanceIndex As Integer = 0
+
+            For i As Integer = 4 To LastIndex - 1 '순매수리스트에 처음2개는 0으로 들어오기 때문에 2번째부터 계산한다
+
+                If RightPipIndex = i And i < (LastIndex - 1) Then
+
+                    RightPipPoint += 1
+                    leftPipIndex = RightPipIndex
+                    RightPipIndex = pipIndexList(RightPipPoint)
+
+                Else '거리측정
+
+                    Dim distance As Double = EuclideanDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
+                    If distance > maxDistance Then
+                        maxDistance = distance
+                        maxDistanceIndex = i
+                    End If
+                End If
+            Next
+
+            For i As Integer = 0 To pipIndexList.Count - 1
+
+                If pipIndexList(i) > maxDistanceIndex Then
+                    pipIndexList.Insert(i, maxDistanceIndex)
+                    Exit For
+                End If
+
+            Next
+
+        Next
+
+        Dim str As String = String.Format("pipIndexList({0}) = ", n)
+        For i As Integer = 0 To pipIndexList.Count - 1
+            str += pipIndexList(i).ToString() & ", "
+        Next
+        Console.WriteLine(str)
+        Return pipIndexList
+
+    End Function
+
+    Private Function EuclideanDistance(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal x3 As Double, ByVal y3 As Double) As Double
+
+        Return Math.Sqrt(Math.Pow(x2 - x3, 2) + Math.Pow(y2 - y3, 2)) + Math.Sqrt(Math.Pow(x1 - x3, 2) + Math.Pow(y1 - y3, 2))
+
+    End Function
+
+
+
 
 
 End Module
