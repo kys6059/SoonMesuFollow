@@ -22,9 +22,9 @@ Partial Class Form2
     '코드 편집기에서는 수정하지 마세요.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_f2_폼닫기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
@@ -36,8 +36,13 @@ Partial Class Form2
         Me.HSc_F2_시간조절 = New System.Windows.Forms.HScrollBar()
         Me.btn_F2_SelectDB = New System.Windows.Forms.Button()
         Me.F2_Chart_순매수 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.txt_TargetPointCount = New System.Windows.Forms.TextBox()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
+        Me.btn_점의수늘리기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_f2_폼닫기
@@ -155,19 +160,68 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend1)
+        ChartArea3.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend3)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(12, 172)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series1)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series3)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1393, 878)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
+        '
+        'txt_TargetPointCount
+        '
+        Me.txt_TargetPointCount.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_TargetPointCount.Font = New System.Drawing.Font("굴림", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_TargetPointCount.Location = New System.Drawing.Point(104, 3)
+        Me.txt_TargetPointCount.Name = "txt_TargetPointCount"
+        Me.txt_TargetPointCount.Size = New System.Drawing.Size(95, 29)
+        Me.txt_TargetPointCount.TabIndex = 3
+        Me.txt_TargetPointCount.Text = "5"
+        Me.txt_TargetPointCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수늘리기, 2, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetPointCount, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수줄이기, 0, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(1411, 172)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(305, 39)
+        Me.TableLayoutPanel2.TabIndex = 4
+        '
+        'btn_점의수줄이기
+        '
+        Me.btn_점의수줄이기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_점의수줄이기.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_점의수줄이기.Location = New System.Drawing.Point(3, 3)
+        Me.btn_점의수줄이기.Name = "btn_점의수줄이기"
+        Me.btn_점의수줄이기.Size = New System.Drawing.Size(95, 33)
+        Me.btn_점의수줄이기.TabIndex = 4
+        Me.btn_점의수줄이기.Text = "DOWN"
+        Me.btn_점의수줄이기.UseVisualStyleBackColor = True
+        '
+        'btn_점의수늘리기
+        '
+        Me.btn_점의수늘리기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_점의수늘리기.Font = New System.Drawing.Font("굴림", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_점의수늘리기.Location = New System.Drawing.Point(205, 3)
+        Me.btn_점의수늘리기.Name = "btn_점의수늘리기"
+        Me.btn_점의수늘리기.Size = New System.Drawing.Size(97, 33)
+        Me.btn_점의수늘리기.TabIndex = 5
+        Me.btn_점의수늘리기.Text = "UP"
+        Me.btn_점의수늘리기.UseVisualStyleBackColor = True
         '
         'Form2
         '
@@ -175,6 +229,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(2484, 1062)
+        Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Controls.Add(Me.F2_Chart_순매수)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.btn_f2_폼닫기)
@@ -183,6 +238,8 @@ Partial Class Form2
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.TableLayoutPanel1.PerformLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel2.ResumeLayout(False)
+        Me.TableLayoutPanel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -198,4 +255,8 @@ Partial Class Form2
     Friend WithEvents HSc_F2_시간조절 As HScrollBar
     Friend WithEvents btn_F2_SelectDB As Button
     Friend WithEvents F2_Chart_순매수 As DataVisualization.Charting.Chart
+    Friend WithEvents txt_TargetPointCount As TextBox
+    Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
+    Friend WithEvents btn_점의수늘리기 As Button
+    Friend WithEvents btn_점의수줄이기 As Button
 End Class

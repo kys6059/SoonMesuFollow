@@ -153,36 +153,42 @@ Public Class Form2
             Dim For_Kig_Series As String = "For_Kig_" + chartNumber.ToString()
             Dim oneMinute_Series As String = "oneMinute_" + chartNumber.ToString()
             Dim PIP_Series As String = "PIP_" + chartNumber.ToString()
-            Dim retIndex = 0
+            Dim retIndex As Integer = 0
 
             For i As Integer = 0 To currentIndex_순매수
 
-                F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수를 입력한다
-                F2_Chart_순매수.Series(For_Series).Points(retIndex).AxisLabel = Format("{0}", 순매수리스트(retIndex).sTime)
+                F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용 - 
+                F2_Chart_순매수.Series(oneMinute_Series).Points(i).AxisLabel = Format("{0}", 순매수리스트(i).sTime)
 
-                F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, 순매수리스트(i).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
-                F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용
+                If i >= 3 Then
+                    retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
+                    F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, 순매수리스트(i).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
 
-                Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, 순매수리스트(i).외국인_연기금_순매수, vbCrLf, 순매수리스트(i).코스피지수)
-                F2_Chart_순매수.Series(For_Series).Points(i).ToolTip = str
-                F2_Chart_순매수.Series(For_Kig_Series).Points(i).ToolTip = str
-                F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
+                    Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, 순매수리스트(i).외국인_연기금_순매수, vbCrLf, 순매수리스트(i).코스피지수)
+                    F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
+                    F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
+                    F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
+                End If
 
             Next
 
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = KOSPI_MAX + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = KOSPI_MIN - 1
 
-            For i As Integer = 0 To PIP_Point_Lists.Length - 1
+            If currentIndex_순매수 > 3 Then
+                For i As Integer = 0 To PIP_Point_Lists.Length - 1
+                    Dim targetPointCount As Integer = Val(txt_TargetPointCount.Text)
 
-                If PIP_Point_Lists(i).PointCount >= 2 Then   '2보다 작다는 말은 비어있다는 말이다
-                    For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
-                        Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-                        F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, 순매수리스트(point).외국인_연기금_순매수)
-                    Next
+                    If PIP_Point_Lists(i).PointCount = targetPointCount Then '원하는 pointCount와 같은 점수만을 화면에 표시한다
 
-                End If
-            Next
+                        For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
+                            Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
+                            F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, 순매수리스트(point).외국인_연기금_순매수)
+                        Next
+
+                    End If
+                Next
+            End If
 
         End If
 
@@ -298,11 +304,28 @@ Public Class Form2
                 Dim xValueInt As Integer = Math.Round(xValue)
                 Dim xTime As String = 순매수리스트(xValueInt).sTime
                 Dim Index_time As String = String.Format("{0}:{1}", xValueInt, xTime)
-                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 120), F2_Chart_순매수.Bottom - 200, 117, 20))
-                g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X - 75, F2_Chart_순매수.Bottom - 198))
+                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 100), F2_Chart_순매수.Bottom - 200, 97, 20))
+                g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X - 94, F2_Chart_순매수.Bottom - 198))
             End If
         End If
 
 
+    End Sub
+
+    Private Sub btn_점의수줄이기_Click(sender As Object, e As EventArgs) Handles btn_점의수줄이기.Click
+
+        If Val(txt_TargetPointCount.Text) >= 3 Then
+            Dim n As Integer = Val(txt_TargetPointCount.Text) - 1
+            txt_TargetPointCount.Text = n.ToString()
+            DrawGraph()
+        End If
+    End Sub
+
+    Private Sub btn_점의수늘리기_Click(sender As Object, e As EventArgs) Handles btn_점의수늘리기.Click
+        If Val(txt_TargetPointCount.Text) <= 9 Then
+            Dim n As Integer = Val(txt_TargetPointCount.Text) + 1
+            txt_TargetPointCount.Text = n.ToString()
+            DrawGraph()
+        End If
     End Sub
 End Class

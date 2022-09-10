@@ -135,11 +135,20 @@ Module Module_For1Min
 
     Public Sub CalcPIPData()          '대표선 계산
 
-        Dim pointCount = 10
-        Dim pipIndexList As List(Of Integer) = PIP_ED(currentIndex_순매수, pointCount)
+        Dim minPoint = 2
+        Dim maxPoint As Integer = Math.Min(currentIndex_순매수 / 2, 10)
 
-        PIP_Point_Lists(0).PointCount = pointCount
-        PIP_Point_Lists(0).PoinIndexList = pipIndexList
+        If maxPoint >= 2 Then ReDim PIP_Point_Lists(maxPoint - minPoint)
+
+        For i As Integer = 0 To maxPoint - minPoint
+            If currentIndex_순매수 >= 4 Then
+                Dim pointCount = i + minPoint
+                Dim pipIndexList As List(Of Integer) = PIP_ED(currentIndex_순매수, pointCount)
+
+                PIP_Point_Lists(i).PointCount = pointCount
+                PIP_Point_Lists(i).PoinIndexList = pipIndexList
+            End If
+        Next
 
     End Sub
 
@@ -155,7 +164,7 @@ Module Module_For1Min
         Dim pipIndexList As List(Of Integer) = New List(Of Integer)
 
         pipIndexList.Add(3) 'PIP 1
-        pipIndexList.Add(LastIndex - 1) 'PIP 2
+        pipIndexList.Add(LastIndex) 'PIP 2
 
         For pipCount As Integer = 2 To n - 1
 
@@ -166,9 +175,9 @@ Module Module_For1Min
             Dim maxDistance As Double = Double.MinValue
             Dim maxDistanceIndex As Integer = 0
 
-            For i As Integer = 4 To LastIndex - 1 '순매수리스트에 처음2개는 0으로 들어오기 때문에 2번째부터 계산한다
+            For i As Integer = 4 To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
 
-                If RightPipIndex = i And i < (LastIndex - 1) Then
+                If RightPipIndex = i And i < (LastIndex) Then
 
                     RightPipPoint += 1
                     leftPipIndex = RightPipIndex
@@ -176,7 +185,7 @@ Module Module_For1Min
 
                 Else '거리측정
 
-                    Dim distance As Double = EuclideanDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
+                    Dim distance As Double = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
                     If distance > maxDistance Then
                         maxDistance = distance
                         maxDistanceIndex = i
@@ -207,6 +216,15 @@ Module Module_For1Min
     Private Function EuclideanDistance(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal x3 As Double, ByVal y3 As Double) As Double
 
         Return Math.Sqrt(Math.Pow(x2 - x3, 2) + Math.Pow(y2 - y3, 2)) + Math.Sqrt(Math.Pow(x1 - x3, 2) + Math.Pow(y1 - y3, 2))
+
+    End Function
+
+    Private Function PerpendichalrDistance(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal x3 As Double, ByVal y3 As Double) As Double
+
+        Dim s As Double = (y2 - y1) / (x2 - x1)
+
+        Return Math.Abs(s * x3 - y3 + y1 - s * x1) / Math.Sqrt(s * s + 1)
+
 
     End Function
 
