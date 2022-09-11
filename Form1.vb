@@ -1371,12 +1371,8 @@ Public Class Form1
     End Sub
 
     Private Sub btn_순매수데이터백업_Click(sender As Object, e As EventArgs) Handles btn_TEST.Click
-
         Form2.Show()
-
     End Sub
 
-    Private Sub DBDate_HScrollBar_Scroll(sender As Object, e As ScrollEventArgs) Handles DBDate_HScrollBar.Scroll
 
-    End Sub
 End Class

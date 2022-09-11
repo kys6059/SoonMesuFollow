@@ -9,6 +9,13 @@ Public Class Form2
 
     Private Sub btn_F2_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_F2_SelectDB.Click
 
+        If List잔고 IsNot Nothing Then
+            If List잔고.Count > 0 Then
+                Add_Log("일반", "양매도 잔고가 있을 때는 매수DB 오픈 금지")
+                Return
+            End If
+        End If
+
         Add_Log("일반", "전체 Data 취합 Click")
 
         Dim dateCount As Integer = GetRawData_1min(txt_F2_DB_Date_Limit.Text, txt_F2_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
@@ -328,4 +335,5 @@ Public Class Form2
             DrawGraph()
         End If
     End Sub
+
 End Class

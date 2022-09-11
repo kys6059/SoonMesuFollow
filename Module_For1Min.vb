@@ -31,6 +31,7 @@ Module Module_For1Min
         Dim PointCount As Integer
         Dim 표준편차 As Double
         Dim PoinIndexList As List(Of Integer)
+
     End Structure
 
     '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
@@ -48,6 +49,8 @@ Module Module_For1Min
 
     Public F2_TargetDateIndex As Integer = 0 '-------------------------------------------- 이건 순매수테이블과 공용으로 활용한다
     Public 순매수데이터날짜수 As Integer = 0
+
+    Public PIP적합포인트수 As Integer = 2
 
 
     Public Sub InitDataStructure_1Min()
@@ -136,23 +139,90 @@ Module Module_For1Min
     Public Sub CalcPIPData()          '대표선 계산
 
         Dim minPoint = 2
-        Dim maxPoint As Integer = Math.Min(currentIndex_순매수 / 2, 10)
+        Dim 최대포인트수대비비율 As Single = Val(Form2.txt_최대포인트수대비비율.Text)
+        Dim maxPoint As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 최대포인트수대비비율), 10)
 
         If maxPoint >= 2 Then ReDim PIP_Point_Lists(maxPoint - minPoint)
 
+        F2_Clear_Log()
+
         For i As Integer = 0 To maxPoint - minPoint
             If currentIndex_순매수 >= 4 Then
+
                 Dim pointCount = i + minPoint
-                Dim pipIndexList As List(Of Integer) = PIP_ED(currentIndex_순매수, pointCount)
+                Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount)
 
                 PIP_Point_Lists(i).PointCount = pointCount
                 PIP_Point_Lists(i).PoinIndexList = pipIndexList
+                PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount)
+
+                Dim str As String = String.Format("pipIndexList({0}), 평균거리는 = {1},   ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2))
+                For j As Integer = 0 To pipIndexList.Count - 1
+                    str += pipIndexList(j).ToString() & ", "
+                Next
+                Console.WriteLine(str)
+                F2_Add_Log(str)
             End If
         Next
 
+        '평균거리가 줄어들다가 늘어나는 점이 있으면 그 점을 화면에 표시한다. 단 평균거리는 0보다 크고 1보다 작아야 한다
+
+        PIP적합포인트수 = maxPoint
+        Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
+        For i As Integer = 1 To maxPoint - minPoint
+            If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then
+                If PIP_Point_Lists(i).표준편차 > PIP_Point_Lists(i - 1).표준편차 * 선행_포인트_마진 Then
+                    PIP적합포인트수 = PIP_Point_Lists(i - 1).PointCount
+                    Exit For
+                End If
+            End If
+        Next
+        Form2.txt_TargetPointCount.Text = PIP적합포인트수.ToString()
+
     End Sub
 
-    Public Function PIP_ED(ByVal LastIndex As Integer, ByVal n As Integer) As List(Of Integer)
+    Private Function Calc_PIP거리계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+
+        LastIndex = Math.Min(LastIndex, 760) '759번째 인덱스가 1520분이다 항상 이때까지만 계산한다
+
+        Dim RightPipPoint = 1
+        Dim leftPipIndex = pipIndexList(RightPipPoint - 1)
+        Dim RightPipIndex = pipIndexList(RightPipPoint)
+
+        Dim maxDistance As Double = Double.MinValue
+        Dim maxDistanceIndex As Integer = 0
+        Dim totalDistance As Double = 0.0
+        Dim cnt As Integer = 0
+
+        For i As Integer = 4 To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
+
+            If RightPipIndex = i And i < LastIndex Then
+
+                RightPipPoint += 1
+                leftPipIndex = RightPipIndex
+                RightPipIndex = pipIndexList(RightPipPoint)
+
+            Else '거리측정
+
+                Dim distance As Double = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
+                If distance > maxDistance Then
+                    maxDistance = distance
+                    maxDistanceIndex = i
+                End If
+
+                cnt += 1
+                totalDistance += Math.Abs(distance)
+
+            End If
+        Next
+
+        Dim 표준거리 = totalDistance / cnt
+
+        Return 표준거리
+
+    End Function
+
+    Public Function PIP_PD(ByVal LastIndex As Integer, ByVal n As Integer) As List(Of Integer)
 
         'rawData는 외국인순매수+연기금순매수값으로 한다
         '9시 2분부터 값이 정상적으로 들어오기 때문에 0,1,2번 값은 버리고 3번인덱스부터 계산한다
@@ -201,14 +271,8 @@ Module Module_For1Min
                 End If
 
             Next
-
         Next
 
-        Dim str As String = String.Format("pipIndexList({0}) = ", n)
-        For i As Integer = 0 To pipIndexList.Count - 1
-            str += pipIndexList(i).ToString() & ", "
-        Next
-        Console.WriteLine(str)
         Return pipIndexList
 
     End Function
@@ -228,7 +292,15 @@ Module Module_For1Min
 
     End Function
 
+    Public Sub F2_Clear_Log()
+        Form2.txt_F2_Log.Clear()
+    End Sub
 
+    Public Sub F2_Add_Log(ByVal str As String)
+
+        Form2.txt_F2_Log.Text = Form2.txt_F2_Log.Text + vbCrLf + str
+
+    End Sub
 
 
 
