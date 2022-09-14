@@ -22,9 +22,9 @@ Partial Class Form2
     '코드 편집기에서는 수정하지 마세요.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_f2_폼닫기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
@@ -42,16 +42,18 @@ Partial Class Form2
         Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
         Me.txt_F2_Log = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.txt_선행_포인트_마진 = New System.Windows.Forms.RichTextBox()
-        Me.txt_신호허용거리배수 = New System.Windows.Forms.RichTextBox()
         Me.txt_최대포인트수대비비율 = New System.Windows.Forms.RichTextBox()
+        Me.txt_신호허용거리배수 = New System.Windows.Forms.RichTextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txt_선행_포인트_마진 = New System.Windows.Forms.RichTextBox()
+        Me.grid_3 = New System.Windows.Forms.DataGridView()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
+        CType(Me.grid_3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn_f2_폼닫기
@@ -169,16 +171,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(12, 172)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1393, 878)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -236,7 +238,7 @@ Partial Class Form2
         '
         Me.txt_F2_Log.Location = New System.Drawing.Point(1411, 228)
         Me.txt_F2_Log.Name = "txt_F2_Log"
-        Me.txt_F2_Log.Size = New System.Drawing.Size(727, 277)
+        Me.txt_F2_Log.Size = New System.Drawing.Size(727, 260)
         Me.txt_F2_Log.TabIndex = 5
         Me.txt_F2_Log.Text = ""
         '
@@ -261,29 +263,25 @@ Partial Class Form2
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(280, 115)
         Me.TableLayoutPanel3.TabIndex = 6
         '
-        'Label1
+        'txt_최대포인트수대비비율
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label1.Location = New System.Drawing.Point(3, 3)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(180, 33)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "선행포인트수 마진"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txt_최대포인트수대비비율.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_최대포인트수대비비율.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_최대포인트수대비비율.Location = New System.Drawing.Point(189, 79)
+        Me.txt_최대포인트수대비비율.Name = "txt_최대포인트수대비비율"
+        Me.txt_최대포인트수대비비율.Size = New System.Drawing.Size(86, 31)
+        Me.txt_최대포인트수대비비율.TabIndex = 7
+        Me.txt_최대포인트수대비비율.Text = "4.0"
         '
-        'Label4
+        'txt_신호허용거리배수
         '
-        Me.Label4.AutoSize = True
-        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label4.Location = New System.Drawing.Point(3, 40)
-        Me.Label4.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(180, 33)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "신호 허용거리 배수"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.txt_신호허용거리배수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_신호허용거리배수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_신호허용거리배수.Location = New System.Drawing.Point(189, 42)
+        Me.txt_신호허용거리배수.Name = "txt_신호허용거리배수"
+        Me.txt_신호허용거리배수.Size = New System.Drawing.Size(86, 29)
+        Me.txt_신호허용거리배수.TabIndex = 6
+        Me.txt_신호허용거리배수.Text = "3.0"
         '
         'Label6
         '
@@ -298,6 +296,30 @@ Partial Class Form2
         Me.Label6.Text = "최대포인트수_배율"
         Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(3, 40)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(180, 33)
+        Me.Label4.TabIndex = 2
+        Me.Label4.Text = "신호 허용거리 배수"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label1.Location = New System.Drawing.Point(3, 3)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(180, 33)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "선행포인트수 마진"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'txt_선행_포인트_마진
         '
         Me.txt_선행_포인트_마진.Dock = System.Windows.Forms.DockStyle.Fill
@@ -307,27 +329,21 @@ Partial Class Form2
         Me.txt_선행_포인트_마진.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
         Me.txt_선행_포인트_마진.Size = New System.Drawing.Size(86, 29)
         Me.txt_선행_포인트_마진.TabIndex = 5
-        Me.txt_선행_포인트_마진.Text = "0.9"
+        Me.txt_선행_포인트_마진.Text = "0.8"
         '
-        'txt_신호허용거리배수
+        'grid_3
         '
-        Me.txt_신호허용거리배수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_신호허용거리배수.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_신호허용거리배수.Location = New System.Drawing.Point(189, 42)
-        Me.txt_신호허용거리배수.Name = "txt_신호허용거리배수"
-        Me.txt_신호허용거리배수.Size = New System.Drawing.Size(86, 29)
-        Me.txt_신호허용거리배수.TabIndex = 6
-        Me.txt_신호허용거리배수.Text = "3.0"
-        '
-        'txt_최대포인트수대비비율
-        '
-        Me.txt_최대포인트수대비비율.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_최대포인트수대비비율.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_최대포인트수대비비율.Location = New System.Drawing.Point(189, 79)
-        Me.txt_최대포인트수대비비율.Name = "txt_최대포인트수대비비율"
-        Me.txt_최대포인트수대비비율.Size = New System.Drawing.Size(86, 31)
-        Me.txt_최대포인트수대비비율.TabIndex = 7
-        Me.txt_최대포인트수대비비율.Text = "4.0"
+        Me.grid_3.AllowUserToAddRows = False
+        Me.grid_3.AllowUserToDeleteRows = False
+        Me.grid_3.BackgroundColor = System.Drawing.SystemColors.Control
+        Me.grid_3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
+        Me.grid_3.Location = New System.Drawing.Point(1411, 494)
+        Me.grid_3.Name = "grid_3"
+        Me.grid_3.ReadOnly = True
+        Me.grid_3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.grid_3.RowTemplate.Height = 23
+        Me.grid_3.Size = New System.Drawing.Size(804, 283)
+        Me.grid_3.TabIndex = 7
         '
         'Form2
         '
@@ -335,6 +351,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(2484, 1062)
+        Me.Controls.Add(Me.grid_3)
         Me.Controls.Add(Me.TableLayoutPanel3)
         Me.Controls.Add(Me.txt_F2_Log)
         Me.Controls.Add(Me.TableLayoutPanel2)
@@ -350,6 +367,7 @@ Partial Class Form2
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
+        CType(Me.grid_3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -377,4 +395,5 @@ Partial Class Form2
     Friend WithEvents Label1 As Label
     Friend WithEvents txt_선행_포인트_마진 As RichTextBox
     Friend WithEvents txt_최대포인트수대비비율 As RichTextBox
+    Friend WithEvents grid_3 As DataGridView
 End Class

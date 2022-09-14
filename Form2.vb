@@ -52,6 +52,9 @@ Public Class Form2
         SetScrolData_F2()
         CalcColorData()        '최대최소 계산
         CalcPIPData()          '대표선 계산
+
+
+        DrawGrid()             '표
         DrawGraph()
 
     End Sub
@@ -62,6 +65,68 @@ Public Class Form2
         HSc_F2_시간조절.Refresh()
         Dim str As String = String.Format("{0}건 중 {1}번째", timeIndex_순매수, currentIndex_순매수)
         Lbl_F2_현재시간Index.Text = str
+    End Sub
+
+    Private Sub DrawGrid()
+
+
+        grid_3.Columns.Clear()
+        grid_3.Rows.Clear()
+        grid_3.ColumnCount = 7
+        grid_3.RowCount = PIP_Point_Lists.Length
+
+
+        If PIP_Point_Lists.Length > 0 Then
+
+            grid_3.RowHeadersVisible = False
+            grid_3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+            For i As Integer = 0 To grid_3.ColumnCount - 1
+                grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+                grid_3.Columns(i).Width = 80
+            Next
+
+            grid_3.Columns(0).HeaderText = "번호"
+            grid_3.Columns(1).HeaderText = "포인트수"
+            grid_3.Columns(2).HeaderText = "평균거리"
+            grid_3.Columns(3).HeaderText = "기울기"
+            grid_3.Columns(4).HeaderText = "신호"
+            grid_3.Columns(5).HeaderText = "최종선 거리"
+            grid_3.Columns(6).HeaderText = "포인트 리스트"
+            grid_3.Columns(0).Width = 50
+            grid_3.Columns(6).Width = 250
+
+            '데이터 입력하기
+
+            For i = 0 To PIP_Point_Lists.Length - 1
+                grid_3.Rows(i).Cells(0).Value = i
+                grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
+                grid_3.Rows(i).Cells(2).Value = Math.Round(PIP_Point_Lists(i).표준편차, 2)
+                grid_3.Rows(i).Cells(3).Value = Math.Round(PIP_Point_Lists(i).마지막선기울기, 2)
+                grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(i).마지막신호
+                grid_3.Rows(i).Cells(5).Value = Math.Round(PIP_Point_Lists(i).마지막선거리합, 2)
+
+                Dim str As String = ""
+                For j = 0 To PIP_Point_Lists(i).PointCount - 1
+                    str = str & PIP_Point_Lists(i).PoinIndexList(j) & ", "
+
+                Next
+                grid_3.Rows(i).Cells(6).Value = str
+                grid_3.Rows(i).Cells(6).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+
+                For k = 0 To grid_3.ColumnCount - 1
+                    If PIP적합포인트인덱스 = i Then
+                        grid_3.Rows(i).Cells(k).Style.BackColor = Color.Yellow
+                        grid_3.Rows(i).Cells(k).Style.ForeColor = Color.Red
+                    End If
+                Next
+
+            Next
+
+        End If
+
+        grid_3.Refresh()
+
     End Sub
 
     Private Sub DrawGraph()

@@ -823,6 +823,8 @@ Partial Class Form1
         'chk_모의투자연결
         '
         Me.chk_모의투자연결.AutoSize = True
+        Me.chk_모의투자연결.Checked = True
+        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"

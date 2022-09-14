@@ -30,6 +30,9 @@ Module Module_For1Min
     Structure PIP탬플릿
         Dim PointCount As Integer
         Dim 표준편차 As Double
+        Dim 마지막신호 As String '상승 -1, 보합 - 0, 하락 = -1
+        Dim 마지막선기울기 As Double
+        Dim 마지막선거리합 As Double
         Dim PoinIndexList As List(Of Integer)
 
     End Structure
@@ -50,7 +53,7 @@ Module Module_For1Min
     Public F2_TargetDateIndex As Integer = 0 '-------------------------------------------- 이건 순매수테이블과 공용으로 활용한다
     Public 순매수데이터날짜수 As Integer = 0
 
-    Public PIP적합포인트수 As Integer = 2
+    Public PIP적합포인트인덱스 As Integer = 0
 
 
     Public Sub InitDataStructure_1Min()
@@ -146,7 +149,7 @@ Module Module_For1Min
 
         F2_Clear_Log()
 
-        For i As Integer = 0 To maxPoint - minPoint
+        For i As Integer = 0 To maxPoint - minPoint 'PIP Point수가 2개부터 최대점(10개)까지 표준편차와 point들을 계산한다
             If currentIndex_순매수 >= 4 Then
 
                 Dim pointCount = i + minPoint
@@ -155,8 +158,11 @@ Module Module_For1Min
                 PIP_Point_Lists(i).PointCount = pointCount
                 PIP_Point_Lists(i).PoinIndexList = pipIndexList
                 PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount)
+                PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount)
+                PIP_Point_Lists(i).마지막신호 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
+                PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount)
 
-                Dim str As String = String.Format("pipIndexList({0}), 평균거리는 = {1},   ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2))
+                Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3},최종선거리={4}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호, Math.Round(PIP_Point_Lists(i).마지막선거리합, 2))
                 For j As Integer = 0 To pipIndexList.Count - 1
                     str += pipIndexList(j).ToString() & ", "
                 Next
@@ -166,20 +172,62 @@ Module Module_For1Min
         Next
 
         '평균거리가 줄어들다가 늘어나는 점이 있으면 그 점을 화면에 표시한다. 단 평균거리는 0보다 크고 1보다 작아야 한다
-
-        PIP적합포인트수 = maxPoint
+        PIP적합포인트인덱스 = 0
         Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
         For i As Integer = 1 To maxPoint - minPoint
             If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then
                 If PIP_Point_Lists(i).표준편차 > PIP_Point_Lists(i - 1).표준편차 * 선행_포인트_마진 Then
-                    PIP적합포인트수 = PIP_Point_Lists(i - 1).PointCount
+                    PIP적합포인트인덱스 = i - 1
                     Exit For
                 End If
             End If
         Next
-        Form2.txt_TargetPointCount.Text = PIP적합포인트수.ToString()
+        If PIP_Point_Lists.Length > 0 Then
+            Form2.txt_TargetPointCount.Text = PIP_Point_Lists(PIP적합포인트인덱스).PointCount.ToString()
+        End If
+
 
     End Sub
+
+
+    Private Function Calc_PIP마지막선거리합계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+
+        If PointCount < 3 Then Return 0
+
+        Dim leftPipIndex = pipIndexList(PointCount - 3)
+        Dim RightPipIndex = pipIndexList(PointCount - 2)
+        Dim LastPoint = pipIndexList(PointCount - 1)
+
+        Dim distance As Double = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, LastPoint, 순매수리스트(LastPoint).외국인_연기금_순매수) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
+
+        Return distance
+
+    End Function
+
+    Private Function 마지막신호판단(ByVal 기울기 As Double) As String
+
+        Dim 신호 As String = "중립"
+        Dim 기준 As Single = 5.0
+        If 기울기 > 기준 Then
+            신호 = "상승"
+        ElseIf 기울기 < (기준 * -1) Then
+            신호 = "하락"
+        End If
+        Return 신호
+    End Function
+
+    Private Function Calc_PIP마지막선기울기계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+
+        Dim x1 As Double = pipIndexList(PointCount - 2)
+        Dim x2 As Double = pipIndexList(PointCount - 1)
+        Dim y1 As Double = 순매수리스트(x1).외국인_연기금_순매수
+        Dim y2 As Double = 순매수리스트(x2).외국인_연기금_순매수
+
+        Dim 기울기 As Double = (y2 - y1) / (x2 - x1)
+
+        Return 기울기
+
+    End Function
 
     Private Function Calc_PIP거리계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
 

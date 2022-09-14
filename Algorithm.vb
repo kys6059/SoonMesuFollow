@@ -188,7 +188,7 @@ Module Algorithm
 
             If isRealFlag = True Then
 
-                If ReceiveCount > 2 Then
+                If ReceiveCount > 1 Then
 
                     If AlreadyOccured("S", occurType.oneShot) = False Then   '위에서 이미발생 조건을 확인하지 않으니 신호가 여러개 등록되는 문제가 발생한 거 같음.(나중에 오후에 신호리스트 루프를 돌면서 매수함) True를 리턴해서 매도는 여러번 하더라도 신호는 1개만 등록되도록 변경함. 20220629
 
