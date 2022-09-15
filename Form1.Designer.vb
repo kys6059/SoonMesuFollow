@@ -823,8 +823,6 @@ Partial Class Form1
         'chk_모의투자연결
         '
         Me.chk_모의투자연결.AutoSize = True
-        Me.chk_모의투자연결.Checked = True
-        Me.chk_모의투자연결.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_모의투자연결.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_모의투자연결.Location = New System.Drawing.Point(293, 4)
         Me.chk_모의투자연결.Name = "chk_모의투자연결"
@@ -1218,7 +1216,7 @@ Partial Class Form1
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(153, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.7_20220905"
+        Me.txt_programversion.Text = "1.1.8_20220915"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'chk_ChangeTargetIndex
