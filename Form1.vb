@@ -1314,10 +1314,32 @@ Public Class Form1
         Dim 기준가격 As String = "1.6"
         Dim timeoutTime As String = "1515"
         Dim 중간청산비율 As String = "0.9"
+        Dim 투자비율 As String = "1.0"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         If isWeekly = True Then
+            Select Case 남은날짜
+                Case 0
+                    기준가격 = "1.4"
+                    손절비율 = "1.20"
+                    ikjulstring = "0.5"
+                    중간청산비율 = "0.65"
+                    투자비율 = "0.7"
+                Case 1
+                    기준가격 = "1.6"
+                    timeoutTime = "1300"
+                    투자비율 = "0.5"
+                Case 2
+                    기준가격 = "1.6"
+                    timeoutTime = "1300"
+                    투자비율 = "0.5"
+                Case 3
+                    투자비율 = "0.7"
+                Case 6
+                    투자비율 = "0.7"
+            End Select
+        Else
             Select Case 남은날짜
                 Case 0
                     기준가격 = "1.5"
@@ -1325,29 +1347,13 @@ Public Class Form1
                     ikjulstring = "0.35"
                     중간청산비율 = "0.55"
                 Case 1
-                    기준가격 = "1.6"
-                    timeoutTime = "1300"
-                Case 2
-                    기준가격 = "1.6"
-                    timeoutTime = "1300"
-                Case 3
-
-                Case 6
-
-            End Select
-        Else
-            Select Case 남은날짜
-                Case 0
-                    기준가격 = "1.6"
-                    손절비율 = "1.20"
-                    ikjulstring = "0.35"
-                    중간청산비율 = "0.55"
-                Case 1
                     기준가격 = "1.7"
                     timeoutTime = "1300"
+                    투자비율 = "0.7"
                 Case 2
                     기준가격 = "1.7"
                     timeoutTime = "1300"
+                    투자비율 = "0.7"
                 Case 3
                     기준가격 = "1.7"
                 Case 6
@@ -1355,13 +1361,14 @@ Public Class Form1
             End Select
         End If
 
-
+        txt_투자비율.Text = 투자비율
         txt_손절매비율.Text = 손절비율
         txt_JongmokTargetPrice.Text = 기준가격
         txt_익절목표.Text = ikjulstring
         txt_신호TimeOut시간.Text = timeoutTime
         txt_중간청산비율.Text = 중간청산비율
 
+        txt_투자비율.Refresh()
         txt_손절매비율.Refresh()
         txt_JongmokTargetPrice.Refresh()
         txt_익절목표.Refresh()
