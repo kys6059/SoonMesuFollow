@@ -52,11 +52,12 @@ Public Class Form2
         SetScrolData_F2()
         CalcColorData()        '최대최소 계산
         CalcPIPData()          '대표선 계산
-
+        SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
 
         DrawGrid()             '표
+        Draw_Shinho_Grid()
         DrawGraph()
-
+        txt_F2_최종방향.Text = 이전순매수방향
     End Sub
 
     Private Sub SetScrolData_F2() '타임 스크롤의 최대최소값을 지정한다
@@ -126,6 +127,78 @@ Public Class Form2
         End If
 
         grid_3.Refresh()
+
+    End Sub
+
+    Private Sub Draw_Shinho_Grid()
+
+
+        grid_shinho.Columns.Clear()
+        grid_shinho.Rows.Clear()
+        grid_shinho.ColumnCount = 23
+        grid_shinho.RowCount = SoonMesuShinhoList.Count
+
+        grid_shinho.RowHeadersVisible = False
+        grid_shinho.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+        For i As Integer = 0 To grid_shinho.ColumnCount - 1
+            grid_shinho.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grid_shinho.Columns(i).Width = 80
+        Next
+        grid_shinho.Columns(0).HeaderText = "신호차수"
+        grid_shinho.Columns(1).HeaderText = "발생Idx"
+        grid_shinho.Columns(2).HeaderText = "발생시간"
+        grid_shinho.Columns(3).HeaderText = "신호ID"
+        grid_shinho.Columns(4).HeaderText = "발생순매수"
+        grid_shinho.Columns(5).HeaderText = "해제순매수"
+        grid_shinho.Columns(6).HeaderText = "발생지수"
+        grid_shinho.Columns(7).HeaderText = "해제지수"
+        grid_shinho.Columns(8).HeaderText = "콜풋"
+        grid_shinho.Columns(9).HeaderText = "행사가"
+        grid_shinho.Columns(10).HeaderText = "발생가격"
+        grid_shinho.Columns(11).HeaderText = "주문번호"
+        grid_shinho.Columns(12).HeaderText = "종목코드"
+        grid_shinho.Columns(13).HeaderText = "체결상태"
+        grid_shinho.Columns(14).HeaderText = "현재가격"
+        grid_shinho.Columns(15).HeaderText = "현재상태"
+        grid_shinho.Columns(16).HeaderText = "이익율"
+        grid_shinho.Columns(17).HeaderText = "중간매도"
+        grid_shinho.Columns(18).HeaderText = "매도시간"
+        grid_shinho.Columns(19).HeaderText = "매도Idx"
+        grid_shinho.Columns(20).HeaderText = "매도사유"
+        grid_shinho.Columns(21).HeaderText = "환산이익"
+        grid_shinho.Columns(22).HeaderText = "기타"
+
+        'grid_shinho.Columns(0).Width = 50
+
+
+        '데이터 입력하기
+
+        For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+            Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+            grid_shinho.Rows(i).Cells(0).Value = s.A00_신호차수
+            grid_shinho.Rows(i).Cells(1).Value = s.A01_발생Index
+            grid_shinho.Rows(i).Cells(2).Value = s.A02_발생시간
+            grid_shinho.Rows(i).Cells(3).Value = s.A03_신호ID
+            grid_shinho.Rows(i).Cells(4).Value = s.A04_신호발생순매수
+            grid_shinho.Rows(i).Cells(5).Value = s.A05_신호해제순매수
+            grid_shinho.Rows(i).Cells(6).Value = s.A06_신호발생종합주가지수
+            grid_shinho.Rows(i).Cells(7).Value = s.A07_신호해제종합주가지수
+            grid_shinho.Rows(i).Cells(8).Value = s.A08_콜풋
+            grid_shinho.Rows(i).Cells(9).Value = s.A09_행사가
+            grid_shinho.Rows(i).Cells(10).Value = s.A10_신호발생가격
+            grid_shinho.Rows(i).Cells(11).Value = s.A11_주문번호
+            grid_shinho.Rows(i).Cells(12).Value = s.A12_종목코드
+            grid_shinho.Rows(i).Cells(13).Value = s.A13_체결상태
+            grid_shinho.Rows(i).Cells(14).Value = s.A14_현재가격
+            grid_shinho.Rows(i).Cells(15).Value = s.A15_현재상태
+            grid_shinho.Rows(i).Cells(16).Value = s.A16_이익률
+            grid_shinho.Rows(i).Cells(17).Value = s.A17_중간매도Flag
+            grid_shinho.Rows(i).Cells(18).Value = s.A18_매도시간
+            grid_shinho.Rows(i).Cells(19).Value = s.A19_매도Index
+            grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
+            grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
+        Next
 
     End Sub
 
@@ -229,14 +302,23 @@ Public Class Form2
 
             For i As Integer = 0 To currentIndex_순매수
 
+                Dim target순매수 As Long
+                If cmb_F2_순매수기준.SelectedIndex = 0 Then
+                    target순매수 = 순매수리스트(i).외국인_기관_순매수
+                ElseIf cmb_F2_순매수기준.SelectedIndex = 1 Then
+                    target순매수 = 순매수리스트(i).외국인_연기금_순매수
+                ElseIf cmb_F2_순매수기준.SelectedIndex = 2 Then
+                    target순매수 = 순매수리스트(i).외국인순매수
+                End If
+
                 F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용 - 
                 F2_Chart_순매수.Series(oneMinute_Series).Points(i).AxisLabel = Format("{0}", 순매수리스트(i).sTime)
 
                 If i >= 3 Then
                     retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
-                    F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, 순매수리스트(i).외국인_연기금_순매수) '외국인+연기금 순매수를 입력한다
+                    F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) '외국인+연기금 순매수를 입력한다
 
-                    Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, 순매수리스트(i).외국인_연기금_순매수, vbCrLf, 순매수리스트(i).코스피지수)
+                    Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
                     F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
                     F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
                     F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
@@ -247,16 +329,29 @@ Public Class Form2
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = KOSPI_MAX + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = KOSPI_MIN - 1
 
-            If currentIndex_순매수 > 3 Then
+            If currentIndex_순매수 >= 4 Then
                 For i As Integer = 0 To PIP_Point_Lists.Length - 1
                     Dim targetPointCount As Integer = Val(txt_TargetPointCount.Text)
 
                     If PIP_Point_Lists(i).PointCount = targetPointCount Then '원하는 pointCount와 같은 점수만을 화면에 표시한다
+                        If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
 
-                        For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
-                            Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-                            F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, 순매수리스트(point).외국인_연기금_순매수)
-                        Next
+                            For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
+                                Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
+
+                                Dim target순매수 As Long
+                                If cmb_F2_순매수기준.SelectedIndex = 0 Then
+                                    target순매수 = 순매수리스트(point).외국인_기관_순매수
+                                ElseIf cmb_F2_순매수기준.SelectedIndex = 1 Then
+                                    target순매수 = 순매수리스트(point).외국인_연기금_순매수
+                                ElseIf cmb_F2_순매수기준.SelectedIndex = 2 Then
+                                    target순매수 = 순매수리스트(point).외국인순매수
+                                End If
+
+                                F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
+                            Next
+
+                        End If
 
                     End If
                 Next
@@ -401,4 +496,11 @@ Public Class Form2
         End If
     End Sub
 
+    Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        cmb_F2_순매수기준.Items.Clear()
+        cmb_F2_순매수기준.Items.Add("0.외국인+기관")
+        cmb_F2_순매수기준.Items.Add("1.외국인+연기금")
+        cmb_F2_순매수기준.Items.Add("2.외국인 Only")
+        cmb_F2_순매수기준.SelectedIndex = 0
+    End Sub
 End Class

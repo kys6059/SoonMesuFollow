@@ -729,19 +729,20 @@ Module realtime_ebest
 
         For i As Integer = 0 To 순매수리스트카운트 - 1
 
-            Dim 외, 연 As Long
+            Dim 외, 연, 기 As Long
 
             순매수리스트(순매수리스트카운트 - 1 - i).sDate = XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "date", i)
             순매수리스트(순매수리스트카운트 - 1 - i).sTime = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "time", i))
             순매수리스트(순매수리스트카운트 - 1 - i).개인순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "indmsamt", i))   '개인순매수 대금
-            순매수리스트(순매수리스트카운트 - 1 - i).기관순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "sysmsamt", i))   '기관계
             순매수리스트(순매수리스트카운트 - 1 - i).코스피지수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "upclose", i)) '코스피지수
 
+            기 = 순매수리스트(순매수리스트카운트 - 1 - i).기관순매수 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "sysmsamt", i))   '기관계
             연 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "monmsamt", i))   '연기금
             외 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "formsamt", i))   '외국인
             순매수리스트(순매수리스트카운트 - 1 - i).외국인_연기금_순매수 = 외 + 연
             순매수리스트(순매수리스트카운트 - 1 - i).외국인순매수 = 외
             순매수리스트(순매수리스트카운트 - 1 - i).연기금순매수 = 연
+            순매수리스트(순매수리스트카운트 - 1 - i).외국인_기관_순매수 = 외 + 기
         Next
         timeIndex_순매수 = 순매수리스트카운트
         currentIndex_순매수 = timeIndex_1Min - 1

@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm.vb" />
+    <Compile Include="Algorithm_SoonMeSu.vb" />
     <Compile Include="DBHandler.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
