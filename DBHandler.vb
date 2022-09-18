@@ -788,4 +788,67 @@ Module DBHandler
         Return iIndex
 
     End Function
+
+    '시뮬레이션이나 실시간으로 발생한 신호의 결과를 빅쿼리에 저장한다
+    Public Sub InsertSoonMeSuShinhoResult()
+        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
+        Dim dateaset_id = "option5"
+        Dim table_id = "Option_SoonMeSuShinhoResultTable"
+
+        Dim totalCount1 As Integer = SoonMesuSimulationTotalShinhoList.Count - 1
+
+        Dim rows(totalCount1) As BigQueryInsertRow
+
+        For i As Integer = 0 To totalCount1
+
+            Dim s As 순매수신호_탬플릿 = SoonMesuSimulationTotalShinhoList(i)
+
+            rows(i) = New BigQueryInsertRow
+            rows(i).Add("A00_ShinhoCount", s.A00_신호차수)
+            rows(i).Add("A01_OccurIndex", s.A01_발생Index)
+            rows(i).Add("A02_OccurTime", s.A02_발생시간)
+            rows(i).Add("A03_ShinhoID", s.A03_신호ID)
+            rows(i).Add("A04_OccuredSoonMesu", s.A04_신호발생순매수)
+            rows(i).Add("A05_DestroySoonMesu", s.A05_신호해제순매수)
+            rows(i).Add("A06_OccuredKOSPI", s.A06_신호발생종합주가지수)
+            rows(i).Add("A07_DestroyKOSPI", s.A07_신호해제종합주가지수)
+            rows(i).Add("A08_Callput", s.A08_콜풋)
+            rows(i).Add("A09_Hangsaga", s.A09_행사가)
+            rows(i).Add("A10_Price", s.A10_신호발생가격)
+            rows(i).Add("A11_OrderNumber", s.A11_주문번호)
+            rows(i).Add("A12_OptionCode", s.A12_종목코드)
+            rows(i).Add("A13_BuyingStatus", s.A13_체결상태)
+            rows(i).Add("A14_CurrentPrice", s.A14_현재가격)
+            rows(i).Add("A15_CurrentStatus", s.A15_현재상태)
+            rows(i).Add("A16_ProfitRatio", s.A16_이익률)
+
+            rows(i).Add("A17_MidSellFlag", s.A17_중간매도Flag)
+            rows(i).Add("A18_SellTime", s.A18_매도시간)
+            rows(i).Add("A19_SellIndex", s.A19_매도Index)
+            rows(i).Add("A20_SellReason", s.A20_매도사유)
+            rows(i).Add("A21_LastProfitRatio", s.A21_환산이익율)
+
+            rows(i).Add("A50_ConditionAll", s.A50_조건전체)
+            rows(i).Add("A51_SoonMesuItems", s.A51_순매수기준)
+            rows(i).Add("A52_Slope", s.A52_기울기)
+            rows(i).Add("A53_prevPointMargin", s.A53_선행포인트수_마진)
+            rows(i).Add("A54_IsReal", s.A54_IsReal)
+            rows(i).Add("A55_Memo", s.A55_메모)
+            rows(i).Add("A56_TargetPrice", s.A56_기준가격)
+            rows(i).Add("A57_Month", s.A57_월물)
+            rows(i).Add("A58_Date", s.A58_날짜)
+            rows(i).Add("A59_RemainDate", s.A59_남은날짜)
+            rows(i).Add("A60_SonjulValue", s.A60_손절기준차)
+            rows(i).Add("A61_IkjulValue", s.A61_익절기준차)
+            rows(i).Add("A62_TimeoutTime", s.A62_TimeoutTime)
+
+        Next
+
+        client.InsertRows(dateaset_id, table_id, rows)
+
+        Dim str As String = " F2 신호결과 저장완료 " & SoonMesuSimulationTotalShinhoList.Count.ToString() & " 개의 row가 등록"
+        Console.WriteLine(str)
+        Add_Log("일반", str)
+
+    End Sub
 End Module

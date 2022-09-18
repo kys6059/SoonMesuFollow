@@ -22,9 +22,9 @@ Partial Class Form2
     '코드 편집기에서는 수정하지 마세요.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_f2_폼닫기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
@@ -71,8 +71,8 @@ Partial Class Form2
         Me.Label13 = New System.Windows.Forms.Label()
         Me.txt_F2_손절매차 = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_전체조건반복 = New System.Windows.Forms.Button()
-        Me.btn_동일조건반복 = New System.Windows.Forms.Button()
+        Me.btn_F2_전체조건반복 = New System.Windows.Forms.Button()
+        Me.btn_F2_동일조건반복 = New System.Windows.Forms.Button()
         Me.chk_F2_화면끄기 = New System.Windows.Forms.CheckBox()
         Me.btn_당일반복 = New System.Windows.Forms.Button()
         Me.txt_실험조건 = New System.Windows.Forms.RichTextBox()
@@ -202,16 +202,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend1)
+        ChartArea2.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend2)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(12, 172)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series1)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series2)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1393, 807)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -655,8 +655,8 @@ Partial Class Form2
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.9004!))
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.27888!))
         Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.82072!))
-        Me.TableLayoutPanel6.Controls.Add(Me.btn_전체조건반복, 2, 1)
-        Me.TableLayoutPanel6.Controls.Add(Me.btn_동일조건반복, 1, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_F2_전체조건반복, 2, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_F2_동일조건반복, 1, 1)
         Me.TableLayoutPanel6.Controls.Add(Me.chk_F2_화면끄기, 0, 0)
         Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
         Me.TableLayoutPanel6.Controls.Add(Me.txt_실험조건, 2, 0)
@@ -669,27 +669,27 @@ Partial Class Form2
         Me.TableLayoutPanel6.Size = New System.Drawing.Size(557, 102)
         Me.TableLayoutPanel6.TabIndex = 19
         '
-        'btn_전체조건반복
+        'btn_F2_전체조건반복
         '
-        Me.btn_전체조건반복.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_전체조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_전체조건반복.Location = New System.Drawing.Point(310, 40)
-        Me.btn_전체조건반복.Name = "btn_전체조건반복"
-        Me.btn_전체조건반복.Size = New System.Drawing.Size(243, 58)
-        Me.btn_전체조건반복.TabIndex = 5
-        Me.btn_전체조건반복.Text = "전체조건 반복"
-        Me.btn_전체조건반복.UseVisualStyleBackColor = True
+        Me.btn_F2_전체조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_F2_전체조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_F2_전체조건반복.Location = New System.Drawing.Point(310, 40)
+        Me.btn_F2_전체조건반복.Name = "btn_F2_전체조건반복"
+        Me.btn_F2_전체조건반복.Size = New System.Drawing.Size(243, 58)
+        Me.btn_F2_전체조건반복.TabIndex = 5
+        Me.btn_F2_전체조건반복.Text = "전체조건 반복"
+        Me.btn_F2_전체조건반복.UseVisualStyleBackColor = True
         '
-        'btn_동일조건반복
+        'btn_F2_동일조건반복
         '
-        Me.btn_동일조건반복.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_동일조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_동일조건반복.Location = New System.Drawing.Point(142, 40)
-        Me.btn_동일조건반복.Name = "btn_동일조건반복"
-        Me.btn_동일조건반복.Size = New System.Drawing.Size(161, 58)
-        Me.btn_동일조건반복.TabIndex = 4
-        Me.btn_동일조건반복.Text = "동일조건반복"
-        Me.btn_동일조건반복.UseVisualStyleBackColor = True
+        Me.btn_F2_동일조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_F2_동일조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_F2_동일조건반복.Location = New System.Drawing.Point(142, 40)
+        Me.btn_F2_동일조건반복.Name = "btn_F2_동일조건반복"
+        Me.btn_F2_동일조건반복.Size = New System.Drawing.Size(161, 58)
+        Me.btn_F2_동일조건반복.TabIndex = 4
+        Me.btn_F2_동일조건반복.Text = "동일조건반복"
+        Me.btn_F2_동일조건반복.UseVisualStyleBackColor = True
         '
         'chk_F2_화면끄기
         '
@@ -807,8 +807,8 @@ Partial Class Form2
     Friend WithEvents txt_F2_손절매차 As RichTextBox
     Friend WithEvents cmb_F2_순매수기준 As ComboBox
     Friend WithEvents TableLayoutPanel6 As TableLayoutPanel
-    Friend WithEvents btn_전체조건반복 As Button
-    Friend WithEvents btn_동일조건반복 As Button
+    Friend WithEvents btn_F2_전체조건반복 As Button
+    Friend WithEvents btn_F2_동일조건반복 As Button
     Friend WithEvents chk_F2_화면끄기 As CheckBox
     Friend WithEvents btn_당일반복 As Button
     Friend WithEvents txt_실험조건 As RichTextBox

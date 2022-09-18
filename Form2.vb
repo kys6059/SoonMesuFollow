@@ -57,8 +57,9 @@ Public Class Form2
             DrawGrid()             '표
             Draw_Shinho_Grid()
             DrawGraph()
+            txt_F2_최종방향.Text = 이전순매수방향
         End If
-        txt_F2_최종방향.Text = 이전순매수방향
+
     End Sub
 
     Private Sub SetScrolData_F2() '타임 스크롤의 최대최소값을 지정한다
@@ -507,6 +508,67 @@ Public Class Form2
         Add_Log("일반", "Form2_당일 자동반복 완료")
 
         당일반복중_flag = False
+
+    End Sub
+
+    Private Sub btn_F2_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_동일조건반복.Click
+
+        당일반복중_flag = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        자동반복계산로직(0)
+        Add_Log("Form2 자동 반복 계산로직 완료", "")
+        당일반복중_flag = False
+    End Sub
+
+    Private Sub 자동반복계산로직(ByVal cnt As Integer)
+
+        isRealFlag = False
+        당일반복중_flag = True
+        For i As Integer = 0 To 순매수데이터날짜수 - 1
+
+            HSc_F2_날짜조절.Value = i     ' 이 안에서도 Clac_DisplayAllGrid  호출하지만 그건 그날짜 data의 첫번째만 호출하는 것임
+            HSc_F2_날짜조절.Refresh()
+
+            chk_F2_화면끄기.Checked = True
+
+            '당일 내부에서 변경
+            For j As Integer = 0 To 순매수리스트카운트 - 1
+
+                currentIndex_순매수 = j
+                If currentIndex_순매수 = 순매수리스트카운트 - 1 Then chk_F2_화면끄기.Checked = False
+                F2_Clac_DisplayAllGrid()
+            Next
+
+            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+            For j = 0 To SoonMesuShinhoList.Count - 1
+                SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+            Next
+
+            Threading.Thread.Sleep(50)
+
+        Next
+
+        '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
+        If SoonMesuSimulationTotalShinhoList.Count > 0 Then
+
+            'Add_Log(cnt.ToString() + "차 자동계산완료", " : " + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
+            InsertSoonMeSuShinhoResult()
+
+            SoonMesuSimulationTotalShinhoList.Clear()
+
+        End If
+
+        당일반복중_flag = False
+
+    End Sub
+
+    Private Sub btn_F2_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_전체조건반복.Click
 
     End Sub
 End Class
