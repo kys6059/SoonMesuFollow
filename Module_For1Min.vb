@@ -221,18 +221,21 @@ Module Module_For1Min
         Dim RightPipIndex = pipIndexList(PointCount - 2)
         Dim LastPoint = pipIndexList(PointCount - 1)
 
-        Dim distance As Double
-
-        If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
-            distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_기관_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_기관_순매수, LastPoint, 순매수리스트(LastPoint).외국인_기관_순매수) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
-            distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, LastPoint, 순매수리스트(LastPoint).외국인_연기금_순매수) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
-            distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인순매수, LastPoint, 순매수리스트(LastPoint).외국인순매수) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
-        End If
-
+        Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), LastPoint, Get순매수(LastPoint)) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
         Return distance
 
+    End Function
+
+    Public Function Get순매수(ByVal index As Integer) As Long
+        Dim ret As Long = 0
+        If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
+            ret = 순매수리스트(index).외국인_기관_순매수
+        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
+            ret = 순매수리스트(index).외국인_연기금_순매수
+        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
+            ret = 순매수리스트(index).외국인순매수
+        End If
+        Return ret
     End Function
 
     Private Function 마지막신호판단(ByVal 기울기 As Double) As String
@@ -251,19 +254,8 @@ Module Module_For1Min
 
         Dim x1 As Double = pipIndexList(PointCount - 2)
         Dim x2 As Double = pipIndexList(PointCount - 1)
-        Dim y1 As Double
-        Dim y2 As Double
-
-        If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
-            y1 = 순매수리스트(x1).외국인_기관_순매수
-            y2 = 순매수리스트(x2).외국인_기관_순매수
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
-            y1 = 순매수리스트(x1).외국인_연기금_순매수
-            y2 = 순매수리스트(x2).외국인_연기금_순매수
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
-            y1 = 순매수리스트(x1).외국인순매수
-            y2 = 순매수리스트(x2).외국인순매수
-        End If
+        Dim y1 As Double = Get순매수(x1)
+        Dim y2 As Double = Get순매수(x2)
 
         Dim 기울기 As Double = (y2 - y1) / (x2 - x1)
 
@@ -294,15 +286,7 @@ Module Module_For1Min
 
             Else '거리측정
 
-                Dim distance As Double
-
-                If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
-                    distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_기관_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_기관_순매수, i, 순매수리스트(i).외국인_기관_순매수)
-                ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
-                    distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
-                ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
-                    distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인순매수, i, 순매수리스트(i).외국인순매수)
-                End If
+                Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), i, Get순매수(i))
 
                 If distance > maxDistance Then
                     maxDistance = distance
@@ -354,14 +338,8 @@ Module Module_For1Min
 
                 Else '거리측정
 
-                    Dim distance As Double
-                    If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
-                        distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_기관_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_기관_순매수, i, 순매수리스트(i).외국인_기관_순매수)
-                    ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
-                        distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인_연기금_순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인_연기금_순매수, i, 순매수리스트(i).외국인_연기금_순매수)
-                    ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
-                        distance = PerpendichalrDistance(leftPipIndex, 순매수리스트(leftPipIndex).외국인순매수, RightPipIndex, 순매수리스트(RightPipIndex).외국인순매수, i, 순매수리스트(i).외국인순매수)
-                    End If
+                    Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), i, Get순매수(i))
+
                     If distance > maxDistance Then
                         maxDistance = distance
                         maxDistanceIndex = i

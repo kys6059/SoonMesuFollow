@@ -52,31 +52,34 @@ Module Algorithm_SoonMeSu
 
         Dim ret As String = CalcAlgorithm_AB()
 
-        If ret <> "중립" Then
-
-            이전순매수방향 = ret '신호가 뜬걸 의미한다 이걸 바꿔 놓는다
+        If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
 
             If ret = "상승" Then
 
-                '이전 신호확인해서 죽이기
+
+                반대방향신호죽이는함수("A_DOWN", "change")                '이전 신호확인해서 죽이기
                 '매수잔고 중에서 반대 신호 매도하기
 
-                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A")             '신규 신호 입력하기
+                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")             '신규 신호 입력하기
                 SoonMesuShinhoList.Add(shinho)
 
                 If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
                 End If
             ElseIf ret = "하락" Then
 
-                '이전 신호확인해서 죽이기
+                반대방향신호죽이는함수("A_UP", "change") '이전 신호확인해서 죽이기
                 '매수잔고 중에서 반대 신호 매도하기
 
-                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B")              '신규 신호 입력하기
+                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")              '신규 신호 입력하기
                 SoonMesuShinhoList.Add(shinho)
 
                 If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
                 End If
             End If
+
+            이전순매수방향 = ret '신호가 뜬걸 의미한다 이걸 바꿔 놓는다
+        Else
+            살아있는신호확인하기()
         End If
 
     End Sub
@@ -132,9 +135,9 @@ Module Algorithm_SoonMeSu
         shinho.A05_신호해제순매수 = 0
         shinho.A06_신호발생종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
         shinho.A07_신호해제종합주가지수 = 0
-        If 신호ID = "A" Then
+        If 신호ID = "A_UP" Then
             shinho.A08_콜풋 = 0
-        Else
+        ElseIf 신호ID = "A_DOWN" Then
             shinho.A08_콜풋 = 1
         End If
 
@@ -162,6 +165,84 @@ Module Algorithm_SoonMeSu
         Return shinho
 
     End Function
+
+    Private Sub 반대방향신호죽이는함수(ByVal str As String, ByVal 매도사유 As String)
+
+        If SoonMesuShinhoList IsNot Nothing Then
+
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A03_신호ID = str And s.A15_현재상태 = 1 Then  '죽어야하는 신호이고 현재상태가 살아있는 상태라면
+
+                    s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
+                    s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
+
+                    s.A15_현재상태 = 0
+                    's.A14_현재가격 --- 이건 나중에 옵션 가격을 적는다
+                    's.A16_이익률     '이것도 나중에 옵션 가격 기준으로 적는다
+                    's.A21_환산이익율
+                    s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
+                    s.A19_매도Index = currentIndex_순매수
+                    s.A20_매도사유 = 매도사유
+
+                    If str = "A_UP" Then
+                        s.A55_메모 = Math.Round(s.A07_신호해제종합주가지수 - s.A06_신호발생종합주가지수, 2)
+                    ElseIf str = "A_DOWN" Then
+                        s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - s.A07_신호해제종합주가지수, 2)
+                    End If
+                    SoonMesuShinhoList(i) = s
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub 살아있는신호확인하기()
+        If SoonMesuShinhoList IsNot Nothing Then
+
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 Then
+
+                    Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+                    Dim 매도사유 As String = ""
+
+                    '손절조건 확인
+                    If s.A03_신호ID = "A_UP" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
+                    If s.A03_신호ID = "A_DOWN" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
+                    '익절조건 확인
+                    If s.A03_신호ID = "A_UP" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+                    If s.A03_신호ID = "A_DOWN" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+                    'timeout 확인
+                    If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
+
+                    If s.A03_신호ID = "A_UP" Then
+                        s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
+                    ElseIf s.A03_신호ID = "A_DOWN" Then
+                        s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+                    End If
+
+                    If 매도사유 <> "" Then
+                        s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
+                        s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
+
+                        s.A15_현재상태 = 0
+                        's.A14_현재가격 --- 이건 나중에 옵션 가격을 적는다
+                        's.A16_이익률     '이것도 나중에 옵션 가격 기준으로 적는다
+                        's.A21_환산이익율
+                        s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
+                        s.A19_매도Index = currentIndex_순매수
+                        s.A20_매도사유 = 매도사유
+                    End If
+
+                    SoonMesuShinhoList(i) = s
+
+                End If
+            Next
+        End If
+    End Sub
+
 
 
 End Module

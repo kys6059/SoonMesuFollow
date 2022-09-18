@@ -53,10 +53,11 @@ Public Class Form2
         CalcColorData()        '최대최소 계산
         CalcPIPData()          '대표선 계산
         SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
-
-        DrawGrid()             '표
-        Draw_Shinho_Grid()
-        DrawGraph()
+        If chk_F2_화면끄기.Checked = False Then
+            DrawGrid()             '표
+            Draw_Shinho_Grid()
+            DrawGraph()
+        End If
         txt_F2_최종방향.Text = 이전순매수방향
     End Sub
 
@@ -135,7 +136,7 @@ Public Class Form2
 
         grid_shinho.Columns.Clear()
         grid_shinho.Rows.Clear()
-        grid_shinho.ColumnCount = 23
+        grid_shinho.ColumnCount = 24
         grid_shinho.RowCount = SoonMesuShinhoList.Count
 
         grid_shinho.RowHeadersVisible = False
@@ -167,7 +168,8 @@ Public Class Form2
         grid_shinho.Columns(19).HeaderText = "매도Idx"
         grid_shinho.Columns(20).HeaderText = "매도사유"
         grid_shinho.Columns(21).HeaderText = "환산이익"
-        grid_shinho.Columns(22).HeaderText = "기타"
+        grid_shinho.Columns(22).HeaderText = "메모"
+        grid_shinho.Columns(23).HeaderText = "기타"
 
         'grid_shinho.Columns(0).Width = 50
 
@@ -198,6 +200,7 @@ Public Class Form2
             grid_shinho.Rows(i).Cells(19).Value = s.A19_매도Index
             grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
             grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
+            grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
         Next
 
     End Sub
@@ -302,19 +305,12 @@ Public Class Form2
 
             For i As Integer = 0 To currentIndex_순매수
 
-                Dim target순매수 As Long
-                If cmb_F2_순매수기준.SelectedIndex = 0 Then
-                    target순매수 = 순매수리스트(i).외국인_기관_순매수
-                ElseIf cmb_F2_순매수기준.SelectedIndex = 1 Then
-                    target순매수 = 순매수리스트(i).외국인_연기금_순매수
-                ElseIf cmb_F2_순매수기준.SelectedIndex = 2 Then
-                    target순매수 = 순매수리스트(i).외국인순매수
-                End If
+                Dim target순매수 As Long = Get순매수(i)
 
                 F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용 - 
                 F2_Chart_순매수.Series(oneMinute_Series).Points(i).AxisLabel = Format("{0}", 순매수리스트(i).sTime)
 
-                If i >= 3 Then
+                If i >= 4 Then
                     retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
                     F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) '외국인+연기금 순매수를 입력한다
 
@@ -329,6 +325,7 @@ Public Class Form2
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = KOSPI_MAX + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = KOSPI_MIN - 1
 
+            'PIP 시리즈를 표시한다
             If currentIndex_순매수 >= 4 Then
                 For i As Integer = 0 To PIP_Point_Lists.Length - 1
                     Dim targetPointCount As Integer = Val(txt_TargetPointCount.Text)
@@ -338,16 +335,7 @@ Public Class Form2
 
                             For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
                                 Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-
-                                Dim target순매수 As Long
-                                If cmb_F2_순매수기준.SelectedIndex = 0 Then
-                                    target순매수 = 순매수리스트(point).외국인_기관_순매수
-                                ElseIf cmb_F2_순매수기준.SelectedIndex = 1 Then
-                                    target순매수 = 순매수리스트(point).외국인_연기금_순매수
-                                ElseIf cmb_F2_순매수기준.SelectedIndex = 2 Then
-                                    target순매수 = 순매수리스트(point).외국인순매수
-                                End If
-
+                                Dim target순매수 As Long = Get순매수(point)
                                 F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
                             Next
 
@@ -502,5 +490,23 @@ Public Class Form2
         cmb_F2_순매수기준.Items.Add("1.외국인+연기금")
         cmb_F2_순매수기준.Items.Add("2.외국인 Only")
         cmb_F2_순매수기준.SelectedIndex = 0
+    End Sub
+
+    Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
+
+        당일반복중_flag = True
+        chk_F2_화면끄기.Checked = True
+        For i As Integer = 0 To 순매수리스트카운트 - 1
+            currentIndex_순매수 = i
+
+            F2_Clac_DisplayAllGrid()
+        Next
+        chk_F2_화면끄기.Checked = False
+        F2_Clac_DisplayAllGrid()
+
+        Add_Log("일반", "Form2_당일 자동반복 완료")
+
+        당일반복중_flag = False
+
     End Sub
 End Class

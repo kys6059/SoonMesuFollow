@@ -42,6 +42,7 @@ Partial Class Form2
         Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
         Me.txt_F2_Log = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.cmb_F2_순매수기준 = New System.Windows.Forms.ComboBox()
         Me.txt_상승하락기울기기준 = New System.Windows.Forms.RichTextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txt_최대포인트수대비비율 = New System.Windows.Forms.RichTextBox()
@@ -59,6 +60,7 @@ Partial Class Form2
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txt_F2_기준가격 = New System.Windows.Forms.RichTextBox()
+        Me.chk_F2_매수실행 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
         Me.txt_F2_TimeoutTime = New System.Windows.Forms.RichTextBox()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -68,8 +70,12 @@ Partial Class Form2
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.txt_F2_손절매차 = New System.Windows.Forms.RichTextBox()
-        Me.chk_F2_매수실행 = New System.Windows.Forms.CheckBox()
-        Me.cmb_F2_순매수기준 = New System.Windows.Forms.ComboBox()
+        Me.TableLayoutPanel6 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_전체조건반복 = New System.Windows.Forms.Button()
+        Me.btn_동일조건반복 = New System.Windows.Forms.Button()
+        Me.chk_F2_화면끄기 = New System.Windows.Forms.CheckBox()
+        Me.btn_당일반복 = New System.Windows.Forms.Button()
+        Me.txt_실험조건 = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -78,6 +84,7 @@ Partial Class Form2
         CType(Me.grid_shinho, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel4.SuspendLayout()
         Me.TableLayoutPanel5.SuspendLayout()
+        Me.TableLayoutPanel6.SuspendLayout()
         Me.SuspendLayout()
         '
         'btn_f2_폼닫기
@@ -105,7 +112,7 @@ Partial Class Form2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.HSc_F2_시간조절, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.btn_F2_SelectDB, 2, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1283, 9)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1113, 12)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -289,6 +296,15 @@ Partial Class Form2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(319, 150)
         Me.TableLayoutPanel3.TabIndex = 6
+        '
+        'cmb_F2_순매수기준
+        '
+        Me.cmb_F2_순매수기준.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmb_F2_순매수기준.FormattingEnabled = True
+        Me.cmb_F2_순매수기준.Location = New System.Drawing.Point(185, 42)
+        Me.cmb_F2_순매수기준.Name = "cmb_F2_순매수기준"
+        Me.cmb_F2_순매수기준.Size = New System.Drawing.Size(129, 20)
+        Me.cmb_F2_순매수기준.TabIndex = 11
         '
         'txt_상승하락기울기기준
         '
@@ -505,6 +521,17 @@ Partial Class Form2
         Me.txt_F2_기준가격.TabIndex = 5
         Me.txt_F2_기준가격.Text = "1.25"
         '
+        'chk_F2_매수실행
+        '
+        Me.chk_F2_매수실행.AutoSize = True
+        Me.chk_F2_매수실행.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_F2_매수실행.Location = New System.Drawing.Point(215, 42)
+        Me.chk_F2_매수실행.Name = "chk_F2_매수실행"
+        Me.chk_F2_매수실행.Size = New System.Drawing.Size(99, 29)
+        Me.chk_F2_매수실행.TabIndex = 10
+        Me.chk_F2_매수실행.Text = "매수 실행"
+        Me.chk_F2_매수실행.UseVisualStyleBackColor = True
+        '
         'TableLayoutPanel5
         '
         Me.TableLayoutPanel5.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset
@@ -621,25 +648,80 @@ Partial Class Form2
         Me.txt_F2_손절매차.TabIndex = 5
         Me.txt_F2_손절매차.Text = "10"
         '
-        'chk_F2_매수실행
+        'TableLayoutPanel6
         '
-        Me.chk_F2_매수실행.AutoSize = True
-        Me.chk_F2_매수실행.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_F2_매수실행.Location = New System.Drawing.Point(215, 42)
-        Me.chk_F2_매수실행.Name = "chk_F2_매수실행"
-        Me.chk_F2_매수실행.Size = New System.Drawing.Size(99, 29)
-        Me.chk_F2_매수실행.TabIndex = 10
-        Me.chk_F2_매수실행.Text = "매수 실행"
-        Me.chk_F2_매수실행.UseVisualStyleBackColor = True
+        Me.TableLayoutPanel6.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
+        Me.TableLayoutPanel6.ColumnCount = 3
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.9004!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.27888!))
+        Me.TableLayoutPanel6.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.82072!))
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_전체조건반복, 2, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_동일조건반복, 1, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.chk_F2_화면끄기, 0, 0)
+        Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
+        Me.TableLayoutPanel6.Controls.Add(Me.txt_실험조건, 2, 0)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(1851, 67)
+        Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
+        Me.TableLayoutPanel6.RowCount = 2
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35.73265!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 64.26735!))
+        Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel6.Size = New System.Drawing.Size(557, 102)
+        Me.TableLayoutPanel6.TabIndex = 19
         '
-        'cmb_F2_순매수기준
+        'btn_전체조건반복
         '
-        Me.cmb_F2_순매수기준.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmb_F2_순매수기준.FormattingEnabled = True
-        Me.cmb_F2_순매수기준.Location = New System.Drawing.Point(185, 42)
-        Me.cmb_F2_순매수기준.Name = "cmb_F2_순매수기준"
-        Me.cmb_F2_순매수기준.Size = New System.Drawing.Size(129, 20)
-        Me.cmb_F2_순매수기준.TabIndex = 11
+        Me.btn_전체조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_전체조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_전체조건반복.Location = New System.Drawing.Point(310, 40)
+        Me.btn_전체조건반복.Name = "btn_전체조건반복"
+        Me.btn_전체조건반복.Size = New System.Drawing.Size(243, 58)
+        Me.btn_전체조건반복.TabIndex = 5
+        Me.btn_전체조건반복.Text = "전체조건 반복"
+        Me.btn_전체조건반복.UseVisualStyleBackColor = True
+        '
+        'btn_동일조건반복
+        '
+        Me.btn_동일조건반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_동일조건반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_동일조건반복.Location = New System.Drawing.Point(142, 40)
+        Me.btn_동일조건반복.Name = "btn_동일조건반복"
+        Me.btn_동일조건반복.Size = New System.Drawing.Size(161, 58)
+        Me.btn_동일조건반복.TabIndex = 4
+        Me.btn_동일조건반복.Text = "동일조건반복"
+        Me.btn_동일조건반복.UseVisualStyleBackColor = True
+        '
+        'chk_F2_화면끄기
+        '
+        Me.chk_F2_화면끄기.AutoSize = True
+        Me.chk_F2_화면끄기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_F2_화면끄기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.chk_F2_화면끄기.Location = New System.Drawing.Point(4, 4)
+        Me.chk_F2_화면끄기.Name = "chk_F2_화면끄기"
+        Me.chk_F2_화면끄기.Size = New System.Drawing.Size(131, 29)
+        Me.chk_F2_화면끄기.TabIndex = 0
+        Me.chk_F2_화면끄기.Text = "화면끄기"
+        Me.chk_F2_화면끄기.UseVisualStyleBackColor = True
+        '
+        'btn_당일반복
+        '
+        Me.btn_당일반복.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_당일반복.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_당일반복.Location = New System.Drawing.Point(4, 40)
+        Me.btn_당일반복.Name = "btn_당일반복"
+        Me.btn_당일반복.Size = New System.Drawing.Size(131, 58)
+        Me.btn_당일반복.TabIndex = 1
+        Me.btn_당일반복.Text = "당일반복"
+        Me.btn_당일반복.UseVisualStyleBackColor = True
+        '
+        'txt_실험조건
+        '
+        Me.txt_실험조건.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_실험조건.Location = New System.Drawing.Point(310, 4)
+        Me.txt_실험조건.Name = "txt_실험조건"
+        Me.txt_실험조건.Size = New System.Drawing.Size(243, 29)
+        Me.txt_실험조건.TabIndex = 7
+        Me.txt_실험조건.Text = ""
         '
         'Form2
         '
@@ -647,6 +729,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(2484, 1262)
+        Me.Controls.Add(Me.TableLayoutPanel6)
         Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Controls.Add(Me.grid_shinho)
@@ -672,6 +755,8 @@ Partial Class Form2
         Me.TableLayoutPanel4.PerformLayout()
         Me.TableLayoutPanel5.ResumeLayout(False)
         Me.TableLayoutPanel5.PerformLayout()
+        Me.TableLayoutPanel6.ResumeLayout(False)
+        Me.TableLayoutPanel6.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -721,4 +806,10 @@ Partial Class Form2
     Friend WithEvents Label13 As Label
     Friend WithEvents txt_F2_손절매차 As RichTextBox
     Friend WithEvents cmb_F2_순매수기준 As ComboBox
+    Friend WithEvents TableLayoutPanel6 As TableLayoutPanel
+    Friend WithEvents btn_전체조건반복 As Button
+    Friend WithEvents btn_동일조건반복 As Button
+    Friend WithEvents chk_F2_화면끄기 As CheckBox
+    Friend WithEvents btn_당일반복 As Button
+    Friend WithEvents txt_실험조건 As RichTextBox
 End Class
