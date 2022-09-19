@@ -346,6 +346,39 @@ Public Class Form2
                 Next
             End If
 
+            '신호를 그린다
+            If SoonMesuShinhoList IsNot Nothing Then
+                For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+
+                    Dim Str As String = "Shinho_" + i.ToString()
+                    F2_Chart_순매수.Series.Add(Str)
+                    F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
+                    F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                    F2_Chart_순매수.Series(Str).Color = Color.DarkRed
+                    F2_Chart_순매수.Series(Str).YAxisType = AxisType.Primary
+
+                    F2_Chart_순매수.Series(Str).BorderWidth = 2
+
+                    Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+
+                    If s.A08_콜풋 = 0 Then
+                        F2_Chart_순매수.Series(Str).Color = Color.Red
+                    Else
+                        F2_Chart_순매수.Series(Str).Color = Color.Blue
+                    End If
+
+                    If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A04_신호발생순매수)  '시작점
+
+                    If s.A15_현재상태 = 1 Then '끝점
+                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                        F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, Get순매수(currentIndex_순매수))
+                    Else
+                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+                        If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, s.A05_신호해제순매수)
+                    End If
+                Next
+            End If
+
         End If
 
     End Sub
