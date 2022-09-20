@@ -170,8 +170,6 @@ Module Module_For1Min
             End If
         End If
 
-        F2_Clear_Log()
-
         For i As Integer = 0 To maxPoint - minPoint 'PIP Point수가 2개부터 최대점(10개)까지 표준편차와 point들을 계산한다
             If currentIndex_순매수 >= 4 Then
 
@@ -189,8 +187,8 @@ Module Module_For1Min
                 For j As Integer = 0 To pipIndexList.Count - 1
                     str += pipIndexList(j).ToString() & ", "
                 Next
-                Console.WriteLine(str)
-                F2_Add_Log(str)
+                'Console.WriteLine(str)
+
             End If
         Next
 
@@ -370,22 +368,7 @@ Module Module_For1Min
     Private Function PerpendichalrDistance(ByVal x1 As Double, ByVal y1 As Double, ByVal x2 As Double, ByVal y2 As Double, ByVal x3 As Double, ByVal y3 As Double) As Double
 
         Dim s As Double = (y2 - y1) / (x2 - x1)
-
         Return Math.Abs(s * x3 - y3 + y1 - s * x1) / Math.Sqrt(s * s + 1)
-
-
     End Function
-
-    Public Sub F2_Clear_Log()
-        Form2.txt_F2_Log.Clear()
-    End Sub
-
-    Public Sub F2_Add_Log(ByVal str As String)
-
-        Form2.txt_F2_Log.Text = Form2.txt_F2_Log.Text + vbCrLf + str
-
-    End Sub
-
-
 
 End Module

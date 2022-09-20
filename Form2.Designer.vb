@@ -40,7 +40,6 @@ Partial Class Form2
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_점의수늘리기 = New System.Windows.Forms.Button()
         Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
-        Me.txt_F2_Log = New System.Windows.Forms.RichTextBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.cmb_F2_순매수기준 = New System.Windows.Forms.ComboBox()
         Me.txt_상승하락기울기기준 = New System.Windows.Forms.RichTextBox()
@@ -236,7 +235,7 @@ Partial Class Form2
         Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수늘리기, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetPointCount, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수줄이기, 0, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(1411, 172)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(1414, 185)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -264,14 +263,6 @@ Partial Class Form2
         Me.btn_점의수줄이기.TabIndex = 4
         Me.btn_점의수줄이기.Text = "DOWN"
         Me.btn_점의수줄이기.UseVisualStyleBackColor = True
-        '
-        'txt_F2_Log
-        '
-        Me.txt_F2_Log.Location = New System.Drawing.Point(1411, 228)
-        Me.txt_F2_Log.Name = "txt_F2_Log"
-        Me.txt_F2_Log.Size = New System.Drawing.Size(727, 221)
-        Me.txt_F2_Log.TabIndex = 5
-        Me.txt_F2_Log.Text = ""
         '
         'TableLayoutPanel3
         '
@@ -393,7 +384,7 @@ Partial Class Form2
         Me.grid_3.AllowUserToDeleteRows = False
         Me.grid_3.BackgroundColor = System.Drawing.SystemColors.Control
         Me.grid_3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grid_3.Location = New System.Drawing.Point(1411, 494)
+        Me.grid_3.Location = New System.Drawing.Point(1414, 230)
         Me.grid_3.Name = "grid_3"
         Me.grid_3.ReadOnly = True
         Me.grid_3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -734,7 +725,6 @@ Partial Class Form2
         Me.Controls.Add(Me.TableLayoutPanel4)
         Me.Controls.Add(Me.grid_shinho)
         Me.Controls.Add(Me.grid_3)
-        Me.Controls.Add(Me.txt_F2_Log)
         Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Controls.Add(Me.F2_Chart_순매수)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -776,7 +766,6 @@ Partial Class Form2
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents btn_점의수늘리기 As Button
     Friend WithEvents btn_점의수줄이기 As Button
-    Friend WithEvents txt_F2_Log As RichTextBox
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents Label6 As Label
     Friend WithEvents Label4 As Label
