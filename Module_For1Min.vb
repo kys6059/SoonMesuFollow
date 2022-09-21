@@ -155,8 +155,8 @@ Module Module_For1Min
     Public Sub CalcPIPData()          '대표선 계산
 
         Dim minPoint = 2
-        Dim 최대포인트수대비비율 As Single = Val(Form2.txt_최대포인트수대비비율.Text)
-        Dim maxPoint As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 최대포인트수대비비율), 10)
+        Dim 최대포인트수 As Single = Val(Form2.txt_최대포인트수대비비율.Text)
+        Dim maxPoint As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 6), 최대포인트수)
 
         If maxPoint >= 2 Then
             ReDim PIP_Point_Lists(maxPoint - minPoint)

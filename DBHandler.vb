@@ -841,6 +841,7 @@ Module DBHandler
             rows(i).Add("A60_SonjulValue", s.A60_손절기준차)
             rows(i).Add("A61_IkjulValue", s.A61_익절기준차)
             rows(i).Add("A62_TimeoutTime", s.A62_TimeoutTime)
+            rows(i).Add("B00_etc", s.B00_etc)
 
         Next
 

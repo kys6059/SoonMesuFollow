@@ -42,6 +42,8 @@ Module Algorithm_SoonMeSu
         Dim A61_익절기준차 As String
         Dim A62_TimeoutTime As String '장 중 매도할 최종 시간
 
+        Dim B00_etc As String
+
     End Structure
 
     Public SoonMesuShinhoList As List(Of 순매수신호_탬플릿)
@@ -149,8 +151,8 @@ Module Algorithm_SoonMeSu
 
         shinho.A21_환산이익율 = 0
 
-        shinho.A50_조건전체 = ""
-        shinho.A51_순매수기준 = "3.외국인_연기금"  '1.외국인, 2.외국인_기관, 3.외국인_연기금
+        shinho.A50_조건전체 = SoonMesuSimulation_조건
+        shinho.A51_순매수기준 = Form2.cmb_F2_순매수기준.Text
         shinho.A52_기울기 = Form2.txt_상승하락기울기기준.Text
         shinho.A53_선행포인트수_마진 = Form2.txt_선행_포인트_마진.Text
         shinho.A54_IsReal = 0
@@ -161,6 +163,8 @@ Module Algorithm_SoonMeSu
         shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
         shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
+
+        shinho.B00_etc = Form2.txt_F2_실험조건.Text
 
         Return shinho
 

@@ -520,10 +520,13 @@ Public Class Form2
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cmb_F2_순매수기준.Items.Clear()
-        cmb_F2_순매수기준.Items.Add("0.외국인+기관")
-        cmb_F2_순매수기준.Items.Add("1.외국인+연기금")
-        cmb_F2_순매수기준.Items.Add("2.외국인 Only")
+        cmb_F2_순매수기준.Items.Add("0.FOR_SYS")
+        cmb_F2_순매수기준.Items.Add("1.FOR_KIG")
+        cmb_F2_순매수기준.Items.Add("2.FOR_Only")
         cmb_F2_순매수기준.SelectedIndex = 0
+
+        Dim strToday As String = Format(Today, "yyMMdd")
+        txt_F2_실험조건.Text = "B" + strToday
     End Sub
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
@@ -603,5 +606,58 @@ Public Class Form2
 
     Private Sub btn_F2_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_전체조건반복.Click
 
+        Form1.chk_양매도실행.Checked = False
+        Form1.chk_중간청산.Checked = False
+
+        Dim 선행포인트수마진() As String = {"1.0", "0.8", "0.6"}
+        Dim 순매수판정기준() As Integer = {0}
+        Dim 최대포인트수() As String = {"04", "07", "10"}
+        Dim 상승하락기울기기준() As String = {"03", "04", "05"}
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To 선행포인트수마진.Length - 1
+            For b As Integer = 0 To 순매수판정기준.Length - 1
+                For c As Integer = 0 To 최대포인트수.Length - 1
+                    For d As Integer = 0 To 상승하락기울기기준.Length - 1
+
+                        txt_선행_포인트_마진.Text = 선행포인트수마진(a)
+                        cmb_F2_순매수기준.SelectedIndex = 순매수판정기준(b)
+                        txt_최대포인트수대비비율.Text = 최대포인트수(c)
+                        txt_상승하락기울기기준.Text = 상승하락기울기기준(d)
+
+                        txt_선행_포인트_마진.Refresh()
+                        cmb_F2_순매수기준.Refresh()
+                        txt_최대포인트수대비비율.Refresh()
+                        txt_상승하락기울기기준.Refresh()
+
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
+                        'SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}", cntstr, 선행포인트수마진(a))
+                        SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_B_{2}_C_{3}_D_{4}", cntstr, 선행포인트수마진(a), 순매수판정기준(b), 최대포인트수(c), 상승하락기울기기준(d))
+
+                        Console.WriteLine(SoonMesuSimulation_조건)
+                        Add_Log("F2_시뮬레이션 진행 : ", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt)
+                        cnt += 1
+                    Next
+                Next
+            Next
+        Next
+
+        SoonMesuSimulation_조건 = ""
     End Sub
 End Class
