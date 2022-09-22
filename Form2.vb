@@ -611,7 +611,7 @@ Public Class Form2
 
         Dim 선행포인트수마진() As String = {"1.0", "0.8", "0.6"}
         Dim 순매수판정기준() As Integer = {0}
-        Dim 최대포인트수() As String = {"04", "07", "10"}
+        Dim 최대포인트수() As String = {"06", "08", "10"}
         Dim 상승하락기울기기준() As String = {"03", "04", "05"}
 
 
