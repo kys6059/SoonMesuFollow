@@ -221,6 +221,16 @@ Module Algorithm_SoonMeSu
                     'timeout 확인
                     If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
 
+                    '반대방향기울기일정시간유지 시 reverse로 매도
+                    Dim 기울기 As Double = PIP_Point_Lists(PIP적합포인트인덱스).마지막선기울기
+                    If PIP_Point_Lists(PIP적합포인트인덱스).마지막선거리합 > Val(Form2.txt_F2_마지막선길이.Text) Then  '마지막선의 길이가 기준 이상이고
+                        If s.A03_신호ID = "A_UP" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 < 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
+                            매도사유 = "RERVERSE"
+                        ElseIf s.A03_신호ID = "A_DOWN" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 > 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
+                            매도사유 = "RERVERSE"
+                        End If
+                    End If
+
                     If s.A03_신호ID = "A_UP" Then
                         s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
                     ElseIf s.A03_신호ID = "A_DOWN" Then
