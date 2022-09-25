@@ -143,7 +143,7 @@ Public Class Form2
 
         For i As Integer = 0 To grid_shinho.ColumnCount - 1
             grid_shinho.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid_shinho.Columns(i).Width = 80
+            grid_shinho.Columns(i).Width = 75
         Next
         grid_shinho.Columns(0).HeaderText = "신호차수"
         grid_shinho.Columns(1).HeaderText = "발생Idx"
