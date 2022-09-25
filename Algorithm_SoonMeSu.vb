@@ -56,26 +56,36 @@ Module Algorithm_SoonMeSu
 
         If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
 
-            If ret = "상승" Then
+            If ret = "상승" Then '중립에서 상승으로 전환 
 
 
                 반대방향신호죽이는함수("A_DOWN", "change")                '이전 신호확인해서 죽이기
-                '매수잔고 중에서 반대 신호 매도하기
+                '매수잔고 중에서 반대 신호 매수로 해결하기  ---- 꼭 해야 함 20220925
 
                 Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")             '신규 신호 입력하기
                 SoonMesuShinhoList.Add(shinho)
 
                 If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
+                    Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+                    Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
+                    If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
+                        Add_Log("신호", String.Format("콜매수로 청산, 풋 매도 AT {0}", shinho.A02_발생시간))
+                    End If
                 End If
-            ElseIf ret = "하락" Then
+            ElseIf ret = "하락" Then '중립에서 하락으로 전환
 
                 반대방향신호죽이는함수("A_UP", "change") '이전 신호확인해서 죽이기
-                '매수잔고 중에서 반대 신호 매도하기
+                '매수잔고 중에서 반대 신호 매수로 해결하기  ---- 꼭 해야 함 20220925
 
                 Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")              '신규 신호 입력하기
                 SoonMesuShinhoList.Add(shinho)
 
                 If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
+                    Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+                    Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
+                    If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
+                        Add_Log("신호", String.Format("풋매수로 청산, 콜 매도 AT {0}", shinho.A02_발생시간))
+                    End If
                 End If
             End If
 
@@ -137,11 +147,6 @@ Module Algorithm_SoonMeSu
         shinho.A05_신호해제순매수 = 0
         shinho.A06_신호발생종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
         shinho.A07_신호해제종합주가지수 = 0
-        If 신호ID = "A_UP" Then
-            shinho.A08_콜풋 = 0
-        ElseIf 신호ID = "A_DOWN" Then
-            shinho.A08_콜풋 = 1
-        End If
 
         shinho.A09_행사가 = 0
         shinho.A10_신호발생가격 = 0
@@ -153,7 +158,7 @@ Module Algorithm_SoonMeSu
 
         shinho.A50_조건전체 = SoonMesuSimulation_조건
         shinho.A51_순매수기준 = Form2.cmb_F2_순매수기준.Text
-        shinho.A52_기울기 = Form2.txt_상승하락기울기기준.Text
+        shinho.A52_기울기 = Form2.txt_F2_상승하락기울기기준.Text
         shinho.A53_선행포인트수_마진 = Form2.txt_선행_포인트_마진.Text
         shinho.A54_IsReal = 0
         shinho.A56_기준가격 = Form2.txt_F2_기준가격.Text
@@ -163,6 +168,34 @@ Module Algorithm_SoonMeSu
         shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
         shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
+
+        '콜풋종목정보 - 매수의 경우
+        '        If 신호ID = "A_UP" Then
+        '       shinho.A08_콜풋 = 0
+        '      ElseIf 신호ID = "A_DOWN" Then
+        '     shinho.A08_콜풋 = 1
+        '    End If
+        '   shinho.A09_행사가 = 일분옵션데이터(shinho.A08_콜풋).HangSaGa
+        '
+        'Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(shinho.A02_발생시간))
+        'shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        'shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        'shinho.A16_이익률 = Math.Round(shinho.A14_현재가격 / shinho.A10_신호발생가격, 3)
+
+
+        '콜풋종목정보 - 매도의 경우
+        If 신호ID = "A_UP" Then
+            shinho.A08_콜풋 = 1
+        ElseIf 신호ID = "A_DOWN" Then
+            shinho.A08_콜풋 = 0
+        End If
+        shinho.A09_행사가 = 일분옵션데이터(shinho.A08_콜풋).HangSaGa
+
+        Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(shinho.A02_발생시간))
+        shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        shinho.A16_이익률 = Math.Round((shinho.A10_신호발생가격 - shinho.A14_현재가격) / shinho.A10_신호발생가격, 3)
+
 
         shinho.B00_etc = Form2.txt_F2_실험조건.Text
 
@@ -221,15 +254,15 @@ Module Algorithm_SoonMeSu
                     'timeout 확인
                     If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
 
-                    '반대방향기울기일정시간유지 시 reverse로 매도
-                    Dim 기울기 As Double = PIP_Point_Lists(PIP적합포인트인덱스).마지막선기울기
-                    If PIP_Point_Lists(PIP적합포인트인덱스).마지막선거리합 > Val(Form2.txt_F2_마지막선길이.Text) Then  '마지막선의 길이가 기준 이상이고
-                        If s.A03_신호ID = "A_UP" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 < 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
-                            매도사유 = "RERVERSE"
-                        ElseIf s.A03_신호ID = "A_DOWN" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 > 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
-                            매도사유 = "RERVERSE"
-                        End If
-                    End If
+                    '반대방향기울기일정시간유지 시 reverse로 매도  '-- 이로직을 적용해도 켈리지수가 30이하라서 불필요함 삭제
+                    'Dim 기울기 As Double = PIP_Point_Lists(PIP적합포인트인덱스).마지막선기울기
+                    'If PIP_Point_Lists(PIP적합포인트인덱스).마지막선거리합 > Val(Form2.txt_F2_마지막선길이.Text) Then  '마지막선의 길이가 기준 이상이고
+                    'If s.A03_신호ID = "A_UP" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 < 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
+                    '매도사유 = "RERVERSE"
+                    'ElseIf s.A03_신호ID = "A_DOWN" And Math.Abs(기울기) > Val(Form2.txt_F2_반대방향처리기울기.Text) And 기울기 > 0 Then   '기울기의 절대값이 기준이상이고 반대방향이고
+                    '   매도사유 = "RERVERSE"
+                    'End If
+                    'End If
 
                     If s.A03_신호ID = "A_UP" Then
                         s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
@@ -237,14 +270,24 @@ Module Algorithm_SoonMeSu
                         s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
                     End If
 
+                    '매수의 경우
+                    'Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    's.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                    's.A16_이익률 = Math.Round(s.A14_현재가격 / s.A10_신호발생가격, 3)
+                    's.A21_환산이익율 = Math.Round(s.A16_이익률 - 1.02, 3)
+
+                    '매도의 경우
+                    Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                    s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+
+
                     If 매도사유 <> "" Then
                         s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
                         s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
                         s.A15_현재상태 = 0
-                        's.A14_현재가격 --- 이건 나중에 옵션 가격을 적는다
-                        's.A16_이익률     '이것도 나중에 옵션 가격 기준으로 적는다
-                        's.A21_환산이익율
                         s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
                         s.A19_매도Index = currentIndex_순매수
                         s.A20_매도사유 = 매도사유

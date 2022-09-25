@@ -75,7 +75,7 @@ Public Class Form2
 
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
-        grid_3.ColumnCount = 7
+        grid_3.ColumnCount = 6
         grid_3.RowCount = PIP_Point_Lists.Length
 
 
@@ -86,7 +86,7 @@ Public Class Form2
 
             For i As Integer = 0 To grid_3.ColumnCount - 1
                 grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-                grid_3.Columns(i).Width = 80
+                grid_3.Columns(i).Width = 70
             Next
 
             grid_3.Columns(0).HeaderText = "번호"
@@ -94,10 +94,9 @@ Public Class Form2
             grid_3.Columns(2).HeaderText = "평균거리"
             grid_3.Columns(3).HeaderText = "기울기"
             grid_3.Columns(4).HeaderText = "신호"
-            grid_3.Columns(5).HeaderText = "최종선 거리"
-            grid_3.Columns(6).HeaderText = "포인트 리스트"
+            grid_3.Columns(5).HeaderText = "포인트 리스트"
             grid_3.Columns(0).Width = 50
-            grid_3.Columns(6).Width = 250
+            grid_3.Columns(5).Width = 250
 
             '데이터 입력하기
 
@@ -107,15 +106,14 @@ Public Class Form2
                 grid_3.Rows(i).Cells(2).Value = Math.Round(PIP_Point_Lists(i).표준편차, 2)
                 grid_3.Rows(i).Cells(3).Value = Math.Round(PIP_Point_Lists(i).마지막선기울기, 2)
                 grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(i).마지막신호
-                grid_3.Rows(i).Cells(5).Value = Math.Round(PIP_Point_Lists(i).마지막선거리합, 2)
 
                 Dim str As String = ""
                 For j = 0 To PIP_Point_Lists(i).PointCount - 1
                     str = str & PIP_Point_Lists(i).PoinIndexList(j) & ", "
 
                 Next
-                grid_3.Rows(i).Cells(6).Value = str
-                grid_3.Rows(i).Cells(6).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+                grid_3.Rows(i).Cells(5).Value = str
+                grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
 
                 For k = 0 To grid_3.ColumnCount - 1
                     If PIP적합포인트인덱스 = i Then
@@ -169,7 +167,7 @@ Public Class Form2
         grid_shinho.Columns(19).HeaderText = "매도Idx"
         grid_shinho.Columns(20).HeaderText = "매도사유"
         grid_shinho.Columns(21).HeaderText = "환산이익"
-        grid_shinho.Columns(22).HeaderText = "메모"
+        grid_shinho.Columns(22).HeaderText = "지수차이"
         grid_shinho.Columns(23).HeaderText = "기타"
 
         'grid_shinho.Columns(0).Width = 50
@@ -253,12 +251,12 @@ Public Class Form2
             F2_Chart_순매수.Series(str).Color = Color.Black
             F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
-            str = "For_" + i.ToString()
-            F2_Chart_순매수.Series.Add(str)
-            F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-            F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            F2_Chart_순매수.Series(str).Color = Color.Blue
-            F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+            'str = "For_" + i.ToString()
+            'F2_Chart_순매수.Series.Add(str)
+            'F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+            'F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            'F2_Chart_순매수.Series(str).Color = Color.Blue
+            'F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
 
             str = "For_Kig_" + i.ToString()
             F2_Chart_순매수.Series.Add(str)
@@ -298,7 +296,7 @@ Public Class Form2
                 F2_Chart_순매수.Series(i).Points.Clear()
             Next
 
-            Dim For_Series As String = "For_" + chartNumber.ToString()
+            'Dim For_Series As String = "For_" + chartNumber.ToString()
             Dim For_Kig_Series As String = "For_Kig_" + chartNumber.ToString()
             Dim oneMinute_Series As String = "oneMinute_" + chartNumber.ToString()
             Dim PIP_Series As String = "PIP_" + chartNumber.ToString()
@@ -312,11 +310,11 @@ Public Class Form2
                 F2_Chart_순매수.Series(oneMinute_Series).Points(i).AxisLabel = Format("{0}", 순매수리스트(i).sTime)
 
                 If i >= 4 Then
-                    retIndex = F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
-                    F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) '외국인+연기금 순매수를 입력한다
+                    'F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '외국인 순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
+                    retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) '외국인+연기금 순매수를 입력한다
 
                     Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
-                    F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
+                    'F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
                     F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
                     F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
                 End If
@@ -609,14 +607,12 @@ Public Class Form2
         Form1.chk_양매도실행.Checked = False
         Form1.chk_중간청산.Checked = False
 
-        Dim 선행포인트수마진() As String = {"1.0"}
-        Dim 순매수판정기준() As Integer = {0}
-        Dim 최대포인트수() As String = {"10", "11", "12", "13"}
-        Dim 상승하락기울기기준() As String = {"4.0", "4.5"}
-        Dim 손절차() As String = {"08", "09"}
-        Dim 익절차() As String = {"15"}
-        Dim 반대방향처리기울기() As String = {"1.0", "2.0", "3.0"}
-        Dim 반대방향처리최종선길이() As String = {"050", "100", "150", "200", "250", "300", "350"}
+        Dim 선행포인트수마진() As String = {"1.0", "0.9", "0.8"} 'a
+        Dim 순매수판정기준() As Integer = {0} 'b
+        Dim 최대포인트수() As String = {"08", "10"} 'c
+        Dim 상승하락기울기기준() As String = {"4.0", "4.5", "5.0"} 'd
+        Dim 손절차() As String = {"08", "09"} 'e
+        Dim 익절차() As String = {"15"} 'f
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -626,18 +622,18 @@ Public Class Form2
 
         Dim cnt As Integer = 0
 
+        For a As Integer = 0 To 선행포인트수마진.Length - 1
+            For c As Integer = 0 To 최대포인트수.Length - 1
+                For d As Integer = 0 To 상승하락기울기기준.Length - 1
 
-        For a As Integer = 0 To 손절차.Length - 1
-            For b As Integer = 0 To 반대방향처리기울기.Length - 1
-                For c As Integer = 0 To 반대방향처리최종선길이.Length - 1
+                    txt_선행_포인트_마진.Text = 선행포인트수마진(a)
+                    txt_F2_최대포인트수.Text = 최대포인트수(c)
+                    txt_F2_상승하락기울기기준.Text = 상승하락기울기기준(d)
 
-                    txt_F2_손절매차.Text = 손절차(a)
-                    txt_F2_반대방향처리기울기.Text = 반대방향처리기울기(b)
-                    txt_F2_마지막선길이.Text = 반대방향처리최종선길이(c)
 
-                    txt_F2_손절매차.Refresh()
-                    txt_F2_반대방향처리기울기.Refresh()
-                    txt_F2_마지막선길이.Refresh()
+                    txt_선행_포인트_마진.Refresh()
+                    txt_F2_최대포인트수.Refresh()
+                    txt_F2_상승하락기울기기준.Refresh()
 
                     Dim cntstr As String
                     If cnt < 10 Then
@@ -647,9 +643,7 @@ Public Class Form2
                     Else
                         cntstr = cnt.ToString()
                     End If
-                    'SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}", cntstr, 선행포인트수마진(a))
-                    'SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_B_{2}_C_{3}_D_{4}", cntstr, 선행포인트수마진(a), 순매수판정기준(b), 최대포인트수(c), 상승하락기울기기준(d))
-                    SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_B_{2}_C_{3}", cntstr, 손절차(a), 반대방향처리기울기(b), 반대방향처리최종선길이(c))
+                    SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_C_{2}_D_{3}", cntstr, 선행포인트수마진(a), 최대포인트수(c), 상승하락기울기기준(d))
 
                     Console.WriteLine(SoonMesuSimulation_조건)
                     Add_Log("F2_시뮬레이션 진행 : ", SoonMesuSimulation_조건)
@@ -658,7 +652,6 @@ Public Class Form2
                 Next
             Next
         Next
-
 
         SoonMesuSimulation_조건 = ""
     End Sub

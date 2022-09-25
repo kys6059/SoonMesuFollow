@@ -155,7 +155,7 @@ Module Module_For1Min
     Public Sub CalcPIPData()          '대표선 계산
 
         Dim minPoint = 2
-        Dim 최대포인트수 As Single = Val(Form2.txt_최대포인트수대비비율.Text)
+        Dim 최대포인트수 As Single = Val(Form2.txt_F2_최대포인트수.Text)
         Dim maxPoint As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 6), 최대포인트수)
 
         If maxPoint >= 2 Then
@@ -181,9 +181,9 @@ Module Module_For1Min
                 PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount)
                 PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount)
                 PIP_Point_Lists(i).마지막신호 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
-                PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount)
+                'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount)
 
-                Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3},최종선거리={4}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호, Math.Round(PIP_Point_Lists(i).마지막선거리합, 2))
+                Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호)
                 For j As Integer = 0 To pipIndexList.Count - 1
                     str += pipIndexList(j).ToString() & ", "
                 Next
@@ -193,7 +193,7 @@ Module Module_For1Min
         Next
 
         '평균거리가 줄어들다가 늘어나는 점이 있으면 그 점을 화면에 표시한다. 단 평균거리는 0보다 크고 1보다 작아야 한다
-        PIP적합포인트인덱스 = 0
+        PIP적합포인트인덱스 = Math.Max(maxPoint - minPoint, 0)
         Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
         For i As Integer = 1 To maxPoint - minPoint
             If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then
@@ -239,7 +239,7 @@ Module Module_For1Min
     Private Function 마지막신호판단(ByVal 기울기 As Double) As String
 
         Dim 신호 As String = "중립"
-        Dim 기준 As Single = Val(Form2.txt_상승하락기울기기준.Text)
+        Dim 기준 As Single = Val(Form2.txt_F2_상승하락기울기기준.Text)
         If 기울기 > 기준 Then
             신호 = "상승"
         ElseIf 기울기 < (기준 * -1) Then
