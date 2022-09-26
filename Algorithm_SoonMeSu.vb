@@ -100,11 +100,6 @@ Module Algorithm_SoonMeSu
 
         Dim ret As String = "중립"
 
-        Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-        Dim curTime = Val(순매수리스트(currentIndex_순매수).sTime)
-
-        If curTime >= 매수마감시간 Then Return ret
-
         Dim CurrentIndex_순매수_마지막방향 As String = PIP_Point_Lists(PIP적합포인트인덱스).마지막신호
 
         If 이전순매수방향 <> CurrentIndex_순매수_마지막방향 Then
@@ -192,10 +187,11 @@ Module Algorithm_SoonMeSu
         shinho.A09_행사가 = 일분옵션데이터(shinho.A08_콜풋).HangSaGa
 
         Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(shinho.A02_발생시간))
-        shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-        shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-        shinho.A16_이익률 = Math.Round((shinho.A10_신호발생가격 - shinho.A14_현재가격) / shinho.A10_신호발생가격, 3)
-
+        If 일분옵션데이터_CurrentIndex >= 0 Then
+            shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+            shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+            shinho.A16_이익률 = Math.Round((shinho.A10_신호발생가격 - shinho.A14_현재가격) / shinho.A10_신호발생가격, 3)
+        End If
 
         shinho.B00_etc = Form2.txt_F2_실험조건.Text
 

@@ -623,7 +623,7 @@ Partial Class Form2
         Me.txt_F2_매수시작시간.Name = "txt_F2_매수시작시간"
         Me.txt_F2_매수시작시간.Size = New System.Drawing.Size(99, 28)
         Me.txt_F2_매수시작시간.TabIndex = 13
-        Me.txt_F2_매수시작시간.Text = "90300"
+        Me.txt_F2_매수시작시간.Text = "101000"
         '
         'txt_F2_신호시작시간
         '
