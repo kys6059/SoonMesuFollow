@@ -61,6 +61,8 @@ Module Module_For1Min
 
     Public 이전순매수방향 As String
 
+    'Public PIP_CALC_MAX_INDEX As Integer = 170 '매수 마감 시간 이후에도 이전과 동일한 알고리즘을 적용하기 위해 시간index를 166으로 하는 방법 - 170 = 85분으로 켈리지수가 가장 높은 10시 25분을 기준으로 함
+
 
     Public Sub InitDataStructure_1Min()
 
@@ -274,7 +276,11 @@ Module Module_For1Min
         Dim totalDistance As Double = 0.0
         Dim cnt As Integer = 0
 
-        For i As Integer = 4 To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
+        Dim startIndex As Integer = 4
+        Dim PIP_CALC_MAX_INDEX As Integer = Val(Form2.txt_F2_PIP_CALC_MAX_INDEX.Text)
+        If PIP_CALC_MAX_INDEX > 0 Then startIndex = Math.Max(LastIndex - PIP_CALC_MAX_INDEX, 4)
+
+        For i As Integer = startIndex To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
 
             If RightPipIndex = i And i < LastIndex Then
 
@@ -311,10 +317,13 @@ Module Module_For1Min
         LastIndex = Math.Min(LastIndex, 760) '759번째 인덱스가 1520분이다 항상 이때까지만 계산한다
 
         Dim pipData(n) As Double
-
         Dim pipIndexList As List(Of Integer) = New List(Of Integer)
 
-        pipIndexList.Add(3) 'PIP 1
+        Dim startIndex As Integer = 4
+        Dim PIP_CALC_MAX_INDEX As Integer = Val(Form2.txt_F2_PIP_CALC_MAX_INDEX.Text)
+        If PIP_CALC_MAX_INDEX > 0 Then startIndex = Math.Max(LastIndex - PIP_CALC_MAX_INDEX, 4)
+
+        pipIndexList.Add(startIndex)
         pipIndexList.Add(LastIndex) 'PIP 2
 
         For pipCount As Integer = 2 To n - 1
@@ -326,7 +335,7 @@ Module Module_For1Min
             Dim maxDistance As Double = Double.MinValue
             Dim maxDistanceIndex As Integer = 0
 
-            For i As Integer = 4 To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
+            For i As Integer = startIndex To LastIndex  '순매수리스트에 처음3개는 0으로 들어오기 때문에 4번째부터 계산한다
 
                 If RightPipIndex = i And i < (LastIndex) Then
 
