@@ -607,13 +607,13 @@ Public Class Form2
         Form1.chk_양매도실행.Checked = False
         Form1.chk_중간청산.Checked = False
 
-        Dim 선행포인트수마진() As String = {"1.00", "0.95"} 'a
+        Dim 선행포인트수마진() As String = {"0.95"} 'a
         Dim 순매수판정기준() As Integer = {0} 'b
         Dim 최대포인트수() As String = {"10"} 'c
-        Dim 상승하락기울기기준() As String = {"4.0", "4.5"} 'd
-        Dim PIP_CALC_MAX_INDEX() As String = {"150", "170", "200", "230", "260"} 'ee
-        Dim 손절차() As String = {"09"} 'f
-        Dim 익절차() As String = {"16"} 'g
+        Dim 상승하락기울기기준() As String = {"4.5", "4.7"} 'd
+        Dim PIP_CALC_MAX_INDEX() As String = {"210", "220", "230", "240", "250"} 'ee
+        Dim 손절차() As String = {"09", "08", "07", "06"} 'f
+        Dim 익절차() As String = {"16", "15"} 'g
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
