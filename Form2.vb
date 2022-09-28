@@ -621,6 +621,8 @@ Public Class Form2
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
 
+
+
         Dim cnt As Integer = 0
 
         For a As Integer = 0 To 선행포인트수마진.Length - 1
