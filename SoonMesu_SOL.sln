@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "EBEST_BOTHSELL", "EBEST_BOTHSELL.vbproj", "{FD8150FC-8006-4376-9219-3B3037822432}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "..\Setup1\Setup1.vdproj", "{8C6461EE-544F-47FE-AD21-CBFFC9048C16}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SoonMesuFollow", "SoonMesuFollow.vbproj", "{FD8150FC-8006-4376-9219-3B3037822432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +15,6 @@ Global
 		{FD8150FC-8006-4376-9219-3B3037822432}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD8150FC-8006-4376-9219-3B3037822432}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD8150FC-8006-4376-9219-3B3037822432}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8C6461EE-544F-47FE-AD21-CBFFC9048C16}.Debug|Any CPU.ActiveCfg = Debug
-		{8C6461EE-544F-47FE-AD21-CBFFC9048C16}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
