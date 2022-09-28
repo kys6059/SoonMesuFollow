@@ -491,8 +491,11 @@ Public Class Form2
                 Dim xValueInt As Integer = Math.Round(xValue)
                 Dim xTime As String = 순매수리스트(xValueInt).sTime
                 Dim Index_time As String = String.Format("{0}:{1}", xValueInt, xTime)
-                g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 100), F2_Chart_순매수.Bottom - 200, 97, 20))
-                g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X - 94, F2_Chart_순매수.Bottom - 198))
+                'g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 100), F2_Chart_순매수.Bottom - 200, 97, 20))
+                'g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X - 94, F2_Chart_순매수.Bottom - 198))
+                g.DrawString(Index_time, font, brush, New PointF(currentMouseLocation.X, startY))
+
+
             End If
         End If
 
