@@ -612,19 +612,18 @@ Public Class Form2
 
         Dim 선행포인트수마진() As String = {"0.95"} 'a
         Dim 순매수판정기준() As Integer = {0} 'b
-        Dim 최대포인트수() As String = {"10"} 'c
-        Dim 상승하락기울기기준() As String = {"4.5", "4.7"} 'd
-        Dim PIP_CALC_MAX_INDEX() As String = {"210", "220", "230", "240", "250"} 'ee
-        Dim 손절차() As String = {"09", "08", "07", "06"} 'f
-        Dim 익절차() As String = {"16", "15"} 'g
+        Dim 최대포인트수() As String = {"10", "8"} 'c
+        Dim 상승하락기울기기준() As String = {"4.5", "4.0"} 'd
+        Dim PIP_CALC_MAX_INDEX() As String = {"180", "190", "200", "230"} 'ee
+        Dim 손절차() As String = {"09", "07"} 'f
+        Dim 익절차() As String = {"16"} 'g
+        Dim 매수마감시간후기울기() As String = {"04.5", "06.0", "08.0", "10.0"}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
         Else
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
-
-
 
         Dim cnt As Integer = 0
 
@@ -634,37 +633,41 @@ Public Class Form2
                     For ee As Integer = 0 To PIP_CALC_MAX_INDEX.Length - 1
                         For f As Integer = 0 To 손절차.Length - 1
                             For g As Integer = 0 To 익절차.Length - 1
+                                For h As Integer = 0 To 매수마감시간후기울기.Length - 1
 
-                                txt_선행_포인트_마진.Text = 선행포인트수마진(a)
-                                txt_F2_최대포인트수.Text = 최대포인트수(c)
-                                txt_F2_상승하락기울기기준.Text = 상승하락기울기기준(d)
-                                txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(ee)
-                                txt_F2_손절매차.Text = 손절차(f)
-                                txt_F2_익절차.Text = 익절차(g)
+                                    txt_선행_포인트_마진.Text = 선행포인트수마진(a)
+                                    txt_F2_최대포인트수.Text = 최대포인트수(c)
+                                    txt_F2_상승하락기울기기준.Text = 상승하락기울기기준(d)
+                                    txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(ee)
+                                    txt_F2_손절매차.Text = 손절차(f)
+                                    txt_F2_익절차.Text = 익절차(g)
+                                    txt_F2_마감시간이후기울기.Text = 매수마감시간후기울기(h)
 
-                                txt_선행_포인트_마진.Refresh()
-                                txt_F2_최대포인트수.Refresh()
-                                txt_F2_상승하락기울기기준.Refresh()
-                                txt_F2_PIP_CALC_MAX_INDEX.Refresh()
-                                txt_F2_손절매차.Refresh()
-                                txt_F2_익절차.Refresh()
+                                    txt_선행_포인트_마진.Refresh()
+                                    txt_F2_최대포인트수.Refresh()
+                                    txt_F2_상승하락기울기기준.Refresh()
+                                    txt_F2_PIP_CALC_MAX_INDEX.Refresh()
+                                    txt_F2_손절매차.Refresh()
+                                    txt_F2_익절차.Refresh()
+                                    txt_F2_마감시간이후기울기.Refresh()
 
-                                Dim cntstr As String
-                                If cnt < 10 Then
-                                    cntstr = "00" & cnt.ToString()
-                                ElseIf cnt >= 10 And cnt < 100 Then
-                                    cntstr = "0" & cnt.ToString()
-                                Else
-                                    cntstr = cnt.ToString()
-                                End If
+                                    Dim cntstr As String
+                                    If cnt < 10 Then
+                                        cntstr = "00" & cnt.ToString()
+                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                        cntstr = "0" & cnt.ToString()
+                                    Else
+                                        cntstr = cnt.ToString()
+                                    End If
 
-                                SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", cntstr, 선행포인트수마진(a), 최대포인트수(c), 상승하락기울기기준(d), PIP_CALC_MAX_INDEX(ee), 손절차(f), 익절차(g))
+                                    SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}", cntstr, 선행포인트수마진(a), 최대포인트수(c), 상승하락기울기기준(d), PIP_CALC_MAX_INDEX(ee), 손절차(f), 익절차(g), 매수마감시간후기울기(h))
 
-                                'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
-                                Console.WriteLine(SoonMesuSimulation_조건)
-                                Add_Log("F2_시뮬레이션 진행 : ", SoonMesuSimulation_조건)
-                                자동반복계산로직(cnt)
-                                cnt += 1
+                                    'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
+                                    Console.WriteLine(SoonMesuSimulation_조건)
+                                    Add_Log("F2_시뮬레이션 진행 : ", SoonMesuSimulation_조건)
+                                    자동반복계산로직(cnt)
+                                    cnt += 1
+                                Next
                             Next
                         Next
                     Next

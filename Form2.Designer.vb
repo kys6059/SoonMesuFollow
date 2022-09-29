@@ -41,8 +41,8 @@ Partial Class Form2
         Me.btn_점의수늘리기 = New System.Windows.Forms.Button()
         Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
-        Me.txt_F2_1 = New System.Windows.Forms.RichTextBox()
         Me.txt_F2_PIP_CALC_MAX_INDEX = New System.Windows.Forms.RichTextBox()
+        Me.txt_F2_마감시간이후기울기 = New System.Windows.Forms.RichTextBox()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.cmb_F2_순매수기준 = New System.Windows.Forms.ComboBox()
@@ -278,8 +278,8 @@ Partial Class Form2
         Me.TableLayoutPanel3.ColumnCount = 2
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.14285!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.85715!))
-        Me.TableLayoutPanel3.Controls.Add(Me.txt_F2_1, 1, 5)
-        Me.TableLayoutPanel3.Controls.Add(Me.txt_F2_PIP_CALC_MAX_INDEX, 1, 4)
+        Me.TableLayoutPanel3.Controls.Add(Me.txt_F2_PIP_CALC_MAX_INDEX, 1, 5)
+        Me.TableLayoutPanel3.Controls.Add(Me.txt_F2_마감시간이후기울기, 1, 4)
         Me.TableLayoutPanel3.Controls.Add(Me.Label17, 0, 5)
         Me.TableLayoutPanel3.Controls.Add(Me.Label16, 0, 4)
         Me.TableLayoutPanel3.Controls.Add(Me.cmb_F2_순매수기준, 1, 1)
@@ -303,25 +303,25 @@ Partial Class Form2
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(330, 222)
         Me.TableLayoutPanel3.TabIndex = 6
         '
-        'txt_F2_1
-        '
-        Me.txt_F2_1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_1.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_1.Location = New System.Drawing.Point(192, 185)
-        Me.txt_F2_1.Name = "txt_F2_1"
-        Me.txt_F2_1.Size = New System.Drawing.Size(133, 32)
-        Me.txt_F2_1.TabIndex = 15
-        Me.txt_F2_1.Text = ""
-        '
         'txt_F2_PIP_CALC_MAX_INDEX
         '
         Me.txt_F2_PIP_CALC_MAX_INDEX.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_F2_PIP_CALC_MAX_INDEX.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_PIP_CALC_MAX_INDEX.Location = New System.Drawing.Point(192, 149)
+        Me.txt_F2_PIP_CALC_MAX_INDEX.Location = New System.Drawing.Point(192, 185)
         Me.txt_F2_PIP_CALC_MAX_INDEX.Name = "txt_F2_PIP_CALC_MAX_INDEX"
-        Me.txt_F2_PIP_CALC_MAX_INDEX.Size = New System.Drawing.Size(133, 28)
-        Me.txt_F2_PIP_CALC_MAX_INDEX.TabIndex = 14
+        Me.txt_F2_PIP_CALC_MAX_INDEX.Size = New System.Drawing.Size(133, 32)
+        Me.txt_F2_PIP_CALC_MAX_INDEX.TabIndex = 15
         Me.txt_F2_PIP_CALC_MAX_INDEX.Text = "170"
+        '
+        'txt_F2_마감시간이후기울기
+        '
+        Me.txt_F2_마감시간이후기울기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_F2_마감시간이후기울기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_F2_마감시간이후기울기.Location = New System.Drawing.Point(192, 149)
+        Me.txt_F2_마감시간이후기울기.Name = "txt_F2_마감시간이후기울기"
+        Me.txt_F2_마감시간이후기울기.Size = New System.Drawing.Size(133, 28)
+        Me.txt_F2_마감시간이후기울기.TabIndex = 14
+        Me.txt_F2_마감시간이후기울기.Text = "4.0"
         '
         'Label17
         '
@@ -333,7 +333,7 @@ Partial Class Form2
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(183, 36)
         Me.Label17.TabIndex = 13
-        Me.Label17.Text = "-"
+        Me.Label17.Text = "기준선의 최대길이"
         Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label16
@@ -346,7 +346,7 @@ Partial Class Form2
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(183, 32)
         Me.Label16.TabIndex = 12
-        Me.Label16.Text = "기준선의 최대길이"
+        Me.Label16.Text = "마감시간 이후 기울기"
         Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'cmb_F2_순매수기준
@@ -918,8 +918,8 @@ Partial Class Form2
     Friend WithEvents txt_F2_신호시작시간 As RichTextBox
     Friend WithEvents Label15 As Label
     Friend WithEvents Label14 As Label
-    Friend WithEvents txt_F2_1 As RichTextBox
     Friend WithEvents txt_F2_PIP_CALC_MAX_INDEX As RichTextBox
     Friend WithEvents Label17 As Label
     Friend WithEvents Label16 As Label
+    Friend WithEvents txt_F2_마감시간이후기울기 As RichTextBox
 End Class

@@ -241,7 +241,14 @@ Module Module_For1Min
     Private Function 마지막신호판단(ByVal 기울기 As Double) As String
 
         Dim 신호 As String = "중립"
-        Dim 기준 As Single = Val(Form2.txt_F2_상승하락기울기기준.Text)
+        Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
+        Dim 기준 As Single
+        If Val(순매수리스트(currentIndex_순매수).sTime) > 매수마감시간 Then
+            기준 = Val(Form2.txt_F2_마감시간이후기울기.Text)
+        Else
+            기준 = Val(Form2.txt_F2_상승하락기울기기준.Text)
+        End If
+
         If 기울기 > 기준 Then
             신호 = "상승"
         ElseIf 기울기 < (기준 * -1) Then
