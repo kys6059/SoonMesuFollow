@@ -53,6 +53,9 @@ Module Algorithm_SoonMeSu
 
     Public Sub SoonMesuCalcAlrotithmAll()
 
+        'Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+        'If Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then Return  '매수시작시간전에는 아예 신호가 안뜨게 만든다 ---- 이걸 하니깐 켈리지수가 급락함 제외함
+
         Dim ret As String = CalcAlgorithm_AB()
 
         If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
