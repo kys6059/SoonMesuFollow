@@ -22,9 +22,12 @@ Partial Class Form2
     '코드 편집기에서는 수정하지 마세요.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.btn_f2_폼닫기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
@@ -83,6 +86,7 @@ Partial Class Form2
         Me.chk_F2_화면끄기 = New System.Windows.Forms.CheckBox()
         Me.btn_당일반복 = New System.Windows.Forms.Button()
         Me.txt_F2_실험조건 = New System.Windows.Forms.RichTextBox()
+        Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -92,6 +96,7 @@ Partial Class Form2
         Me.TableLayoutPanel4.SuspendLayout()
         Me.TableLayoutPanel5.SuspendLayout()
         Me.TableLayoutPanel6.SuspendLayout()
+        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'btn_f2_폼닫기
@@ -209,17 +214,17 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend1)
+        ChartArea5.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend5)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(2, 230)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series1)
-        Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 776)
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series5)
+        Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 722)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
         '
@@ -243,7 +248,7 @@ Partial Class Form2
         Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수늘리기, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.txt_TargetPointCount, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.btn_점의수줄이기, 0, 0)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(2005, 1271)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(2008, 1219)
         Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -311,7 +316,7 @@ Partial Class Form2
         Me.txt_F2_PIP_CALC_MAX_INDEX.Name = "txt_F2_PIP_CALC_MAX_INDEX"
         Me.txt_F2_PIP_CALC_MAX_INDEX.Size = New System.Drawing.Size(133, 32)
         Me.txt_F2_PIP_CALC_MAX_INDEX.TabIndex = 15
-        Me.txt_F2_PIP_CALC_MAX_INDEX.Text = "170"
+        Me.txt_F2_PIP_CALC_MAX_INDEX.Text = "190"
         '
         'txt_F2_마감시간이후기울기
         '
@@ -321,7 +326,7 @@ Partial Class Form2
         Me.txt_F2_마감시간이후기울기.Name = "txt_F2_마감시간이후기울기"
         Me.txt_F2_마감시간이후기울기.Size = New System.Drawing.Size(133, 28)
         Me.txt_F2_마감시간이후기울기.TabIndex = 14
-        Me.txt_F2_마감시간이후기울기.Text = "4.0"
+        Me.txt_F2_마감시간이후기울기.Text = "10.0"
         '
         'Label17
         '
@@ -389,7 +394,7 @@ Partial Class Form2
         Me.txt_F2_최대포인트수.Name = "txt_F2_최대포인트수"
         Me.txt_F2_최대포인트수.Size = New System.Drawing.Size(133, 28)
         Me.txt_F2_최대포인트수.TabIndex = 7
-        Me.txt_F2_최대포인트수.Text = "10"
+        Me.txt_F2_최대포인트수.Text = "8"
         '
         'Label6
         '
@@ -437,7 +442,7 @@ Partial Class Form2
         Me.txt_선행_포인트_마진.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
         Me.txt_선행_포인트_마진.Size = New System.Drawing.Size(133, 28)
         Me.txt_선행_포인트_마진.TabIndex = 5
-        Me.txt_선행_포인트_마진.Text = "1.0"
+        Me.txt_선행_포인트_마진.Text = "0.95"
         '
         'grid_3
         '
@@ -445,7 +450,7 @@ Partial Class Form2
         Me.grid_3.AllowUserToDeleteRows = False
         Me.grid_3.BackgroundColor = System.Drawing.SystemColors.Control
         Me.grid_3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grid_3.Location = New System.Drawing.Point(2005, 1012)
+        Me.grid_3.Location = New System.Drawing.Point(2008, 958)
         Me.grid_3.Name = "grid_3"
         Me.grid_3.ReadOnly = True
         Me.grid_3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -459,7 +464,7 @@ Partial Class Form2
         Me.grid_shinho.AllowUserToDeleteRows = False
         Me.grid_shinho.BackgroundColor = System.Drawing.SystemColors.Control
         Me.grid_shinho.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grid_shinho.Location = New System.Drawing.Point(2, 1012)
+        Me.grid_shinho.Location = New System.Drawing.Point(2, 958)
         Me.grid_shinho.Name = "grid_shinho"
         Me.grid_shinho.ReadOnly = True
         Me.grid_shinho.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
@@ -825,12 +830,29 @@ Partial Class Form2
         Me.txt_F2_실험조건.TabIndex = 7
         Me.txt_F2_실험조건.Text = ""
         '
+        'Chart1
+        '
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea6)
+        Legend6.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend6)
+        Me.Chart1.Location = New System.Drawing.Point(1404, 230)
+        Me.Chart1.Name = "Chart1"
+        Series6.ChartArea = "ChartArea1"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        Me.Chart1.Series.Add(Series6)
+        Me.Chart1.Size = New System.Drawing.Size(1229, 722)
+        Me.Chart1.TabIndex = 20
+        Me.Chart1.Text = "Chart1"
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(2634, 1312)
+        Me.ClientSize = New System.Drawing.Size(2634, 1262)
+        Me.Controls.Add(Me.Chart1)
         Me.Controls.Add(Me.TableLayoutPanel6)
         Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.TableLayoutPanel4)
@@ -860,6 +882,7 @@ Partial Class Form2
         Me.TableLayoutPanel5.PerformLayout()
         Me.TableLayoutPanel6.ResumeLayout(False)
         Me.TableLayoutPanel6.PerformLayout()
+        CType(Me.Chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -922,4 +945,5 @@ Partial Class Form2
     Friend WithEvents Label17 As Label
     Friend WithEvents Label16 As Label
     Friend WithEvents txt_F2_마감시간이후기울기 As RichTextBox
+    Friend WithEvents Chart1 As DataVisualization.Charting.Chart
 End Class

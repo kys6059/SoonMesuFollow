@@ -132,7 +132,6 @@ Public Class Form2
 
     Private Sub Draw_Shinho_Grid()
 
-
         grid_shinho.Columns.Clear()
         grid_shinho.Rows.Clear()
         grid_shinho.ColumnCount = 24
@@ -205,13 +204,13 @@ Public Class Form2
     End Sub
 
     Private Sub DrawGraph()
-        F2_Chart_순매수.Visible = False
-        InitGraph()
-        For i As Integer = 0 To 0
-            DrawWinFormGraph(i)
-        Next
 
-        F2_Chart_순매수.Visible = True
+        F2_InitGraph()
+        F2_DrawWinFormGraph(0)
+
+        Init_Option_1min_Graph()
+        Draw_Option_1min_Graph()
+
     End Sub
 
     Private Sub CalcColorData()        '최대최소,제2저가 계산
@@ -230,8 +229,9 @@ Public Class Form2
 
     End Sub
 
-    Private Sub InitGraph()
+    Private Sub F2_InitGraph()
 
+        F2_Chart_순매수.Visible = False
         Dim str, ChartAreaStr As String
 
         F2_Chart_순매수.Series.Clear()
@@ -288,7 +288,7 @@ Public Class Form2
 
         F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY.IsStartedFromZero = False
     End Sub
-    Private Sub DrawWinFormGraph(ByVal chartNumber As Integer)
+    Private Sub F2_DrawWinFormGraph(ByVal chartNumber As Integer)
 
         If currentIndex_순매수 >= 0 Then  '기본축은 순매수축으로 한다
 
@@ -378,7 +378,7 @@ Public Class Form2
             End If
 
         End If
-
+        F2_Chart_순매수.Visible = True
     End Sub
 
     Private Sub HSc_F2_시간조절_ValueChanged(sender As Object, e As EventArgs) Handles HSc_F2_시간조절.ValueChanged
@@ -676,5 +676,130 @@ Public Class Form2
         Next
 
         SoonMesuSimulation_조건 = ""
+    End Sub
+
+    Private Sub Init_Option_1min_Graph()
+
+        Chart1.Visible = False
+        Dim str, ChartAreaStr As String
+
+        Chart1.Series.Clear()
+        Chart1.ChartAreas.Clear()
+        Chart1.Legends.Clear()
+        Chart1.Annotations.Clear()
+
+        For i As Integer = 0 To 1
+
+            ChartAreaStr = "ChartArea_" + i.ToString()
+            Chart1.ChartAreas.Add(ChartAreaStr)
+
+            str = "CandleStick_" + i.ToString()
+            Chart1.Series.Add(str)
+            Chart1.Series(str).ChartArea = ChartAreaStr
+            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Candlestick
+            Chart1.Series(str).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
+
+            ''Lebel 설정
+            Chart1.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+            '축 선 속성 설정
+            Chart1.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart1.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
+            Chart1.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart1.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+        Next
+    End Sub
+
+    Private Sub Draw_Option_1min_Graph()
+        Dim i, callput, retindex As Integer '
+
+        If currentIndex_1MIn >= 0 Then
+
+            For i = 0 To Chart1.Series.Count - 1
+                Chart1.Series(i).Points.Clear()
+            Next
+
+            Dim maxValue As Single = Single.MinValue
+            Dim minValue As Single = Single.MaxValue
+
+            For callput = 0 To 1
+
+                Dim CandlestrickSeries As String = "CandleStick_" + callput.ToString()
+
+                For i = 0 To currentIndex_1MIn
+
+                    ' main Series 입력
+                    retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
+                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
+                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
+                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+
+                    If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
+                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                    ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
+                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                    End If
+
+                    Dim str As String = "시간:" & 일분옵션데이터(0).ctime(i) & vbCrLf & "시가:" & 일분옵션데이터(callput).price(i, 0) & vbCrLf & "종가:" & 일분옵션데이터(callput).price(i, 3)
+                    Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+
+                    If maxValue < 일분옵션데이터(callput).price(i, 1) Then maxValue = 일분옵션데이터(callput).price(i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                    If minValue > 일분옵션데이터(callput).price(i, 2) Then minValue = 일분옵션데이터(callput).price(i, 2)
+
+                Next
+            Next
+
+            '콜 풋 차트의 크기를 똑같이 하기 위해서 최대,최소값을 맞춘다
+            maxValue = maxValue + 0.1
+            minValue = minValue - 0.1
+            For i = 0 To 1
+                Chart1.ChartAreas(i).AxisY.Minimum = minValue
+                Chart1.ChartAreas(i).AxisY.Maximum = maxValue
+                Chart1.ChartAreas(i).AxisY.Interval = 0.2
+            Next
+        End If
+
+        '신호를 그린다
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                Dim Str As String = "Shinho_" + i.ToString()
+                Chart1.Series.Add(Str)
+
+                If s.A08_콜풋 = 0 Then
+                    Chart1.Series(Str).ChartArea = "ChartArea_0"
+                Else
+                    Chart1.Series(Str).ChartArea = "ChartArea_1"
+                End If
+
+                Chart1.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart1.Series(Str).Color = Color.Black
+                Chart1.Series(Str).BorderWidth = 2
+
+                '시작점,끝점 찾기
+                Dim 신호시작점 As Integer = 순매수시간으로1MIN인덱스찾기(Val(s.A02_발생시간))
+                Dim 신호끝점 As Integer
+
+                If currentIndex_1MIn >= 신호시작점 Then Chart1.Series(Str).Points.AddXY(신호시작점, s.A10_신호발생가격)  '시작점
+
+                If s.A15_현재상태 = 1 Then '끝점
+                    신호끝점 = currentIndex_1MIn
+                    Chart1.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                    If currentIndex_1MIn >= 신호끝점 Then Chart1.Series(Str).Points.AddXY(신호끝점, 일분옵션데이터(s.A08_콜풋).price(currentIndex_1MIn, 3))
+                Else
+                    신호끝점 = 순매수시간으로1MIN인덱스찾기(Val(s.A18_매도시간))
+                    Chart1.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+                    If currentIndex_1MIn >= 신호끝점 Then Chart1.Series(Str).Points.AddXY(신호끝점, s.A22_신호해제가격)
+                End If
+            Next
+        End If
+
+        Chart1.Visible = True
+    End Sub
+
+    Private Sub HSc_F2_시간조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_시간조절.Scroll
+
     End Sub
 End Class

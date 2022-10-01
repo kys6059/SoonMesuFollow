@@ -26,6 +26,7 @@ Module Algorithm_SoonMeSu
         Dim A19_매도Index As Integer
         Dim A20_매도사유 As String  '익절, 손절, TimeOver 구분
         Dim A21_환산이익율 As Single '매수 관점에서 이익률
+        Dim A22_신호해제가격 As Single '옵션 환매(매수)가격
 
 
         Dim A50_조건전체 As String
@@ -212,12 +213,17 @@ Module Algorithm_SoonMeSu
                     s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
                     s.A15_현재상태 = 0
-                    's.A14_현재가격 --- 이건 나중에 옵션 가격을 적는다
-                    's.A16_이익률     '이것도 나중에 옵션 가격 기준으로 적는다
-                    's.A21_환산이익율
+
                     s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
                     s.A19_매도Index = currentIndex_순매수
                     s.A20_매도사유 = 매도사유
+
+                    '매도의 경우
+                    Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                    s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                    s.A22_신호해제가격 = s.A14_현재가격
 
                     If str = "A_UP" Then
                         s.A55_메모 = Math.Round(s.A07_신호해제종합주가지수 - s.A06_신호발생종합주가지수, 2)
@@ -287,6 +293,7 @@ Module Algorithm_SoonMeSu
                         s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
                         s.A19_매도Index = currentIndex_순매수
                         s.A20_매도사유 = 매도사유
+                        s.A22_신호해제가격 = s.A14_현재가격
                     End If
 
                     SoonMesuShinhoList(i) = s

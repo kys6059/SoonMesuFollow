@@ -48,7 +48,7 @@ Partial Class Form1
         Me.DBDate_HScrollBar = New System.Windows.Forms.HScrollBar()
         Me.txt_Log = New System.Windows.Forms.TextBox()
         Me.txt_DB_Date_Limit = New System.Windows.Forms.TextBox()
-        Me.txt_ebest_id = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_양매도실행 = New System.Windows.Forms.CheckBox()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -141,7 +141,7 @@ Partial Class Form1
         CType(Me.grd_selected, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
-        CType(Me.txt_ebest_id, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.chart1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel4.SuspendLayout()
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel5.SuspendLayout()
@@ -417,21 +417,21 @@ Partial Class Form1
         Me.txt_DB_Date_Limit.TabIndex = 11
         Me.txt_DB_Date_Limit.Text = " where cdate > 220301"
         '
-        'txt_ebest_id
+        'chart1
         '
         ChartArea1.Name = "ChartArea1"
-        Me.txt_ebest_id.ChartAreas.Add(ChartArea1)
+        Me.chart1.ChartAreas.Add(ChartArea1)
         Legend1.Name = "Legend1"
-        Me.txt_ebest_id.Legends.Add(Legend1)
-        Me.txt_ebest_id.Location = New System.Drawing.Point(1767, 169)
-        Me.txt_ebest_id.Name = "txt_ebest_id"
+        Me.chart1.Legends.Add(Legend1)
+        Me.chart1.Location = New System.Drawing.Point(1767, 169)
+        Me.chart1.Name = "chart1"
         Series1.ChartArea = "ChartArea1"
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
-        Me.txt_ebest_id.Series.Add(Series1)
-        Me.txt_ebest_id.Size = New System.Drawing.Size(1242, 885)
-        Me.txt_ebest_id.TabIndex = 13
-        Me.txt_ebest_id.Text = "Chart1"
+        Me.chart1.Series.Add(Series1)
+        Me.chart1.Size = New System.Drawing.Size(1242, 885)
+        Me.chart1.TabIndex = 13
+        Me.chart1.Text = "Chart1"
         '
         'TableLayoutPanel4
         '
@@ -1577,7 +1577,7 @@ Partial Class Form1
         Me.Controls.Add(Me.TableLayoutPanel5)
         Me.Controls.Add(Me.grd_ShinHo)
         Me.Controls.Add(Me.TableLayoutPanel4)
-        Me.Controls.Add(Me.txt_ebest_id)
+        Me.Controls.Add(Me.chart1)
         Me.Controls.Add(Me.txt_DB_Date_Limit)
         Me.Controls.Add(Me.txt_Log)
         Me.Controls.Add(Me.TableLayoutPanel3)
@@ -1597,7 +1597,7 @@ Partial Class Form1
         Me.TableLayoutPanel1.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.TableLayoutPanel3.PerformLayout()
-        CType(Me.txt_ebest_id, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.chart1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
         CType(Me.grd_ShinHo, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1642,7 +1642,7 @@ Partial Class Form1
     Friend WithEvents DBDate_HScrollBar As HScrollBar
     Friend WithEvents txt_Log As TextBox
     Friend WithEvents txt_DB_Date_Limit As TextBox
-    Friend WithEvents txt_ebest_id As DataVisualization.Charting.Chart
+    Friend WithEvents chart1 As DataVisualization.Charting.Chart
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
     Friend WithEvents Label10 As Label
     Friend WithEvents Label12 As Label
