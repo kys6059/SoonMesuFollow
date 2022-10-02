@@ -370,7 +370,7 @@ Module realtime_ebest
 
         Dim 투자비율반영금액 As Long = Math.Round(주문가능금액 * Val(Form1.txt_투자비율.Text))
 
-        If optionList.Count > 0 Then
+        If optionList.Count > 0 And selectedJongmokIndex(callput) >= 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
             Dim code As String = it.Code(callput)
 
@@ -549,8 +549,8 @@ Module realtime_ebest
 
             TotalCount = retCount
 
-            SetSelectedIndex()
-            XAQuery_EBEST_분봉데이터호출함수(0)                 '콜 그래프 Data 호출
+            SetSelectedIndex_For_순매수()  '순매수용으로 변경함
+
 
             Console.WriteLine("옵션 종목 Count =  " & optionList.Count.ToString())
 
@@ -605,7 +605,7 @@ Module realtime_ebest
 
         Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8415OutBlock1")
 
-        Dim iTime As Integer = Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", 0), 4))
+        Dim iTime As Integer = Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", 0), 4)) '첫번째열의 hhmm을 가져와서 나머지가 1이면 1분데이터에 5이면 5분데이터에 저장한다
         Dim 나머지 As Integer = iTime Mod 5
 
         If 나머지 = 0 Then '5분주기 데이터는 기존 데이터에 그대로 저장한다
@@ -638,27 +638,49 @@ Module realtime_ebest
                 Data(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
             Next
 
-        Else  '1분봉이면 1분 데이터에 저장한다
-
-            Add_Log("일반", "나머지는 ___________" & 나머지.ToString() & ", Count = " & Count.ToString() & ", 콜풋은 " & callput.ToString())
-            Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
-
-            일분옵션데이터(callput).Code = it.Code(callput)
-            일분옵션데이터(callput).HangSaGa = it.HangSaGa
-
-            For i As Integer = 0 To Count - 1
-                일분옵션데이터(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-                일분옵션데이터(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-                일분옵션데이터(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-                일분옵션데이터(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-                일분옵션데이터(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-                일분옵션데이터(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
-            Next
-
             If callput = 1 Then 'DB 저장 로직
                 InsertTargetDateData_1분(TargetDate) '1분데이터 저장
                 Insert순매수이력데이터(TargetDate) '개인, 기관, 외국인, 코스피지수 저장 30초 주기
             End If
+
+        Else  '1분봉이면 1분 데이터에 저장한다
+
+            'Add_Log("일반", "나머지는 ___________" & 나머지.ToString() & ", Count = " & Count.ToString() & ", 콜풋은 " & callput.ToString())
+            If optionList IsNot Nothing Then
+                Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+
+                일분옵션데이터(callput).Code = it.Code(callput)
+                일분옵션데이터(callput).HangSaGa = it.HangSaGa
+
+                '5분에서 복사함
+                Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", 0))
+                'EBEST는 장 시작전에도 1개가 들어와서 이렇게 1개만 들어올 때 장 전인지를 거래량으로 판단한다
+                If Count <= 1 Then
+                    If 거래량AtFirst > 0 Then
+                        timeIndex_1Min = Count   'Time의 Count
+                    Else
+                        timeIndex_1Min = 0
+                    End If
+                Else
+                    timeIndex_1Min = Count   'Time의 Count
+                End If
+                currentIndex_1MIn = timeIndex_1Min - 1
+
+                '장전에 무수히 +가 되면 안되니 장 시작 후 풋코드를 받으면 ReceiveCount를 증가시킨다
+                If currentIndex_1MIn >= 0 And callput = 1 Then
+                    ReceiveCount += 1
+                End If
+
+                For i As Integer = 0 To Count - 1
+                    일분옵션데이터(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+                    일분옵션데이터(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+                    일분옵션데이터(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+                    일분옵션데이터(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+                    일분옵션데이터(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+                    일분옵션데이터(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+                Next
+            End If
+
 
         End If
 
@@ -691,7 +713,7 @@ Module realtime_ebest
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
         XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
 
-        If optionList.Count > 0 Then
+        If optionList.Count > 0 And selectedJongmokIndex(capplut) >= 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
             Dim code As String = it.Code(capplut)
 
@@ -745,8 +767,10 @@ Module realtime_ebest
             순매수리스트(순매수리스트카운트 - 1 - i).외국인_기관_순매수 = 외 + 기
         Next
         timeIndex_순매수 = 순매수리스트카운트
-        currentIndex_순매수 = timeIndex_1Min - 1
-        Add_Log("일반", "순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
+        currentIndex_순매수 = timeIndex_순매수 - 1
+        Console.WriteLine("순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
+
+        XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
 
     End Sub
 

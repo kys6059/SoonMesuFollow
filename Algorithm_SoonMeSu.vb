@@ -72,7 +72,7 @@ Module Algorithm_SoonMeSu
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")             '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
 
-                    If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
+                    If EBESTisConntected = True And Form2.chk_실거래실행.Checked = True Then
                         Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
                         Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
                         If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
@@ -89,7 +89,7 @@ Module Algorithm_SoonMeSu
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")              '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
 
-                    If EBESTisConntected = True And Form2.chk_F2_매수실행.Checked = True Then
+                    If EBESTisConntected = True And Form2.chk_실거래실행.Checked = True Then
                         Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
                         Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
                         If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
@@ -166,7 +166,7 @@ Module Algorithm_SoonMeSu
         shinho.A52_기울기 = Form2.txt_F2_상승하락기울기기준.Text
         shinho.A53_선행포인트수_마진 = Form2.txt_선행_포인트_마진.Text
         shinho.A54_IsReal = 0
-        shinho.A56_기준가격 = Form2.txt_F2_기준가격.Text
+        shinho.A56_기준가격 = Form2.txt_JongmokTargetPrice.Text
         shinho.A57_월물 = sMonth
         shinho.A58_날짜 = 순매수리스트(currentIndex_순매수).sDate
         shinho.A59_남은날짜 = getRemainDate(sMonth, Val(shinho.A58_날짜))

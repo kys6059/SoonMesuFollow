@@ -726,12 +726,15 @@ Public Class Form1
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
+        Return '------------------------------------------------------------------- Form2 테스틀 위해 바로 빠짐
 
         label_timerCounter.Text = timerCount.ToString()
 
         Select Case timerCount
             Case 0
-                If EBESTisConntected = True Then XAQuery_전체종목조회함수() ' +  Received면 콜 분봉 조회
+                If EBESTisConntected = True Then
+                    XAQuery_전체종목조회함수() ' +  Received면 콜 분봉 조회
+                End If
 
             Case 1
                 If EBESTisConntected = True Then 계좌조회()
@@ -741,7 +744,7 @@ Public Class Form1
                 If EBESTisConntected = True Then 구매가능수량조회(0)
 
             Case 3
-                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수(1)
+                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수_1분(1)
 
             Case 4
                 If EBESTisConntected = True Then 구매가능수량조회(1)

@@ -3,10 +3,6 @@ Imports System.Windows.Forms.DataVisualization.Charting
 
 Public Class Form2
 
-    Private Sub btn_f2_폼닫기_Click(sender As Object, e As EventArgs) Handles btn_f2_폼닫기.Click
-        Me.Hide()
-    End Sub
-
     Private Sub btn_F2_SelectDB_Click(sender As Object, e As EventArgs) Handles btn_F2_SelectDB.Click
 
         If List잔고 IsNot Nothing Then
@@ -49,15 +45,19 @@ Public Class Form2
 
     Private Sub F2_Clac_DisplayAllGrid()
 
-        SetScrolData_F2()
-        CalcColorData()        '최대최소 계산
-        CalcPIPData()          '대표선 계산
-        SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
-        If chk_F2_화면끄기.Checked = False Then
-            DrawGrid()             '표
-            Draw_Shinho_Grid()
-            DrawGraph()
-            txt_F2_최종방향.Text = 이전순매수방향
+        If currentIndex_순매수 >= 0 Then
+            lbl_ReceiveCounter.Text = "수신횟수 = " & ReceiveCount.ToString()
+            SetScrolData_F2()
+            CalcColorData()        '최대최소 계산
+            CalcPIPData()          '대표선 계산
+            SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
+            If chk_F2_화면끄기.Checked = False Then
+                RedrawAll() 'grid1에 옵션리스트를 출력하고 선택된 것을 표시한다
+                DrawGrid_PIP_계산그리드()
+                Draw_Shinho_Grid()
+                DrawGraph()
+                txt_F2_최종방향.Text = 이전순매수방향
+            End If
         End If
 
     End Sub
@@ -70,8 +70,7 @@ Public Class Form2
         Lbl_F2_현재시간Index.Text = str
     End Sub
 
-    Private Sub DrawGrid()
-
+    Private Sub DrawGrid_PIP_계산그리드()
 
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
@@ -134,73 +133,72 @@ Public Class Form2
 
         grid_shinho.Columns.Clear()
         grid_shinho.Rows.Clear()
-        grid_shinho.ColumnCount = 24
-        grid_shinho.RowCount = SoonMesuShinhoList.Count
+        If SoonMesuShinhoList IsNot Nothing Then
+            grid_shinho.ColumnCount = 24
+            grid_shinho.RowCount = SoonMesuShinhoList.Count
 
-        grid_shinho.RowHeadersVisible = False
-        grid_shinho.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grid_shinho.RowHeadersVisible = False
+            grid_shinho.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-        For i As Integer = 0 To grid_shinho.ColumnCount - 1
-            grid_shinho.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid_shinho.Columns(i).Width = 72
-        Next
-        grid_shinho.Columns(0).HeaderText = "신호차수"
-        grid_shinho.Columns(1).HeaderText = "발생Idx"
-        grid_shinho.Columns(2).HeaderText = "발생시간"
-        grid_shinho.Columns(3).HeaderText = "신호ID"
-        grid_shinho.Columns(4).HeaderText = "발생순매수"
-        grid_shinho.Columns(5).HeaderText = "해제순매수"
-        grid_shinho.Columns(6).HeaderText = "발생지수"
-        grid_shinho.Columns(7).HeaderText = "해제지수"
-        grid_shinho.Columns(8).HeaderText = "콜풋"
-        grid_shinho.Columns(9).HeaderText = "행사가"
-        grid_shinho.Columns(10).HeaderText = "발생가격"
-        grid_shinho.Columns(11).HeaderText = "주문번호"
-        grid_shinho.Columns(12).HeaderText = "종목코드"
-        grid_shinho.Columns(13).HeaderText = "체결상태"
-        grid_shinho.Columns(14).HeaderText = "현재가격"
-        grid_shinho.Columns(15).HeaderText = "현재상태"
-        grid_shinho.Columns(16).HeaderText = "이익율"
-        grid_shinho.Columns(17).HeaderText = "중간매도"
-        grid_shinho.Columns(18).HeaderText = "매도시간"
-        grid_shinho.Columns(19).HeaderText = "매도Idx"
-        grid_shinho.Columns(20).HeaderText = "매도사유"
-        grid_shinho.Columns(21).HeaderText = "환산이익"
-        grid_shinho.Columns(22).HeaderText = "지수차이"
-        grid_shinho.Columns(23).HeaderText = "기타"
+            For i As Integer = 0 To grid_shinho.ColumnCount - 1
+                grid_shinho.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+                grid_shinho.Columns(i).Width = 72
+            Next
+            grid_shinho.Columns(0).HeaderText = "신호차수"
+            grid_shinho.Columns(1).HeaderText = "발생Idx"
+            grid_shinho.Columns(2).HeaderText = "발생시간"
+            grid_shinho.Columns(3).HeaderText = "신호ID"
+            grid_shinho.Columns(4).HeaderText = "발생순매수"
+            grid_shinho.Columns(5).HeaderText = "해제순매수"
+            grid_shinho.Columns(6).HeaderText = "발생지수"
+            grid_shinho.Columns(7).HeaderText = "해제지수"
+            grid_shinho.Columns(8).HeaderText = "콜풋"
+            grid_shinho.Columns(9).HeaderText = "행사가"
+            grid_shinho.Columns(10).HeaderText = "발생가격"
+            grid_shinho.Columns(11).HeaderText = "주문번호"
+            grid_shinho.Columns(12).HeaderText = "종목코드"
+            grid_shinho.Columns(13).HeaderText = "체결상태"
+            grid_shinho.Columns(14).HeaderText = "현재가격"
+            grid_shinho.Columns(15).HeaderText = "현재상태"
+            grid_shinho.Columns(16).HeaderText = "이익율"
+            grid_shinho.Columns(17).HeaderText = "중간매도"
+            grid_shinho.Columns(18).HeaderText = "매도시간"
+            grid_shinho.Columns(19).HeaderText = "매도Idx"
+            grid_shinho.Columns(20).HeaderText = "매도사유"
+            grid_shinho.Columns(21).HeaderText = "환산이익"
+            grid_shinho.Columns(22).HeaderText = "지수차이"
+            grid_shinho.Columns(23).HeaderText = "기타"
 
-        'grid_shinho.Columns(0).Width = 50
+            'grid_shinho.Columns(0).Width = 50
 
-
-        '데이터 입력하기
-
-        For i As Integer = 0 To SoonMesuShinhoList.Count - 1
-            Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
-            grid_shinho.Rows(i).Cells(0).Value = s.A00_신호차수
-            grid_shinho.Rows(i).Cells(1).Value = s.A01_발생Index
-            grid_shinho.Rows(i).Cells(2).Value = s.A02_발생시간
-            grid_shinho.Rows(i).Cells(3).Value = s.A03_신호ID
-            grid_shinho.Rows(i).Cells(4).Value = s.A04_신호발생순매수
-            grid_shinho.Rows(i).Cells(5).Value = s.A05_신호해제순매수
-            grid_shinho.Rows(i).Cells(6).Value = s.A06_신호발생종합주가지수
-            grid_shinho.Rows(i).Cells(7).Value = s.A07_신호해제종합주가지수
-            grid_shinho.Rows(i).Cells(8).Value = s.A08_콜풋
-            grid_shinho.Rows(i).Cells(9).Value = s.A09_행사가
-            grid_shinho.Rows(i).Cells(10).Value = s.A10_신호발생가격
-            grid_shinho.Rows(i).Cells(11).Value = s.A11_주문번호
-            grid_shinho.Rows(i).Cells(12).Value = s.A12_종목코드
-            grid_shinho.Rows(i).Cells(13).Value = s.A13_체결상태
-            grid_shinho.Rows(i).Cells(14).Value = s.A14_현재가격
-            grid_shinho.Rows(i).Cells(15).Value = s.A15_현재상태
-            grid_shinho.Rows(i).Cells(16).Value = s.A16_이익률
-            grid_shinho.Rows(i).Cells(17).Value = s.A17_중간매도Flag
-            grid_shinho.Rows(i).Cells(18).Value = s.A18_매도시간
-            grid_shinho.Rows(i).Cells(19).Value = s.A19_매도Index
-            grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
-            grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
-            grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
-        Next
-
+            '데이터 입력하기
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                grid_shinho.Rows(i).Cells(0).Value = s.A00_신호차수
+                grid_shinho.Rows(i).Cells(1).Value = s.A01_발생Index
+                grid_shinho.Rows(i).Cells(2).Value = s.A02_발생시간
+                grid_shinho.Rows(i).Cells(3).Value = s.A03_신호ID
+                grid_shinho.Rows(i).Cells(4).Value = s.A04_신호발생순매수
+                grid_shinho.Rows(i).Cells(5).Value = s.A05_신호해제순매수
+                grid_shinho.Rows(i).Cells(6).Value = s.A06_신호발생종합주가지수
+                grid_shinho.Rows(i).Cells(7).Value = s.A07_신호해제종합주가지수
+                grid_shinho.Rows(i).Cells(8).Value = s.A08_콜풋
+                grid_shinho.Rows(i).Cells(9).Value = s.A09_행사가
+                grid_shinho.Rows(i).Cells(10).Value = s.A10_신호발생가격
+                grid_shinho.Rows(i).Cells(11).Value = s.A11_주문번호
+                grid_shinho.Rows(i).Cells(12).Value = s.A12_종목코드
+                grid_shinho.Rows(i).Cells(13).Value = s.A13_체결상태
+                grid_shinho.Rows(i).Cells(14).Value = s.A14_현재가격
+                grid_shinho.Rows(i).Cells(15).Value = s.A15_현재상태
+                grid_shinho.Rows(i).Cells(16).Value = s.A16_이익률
+                grid_shinho.Rows(i).Cells(17).Value = s.A17_중간매도Flag
+                grid_shinho.Rows(i).Cells(18).Value = s.A18_매도시간
+                grid_shinho.Rows(i).Cells(19).Value = s.A19_매도Index
+                grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
+                grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
+                grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
+            Next
+        End If
     End Sub
 
     Private Sub DrawGraph()
@@ -272,7 +270,7 @@ Public Class Form2
             F2_Chart_순매수.Series(str).Color = Color.DarkRed
             F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
             F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
-            F2_Chart_순매수.Series(str).BorderWidth = 3
+            F2_Chart_순매수.Series(str).BorderWidth = 2
 
             ''Lebel 설정 - 이건 소수점 2째자리까지만 표기하도록 하는 기능인거 같음 - 필요 없을 듯
             'txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
@@ -355,7 +353,7 @@ Public Class Form2
                     F2_Chart_순매수.Series(Str).Color = Color.DarkRed
                     F2_Chart_순매수.Series(Str).YAxisType = AxisType.Primary
 
-                    F2_Chart_순매수.Series(Str).BorderWidth = 2
+                    F2_Chart_순매수.Series(Str).BorderWidth = 3
 
                     Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
 
@@ -418,7 +416,7 @@ Public Class Form2
         순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
 
         If TotalCount1 > 0 And 순매수리스트카운트 > 0 Then
-            'MakeOptinList()  이건 리스트를 만드는 기능인데 이건 매수할 때 필요가 없다. 
+            MakeOptinList_For_1Minute()
 
             '나중에 여기에 조건들 집어넣기 
 
@@ -473,20 +471,20 @@ Public Class Form2
         Dim yValuesingle As Single = F2_Chart_순매수.ChartAreas(0).AxisY.PixelPositionToValue(currentMouseLocation.Y)
         If Not Single.IsNaN(yValuesingle) Then
             Dim yValue As Long = Math.Round(yValuesingle)
-            g.DrawRectangle(pen, New Rectangle(F2_Chart_순매수.Left + 25, startY, 75, y2LabelHeight))
-            g.DrawString(yValue.ToString() & "억", font, brush, New PointF(F2_Chart_순매수.Left + 28, startY))
+            'g.DrawRectangle(pen, New Rectangle(currentMouseLocation.X - 100, startY, 75, y2LabelHeight))
+            g.DrawString(yValue.ToString() & "억", font, brush, New PointF(currentMouseLocation.X - 60, startY))
         End If
 
         '종합주가지수
         Dim y2Value As Single = Math.Round(F2_Chart_순매수.ChartAreas(0).AxisY2.PixelPositionToValue(currentMouseLocation.Y), 2)
         If Not Single.IsNaN(y2Value) Then
-            g.DrawRectangle(pen, New Rectangle(F2_Chart_순매수.Right - 100, startY, 75, y2LabelHeight))
-            g.DrawString(y2Value.ToString(), font, brush, New PointF(F2_Chart_순매수.Right - 97, startY))
+            'g.DrawRectangle(pen, New Rectangle(F2_Chart_순매수.Right - 100, startY, 75, y2LabelHeight))
+            g.DrawString(y2Value.ToString(), font, brush, New PointF(currentMouseLocation.X, startY + 30))
         End If
 
         'X축 시간
         Dim xValue As Single = F2_Chart_순매수.ChartAreas(0).AxisX.PixelPositionToValue(currentMouseLocation.X)
-        If Not Single.IsNaN(xValue) And xValue >= 0 Then
+        If Not Single.IsNaN(xValue) And xValue >= 0 And xValue < timeIndex_순매수 Then
             If 순매수리스트 IsNot Nothing Then
                 Dim xValueInt As Integer = Math.Round(xValue)
                 Dim xTime As String = 순매수리스트(xValueInt).sTime
@@ -528,10 +526,28 @@ Public Class Form2
 
         Dim strToday As String = Format(Today, "yyMMdd")
         txt_F2_실험조건.Text = "B" + strToday
+
+        ReceiveCount = 0
+
+
+        Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
+        Dim strdt As String = Format(dt, "yyMM01")
+        txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
+
+
+        Dim lDate As Long = Val(strToday)
+        Dim 월물 As Long = getsMonth(lDate)
+        sMonth = 월물
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+
+        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+        손절매수준설정(남은날짜)
+        currentIndex = -1
+
     End Sub
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
-        chk_F2_매수실행.Checked = False
+        chk_실거래실행.Checked = False
         당일반복중_flag = True
         chk_F2_화면끄기.Checked = True
         For i As Integer = 0 To 순매수리스트카운트 - 1
@@ -549,7 +565,7 @@ Public Class Form2
     End Sub
 
     Private Sub btn_F2_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_동일조건반복.Click
-        chk_F2_매수실행.Checked = False
+        chk_실거래실행.Checked = False
         당일반복중_flag = True
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -606,7 +622,7 @@ Public Class Form2
     End Sub
 
     Private Sub btn_F2_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_전체조건반복.Click
-        chk_F2_매수실행.Checked = False
+        chk_실거래실행.Checked = False
         Form1.chk_양매도실행.Checked = False
         Form1.chk_중간청산.Checked = False
 
@@ -776,7 +792,7 @@ Public Class Form2
 
                 Chart1.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
                 Chart1.Series(Str).Color = Color.Black
-                Chart1.Series(Str).BorderWidth = 2
+                Chart1.Series(Str).BorderWidth = 3
 
                 '시작점,끝점 찾기
                 Dim 신호시작점 As Integer = 순매수시간으로1MIN인덱스찾기(Val(s.A02_발생시간))
@@ -809,5 +825,249 @@ Public Class Form2
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Insert순매수이력데이터(TargetDate) '개인, 기관, 외국인, 코스피지수 저장 30초 주기
+    End Sub
+
+    Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
+        이베스트로그인함수()
+        ReceiveCount = 0
+    End Sub
+
+    Private Sub 이베스트로그인함수()
+
+        Dim nServerType As Integer
+        Dim strServerAddress, password As String
+
+        If txt_ebest_pwd.Text = "" Then
+            MessageBox.Show("이베스트 비밀번호가 비어있습니다")
+            Return
+        End If
+
+        If chk_모의투자연결.Checked = False Then
+            nServerType = 0     ' 실서버
+            strServerAddress = "hts.etrade.co.kr"
+            거래비밀번호 = "3487"
+            password = txt_ebest_pwd.Text
+        Else
+            nServerType = 1     ' 모의투자서버
+            strServerAddress = "demo.ebestsec.co.kr"
+            password = "kys60590"
+            거래비밀번호 = "0000"
+        End If
+
+        Dim id As String = txt_ebest_id1.Text
+        Dim cert As String = txt_ebest인증비밀번호.Text
+
+        Dim bSuccess As Boolean = ConnectToEbest(id, password, cert, nServerType, strServerAddress)
+        If bSuccess = False Then
+            Add_Log("일반", "로그인 실패")
+        Else
+            Add_Log("일반", "이베스트 로그인 성공 at " + strServerAddress)
+
+        End If
+    End Sub
+
+    Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
+        If btn_TimerStart.Text = "START" Then
+            Timer1.Interval = 1000
+            Timer1.Enabled = True
+            btn_TimerStart.Text = "STOP"
+            timerCount = 0
+        Else
+            Timer1.Enabled = False
+            btn_TimerStart.Text = "START"
+            label_timerCounter.Text = "---"
+        End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+
+        label_timerCounter.Text = timerCount.ToString()
+
+        Select Case timerCount
+            Case 0
+                If EBESTisConntected = True Then
+                    XAQuery_전체종목조회함수()
+                End If
+            Case 1
+                If EBESTisConntected = True Then
+                    XAQuery_EBEST_순매수현황조회함수() ' +  Received면 콜 분봉 조회
+                End If
+
+            Case 2
+                If EBESTisConntected = True Then 계좌조회()
+                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
+
+            Case 3
+                If EBESTisConntected = True Then 구매가능수량조회(0)
+
+            Case 4
+                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수_1분(1)
+
+            Case 5
+                If EBESTisConntected = True Then 구매가능수량조회(1)
+
+
+
+            Case 8
+                If EBESTisConntected = True Then F2_Clac_DisplayAllGrid()
+
+            Case Else
+
+        End Select
+
+        timerCount = timerCount + 1
+        If timerCount >= timerMaxInterval Then timerCount = 0
+    End Sub
+
+    Private Sub 손절매수준설정(ByVal 남은날짜 As Integer)
+
+        남은날짜 = 남은날짜 Mod 7
+        Dim isWeekly As Boolean = False
+        Dim 기준가격 As String = "1.4"
+        Dim 투자비율 As String = "1.0"
+
+        If txt_week_정규.Text = "W" Then isWeekly = True
+
+        If isWeekly = True Then
+            Select Case 남은날짜
+                Case 0
+                Case 1
+                Case 2
+                Case 3
+                Case 6
+                    투자비율 = "0.5"
+            End Select
+        Else
+            Select Case 남은날짜
+                Case 0
+                Case 1
+                Case 2
+                Case 3
+                Case 6
+                    투자비율 = "0.7"
+            End Select
+        End If
+        txt_투자비율.Text = 투자비율
+        txt_투자비율.Refresh()
+
+    End Sub
+
+    Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
+        Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
+
+        If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
+
+            selectedJongmokIndex(0) = selectedIndex - 1
+            '여기다가 행사가 추출하는 로직 추가함
+            콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
+            chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
+            F2_Clac_DisplayAllGrid()
+            Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+        End If
+    End Sub
+
+    Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
+        Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
+
+        If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
+
+            selectedJongmokIndex(1) = selectedIndex - 1
+            '여기다가 행사가 추출하는 로직 추가함
+
+            콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
+            chk_ChangeTargetIndex.Checked = False
+            F2_Clac_DisplayAllGrid()
+            Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
+        End If
+    End Sub
+
+    Private Sub RedrawAll()
+
+        If optionList.Count > 0 Then
+            InitFirstGrid()
+            DrawGrid1Data()
+
+            If currentIndex_1MIn >= 0 Then
+
+                'grd_selected 조절하기
+                'combo에 전체 종목을 Add한다 인덱스, 행사가, 현재가격
+                cmb_selectedJongmokIndex_0.Items.Clear()
+                cmb_selectedJongmokIndex_1.Items.Clear()
+
+                cmb_selectedJongmokIndex_0.Items.Add(" ") '0번이 선택되는게 초기화인지 명시적으로 0번을 선택했는지를 확인하기 위해서 제일 앞에 널값을 하나 넣는다
+                cmb_selectedJongmokIndex_1.Items.Add(" ")
+
+                For i As Integer = 0 To optionList.Count - 1
+
+                    Dim it As ListTemplate = optionList(i)
+                    Dim str As String
+                    str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(0, 3) & ")"
+                    cmb_selectedJongmokIndex_0.Items.Add(str)
+                    str = i.ToString() & ". 행사가 : " & it.HangSaGa & " (" & it.price(1, 3) & ")"
+                    cmb_selectedJongmokIndex_1.Items.Add(str)
+
+                Next
+
+                cmb_selectedJongmokIndex_1.SelectedIndex = selectedJongmokIndex(1) + 1
+                cmb_selectedJongmokIndex_0.SelectedIndex = selectedJongmokIndex(0) + 1
+            End If
+            txt_TargetDate.Text = TargetDate
+        End If
+    End Sub
+
+    Private Sub InitFirstGrid()
+
+        grid1.Columns.Clear()
+        grid1.Rows.Clear()
+
+        '전체 크기 지정
+        grid1.ColumnCount = 7
+        grid1.RowCount = TotalCount
+
+        For i As Integer = 0 To 6
+            grid1.Columns(i).Width = 68
+            grid1.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grid1.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
+
+        grid1.Columns(0).HeaderText = "시간가치"
+        grid1.Columns(1).HeaderText = "시가"
+        grid1.Columns(2).HeaderText = "종가"
+        grid1.Columns(3).HeaderText = "행사가"
+        grid1.Columns(4).HeaderText = "시간가치"
+        grid1.Columns(5).HeaderText = "시가"
+        grid1.Columns(6).HeaderText = "종가"
+
+        grid1.Columns(3).DefaultCellStyle.BackColor = Color.Yellow
+        grid1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+        For i As Integer = 0 To TotalCount - 1
+            grid1.Rows(i).HeaderCell.Value = i.ToString()
+        Next
+
+        grid1.RowHeadersWidth = 50
+
+    End Sub
+
+    Private Sub DrawGrid1Data()
+
+
+        For i As Integer = 0 To TotalCount - 1
+            Dim it As ListTemplate = optionList(i)
+            grid1.Rows(i).Cells(0).Value = Format(it.시간가치(0), "##0.00")
+            grid1.Rows(i).Cells(1).Value = Format(it.price(0, 0), "##0.00")
+            grid1.Rows(i).Cells(2).Value = Format(it.price(0, 3), "##0.00")
+            grid1.Rows(i).Cells(3).Value = it.HangSaGa
+            grid1.Rows(i).Cells(4).Value = Format(it.시간가치(1), "##0.00")
+            grid1.Rows(i).Cells(5).Value = Format(it.price(1, 0), "##0.00")
+            grid1.Rows(i).Cells(6).Value = Format(it.price(1, 3), "##0.00")
+        Next
+
+        If selectedJongmokIndex(0) >= 0 And selectedJongmokIndex(1) >= 0 Then
+            grid1.Rows(selectedJongmokIndex(0)).Cells(2).Style.BackColor = Color.LightGreen
+            grid1.Rows(selectedJongmokIndex(1)).Cells(6).Style.BackColor = Color.LightGreen
+            grid1.Rows(selectedJongmokIndex(0)).Cells(2).Style.ForeColor = Color.Black
+            grid1.Rows(selectedJongmokIndex(1)).Cells(6).Style.ForeColor = Color.Black
+        End If
     End Sub
 End Class

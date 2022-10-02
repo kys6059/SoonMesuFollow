@@ -1420,7 +1420,7 @@ Partial Class Form1
         Me.TableLayoutPanel9.Controls.Add(Me.Label28, 2, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.Label25, 0, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.txt_월물, 1, 0)
-        Me.TableLayoutPanel9.Location = New System.Drawing.Point(139, 128)
+        Me.TableLayoutPanel9.Location = New System.Drawing.Point(138, 128)
         Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
         Me.TableLayoutPanel9.RowCount = 1
         Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))

@@ -111,7 +111,7 @@ Module Module_common
         LowerLimt = Val(Form1.txt_LowerLimit.Text)
         timeIndex = 0
         timerCount = 0 '16초마다 돌아가는 타이머 주기
-        timerMaxInterval = 8 '7초보다 크면 0으로 바꿈
+        timerMaxInterval = 9 '이크면 0으로 바꿈
         currentIndex = -1
         timeIndex = -1
 
@@ -189,6 +189,8 @@ Module Module_common
 
 
     End Function
+
+
 
 
     Public Sub SetSelectedIndex()
@@ -489,11 +491,11 @@ Module Module_common
         tDate = Format(Now(), "MM-dd hh:mm:ss")
 
         If currentIndex > 0 Then
-            Form1.txt_Log.Text = tDate & " " & Data(0).ctime(currentIndex) & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
+            Form2.txt_Log.Text = tDate & " " & Data(0).ctime(currentIndex) & " " & str1 & " : " & str2 & vbCrLf & Form2.txt_Log.Text
         Else
-            Form1.txt_Log.Text = tDate & " " & str1 & " : " & str2 & vbCrLf & Form1.txt_Log.Text
+            Form2.txt_Log.Text = tDate & " " & str1 & " : " & str2 & vbCrLf & Form2.txt_Log.Text
         End If
-        Form1.txt_Log.Refresh()
+        Form2.txt_Log.Refresh()
 
     End Sub
 
@@ -560,9 +562,8 @@ Module Module_common
 
         End If
 
-        Form1.txt_월물.Text = txt월물
-        Form1.txt_week_정규.Text = txtweekly
-
+        Form2.txt_월물.Text = txt월물
+        Form2.txt_week_정규.Text = txtweekly
         Add_Log("설정", "월물 = " & txt월물 & ", Week/정규 = " & txtweekly & ", 남은날짜 = " & 남은날짜.ToString() & ", CASE = " & sCase)
 
     End Sub

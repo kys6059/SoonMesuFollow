@@ -93,6 +93,12 @@ Module Module_For1Min
             SoonMesuShinhoList.Clear()
         End If
 
+        If optionList Is Nothing Then
+            optionList = New List(Of ListTemplate)
+        Else
+            optionList.Clear()
+        End If
+
     End Sub
 
     Public Function FindIndexFormTime_1Min(ByVal strTime As String) As Integer
@@ -386,5 +392,93 @@ Module Module_For1Min
         Dim s As Double = (y2 - y1) / (x2 - x1)
         Return Math.Abs(s * x3 - y3 + y1 - s * x1) / Math.Sqrt(s * s + 1)
     End Function
+
+    Public Sub SetSelectedIndex_For_순매수()  '순매수로직을 위해 기존 양매도로직을 수정함
+
+        If selectedJongmokIndex(0) < 0 Or Form2.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
+
+            Dim str As String = "SetSelectedIndex 진입 - selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form2.chk_ChangeTargetIndex.Checked = " & Form2.chk_ChangeTargetIndex.Checked.ToString()
+
+            Console.WriteLine(str)
+
+            Dim Targetprice As Single = Val(Form2.txt_JongmokTargetPrice.Text)
+            Dim targetCallIndex As Single = 1100.0
+            Dim targetPutIndex As Single = 1100.0
+
+            Dim 최종목표인덱스(1) As Integer
+            Dim i, j As Integer
+            Dim str10 As String = ""
+
+            For i = 0 To 1 '방향
+
+                Dim targetIndex As Integer
+                Dim minGap As Single = 1100.0
+                For j = 0 To optionList.Count - 1
+                    Dim it As ListTemplate = optionList(j)
+                    Dim gap As Single = Math.Abs(Targetprice - it.price(i, 3))
+                    If gap < minGap Then
+                        targetIndex = j
+                        minGap = gap
+                    End If
+                Next
+
+                콜선택된행사가(i) = 인덱스로부터행사가찾기(targetIndex)
+            Next
+
+        End If
+
+        '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
+        Dim index1 As Integer
+        index1 = 행사가로부터인덱스찾기(콜선택된행사가(0))
+        If index1 >= 0 Then selectedJongmokIndex(0) = index1
+
+        Dim index2 As Integer
+        index2 = 행사가로부터인덱스찾기(콜선택된행사가(1))
+        If index2 >= 0 Then selectedJongmokIndex(1) = index2
+
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 Then selectedJongmokIndex(s.A08_콜풋) = 행사가로부터인덱스찾기(s.A09_행사가)
+            Next
+        End If
+
+    End Sub
+
+    'DB로부터 읽은 Data로부터 OptionList를 만들어낸다
+    '이 때 Data 안에는 2개 밖에 없을거기 때문에 Option List도 2개가 된다 0번 - 콜, 1번 풋
+    Public Sub MakeOptinList_For_1Minute()
+
+        optionList.Clear()
+
+        For i As Integer = 0 To TotalCount - 1
+
+            If currentIndex_1MIn > 0 Then
+
+                Dim it As ListTemplate = New ListTemplate
+                it.Initialize()
+
+                Dim max As Single = Single.MinValue
+                Dim min As Single = Single.MaxValue
+
+                For j As Integer = 0 To currentIndex_1MIn - 1
+                    If 일분옵션데이터(i).price(j, 1) > max Then max = 일분옵션데이터(i).price(j, 1)
+                    If 일분옵션데이터(i).price(j, 2) < min Then min = 일분옵션데이터(i).price(j, 2)
+                Next
+
+                it.HangSaGa = 일분옵션데이터(i).HangSaGa '행사가
+                it.price(i, 0) = 일분옵션데이터(i).price(0, 0)
+                it.price(i, 1) = max
+                it.price(i, 2) = min
+                it.price(i, 3) = 일분옵션데이터(i).price(currentIndex, 3)
+
+                optionList.Add(it)
+
+            End If
+
+            selectedJongmokIndex(i) = i
+        Next
+
+    End Sub
 
 End Module
