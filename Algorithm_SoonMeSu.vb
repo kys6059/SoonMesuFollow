@@ -54,17 +54,20 @@ Module Algorithm_SoonMeSu
     Public Sub SoonMesuCalcAlrotithmAll()
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+        Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
         'If Val(순매수리스트(currentIndex_순매수).sTime) > startTime Then Return  '매수시작시간전에는 아예 신호가 안뜨게 만든다 ---- 이걸 하니깐 켈리지수가 급락함 제외함
 
         Dim ret As String = CalcAlgorithm_AB()
 
         If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime Then  '매수시작시간전에는 아예 신호가 안뜨게 만들고 아래 이전순매수방향만 지정한다
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime Then  '매수시작시간전에는 아예 신호가 안뜨게 만들고 아래 이전순매수방향만 지정한다  '끝나는 시간도 정하니까 신호가 안떠서 반대방향 신호를 죽이지 않는 문제점 발생해서 시작 시간만 체크함
+
                 If ret = "상승" Then '중립에서 상승으로 전환 
 
-
                     반대방향신호죽이는함수("A_DOWN", "change")                '이전 신호확인해서 죽이기
-                    '매수잔고 중에서 반대 신호 매수로 해결하기  ---- 꼭 해야 함 20220925
+
+                    '매수잔고 중에서 반대 신호 매수로 해결하기  ------------------------------------------------------------------------------------------------------------------------------- 꼭 해야 함 20220925
+                    If EBESTisConntected = True Then Add_Log("신호", String.Format("콜매수로 청산"))
 
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")             '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
@@ -73,13 +76,15 @@ Module Algorithm_SoonMeSu
                         Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
                         Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
                         If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
-                            Add_Log("신호", String.Format("콜매수로 청산, 풋 매도 AT {0}", shinho.A02_발생시간))
+                            Add_Log("신호", String.Format("풋 매도 AT {0}", shinho.A02_발생시간))
                         End If
                     End If
                 ElseIf ret = "하락" Then '중립에서 하락으로 전환
 
                     반대방향신호죽이는함수("A_UP", "change") '이전 신호확인해서 죽이기
-                    '매수잔고 중에서 반대 신호 매수로 해결하기  ---- 꼭 해야 함 20220925
+
+                    '매수잔고 중에서 반대 신호 매수로 해결하기  ------------------------------------------------------------------------------------------------------------------------------- 꼭 해야 함 20220925
+                    If EBESTisConntected = True Then Add_Log("신호", String.Format("풋매수로 청산"))
 
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")              '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
@@ -88,15 +93,15 @@ Module Algorithm_SoonMeSu
                         Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
                         Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
                         If shinho.A02_발생시간 >= 매수시작시간 And shinho.A02_발생시간 <= 매수마감시간 Then
-                            Add_Log("신호", String.Format("풋매수로 청산, 콜 매도 AT {0}", shinho.A02_발생시간))
+                            Add_Log("신호", String.Format("콜 매도 AT {0}", shinho.A02_발생시간))
                         End If
                     End If
                 End If
             End If
 
             이전순매수방향 = ret '신호가 뜬걸 의미한다 이걸 바꿔 놓는다
-        Else
-            살아있는신호확인하기()
+            Else
+                살아있는신호확인하기()
         End If
 
     End Sub
