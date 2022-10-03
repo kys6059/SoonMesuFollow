@@ -368,7 +368,7 @@ Module realtime_ebest
         '모의투자에서는 QryTp 일반/금액/비율이 동작하지 않음
         '실계좌에서는 금액으로 동작하는 거 확인하 (20220809)
 
-        Dim 투자비율반영금액 As Long = Math.Round(주문가능금액 * Val(Form1.txt_투자비율.Text))
+        Dim 투자비율반영금액 As Long = Math.Round(주문가능금액 * Val(Form2.txt_투자비율.Text))
 
         If optionList.Count > 0 And selectedJongmokIndex(callput) >= 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
@@ -412,24 +412,17 @@ Module realtime_ebest
         Dim 사용예정현금증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0))
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
 
-        If 종목구분 = "2" Then
-
-            If 콜구매가능개수 <> 신규주문가능수량 Then
-                콜구매가능개수 = 신규주문가능수량
-                If Val(Form1.txt_양매도Target시간Index.Text) <= currentIndex Then
+        If EBESTisConntected = True And Val(Form2.txt_F2_매수마감시간.Text) >= Val(순매수리스트(currentIndex_순매수).sTime) Then  '매수마감시간안에서만 보여줌
+            If 종목구분 = "2" Then
+                If 콜구매가능개수 <> 신규주문가능수량 Then
+                    콜구매가능개수 = 신규주문가능수량
                     Add_Log("일반", "코드 : " & 종목코드 & ", 콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
                 End If
-
-            End If
-
-        ElseIf 종목구분 = "3" Then
-
-            If 풋구매가능개수 <> 신규주문가능수량 Then
-                풋구매가능개수 = 신규주문가능수량
-                If Val(Form1.txt_양매도Target시간Index.Text) <= currentIndex Then
+            ElseIf 종목구분 = "3" Then
+                If 풋구매가능개수 <> 신규주문가능수량 Then
+                    풋구매가능개수 = 신규주문가능수량
                     Add_Log("일반", "코드 : " & 종목코드 & ", 풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
                 End If
-
             End If
         End If
 
@@ -477,8 +470,8 @@ Module realtime_ebest
         If XAQuery_전체종목조회 Is Nothing Then XAQuery_전체종목조회 = New XAQuery
         XAQuery_전체종목조회.ResFileName = "c:\ebest\xingApi\res\t2301.res"
 
-        Dim 월물 As String = Form1.txt_월물.Text
-        Dim 구분 As String = Form1.txt_week_정규.Text 'G" 정규, M:미니, W:위클리
+        Dim 월물 As String = Form2.txt_월물.Text
+        Dim 구분 As String = Form2.txt_week_정규.Text 'G" 정규, M:미니, W:위클리
 
         XAQuery_전체종목조회.SetFieldData("t2301InBlock", "yyyymm", 0, 월물)
         XAQuery_전체종목조회.SetFieldData("t2301InBlock", "gubun", 0, 구분)
@@ -493,8 +486,8 @@ Module realtime_ebest
         Dim callCount As Long = XAQuery_전체종목조회.GetBlockCount("t2301OutBlock1")
         Dim putCount As Long = XAQuery_전체종목조회.GetBlockCount("t2301OutBlock2")
 
-        Dim highLimit As Single = Val(Form1.txt_UpperLimit.Text)
-        Dim lowLimit As Single = Val(Form1.txt_LowerLimit.Text)
+        Dim highLimit As Single = Val(Form2.txt_UpperLimit.Text)
+        Dim lowLimit As Single = Val(Form2.txt_LowerLimit.Text)
         Dim retCount As Integer = 0
 
         optionList.Clear()
@@ -523,7 +516,7 @@ Module realtime_ebest
                 it.거래량(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "volume", i))
                 it.시간가치(1) = Val(XAQuery_전체종목조회.GetFieldData("t2301OutBlock2", "timevl", i))
 
-                If Form1.chk_ChangeTargetIndex.Checked = True Then   '바꿀 수 있을 대는 바꾼다
+                If Form2.chk_ChangeTargetIndex.Checked = True Then   '바꿀 수 있을 대는 바꾼다
                     If (it.price(0, 3) > lowLimit And it.price(0, 3) < highLimit) Or (it.price(1, 3) > lowLimit And it.price(1, 3) < highLimit) Then  '콜풋 둘 중 하나가 범위안에 들어오면
                         optionList.Add(it)
                         retCount += 1
