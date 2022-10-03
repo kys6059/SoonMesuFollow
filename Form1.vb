@@ -12,14 +12,6 @@ Public Class Form1
     '5분데이터를 가져오고
     'Clac_DisplayAllGrid를 수행한다
 
-    '로그인 Data가 Received 되면 불려지는 함수
-    Public Sub Ebest_realTime_Start()
-
-        InitDataStructure()
-        XAQuery_현재날짜조회함수() '프로그램 상 오늘 날짜를 가져온다
-
-    End Sub
-
     Public Sub DrawScrollData()
 
         If DBTotalDateCount > 1 Then lbl_DBDateInfo.Text = "총 " + DBTotalDateCount.ToString() + "일 중 " + (gTargetDateIndex + 1).ToString() + " 번째(" + DBDateList(gTargetDateIndex).ToString() + ")"
@@ -724,67 +716,14 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-
-        Return '------------------------------------------------------------------- Form2 테스틀 위해 바로 빠짐
-
-        label_timerCounter.Text = timerCount.ToString()
-
-        Select Case timerCount
-            Case 0
-                If EBESTisConntected = True Then
-                    XAQuery_전체종목조회함수() ' +  Received면 콜 분봉 조회
-                End If
-
-            Case 1
-                If EBESTisConntected = True Then 계좌조회()
-                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
-
-            Case 2
-                If EBESTisConntected = True Then 구매가능수량조회(0)
-
-            Case 3
-                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수_1분(1)
-
-            Case 4
-                If EBESTisConntected = True Then 구매가능수량조회(1)
-
-            Case 5
 
 
-            Case 7
-                If EBESTisConntected = True Then Clac_DisplayAllGrid()
-
-            Case Else
-
-        End Select
-
-        timerCount = timerCount + 1
-        If timerCount >= timerMaxInterval Then timerCount = 0
-
-    End Sub
 
     Public Sub Timer_Change()
-        If btn_TimerStart.Text = "START" Then
-            Timer1.Interval = 1000
-            Timer1.Enabled = True
-            btn_TimerStart.Text = "STOP"
-            timerCount = 0
-        End If
+
     End Sub
 
     Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
-
-        If btn_TimerStart.Text = "START" Then
-            Timer1.Interval = 1000
-            Timer1.Enabled = True
-            btn_TimerStart.Text = "STOP"
-            timerCount = 0
-        Else
-            Timer1.Enabled = False
-            btn_TimerStart.Text = "START"
-            label_timerCounter.Text = "---"
-        End If
 
     End Sub
 
@@ -825,15 +764,13 @@ Public Class Form1
         End If
 
         Dim rowCount As Integer
-
+        Dim TableName As String = MakeTableName(txt_TableName.Text)
         If tempTargetDate > 0 Then
-            rowCount = GetRowCount(tempTargetDate)
+            rowCount = GetRowCount(tempTargetDate, TableName)
         End If
 
         If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
-
-            InsertTargetDateData(tempTargetDate)
-
+            InsertTargetDateData(tempTargetDate, TableName)
         Else
             MsgBox(tempTargetDate.ToString() + " 날에는 이미 등록되어 있습니다")
             'InsertTargetDateData(tempTargetDate)

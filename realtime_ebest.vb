@@ -156,7 +156,7 @@ Module realtime_ebest
             isRealFlag = True
             계좌조회() '계좌조회 호출
 
-            Form1.Ebest_realTime_Start()
+            Ebest_realTime_Start()
 
         End If
 
@@ -467,7 +467,7 @@ Module realtime_ebest
         If 오늘날짜 > 0 Then
             TargetDate = 오늘날짜
             sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
-            Form1.Timer_Change()
+            Form2.Timer_Change()
         End If
 
         Add_Log("일반", "EBEST 오늘날짜는 " & 오늘날짜.ToString() & ", sMonth = " & sMonth)
@@ -639,8 +639,7 @@ Module realtime_ebest
             Next
 
             If callput = 1 Then 'DB 저장 로직
-                InsertTargetDateData_1분(TargetDate) '1분데이터 저장
-                Insert순매수이력데이터(TargetDate) '개인, 기관, 외국인, 코스피지수 저장 30초 주기
+                InsertTargetDateData(TargetDate, "option_weekly") '1분데이터 저장
             End If
 
         Else  '1분봉이면 1분 데이터에 저장한다

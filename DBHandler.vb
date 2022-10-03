@@ -30,13 +30,13 @@ Module DBHandler
     End Function
 
     '그날 데이터를 입력하기 전에 해당 날짜에 이미 Data가 있는지 확인하기 위해 그 날짜 Data 건수를 가져온다
-    Public Function GetRowCount(ByVal iDate As Integer) As Integer
+    Public Function GetRowCount(ByVal iDate As Integer, ByVal TableName As String) As Integer
 
         Dim client As BigQueryClient
 
-        tableName = MakeTableName(Form1.txt_TableName.Text)
+        Dim TableFullName As String = MakeTableName(TableName)
 
-        Dim query As String = "select count(*) as cnt from " + tableName + " Where cdate = " + iDate.ToString()
+        Dim query As String = "select count(*) as cnt from " + TableFullName + " Where cdate = " + iDate.ToString()
         Dim cnt As Integer = -1
         Dim job As BigQueryJob
         Try
@@ -128,7 +128,7 @@ Module DBHandler
 
 
     '일일 데이터를 빅쿼리에 저장한다
-    Public Function InsertTargetDateData(ByVal iDate As Integer) As Integer
+    Public Function InsertTargetDateData(ByVal iDate As Integer, ByVal table_id As String) As Integer
 
         Dim retCount As Integer = 0
         Dim i, callput As Integer
@@ -136,8 +136,6 @@ Module DBHandler
         Dim client As BigQueryClient = BigQueryClient.Create(projectID)
         Dim 영보다큰갯수 As Integer = 0
         Dim dateaset_id = "option5"
-        Dim table_id = Form1.txt_TableName.Text
-
 
         For callput = 0 To 1
             For j = 0 To currentIndex
@@ -148,8 +146,6 @@ Module DBHandler
         Next
 
         Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
-
-
 
         For callput = 0 To 1
 
@@ -184,10 +180,9 @@ Module DBHandler
             Next
         Next
 
-
         client.InsertRows(dateaset_id, table_id, rows)
 
-        Dim str As String = iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+        Dim str As String = iDate.ToString() & "5분데이터 - 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
         Console.WriteLine(str)
         Add_Log("일반", str)
 
@@ -401,14 +396,14 @@ Module DBHandler
 
     Public Sub AutoSave()
 
-        If currentIndex >= 78 Then
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 153000 Then
 
             '타이머를 끈다
-            Form1.Timer1.Enabled = False
-            Form1.btn_TimerStart.Text = "START"
-            Form1.label_timerCounter.Text = "---"
+            Form2.Timer1.Enabled = False
+            Form2.btn_TimerStart.Text = "START"
+            Form2.label_timerCounter.Text = "---"
 
-            Dim tempTargetDate As Integer = Val(Form1.txt_DBDate.Text)
+            Dim tempTargetDate As Integer = TargetDate
 
             If tempTargetDate > 20000000 Then
                 tempTargetDate = tempTargetDate Mod 20000000
@@ -416,19 +411,17 @@ Module DBHandler
 
             Dim rowCount As Integer
 
-            If tempTargetDate > 0 Then rowCount = GetRowCount(tempTargetDate)
+            If tempTargetDate > 0 Then rowCount = GetRowCount(tempTargetDate, Form2.txt_F2_TableName.Text)
 
             If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
-                InsertTargetDateData(tempTargetDate)
+                InsertTargetDateData_1분(tempTargetDate)
+                Insert순매수이력데이터(tempTargetDate)
 
                 Threading.Thread.Sleep(2000)
-                XAQuery_EBEST_순매수현황조회함수()
+                XAQuery_EBEST_분봉데이터호출함수(0)
 
                 Threading.Thread.Sleep(2000)
-                XAQuery_EBEST_분봉데이터호출함수_1분(0)
-
-                Threading.Thread.Sleep(2000)
-                XAQuery_EBEST_분봉데이터호출함수_1분(1)
+                XAQuery_EBEST_분봉데이터호출함수(1)
 
                 '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
 

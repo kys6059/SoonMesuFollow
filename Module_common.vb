@@ -89,6 +89,14 @@ Module Module_common
 
     Public 당일반복중_flag As Boolean = False '당일 반복 중에 매수를 수십회 하는 문제를 해결하기 위해 당일 반복 전후에 Flag를 설정하여 청산에서 확인한다
 
+    '로그인 Data가 Received 되면 불려지는 함수
+    Public Sub Ebest_realTime_Start()
+
+        InitDataStructure()
+        XAQuery_현재날짜조회함수() '프로그램 상 오늘 날짜를 가져온다
+
+    End Sub
+
     Public Sub InitDataStructure()
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821

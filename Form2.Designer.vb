@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
         Me.Lbl_F2_현재시간Index = New System.Windows.Forms.Label()
@@ -162,6 +162,7 @@ Partial Class Form2
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
+        Me.btn_InsertDB = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -187,10 +188,11 @@ Partial Class Form2
         '
         Me.TableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset
         Me.TableLayoutPanel1.ColumnCount = 4
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.09524!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.28571!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.80952!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.80952!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.40861!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.58065!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.50537!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.50537!))
+        Me.TableLayoutPanel1.Controls.Add(Me.btn_InsertDB, 1, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.HSc_F2_날짜조절, 3, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.Lbl_F2_현재시간Index, 0, 2)
         Me.TableLayoutPanel1.Controls.Add(Me.Lbl_F2_현재날짜Index, 3, 2)
@@ -211,19 +213,19 @@ Partial Class Form2
         'HSc_F2_날짜조절
         '
         Me.HSc_F2_날짜조절.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HSc_F2_날짜조절.Location = New System.Drawing.Point(490, 44)
+        Me.HSc_F2_날짜조절.Location = New System.Drawing.Point(505, 43)
         Me.HSc_F2_날짜조절.Name = "HSc_F2_날짜조절"
-        Me.HSc_F2_날짜조절.Size = New System.Drawing.Size(153, 40)
+        Me.HSc_F2_날짜조절.Size = New System.Drawing.Size(138, 39)
         Me.HSc_F2_날짜조절.TabIndex = 8
         '
         'Lbl_F2_현재시간Index
         '
         Me.Lbl_F2_현재시간Index.AutoSize = True
         Me.Lbl_F2_현재시간Index.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Lbl_F2_현재시간Index.Location = New System.Drawing.Point(3, 87)
+        Me.Lbl_F2_현재시간Index.Location = New System.Drawing.Point(3, 85)
         Me.Lbl_F2_현재시간Index.Margin = New System.Windows.Forms.Padding(1)
         Me.Lbl_F2_현재시간Index.Name = "Lbl_F2_현재시간Index"
-        Me.Lbl_F2_현재시간Index.Size = New System.Drawing.Size(239, 38)
+        Me.Lbl_F2_현재시간Index.Size = New System.Drawing.Size(216, 40)
         Me.Lbl_F2_현재시간Index.TabIndex = 6
         Me.Lbl_F2_현재시간Index.Text = "X건 중 Y"
         Me.Lbl_F2_현재시간Index.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -232,9 +234,9 @@ Partial Class Form2
         '
         Me.Lbl_F2_현재날짜Index.AutoSize = True
         Me.Lbl_F2_현재날짜Index.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Lbl_F2_현재날짜Index.Location = New System.Drawing.Point(493, 86)
+        Me.Lbl_F2_현재날짜Index.Location = New System.Drawing.Point(508, 84)
         Me.Lbl_F2_현재날짜Index.Name = "Lbl_F2_현재날짜Index"
-        Me.Lbl_F2_현재날짜Index.Size = New System.Drawing.Size(147, 40)
+        Me.Lbl_F2_현재날짜Index.Size = New System.Drawing.Size(132, 42)
         Me.Lbl_F2_현재날짜Index.TabIndex = 4
         Me.Lbl_F2_현재날짜Index.Text = "X일 중 Y일"
         Me.Lbl_F2_현재날짜Index.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -243,18 +245,18 @@ Partial Class Form2
         '
         Me.TableLayoutPanel1.SetColumnSpan(Me.txt_F2_DB_Date_Limit, 3)
         Me.txt_F2_DB_Date_Limit.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_DB_Date_Limit.Location = New System.Drawing.Point(248, 5)
+        Me.txt_F2_DB_Date_Limit.Location = New System.Drawing.Point(225, 5)
         Me.txt_F2_DB_Date_Limit.Name = "txt_F2_DB_Date_Limit"
-        Me.txt_F2_DB_Date_Limit.Size = New System.Drawing.Size(392, 21)
+        Me.txt_F2_DB_Date_Limit.Size = New System.Drawing.Size(415, 21)
         Me.txt_F2_DB_Date_Limit.TabIndex = 0
         Me.txt_F2_DB_Date_Limit.Text = "where cdate >= 220801"
         '
         'txt_F2_TableName
         '
         Me.txt_F2_TableName.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_TableName.Location = New System.Drawing.Point(340, 47)
+        Me.txt_F2_TableName.Location = New System.Drawing.Point(370, 46)
         Me.txt_F2_TableName.Name = "txt_F2_TableName"
-        Me.txt_F2_TableName.Size = New System.Drawing.Size(145, 21)
+        Me.txt_F2_TableName.Size = New System.Drawing.Size(130, 21)
         Me.txt_F2_TableName.TabIndex = 2
         Me.txt_F2_TableName.Text = "option_one_minute"
         '
@@ -262,9 +264,9 @@ Partial Class Form2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.Location = New System.Drawing.Point(248, 44)
+        Me.Label2.Location = New System.Drawing.Point(225, 43)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(84, 40)
+        Me.Label2.Size = New System.Drawing.Size(137, 39)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "테이블명"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -272,33 +274,33 @@ Partial Class Form2
         'HSc_F2_시간조절
         '
         Me.HSc_F2_시간조절.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HSc_F2_시간조절.Location = New System.Drawing.Point(2, 44)
+        Me.HSc_F2_시간조절.Location = New System.Drawing.Point(2, 43)
         Me.HSc_F2_시간조절.Name = "HSc_F2_시간조절"
-        Me.HSc_F2_시간조절.Size = New System.Drawing.Size(241, 40)
+        Me.HSc_F2_시간조절.Size = New System.Drawing.Size(218, 39)
         Me.HSc_F2_시간조절.TabIndex = 5
         '
         'btn_F2_SelectDB
         '
         Me.btn_F2_SelectDB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_F2_SelectDB.Location = New System.Drawing.Point(340, 89)
+        Me.btn_F2_SelectDB.Location = New System.Drawing.Point(370, 87)
         Me.btn_F2_SelectDB.Name = "btn_F2_SelectDB"
-        Me.btn_F2_SelectDB.Size = New System.Drawing.Size(145, 34)
+        Me.btn_F2_SelectDB.Size = New System.Drawing.Size(130, 36)
         Me.btn_F2_SelectDB.TabIndex = 7
         Me.btn_F2_SelectDB.Text = "DB_가져오기"
         Me.btn_F2_SelectDB.UseVisualStyleBackColor = True
         '
         'F2_Chart_순매수
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend3)
+        ChartArea5.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend5)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 233)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series3)
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series5)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 641)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -886,16 +888,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend4)
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea6)
+        Legend6.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend6)
         Me.Chart1.Location = New System.Drawing.Point(2054, 235)
         Me.Chart1.Name = "Chart1"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.Chart1.Series.Add(Series4)
+        Series6.ChartArea = "ChartArea1"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        Me.Chart1.Series.Add(Series6)
         Me.Chart1.Size = New System.Drawing.Size(1229, 639)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1912,6 +1914,17 @@ Partial Class Form2
         Me.lbl_ReceiveCounter.Text = "0"
         Me.lbl_ReceiveCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
+        'btn_InsertDB
+        '
+        Me.btn_InsertDB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_InsertDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_InsertDB.Location = New System.Drawing.Point(225, 87)
+        Me.btn_InsertDB.Name = "btn_InsertDB"
+        Me.btn_InsertDB.Size = New System.Drawing.Size(137, 36)
+        Me.btn_InsertDB.TabIndex = 38
+        Me.btn_InsertDB.Text = "DB에 입력"
+        Me.btn_InsertDB.UseVisualStyleBackColor = True
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -2115,4 +2128,5 @@ Partial Class Form2
     Friend WithEvents txt_F2_1회최대매매수량 As TextBox
     Friend WithEvents Label33 As Label
     Friend WithEvents lbl_F2_매매신호 As Label
+    Friend WithEvents btn_InsertDB As Button
 End Class

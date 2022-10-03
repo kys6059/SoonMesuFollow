@@ -742,16 +742,12 @@ Public Class Form2
         Chart1.Visible = True
     End Sub
 
-    Private Sub HSc_F2_시간조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_시간조절.Scroll
-
-    End Sub
-
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        XAQuery_EBEST_순매수현황조회함수()
+
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Insert순매수이력데이터(TargetDate) '개인, 기관, 외국인, 코스피지수 저장 30초 주기
+
     End Sub
 
     Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
@@ -1255,5 +1251,16 @@ Public Class Form2
         SoonMesuSimulation_조건 = ""
     End Sub
 
+    Public Sub Timer_Change()
+        If btn_TimerStart.Text = "START" Then
+            Timer1.Interval = 1000
+            Timer1.Enabled = True
+            btn_TimerStart.Text = "STOP"
+            timerCount = 0
+        End If
+    End Sub
 
+    Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
+        AutoSave()
+    End Sub
 End Class
