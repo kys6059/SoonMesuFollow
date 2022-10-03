@@ -30,6 +30,7 @@ Partial Class Form2
         Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_InsertDB = New System.Windows.Forms.Button()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
         Me.Lbl_F2_현재시간Index = New System.Windows.Forms.Label()
         Me.Lbl_F2_현재날짜Index = New System.Windows.Forms.Label()
@@ -162,7 +163,6 @@ Partial Class Form2
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
-        Me.btn_InsertDB = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -210,22 +210,33 @@ Partial Class Form2
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(645, 128)
         Me.TableLayoutPanel1.TabIndex = 1
         '
+        'btn_InsertDB
+        '
+        Me.btn_InsertDB.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_InsertDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_InsertDB.Location = New System.Drawing.Point(225, 89)
+        Me.btn_InsertDB.Name = "btn_InsertDB"
+        Me.btn_InsertDB.Size = New System.Drawing.Size(137, 34)
+        Me.btn_InsertDB.TabIndex = 38
+        Me.btn_InsertDB.Text = "DB에 입력"
+        Me.btn_InsertDB.UseVisualStyleBackColor = True
+        '
         'HSc_F2_날짜조절
         '
         Me.HSc_F2_날짜조절.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HSc_F2_날짜조절.Location = New System.Drawing.Point(505, 43)
+        Me.HSc_F2_날짜조절.Location = New System.Drawing.Point(505, 44)
         Me.HSc_F2_날짜조절.Name = "HSc_F2_날짜조절"
-        Me.HSc_F2_날짜조절.Size = New System.Drawing.Size(138, 39)
+        Me.HSc_F2_날짜조절.Size = New System.Drawing.Size(138, 40)
         Me.HSc_F2_날짜조절.TabIndex = 8
         '
         'Lbl_F2_현재시간Index
         '
         Me.Lbl_F2_현재시간Index.AutoSize = True
         Me.Lbl_F2_현재시간Index.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Lbl_F2_현재시간Index.Location = New System.Drawing.Point(3, 85)
+        Me.Lbl_F2_현재시간Index.Location = New System.Drawing.Point(3, 87)
         Me.Lbl_F2_현재시간Index.Margin = New System.Windows.Forms.Padding(1)
         Me.Lbl_F2_현재시간Index.Name = "Lbl_F2_현재시간Index"
-        Me.Lbl_F2_현재시간Index.Size = New System.Drawing.Size(216, 40)
+        Me.Lbl_F2_현재시간Index.Size = New System.Drawing.Size(216, 38)
         Me.Lbl_F2_현재시간Index.TabIndex = 6
         Me.Lbl_F2_현재시간Index.Text = "X건 중 Y"
         Me.Lbl_F2_현재시간Index.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -234,9 +245,9 @@ Partial Class Form2
         '
         Me.Lbl_F2_현재날짜Index.AutoSize = True
         Me.Lbl_F2_현재날짜Index.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Lbl_F2_현재날짜Index.Location = New System.Drawing.Point(508, 84)
+        Me.Lbl_F2_현재날짜Index.Location = New System.Drawing.Point(508, 86)
         Me.Lbl_F2_현재날짜Index.Name = "Lbl_F2_현재날짜Index"
-        Me.Lbl_F2_현재날짜Index.Size = New System.Drawing.Size(132, 42)
+        Me.Lbl_F2_현재날짜Index.Size = New System.Drawing.Size(132, 40)
         Me.Lbl_F2_현재날짜Index.TabIndex = 4
         Me.Lbl_F2_현재날짜Index.Text = "X일 중 Y일"
         Me.Lbl_F2_현재날짜Index.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -254,7 +265,7 @@ Partial Class Form2
         'txt_F2_TableName
         '
         Me.txt_F2_TableName.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_TableName.Location = New System.Drawing.Point(370, 46)
+        Me.txt_F2_TableName.Location = New System.Drawing.Point(370, 47)
         Me.txt_F2_TableName.Name = "txt_F2_TableName"
         Me.txt_F2_TableName.Size = New System.Drawing.Size(130, 21)
         Me.txt_F2_TableName.TabIndex = 2
@@ -264,9 +275,9 @@ Partial Class Form2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label2.Location = New System.Drawing.Point(225, 43)
+        Me.Label2.Location = New System.Drawing.Point(225, 44)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(137, 39)
+        Me.Label2.Size = New System.Drawing.Size(137, 40)
         Me.Label2.TabIndex = 3
         Me.Label2.Text = "테이블명"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -274,17 +285,17 @@ Partial Class Form2
         'HSc_F2_시간조절
         '
         Me.HSc_F2_시간조절.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HSc_F2_시간조절.Location = New System.Drawing.Point(2, 43)
+        Me.HSc_F2_시간조절.Location = New System.Drawing.Point(2, 44)
         Me.HSc_F2_시간조절.Name = "HSc_F2_시간조절"
-        Me.HSc_F2_시간조절.Size = New System.Drawing.Size(218, 39)
+        Me.HSc_F2_시간조절.Size = New System.Drawing.Size(218, 40)
         Me.HSc_F2_시간조절.TabIndex = 5
         '
         'btn_F2_SelectDB
         '
         Me.btn_F2_SelectDB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_F2_SelectDB.Location = New System.Drawing.Point(370, 87)
+        Me.btn_F2_SelectDB.Location = New System.Drawing.Point(370, 89)
         Me.btn_F2_SelectDB.Name = "btn_F2_SelectDB"
-        Me.btn_F2_SelectDB.Size = New System.Drawing.Size(130, 36)
+        Me.btn_F2_SelectDB.Size = New System.Drawing.Size(130, 34)
         Me.btn_F2_SelectDB.TabIndex = 7
         Me.btn_F2_SelectDB.Text = "DB_가져오기"
         Me.btn_F2_SelectDB.UseVisualStyleBackColor = True
@@ -1913,17 +1924,6 @@ Partial Class Form2
         Me.lbl_ReceiveCounter.TabIndex = 37
         Me.lbl_ReceiveCounter.Text = "0"
         Me.lbl_ReceiveCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'btn_InsertDB
-        '
-        Me.btn_InsertDB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_InsertDB.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_InsertDB.Location = New System.Drawing.Point(225, 87)
-        Me.btn_InsertDB.Name = "btn_InsertDB"
-        Me.btn_InsertDB.Size = New System.Drawing.Size(137, 36)
-        Me.btn_InsertDB.TabIndex = 38
-        Me.btn_InsertDB.Text = "DB에 입력"
-        Me.btn_InsertDB.UseVisualStyleBackColor = True
         '
         'Form2
         '

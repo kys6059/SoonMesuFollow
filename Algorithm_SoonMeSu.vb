@@ -68,18 +68,18 @@ Module Algorithm_SoonMeSu
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
 
-                    Add_Log("신호", String.Format("상승신호 발생 AT {0}", shinho.A02_발생시간))
+                    If EBESTisConntected = True Then Add_Log("신호", String.Format("상승신호 발생 AT {0}", shinho.A02_발생시간))
                     Form2.lbl_F2_매매신호.Text = "1"
-
+                    Form2.lbl_F2_매매신호.BackColor = Color.Magenta
                 ElseIf ret = "하락" Then '중립에서 하락으로 전환
 
                     반대방향신호죽이는함수("A_UP", "change")                                   '이전 신호확인해서 죽이기
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")             '신규 신호 입력하기
                     SoonMesuShinhoList.Add(shinho)
 
-                    Add_Log("신호", String.Format("하락신호 발생 AT {0}", shinho.A02_발생시간))
+                    If EBESTisConntected = True Then Add_Log("신호", String.Format("하락신호 발생 AT {0}", shinho.A02_발생시간))
                     Form2.lbl_F2_매매신호.Text = "-1"
-
+                    Form2.lbl_F2_매매신호.BackColor = Color.Green
                 End If
             End If
 
@@ -288,7 +288,8 @@ Module Algorithm_SoonMeSu
                         s.A20_매도사유 = 매도사유
                         s.A22_신호해제가격 = s.A14_현재가격
                         Form2.lbl_F2_매매신호.Text = "0"  '해제가 되면 타이머로 돌면서 체크해서 매매신호와 잔고를 비교해서 다르면 청산한다  -- 이건 시간에 관계없이 해야 함
-                        Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
+                        Form2.lbl_F2_매매신호.BackColor = Color.White
+                        If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
                     End If
 
                     SoonMesuShinhoList(i) = s
@@ -299,15 +300,8 @@ Module Algorithm_SoonMeSu
     End Sub
 
     Public Sub 매매신호처리함수()
-        Dim 현재신호 As Integer = Val(Form2.lbl_F2_매매신호.Text)
 
-        If 현재신호 = 1 Then
-            Form2.lbl_F2_매매신호.BackColor = Color.Magenta
-        ElseIf 현재신호 = -1 Then
-            Form2.lbl_F2_매매신호.BackColor = Color.Green
-        Else
-            Form2.lbl_F2_매매신호.BackColor = Color.White
-        End If
+        Dim 현재신호 As Integer = Val(Form2.lbl_F2_매매신호.Text)
         Form2.lbl_F2_매매신호.Refresh()
 
         If EBESTisConntected = True And 당일반복중_flag = False Then     '---------------- 당일반복 돌릴 때 문제 없도록 잘 해야 함

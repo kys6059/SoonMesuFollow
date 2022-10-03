@@ -180,7 +180,6 @@ Module Module_For1Min
 
         For i As Integer = 0 To maxPoint - minPoint 'PIP Point수가 2개부터 최대점(10개)까지 표준편차와 point들을 계산한다
             If currentIndex_순매수 >= 4 Then
-
                 Dim pointCount = i + minPoint
                 Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount)
 
@@ -202,6 +201,7 @@ Module Module_For1Min
 
         '평균거리가 줄어들다가 늘어나는 점이 있으면 그 점을 화면에 표시한다. 단 평균거리는 0보다 크고 1보다 작아야 한다
         PIP적합포인트인덱스 = Math.Max(maxPoint - minPoint, 0)
+
         Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
         For i As Integer = 1 To maxPoint - minPoint
             If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then

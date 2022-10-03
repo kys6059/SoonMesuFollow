@@ -138,6 +138,8 @@ Module Module_common
         Else
             ShinhoList.Clear()
         End If
+        Form2.lbl_F2_매매신호.Text = "0"
+        Form2.lbl_F2_매매신호.BackColor = Color.White
 
     End Sub
 

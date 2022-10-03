@@ -197,6 +197,16 @@ Public Class Form2
                 grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
                 grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
                 grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
+
+                If s.A21_환산이익율 > 0 Then
+                    grid_shinho.Rows(i).Cells(21).Style.BackColor = Color.Magenta
+                ElseIf s.A21_환산이익율 <= 0 Then
+                    grid_shinho.Rows(i).Cells(21).Style.BackColor = Color.GreenYellow
+                End If
+
+                For j As Integer = 0 To grid_shinho.ColumnCount - 1 '매수시간에 아닌 때 발생한 신호는 회색처리한다
+                    If Val(s.A02_발생시간) < Val(txt_F2_매수시작시간.Text) Or Val(s.A02_발생시간) > Val(txt_F2_매수마감시간.Text) Then grid_shinho.Rows(i).Cells(j).Style.ForeColor = Color.Gray
+                Next
             Next
         End If
     End Sub
@@ -395,7 +405,7 @@ Public Class Form2
         Dim newValue As Integer = HSc_F2_날짜조절.Value
 
         If F2_TargetDateIndex <> newValue Then
-
+            InitDataStructure()
             InitDataStructure_1Min()
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
 
@@ -751,6 +761,8 @@ Public Class Form2
     End Sub
 
     Private Sub btn_이베스트로그인_Click(sender As Object, e As EventArgs) Handles btn_이베스트로그인.Click
+        InitDataStructure()
+        InitDataStructure_1Min()
         이베스트로그인함수()
         ReceiveCount = 0
     End Sub
@@ -1262,5 +1274,9 @@ Public Class Form2
 
     Private Sub btn_InsertDB_Click(sender As Object, e As EventArgs) Handles btn_InsertDB.Click
         AutoSave()
+    End Sub
+
+    Private Sub HSc_F2_날짜조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_날짜조절.Scroll
+
     End Sub
 End Class
