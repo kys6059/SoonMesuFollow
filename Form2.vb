@@ -11,7 +11,7 @@ Public Class Form2
                 Return
             End If
         End If
-
+        isRealFlag = False
         Add_Log("일반", "전체 Data 취합 Click")
 
         Dim dateCount As Integer = GetRawData_1min(txt_F2_DB_Date_Limit.Text, txt_F2_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
@@ -486,7 +486,7 @@ Public Class Form2
         Dim xValue As Single = F2_Chart_순매수.ChartAreas(0).AxisX.PixelPositionToValue(currentMouseLocation.X)
         If Not Single.IsNaN(xValue) And xValue >= 0 And xValue < timeIndex_순매수 Then
             If 순매수리스트 IsNot Nothing Then
-                Dim xValueInt As Integer = Math.Round(xValue)
+                Dim xValueInt As Integer = Math.Min(Math.Truncate(xValue), currentIndex_순매수)
                 Dim xTime As String = 순매수리스트(xValueInt).sTime
                 Dim Index_time As String = String.Format("{0}:{1}", xValueInt, xTime)
                 'g.DrawRectangle(pen, New Rectangle((currentMouseLocation.X - 100), F2_Chart_순매수.Bottom - 200, 97, 20))
@@ -837,7 +837,7 @@ Public Class Form2
 
             Case 8
                 If EBESTisConntected = True Then F2_Clac_DisplayAllGrid()
-
+                매매신호처리함수()
             Case Else
 
         End Select
@@ -998,10 +998,190 @@ Public Class Form2
         End If
     End Sub
 
+    Public Sub Display계좌정보()
+
+        lbl_주문가능금액.Text = Format(주문가능금액, "###,###,###,###,##0")
+        lbl_인출가능금액.Text = Format(인출가능금액, "###,###,###,###,##0")
+        lbl_매매손익합계.Text = Format(평가종합.매매손익합계, "###,###,###,###,##0")
+        lbl_평가금액.Text = Format(평가종합.평가금액, "###,###,###,###,##0")
+        lbl_평가손익.Text = Format(평가종합.평가손익, "###,###,###,###,##0")
+        lbl_계좌번호.Text = strAccountNum
+
+        Init_grd_잔고조회()
+        Draw_grd_잔고조회()
+
+    End Sub
+
+    Private Sub Init_grd_잔고조회()
+
+        grd_잔고조회.Columns.Clear()
+        grd_잔고조회.Rows.Clear()
+
+        grd_잔고조회.ColumnCount = 13         '전체 크기 지정
+
+        If List잔고 Is Nothing Then
+            grd_잔고조회.RowCount = 1
+        Else
+            grd_잔고조회.RowCount = List잔고.Count + 1
+        End If
+
+        grd_잔고조회.RowHeadersWidth = 35
+
+        grd_잔고조회.Columns(0).HeaderText = "종목번호"
+        grd_잔고조회.Columns(1).HeaderText = "구분"
+        grd_잔고조회.Columns(2).HeaderText = "잔고수량"
+        grd_잔고조회.Columns(3).HeaderText = "청산가능수량"
+        grd_잔고조회.Columns(4).HeaderText = "평균단가"
+        grd_잔고조회.Columns(5).HeaderText = "총매입금액"
+        grd_잔고조회.Columns(6).HeaderText = "매매구분"
+        grd_잔고조회.Columns(7).HeaderText = "매매손익"
+        grd_잔고조회.Columns(8).HeaderText = "처리순번"
+        grd_잔고조회.Columns(9).HeaderText = "현재가"
+        grd_잔고조회.Columns(10).HeaderText = "평가금액"
+        grd_잔고조회.Columns(11).HeaderText = "평가손익"
+        grd_잔고조회.Columns(12).HeaderText = "수익율"
+
+        Dim defaultWidth As Integer = 68
+        grd_잔고조회.Columns(0).Width = defaultWidth + 15
+        grd_잔고조회.Columns(1).Width = defaultWidth
+        grd_잔고조회.Columns(2).Width = defaultWidth
+        grd_잔고조회.Columns(3).Width = defaultWidth + 15
+        grd_잔고조회.Columns(4).Width = defaultWidth
+        grd_잔고조회.Columns(5).Width = defaultWidth + 15
+        grd_잔고조회.Columns(6).Width = defaultWidth
+        grd_잔고조회.Columns(7).Width = defaultWidth
+        grd_잔고조회.Columns(8).Width = defaultWidth
+        grd_잔고조회.Columns(9).Width = defaultWidth
+        grd_잔고조회.Columns(10).Width = defaultWidth + 15
+        grd_잔고조회.Columns(11).Width = defaultWidth + 15
+        grd_잔고조회.Columns(12).Width = defaultWidth + 15
+
+        grd_잔고조회.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+
+        For i = 0 To grd_잔고조회.ColumnCount - 1   '헤더 가운데 정렬
+            grd_잔고조회.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grd_잔고조회.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
+        Next
+    End Sub
+
+    Private Sub Draw_grd_잔고조회()
+
+        If List잔고 Is Nothing Then Return
+        Dim 총매입금액 As Long = 0
+        Dim 평가손익 As Long = 0
+
+        For i As Integer = 0 To List잔고.Count - 1
+            grd_잔고조회.Rows(i).Cells(0).Value = List잔고(i).A01_종복번호
+            grd_잔고조회.Rows(i).Cells(1).Value = List잔고(i).A02_구분
+            grd_잔고조회.Rows(i).Cells(2).Value = Format(List잔고(i).A03_잔고수량, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(3).Value = List잔고(i).A04_청산가능수량
+            grd_잔고조회.Rows(i).Cells(4).Value = List잔고(i).A05_평균단가
+            grd_잔고조회.Rows(i).Cells(5).Value = Format(List잔고(i).A06_총매입금액, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(6).Value = List잔고(i).A07_매매구분
+            grd_잔고조회.Rows(i).Cells(7).Value = List잔고(i).A08_매매손익
+            grd_잔고조회.Rows(i).Cells(8).Value = List잔고(i).A09_처리순번
+            grd_잔고조회.Rows(i).Cells(9).Value = List잔고(i).A10_현재가
+            grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
+            grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
+
+            총매입금액 += List잔고(i).A06_총매입금액
+            평가손익 += List잔고(i).A12_평가손익
+
+        Next
+
+        Dim rawCount As Integer = List잔고.Count
+        Dim 수익율 As Single = 평가손익 / 총매입금액
+        If rawCount > 0 Then
+            grd_잔고조회.Rows(rawCount).Cells(5).Value = Format(총매입금액, "###,###,###,##0")
+            grd_잔고조회.Rows(rawCount).Cells(11).Value = Format(평가손익, "###,###,###,##0")
+            grd_잔고조회.Rows(rawCount).Cells(12).Value = Format(수익율, "##0.0%")
+
+            If 수익율 > 0 Then
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.Yellow
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Red
+            Else
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.LightGreen
+                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Black
+            End If
+        End If
+    End Sub
+
+    Public Function 진짜할건지확인(str As String) As Boolean
+
+        Dim dr As DialogResult
+        dr = MessageBox.Show("진짜 " & str & "할건가?", str & "여부", MessageBoxButtons.YesNo)
+
+        If dr = DialogResult.No Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
+    Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
+
+        If 진짜할건지확인("매매") = False Then Return
+        If 매도실행호출_1개(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
+
+    End Sub
+
+    Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
+
+        If 진짜할건지확인("매매") = False Then Return
+        If 매도실행호출_1개(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
+
+    End Sub
+
+    Private Sub btn_매도를청산_Click(sender As Object, e As EventArgs) Handles btn_매도를청산.Click
+        If 진짜할건지확인("매매") = False Then Return
+        If List잔고 IsNot Nothing Then
+
+            Dim 매매1회최대수량 As Integer = Val(txt_F2_1회최대매매수량.Text)
+            For i As Integer = 0 To List잔고.Count - 1
+
+                Dim it As 잔고Type = List잔고(i)
+                If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
+                    Dim 종목번호 As String = it.A01_종복번호
+                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
+                    한종목매수(종목번호, it.A10_현재가, count)
+                End If
+
+            Next
+        End If
+    End Sub
+
+    Private Sub btn_매수를청산_Click(sender As Object, e As EventArgs) Handles btn_매수를청산.Click
+        If 진짜할건지확인("매매") = False Then Return
+        If List잔고 IsNot Nothing Then
+
+            Dim 매매1회최대수량 As Integer = Val(txt_F2_1회최대매매수량.Text)
+            For i As Integer = 0 To List잔고.Count - 1
+
+                Dim it As 잔고Type = List잔고(i)
+                If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
+                    Dim 종목번호 As String = it.A01_종복번호
+                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
+                    한종목매수(종목번호, it.A10_현재가, count)
+                End If
+
+            Next
+        End If
+    End Sub
+
+    Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
+        If currentIndex_1MIn >= 0 Then 구매가능수량조회(0)
+    End Sub
+
+    Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_put_구매가능수.Click
+        If currentIndex_1MIn >= 0 Then 구매가능수량조회(1)
+    End Sub
+
     Private Sub btn_F2_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_전체조건반복.Click
         chk_실거래실행.Checked = False
         Form1.chk_양매도실행.Checked = False
         Form1.chk_중간청산.Checked = False
+        당일반복중_flag = True
 
         Dim 선행포인트수마진() As String = {"0.95", "0.90"} 'a
         Dim 순매수판정기준() As Integer = {0, 1, 2} 'b
@@ -1071,7 +1251,9 @@ Public Class Form2
                 Next
             Next
         Next
-
+        당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
     End Sub
+
+
 End Class

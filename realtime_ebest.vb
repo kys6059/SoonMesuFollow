@@ -257,7 +257,7 @@ Module realtime_ebest
 
         Next
 
-        Form1.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
+        Form2.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
     End Sub
 
@@ -685,7 +685,17 @@ Module realtime_ebest
         End If
 
     End Sub
+    Public Function 매도실행호출_1개(ByVal callput As Integer) As Boolean
 
+        Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+
+        Dim code As String = it.Code(callput)
+        Dim price As Single = it.price(callput, 3)
+        Dim count As Integer = 1
+
+        한종목매도(code, price, count)
+        Return True
+    End Function
 
     Public Function 매도실행호출(ByVal callput As Integer) As Boolean
 
