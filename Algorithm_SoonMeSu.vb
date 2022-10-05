@@ -272,7 +272,13 @@ Module Algorithm_SoonMeSu
                     's.A21_환산이익율 = Math.Round(s.A16_이익률 - 1.02, 3)
 
                     '매도의 경우
-                    Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+
+                    Dim 일분옵션데이터_CurrentIndex As Integer
+                    If EBESTisConntected = True And currentIndex_1MIn >= 0 Then
+                        일분옵션데이터_CurrentIndex = currentIndex_1MIn
+                    Else
+                        일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    End If
                     If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                     s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
                     s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
@@ -319,15 +325,17 @@ Module Algorithm_SoonMeSu
                         If Mid(it.A01_종복번호, 1, 1) = "2" Then
                             If 현재신호 = 0 Or 현재신호 = 1 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
                                 Dim 종목번호 As String = it.A01_종복번호
-                                Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                                한종목매수(종목번호, it.A10_현재가, count)
+                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
                             End If
 
                         Else '풋일 때  -- 오른다를 산 상태
                             If 현재신호 = 0 Or 현재신호 = -1 Then
                                 Dim 종목번호 As String = it.A01_종복번호
-                                Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                                한종목매수(종목번호, it.A10_현재가, count)
+                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
                             End If
                         End If
                     End If
@@ -350,13 +358,13 @@ Module Algorithm_SoonMeSu
                         Dim code As String = 일분옵션데이터(1).Code
                         Dim count As Integer = Math.Min(풋구매가능개수, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
                         Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
-                        한종목매도(code, price, count)
+                        If count > 0 Then 한종목매도(code, price, count)
 
                     ElseIf 현재신호 = -1 Then
                         Dim code As String = 일분옵션데이터(0).Code
                         Dim count As Integer = Math.Min(콜구매가능개수, 매매1회최대수량)
                         Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
-                        한종목매도(code, price, count)
+                        If count > 0 Then 한종목매도(code, price, count)
 
                     End If
 

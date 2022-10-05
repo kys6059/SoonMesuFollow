@@ -199,9 +199,11 @@ Public Class Form2
                 grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
 
                 If s.A21_환산이익율 > 0 Then
-                    grid_shinho.Rows(i).Cells(21).Style.BackColor = Color.Magenta
+                    grid_shinho.Rows(i).Cells(21).Style.BackColor = Color.Yellow
+                    grid_shinho.Rows(i).Cells(21).Style.ForeColor = Color.Red
                 ElseIf s.A21_환산이익율 <= 0 Then
                     grid_shinho.Rows(i).Cells(21).Style.BackColor = Color.GreenYellow
+                    grid_shinho.Rows(i).Cells(21).Style.ForeColor = Color.Black
                 End If
 
                 For j As Integer = 0 To grid_shinho.ColumnCount - 1 '매수시간에 아닌 때 발생한 신호는 회색처리한다
@@ -1030,7 +1032,7 @@ Public Class Form2
         If List잔고 Is Nothing Then
             grd_잔고조회.RowCount = 1
         Else
-            grd_잔고조회.RowCount = List잔고.Count + 1
+            grd_잔고조회.RowCount = List잔고.Count
         End If
 
         grd_잔고조회.RowHeadersWidth = 35
@@ -1091,28 +1093,35 @@ Public Class Form2
             grd_잔고조회.Rows(i).Cells(9).Value = List잔고(i).A10_현재가
             grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
-            grd_잔고조회.Rows(i).Cells(12).Value = List잔고(i).A13_수익율
+            grd_잔고조회.Rows(i).Cells(12).Value = Format(List잔고(i).A13_수익율, "##0.0%")
 
-            총매입금액 += List잔고(i).A06_총매입금액
-            평가손익 += List잔고(i).A12_평가손익
+            If List잔고(i).A13_수익율 > 0 Then
+                grd_잔고조회.Rows(i).Cells(12).Style.BackColor = Color.Yellow
+                grd_잔고조회.Rows(i).Cells(12).Style.ForeColor = Color.Red
+            Else
+                grd_잔고조회.Rows(i).Cells(12).Style.BackColor = Color.LightGreen
+                grd_잔고조회.Rows(i).Cells(12).Style.ForeColor = Color.Black
+            End If
 
+            '총매입금액 += List잔고(i).A06_총매입금액
+            '평가손익 += List잔고(i).A12_평가손익
         Next
 
-        Dim rawCount As Integer = List잔고.Count
-        Dim 수익율 As Single = 평가손익 / 총매입금액
-        If rawCount > 0 Then
-            grd_잔고조회.Rows(rawCount).Cells(5).Value = Format(총매입금액, "###,###,###,##0")
-            grd_잔고조회.Rows(rawCount).Cells(11).Value = Format(평가손익, "###,###,###,##0")
-            grd_잔고조회.Rows(rawCount).Cells(12).Value = Format(수익율, "##0.0%")
+        'Dim rawCount As Integer = List잔고.Count
+        'Dim 수익율 As Single = 평가손익 / 총매입금액
+        'If rawCount > 0 Then
+        'grd_잔고조회.Rows(rawCount).Cells(5).Value = Format(총매입금액, "###,###,###,##0")
+        'grd_잔고조회.Rows(rawCount).Cells(11).Value = Format(평가손익, "###,###,###,##0")
+        'grd_잔고조회.Rows(rawCount).Cells(12).Value = Format(수익율, "##0.0%")
 
-            If 수익율 > 0 Then
-                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.Yellow
-                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Red
-            Else
-                grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.LightGreen
-                grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Black
-            End If
-        End If
+        'If 수익율 > 0 Then
+        'grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.Yellow
+        'grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Red
+        'Else
+        'grd_잔고조회.Rows(rawCount).Cells(12).Style.BackColor = Color.LightGreen
+        'grd_잔고조회.Rows(rawCount).Cells(12).Style.ForeColor = Color.Black
+        'End If
+        'End If
     End Sub
 
     Public Function 진짜할건지확인(str As String) As Boolean
@@ -1170,7 +1179,7 @@ Public Class Form2
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
                     Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매수(종목번호, it.A10_현재가, count)
+                    한종목매도(종목번호, it.A10_현재가, count)
                 End If
 
             Next
