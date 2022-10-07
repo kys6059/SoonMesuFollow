@@ -90,6 +90,7 @@ Module Algorithm_SoonMeSu
 
 
 
+
         Else  '시작시간 전에 1개나 2매 매매 검토 221007
                 Dim 시작전신호 = PIP_Point_Lists(PIP적합포인트인덱스).마지막신호
             If currentIndex_순매수 > 4 Then

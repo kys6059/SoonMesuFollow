@@ -1210,6 +1210,7 @@ Public Class Form2
         Dim 매수마감시간후기울기() As String = {"10.0"} 'h
         Dim 최초매매시작시간() As String = {"90500", "91000", "91500", "92000", "92500", "93000", "93500", "94000"} 'i
 
+
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
         Else
