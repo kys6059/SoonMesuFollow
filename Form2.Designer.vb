@@ -68,7 +68,7 @@ Partial Class Form2
         Me.Label9 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel5 = New System.Windows.Forms.TableLayoutPanel()
         Me.txt_F2_매수시작시간 = New System.Windows.Forms.RichTextBox()
-        Me.txt_F2_신호시작시간 = New System.Windows.Forms.RichTextBox()
+        Me.txt_F2_최초매매시작시간 = New System.Windows.Forms.RichTextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.txt_F2_TimeoutTime = New System.Windows.Forms.RichTextBox()
@@ -664,7 +664,7 @@ Partial Class Form2
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666!))
         Me.TableLayoutPanel5.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334!))
         Me.TableLayoutPanel5.Controls.Add(Me.txt_F2_매수시작시간, 1, 3)
-        Me.TableLayoutPanel5.Controls.Add(Me.txt_F2_신호시작시간, 1, 2)
+        Me.TableLayoutPanel5.Controls.Add(Me.txt_F2_최초매매시작시간, 1, 2)
         Me.TableLayoutPanel5.Controls.Add(Me.Label15, 0, 3)
         Me.TableLayoutPanel5.Controls.Add(Me.Label14, 0, 2)
         Me.TableLayoutPanel5.Controls.Add(Me.txt_F2_TimeoutTime, 1, 5)
@@ -698,15 +698,15 @@ Partial Class Form2
         Me.txt_F2_매수시작시간.TabIndex = 13
         Me.txt_F2_매수시작시간.Text = "101000"
         '
-        'txt_F2_신호시작시간
+        'txt_F2_최초매매시작시간
         '
-        Me.txt_F2_신호시작시간.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_신호시작시간.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_신호시작시간.Location = New System.Drawing.Point(197, 77)
-        Me.txt_F2_신호시작시간.Name = "txt_F2_신호시작시간"
-        Me.txt_F2_신호시작시간.Size = New System.Drawing.Size(90, 28)
-        Me.txt_F2_신호시작시간.TabIndex = 12
-        Me.txt_F2_신호시작시간.Text = "90300"
+        Me.txt_F2_최초매매시작시간.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_F2_최초매매시작시간.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_F2_최초매매시작시간.Location = New System.Drawing.Point(197, 77)
+        Me.txt_F2_최초매매시작시간.Name = "txt_F2_최초매매시작시간"
+        Me.txt_F2_최초매매시작시간.Size = New System.Drawing.Size(90, 28)
+        Me.txt_F2_최초매매시작시간.TabIndex = 12
+        Me.txt_F2_최초매매시작시간.Text = "90500"
         '
         'Label15
         '
@@ -729,7 +729,7 @@ Partial Class Form2
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(188, 32)
         Me.Label14.TabIndex = 10
-        Me.Label14.Text = "신호시작시간"
+        Me.Label14.Text = "최초매매시작시간"
         Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txt_F2_TimeoutTime
@@ -2042,7 +2042,7 @@ Partial Class Form2
     Friend WithEvents btn_당일반복 As Button
     Friend WithEvents txt_F2_실험조건 As RichTextBox
     Friend WithEvents txt_F2_매수시작시간 As RichTextBox
-    Friend WithEvents txt_F2_신호시작시간 As RichTextBox
+    Friend WithEvents txt_F2_최초매매시작시간 As RichTextBox
     Friend WithEvents Label15 As Label
     Friend WithEvents Label14 As Label
     Friend WithEvents txt_F2_PIP_CALC_MAX_INDEX As RichTextBox

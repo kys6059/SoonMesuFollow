@@ -412,16 +412,18 @@ Module realtime_ebest
         Dim 사용예정현금증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0))
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
 
-        If EBESTisConntected = True And Val(Form2.txt_F2_매수마감시간.Text) >= Val(순매수리스트(currentIndex_순매수).sTime) Then  '매수마감시간안에서만 보여줌
-            If 종목구분 = "2" Then
-                If 콜구매가능개수 <> 신규주문가능수량 Then
-                    콜구매가능개수 = 신규주문가능수량
-                    Add_Log("일반", "코드 : " & 종목코드 & ", 콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
-                End If
-            ElseIf 종목구분 = "3" Then
-                If 풋구매가능개수 <> 신규주문가능수량 Then
-                    풋구매가능개수 = 신규주문가능수량
-                    Add_Log("일반", "코드 : " & 종목코드 & ", 풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
+        If currentIndex_순매수 >= 0 Then
+            If EBESTisConntected = True And Val(Form2.txt_F2_매수마감시간.Text) >= Val(순매수리스트(currentIndex_순매수).sTime) Then  '매수마감시간안에서만 보여줌
+                If 종목구분 = "2" Then
+                    If 콜구매가능개수 <> 신규주문가능수량 Then
+                        콜구매가능개수 = 신규주문가능수량
+                        Add_Log("일반", "코드 : " & 종목코드 & ", 콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                    End If
+                ElseIf 종목구분 = "3" Then
+                    If 풋구매가능개수 <> 신규주문가능수량 Then
+                        풋구매가능개수 = 신규주문가능수량
+                        Add_Log("일반", "코드 : " & 종목코드 & ", 풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                    End If
                 End If
             End If
         End If
