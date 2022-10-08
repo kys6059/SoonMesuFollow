@@ -92,9 +92,12 @@ Module Algorithm_SoonMeSu
 
 
         Else  '시작시간 전에 1개나 2매 매매 검토 221007
-                Dim 시작전신호 = PIP_Point_Lists(PIP적합포인트인덱스).마지막신호
             If currentIndex_순매수 > 4 Then
-                If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때
+
+                Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
+                Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
+
+                If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
                     If SoonMesuShinhoList.Count < 1 Then
                         If 시작전신호 = "상승" Then
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
@@ -122,6 +125,8 @@ Module Algorithm_SoonMeSu
 
 
     End Sub
+
+
 
     Public Sub SoonMesuCalcAlrotithmAll_old()
 
