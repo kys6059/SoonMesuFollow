@@ -61,7 +61,7 @@ Module Algorithm_SoonMeSu
 
         Dim ret As String = CalcAlgorithm_AB()
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime Then  '매수시작시간전에는 아예 신호가 안뜨게 만들고 아래 이전순매수방향만 지정한다  '끝나는 시간도 정하니까 신호가 안떠서 반대방향 신호를 죽이지 않는 문제점 발생해서 시작 시간만 체크함
-            If Val(순매수리스트(currentIndex_순매수).sTime) < timeoutTime Then
+            If Val(순매수리스트(currentIndex_순매수).sTime) < timeoutTime + 500 Then
                 If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
                     If ret = "상승" Then '중립에서 상승으로 전환 
 
