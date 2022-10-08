@@ -91,6 +91,7 @@ Module Algorithm_SoonMeSu
 
 
 
+
         Else  '시작시간 전에 1개나 2매 매매 검토 221007
             If currentIndex_순매수 > 4 Then
 

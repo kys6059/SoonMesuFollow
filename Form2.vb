@@ -1212,6 +1212,7 @@ Public Class Form2
         Dim temp_시작전허용기울기() As String = {"60.0"} 'j
 
 
+
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
         Else

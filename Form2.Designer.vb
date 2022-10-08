@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
@@ -302,16 +302,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend3)
+        ChartArea5.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend5)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series3)
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series5)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -899,16 +899,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend4)
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea6)
+        Legend6.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend6)
         Me.Chart1.Location = New System.Drawing.Point(2054, 205)
         Me.Chart1.Name = "Chart1"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.Chart1.Series.Add(Series4)
+        Series6.ChartArea = "ChartArea1"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        Me.Chart1.Series.Add(Series6)
         Me.Chart1.Size = New System.Drawing.Size(1229, 635)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1824,7 +1824,7 @@ Partial Class Form2
         Me.TLP_BuySell.Controls.Add(Me.btn_call_매도, 2, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_매도를청산, 1, 0)
         Me.TLP_BuySell.Controls.Add(Me.btn_call_구매가능수, 0, 0)
-        Me.TLP_BuySell.Location = New System.Drawing.Point(756, 1109)
+        Me.TLP_BuySell.Location = New System.Drawing.Point(780, 1088)
         Me.TLP_BuySell.Name = "TLP_BuySell"
         Me.TLP_BuySell.RowCount = 2
         Me.TLP_BuySell.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))

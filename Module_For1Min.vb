@@ -16,6 +16,7 @@ Module Module_For1Min
         Dim 코스피지수 As Single
     End Structure
 
+
     Structure 일분데이터템플릿
 
         Dim HangSaGa As String
