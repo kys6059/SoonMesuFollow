@@ -207,7 +207,7 @@ Public Class Form2
                 End If
 
                 For j As Integer = 0 To grid_shinho.ColumnCount - 1 '매수시간에 아닌 때 발생한 신호는 회색처리한다
-                    If Val(s.A02_발생시간) < Val(txt_F2_매수시작시간.Text) Or Val(s.A02_발생시간) > Val(txt_F2_매수마감시간.Text) Then grid_shinho.Rows(i).Cells(j).Style.ForeColor = Color.Gray
+                    If Val(s.A02_발생시간) > Val(txt_F2_매수마감시간.Text) Then grid_shinho.Rows(i).Cells(j).Style.ForeColor = Color.Gray
                 Next
             Next
         End If
@@ -1209,7 +1209,7 @@ Public Class Form2
         Dim 익절차() As String = {"16"} 'g
         Dim 매수마감시간후기울기() As String = {"10.0"} 'h
         Dim 최초매매시작시간() As String = {"90500", "91000", "91500", "92000", "92500", "93000"} 'i
-        Dim temp_시작전허용기울기() As String = {"10.0", "20.0", "30.0", "40.0", "50.0", "60.0", "70.0"}
+        Dim temp_시작전허용기울기() As String = {"20.0", "30.0", "40.0", "50.0", "60.0", "70.0"} 'j
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then

@@ -96,9 +96,9 @@ Module Algorithm_SoonMeSu
 
                 Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
                 Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
+                If SoonMesuShinhoList.Count < 1 Then
+                    If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
 
-                If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
-                    If SoonMesuShinhoList.Count < 1 Then
                         If 시작전신호 = "상승" Then
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
                             SoonMesuShinhoList.Add(shinho)
@@ -114,9 +114,10 @@ Module Algorithm_SoonMeSu
                             Form2.lbl_F2_매매신호.BackColor = Color.Green
                             이전순매수방향 = 시작전신호
                         End If
-                    Else
-                        살아있는신호확인하기()
                     End If
+
+                Else
+                    살아있는신호확인하기()
                 End If
             End If
         End If
