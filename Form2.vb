@@ -1200,16 +1200,16 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        Dim 선행포인트수마진() As String = {"0.90"} 'a
+        Dim 선행포인트수마진() As String = {"0.90", "1.00"} 'a
         Dim 순매수판정기준() As Integer = {0} 'b
-        Dim 최대포인트수() As String = {"06"} 'c{"10", "08", "07", "06"} 'c
-        Dim 상승하락기울기기준() As String = {"4.0"} 'd
-        Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
+        Dim 최대포인트수() As String = {"06", "05", "04"} 'c{"10", "08", "07", "06"} 'c
+        Dim 상승하락기울기기준() As String = {"4.0", "5.0", "6.0", "7.0"} 'd
+        Dim PIP_CALC_MAX_INDEX() As String = {"190", "210", "230"} 'ee
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"16"} 'g
-        Dim 매수마감시간후기울기() As String = {"10.0"} 'h
-        Dim 최초매매시작시간() As String = {"90500", "91000", "91500", "92000", "92500", "93000"} 'i
-        Dim temp_시작전허용기울기() As String = {"20.0", "30.0", "40.0", "50.0", "60.0", "70.0"} 'j
+        Dim 매수마감시간후기울기() As String = {"10.0", "07.0"} 'h
+        Dim 최초매매시작시간() As String = {"91000"} 'i
+        Dim temp_시작전허용기울기() As String = {"60.0"} 'j
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then

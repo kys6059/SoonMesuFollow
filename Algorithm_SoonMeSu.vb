@@ -120,6 +120,7 @@ Module Algorithm_SoonMeSu
                     살아있는신호확인하기()
                 End If
             End If
+
         End If
 
 
@@ -170,7 +171,7 @@ Module Algorithm_SoonMeSu
                         If SoonMesuShinhoList.Count < 1 Then
                             If ret = "상승" Then
                                 Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
-                                SoonMesuShinhoList.Add(shinho)
+                                'SoonMesuShinhoList.Add(shinho)
                                 If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
                                 Form2.lbl_F2_매매신호.Text = "1"
                                 Form2.lbl_F2_매매신호.BackColor = Color.Magenta
