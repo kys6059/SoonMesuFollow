@@ -256,7 +256,7 @@ Module realtime_ebest
 
 
         Next
-
+        Console.WriteLine(String.Format("잔고조회 카운트:{0}", count))
         Form2.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
     End Sub
@@ -776,6 +776,30 @@ Module realtime_ebest
 
         XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
 
+    End Sub
+
+    Public Sub 전체잔고정리하기()
+
+        If List잔고 IsNot Nothing Then
+
+            Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+            For i As Integer = 0 To List잔고.Count - 1
+
+                Dim it As 잔고Type = List잔고(i)
+
+                If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
+                    Dim 종목번호 As String = it.A01_종복번호
+                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
+                    한종목매수(종목번호, it.A10_현재가, count)
+                End If
+                If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
+                    Dim 종목번호 As String = it.A01_종복번호
+                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
+                    한종목매도(종목번호, it.A10_현재가, count)
+                End If
+
+            Next
+        End If
     End Sub
 
 End Module
