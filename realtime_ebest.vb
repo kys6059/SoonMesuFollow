@@ -221,41 +221,60 @@ Module realtime_ebest
         평가종합.평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tsunik", 0))
 
         Dim count As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.GetBlockCount("t0441OutBlock1")        ' Occurs 의 갯수를 구한다.
+        If count = 0 Then
+            콜최대구매개수 = 0
+            콜현재환매개수 = 0
+            풋최대구매개수 = 0
+            풋현재환매개수 = 0
+        Else
+            Dim 콜잔고있음 As Boolean = False
+            Dim 풋잔고있음 As Boolean = False
 
-        For i As Integer = 0 To count - 1
-            Dim it As 잔고Type = New 잔고Type
-            it.A01_종복번호 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "expcode", i) '종목번호
-            it.A02_구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medosu", i) '구분
-            it.A03_잔고수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "jqty", i))
-            it.A04_청산가능수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "cqty", i))
-            it.A05_평균단가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "pamt", i))
-            it.A06_총매입금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "mamt", i))
-            it.A07_매매구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medocd", i)
-            it.A08_매매손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik", i))
-            it.A09_처리순번 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sysprocseq", i))
-            it.A10_현재가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "price", i))
-            it.A11_평가금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "appamt", i))
-            it.A12_평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik1", i))
-            it.A13_수익율 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sunikrt", i))
-            List잔고.Add(it)
+            For i As Integer = 0 To count - 1
+                Dim it As 잔고Type = New 잔고Type
+                it.A01_종복번호 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "expcode", i) '종목번호
+                it.A02_구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medosu", i) '구분
+                it.A03_잔고수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "jqty", i))
+                it.A04_청산가능수량 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "cqty", i))
+                it.A05_평균단가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "pamt", i))
+                it.A06_총매입금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "mamt", i))
+                it.A07_매매구분 = XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "medocd", i)
+                it.A08_매매손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik", i))
+                it.A09_처리순번 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sysprocseq", i))
+                it.A10_현재가 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "price", i))
+                it.A11_평가금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "appamt", i))
+                it.A12_평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "dtsunik1", i))
+                it.A13_수익율 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock1", "sunikrt", i))
+                List잔고.Add(it)
 
-            '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
-            Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
+                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
 
-            If callput = "2" And it.A02_구분 = "매도" Then
-                If 콜최대구매개수 < it.A03_잔고수량 Then
-                    콜최대구매개수 = it.A03_잔고수량
-                    Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+                If callput = "2" And it.A02_구분 = "매도" Then
+                    If 콜최대구매개수 < it.A03_잔고수량 Then
+                        콜최대구매개수 = it.A03_잔고수량
+                        Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+                    End If
+                    콜잔고있음 = True
+                ElseIf callput = "3" And it.A02_구분 = "매도" Then
+                    If 풋최대구매개수 < it.A03_잔고수량 Then
+                        풋최대구매개수 = it.A03_잔고수량
+                        Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+                    End If
+                    풋잔고있음 = True
                 End If
-            ElseIf callput = "3" And it.A02_구분 = "매도" Then
-                If 풋최대구매개수 < it.A03_잔고수량 Then
-                    풋최대구매개수 = it.A03_잔고수량
-                    Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
-                End If
+            Next
+
+            If 콜잔고있음 = False Then
+                콜최대구매개수 = 0
+                콜현재환매개수 = 0
             End If
+            If 풋잔고있음 = False Then
+                풋최대구매개수 = 0
+                풋현재환매개수 = 0
+            End If
+        End If
 
-
-        Next
         Console.WriteLine(String.Format("잔고조회 카운트:{0}", count))
         Form2.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다
 
@@ -701,10 +720,10 @@ Module realtime_ebest
         Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
         Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
 
-        If 최소구매가능개수 > 3 And 구매가능대비비율 > 0 Then
+        If 최소구매가능개수 > 0 And 구매가능대비비율 > 0 Then
             Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
             Dim count As Integer = Math.Truncate(singleCount)
-            한종목매도(code, price, count)
+            If count > 0 Then 한종목매도(code, price, count)
             Return True
         Else
             Return False
@@ -789,8 +808,20 @@ Module realtime_ebest
 
                 If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
-                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매수(종목번호, it.A10_현재가, count)
+
+                    Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                    Dim count As Integer
+                    If callput = "2" Then
+                        count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                        count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
+                        count = Math.Min(count, 매매1회최대수량)
+                    Else
+                        count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                        count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
+                        count = Math.Min(count, 매매1회최대수량)
+                    End If
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
+
                 End If
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호

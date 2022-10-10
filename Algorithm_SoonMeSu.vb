@@ -62,7 +62,11 @@ Module Algorithm_SoonMeSu
         Dim ret As String = CalcAlgorithm_AB()
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime Then  '매수시작시간전에는 아예 신호가 안뜨게 만들고 아래 이전순매수방향만 지정한다  '끝나는 시간도 정하니까 신호가 안떠서 반대방향 신호를 죽이지 않는 문제점 발생해서 시작 시간만 체크함
             If Val(순매수리스트(currentIndex_순매수).sTime) < timeoutTime + 500 Then
-                If ret <> "중립" Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
+
+                '이전순매수와 지금인덱스를 비교하여 5보다 작으면(2분이하) 무시하는 로직 추가
+                Dim 마지막순매수index As Integer = Get마지막순매수Index()
+                If ret <> "중립" And 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then '중립 --> 상승 or 하강이 뜨거나 반대 방향 신호가 뜨면 여기를 진입한다
+
                     If ret = "상승" Then '중립에서 상승으로 전환 
 
                         반대방향신호죽이는함수("A_DOWN", "change")                                 '이전 신호확인해서 죽이기
@@ -88,11 +92,7 @@ Module Algorithm_SoonMeSu
                 End If
             End If
 
-
-
-
-
-        Else  '시작시간 전에 1개나 2매 매매 검토 221007
+        Else  '시작시간 전에 1개만 매매 - 31일 중 2건 발생함 2건 다 성공 
             If currentIndex_순매수 > 4 Then
 
                 Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
@@ -124,8 +124,9 @@ Module Algorithm_SoonMeSu
 
         End If
 
-
-
+        If currentIndex_순매수 > 500 Then
+            If Val(순매수리스트(currentIndex_순매수).sTime) > 151600 Then 전체잔고정리하기()
+        End If
 
     End Sub
 
@@ -434,16 +435,26 @@ Module Algorithm_SoonMeSu
                         If Mid(it.A01_종복번호, 1, 1) = "2" Then
                             If 현재신호 = 0 Or 현재신호 = 1 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
                                 Dim 종목번호 As String = it.A01_종복번호
+
+                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                 Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                Dim count As Integer = 0
+
+                                count = Math.Min(잔고와청산가능, 콜최대구매개수 - 콜현재환매개수)
+                                count = Math.Min(count, 매매1회최대수량)
                                 If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
+
                             End If
 
                         Else '풋일 때  -- 오른다를 산 상태
                             If 현재신호 = 0 Or 현재신호 = -1 Then
                                 Dim 종목번호 As String = it.A01_종복번호
+                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                 Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                Dim count As Integer = 0
+
+                                count = Math.Min(잔고와청산가능, 풋최대구매개수 - 풋현재환매개수)
+                                count = Math.Min(count, 매매1회최대수량)
                                 If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
                             End If
                         End If
@@ -484,4 +495,16 @@ Module Algorithm_SoonMeSu
         End If
     End Sub
 
+    Private Function Get마지막순매수Index() As Integer
+        Dim ret = 0
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 Then
+                    ret = s.A01_발생Index
+                End If
+            Next
+        End If
+        Return ret
+    End Function
 End Module
