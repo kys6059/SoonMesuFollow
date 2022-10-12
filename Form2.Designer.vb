@@ -23,13 +23,14 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
         Me.HSc_F2_날짜조절 = New System.Windows.Forms.HScrollBar()
         Me.Lbl_F2_현재시간Index = New System.Windows.Forms.Label()
@@ -163,7 +164,6 @@ Partial Class Form2
         Me.btn_call_구매가능수 = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
-        Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -212,6 +212,19 @@ Partial Class Form2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(645, 112)
         Me.TableLayoutPanel1.TabIndex = 1
+        '
+        'chk_F2_AutoSave
+        '
+        Me.chk_F2_AutoSave.AutoSize = True
+        Me.chk_F2_AutoSave.Checked = True
+        Me.chk_F2_AutoSave.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_F2_AutoSave.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_F2_AutoSave.Location = New System.Drawing.Point(5, 5)
+        Me.chk_F2_AutoSave.Name = "chk_F2_AutoSave"
+        Me.chk_F2_AutoSave.Size = New System.Drawing.Size(212, 28)
+        Me.chk_F2_AutoSave.TabIndex = 38
+        Me.chk_F2_AutoSave.Text = "자동저장(1540)"
+        Me.chk_F2_AutoSave.UseVisualStyleBackColor = True
         '
         'btn_InsertDB
         '
@@ -305,16 +318,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea7.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea7)
-        Legend7.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend7)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series7.ChartArea = "ChartArea1"
-        Series7.Legend = "Legend1"
-        Series7.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series7)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -902,16 +915,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea8.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea8)
-        Legend8.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend8)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(2054, 205)
         Me.Chart1.Name = "Chart1"
-        Series8.ChartArea = "ChartArea1"
-        Series8.Legend = "Legend1"
-        Series8.Name = "Series1"
-        Me.Chart1.Series.Add(Series8)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1229, 635)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1929,19 +1942,6 @@ Partial Class Form2
         Me.lbl_ReceiveCounter.TabIndex = 37
         Me.lbl_ReceiveCounter.Text = "0"
         Me.lbl_ReceiveCounter.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'chk_F2_AutoSave
-        '
-        Me.chk_F2_AutoSave.AutoSize = True
-        Me.chk_F2_AutoSave.Checked = True
-        Me.chk_F2_AutoSave.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_F2_AutoSave.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_F2_AutoSave.Location = New System.Drawing.Point(5, 5)
-        Me.chk_F2_AutoSave.Name = "chk_F2_AutoSave"
-        Me.chk_F2_AutoSave.Size = New System.Drawing.Size(212, 28)
-        Me.chk_F2_AutoSave.TabIndex = 38
-        Me.chk_F2_AutoSave.Text = "자동저장(1540)"
-        Me.chk_F2_AutoSave.UseVisualStyleBackColor = True
         '
         'Timer_AutoSave111
         '
