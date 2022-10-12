@@ -150,8 +150,8 @@ Module Algorithm
             If EBESTisConntected = True Then
                 If Form1.chk_양매도실행.Checked = True Then
                     If 콜현재환매개수 = 0 And 풋현재환매개수 = 0 Then     '신호와 같은 라인에서 사고 팔리면 그 후 자동으로 또 사지는 걸 방지하는 코드
-                        매도실행호출(0)
-                        매도실행호출(1)
+                        '매도실행호출(0)
+                        '매도실행호출(1)
                     End If
                 End If
             End If

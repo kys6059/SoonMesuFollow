@@ -426,7 +426,7 @@ Module DBHandler
                 '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
 
             Else
-                Add_Log("일반", tempTargetDate.ToString() & " 날에는 이미 등록되어 있습니다")
+                Add_Log("일반", tempTargetDate.ToString() & " 날에는 이미 순매수데이터가 등록되어 있습니다")
             End If
         End If
 

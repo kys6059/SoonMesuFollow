@@ -1132,14 +1132,14 @@ Public Class Form1
     Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
 
         If 진짜할건지확인("매매") = False Then Return
-        If 매도실행호출(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
+        'If 매도실행호출(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
 
     End Sub
 
     Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
 
         If 진짜할건지확인("매매") = False Then Return
-        If 매도실행호출(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
+        'If 매도실행호출(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
 
     End Sub
 

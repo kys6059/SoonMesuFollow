@@ -254,12 +254,20 @@ Module realtime_ebest
                     If 콜최대구매개수 < it.A03_잔고수량 Then
                         콜최대구매개수 = it.A03_잔고수량
                         Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+                    ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
+                        Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
+                        If temp <> 콜현재환매개수 Then 콜현재환매개수 = temp
+                        Add_Log("일반", "콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
                     End If
                     콜잔고있음 = True
                 ElseIf callput = "3" And it.A02_구분 = "매도" Then
                     If 풋최대구매개수 < it.A03_잔고수량 Then
                         풋최대구매개수 = it.A03_잔고수량
                         Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+                    ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
+                        Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
+                        If temp <> 풋현재환매개수 Then 풋현재환매개수 = temp
+                        Add_Log("일반", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
                     End If
                     풋잔고있음 = True
                 End If
@@ -339,45 +347,45 @@ Module realtime_ebest
         Dim 주문수량 As Integer = Val(XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "OrdQty", 0))
         Dim 매수매도구분 As String = XAQuery_매수매도.GetFieldData("CFOAT00100OutBlock1", "BnsTpCode", 0)
 
-        '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
-        Dim callput As String = Mid(종목코드, 1, 1)
-        Dim 환매개수string As String = ""
+        '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623  --------------- 모의투자에서 매수, 매도를 연속으로 했더니 매수만 두번 들어오는 문제 혹인 20221012 환매갯수 계산을 잔고에서 처리하도록 변경함
+        'Dim callput As String = Mid(종목코드, 1, 1)
+        'Dim 환매개수string As String = ""
 
-        Dim intordno As Integer = Val(OrdNo)
+        'Dim intordno As Integer = Val(OrdNo)
 
-        If intordno > 0 Then '주문번호가 0보다 클 때만 현재환매갯수의 값을 바꾼다 '가끔 주문이 거부되어 0으로 들어오는 현상 확인됨 20220826
-            If 매수매도구분 = "2" Then         '매수라면
+        'If intordno > 0 Then '주문번호가 0보다 클 때만 현재환매갯수의 값을 바꾼다 '가끔 주문이 거부되어 0으로 들어오는 현상 확인됨 20220826
+        'If 매수매도구분 = "2" Then         '매수라면
+        '
+        'If List잔고 IsNot Nothing Then
+        '
+        'Dim 매도종목매치 As Boolean = False
+        '
+        'For i As Integer = 0 To List잔고.Count - 1
+        '
+        'Dim it As 잔고Type = List잔고(i)
+        'If it.A02_구분 = "매도" And it.A01_종복번호 = 종목코드 Then
+        '매도종목매치 = True
+        'Exit For
+        'End If
+        '
+        'Next
 
-                If List잔고 IsNot Nothing Then
+        'If 매도종목매치 = True Then
+        'If callput = "2" Then '콜이라면
+        '환매개수string = String.Format("-매수,콜환매 {0} to {1} ", 콜현재환매개수, 콜현재환매개수 + 주문수량)
+        '콜현재환매개수 = 콜현재환매개수 + 주문수량
+        'Else
+        '환매개수string = String.Format("-매수,풋환매 {0} to {1} ", 풋현재환매개수, 풋현재환매개수 + 주문수량)
+        '풋현재환매개수 = 풋현재환매개수 + 주문수량
+        'End If
+        'End If
+        '
+        '
+        'End If
+        'End If
+        'End If
 
-                    Dim 매도종목매치 As Boolean = False
-
-                    For i As Integer = 0 To List잔고.Count - 1
-
-                        Dim it As 잔고Type = List잔고(i)
-                        If it.A02_구분 = "매도" And it.A01_종복번호 = 종목코드 Then
-                            매도종목매치 = True
-                            Exit For
-                        End If
-
-                    Next
-
-                    If 매도종목매치 = True Then
-                        If callput = "2" Then '콜이라면
-                            환매개수string = String.Format("-매수,콜환매 {0} to {1} ", 콜현재환매개수, 콜현재환매개수 + 주문수량)
-                            콜현재환매개수 = 콜현재환매개수 + 주문수량
-                        Else
-                            환매개수string = String.Format("-매수,풋환매 {0} to {1} ", 풋현재환매개수, 풋현재환매개수 + 주문수량)
-                            풋현재환매개수 = 풋현재환매개수 + 주문수량
-                        End If
-                    End If
-
-
-                End If
-            End If
-        End If
-
-        Dim str As String = "주문No=" & OrdNo.ToString() & ",코드=" & 종목코드 & ",가격=" & 주문가격.ToString() & ",수량=" & 주문수량.ToString() & ",구분=" & 매수매도구분 & 환매개수string
+        Dim str As String = "주문No=" & OrdNo.ToString() & ",코드=" & 종목코드 & ",가격=" & 주문가격.ToString() & ",수량=" & 주문수량.ToString() & ",구분=" & 매수매도구분 ' & 환매개수string
         Add_Log("일반", str)
 
     End Sub
@@ -710,26 +718,26 @@ Module realtime_ebest
         Return True
     End Function
 
-    Public Function 매도실행호출(ByVal callput As Integer) As Boolean
+    '   Public Function 매도실행호출(ByVal callput As Integer) As Boolean
 
-        Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
-        Dim price As Single = Data(callput).price(tempIndex, 3)
-        Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
-
-        Dim code As String = it.Code(callput)
-        Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
-        Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
-
-        If 최소구매가능개수 > 0 And 구매가능대비비율 > 0 Then
-            Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
-            Dim count As Integer = Math.Truncate(singleCount)
-            If count > 0 Then 한종목매도(code, price, count)
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
+    '   Dim tempIndex As Integer = GetMaxIndex() '장이 끝나면 마지막에 0만 들어있는 값이 와서 그 앞에 걸 기준으로 바꾼다
+    '  Dim price As Single = Data(callput).price(tempIndex, 3)
+    ' Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
+    '
+    ' Dim code As String = it.Code(callput)
+    'Dim 구매가능대비비율 As Single = Val(Form1.txt_구매가능대비비율.Text)
+    'Dim 최소구매가능개수 As Integer = Math.Min(콜구매가능개수, 풋구매가능개수)
+    '
+    'If 최소구매가능개수 > 0 And 구매가능대비비율 > 0 Then
+    ' Dim singleCount As Single = 최소구매가능개수 * 구매가능대비비율
+    'Dim count As Integer = Math.Truncate(singleCount)
+    'If count > 0 Then 한종목매도(code, price, count)
+    'Return True
+    'Else
+    'Return False
+    'End If
+    '
+    'End Function
 
     Public Sub XAQuery_EBEST_분봉데이터호출함수_1분(ByVal capplut As Integer)
         't8415 
@@ -813,11 +821,11 @@ Module realtime_ebest
                     Dim count As Integer
                     If callput = "2" Then
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
+                        'count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     Else
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
+                        'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
                     If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)

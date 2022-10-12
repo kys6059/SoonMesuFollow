@@ -58,6 +58,18 @@ Public Class Form2
                 DrawGraph()
                 txt_F2_최종방향.Text = 이전순매수방향
             End If
+
+            If chk_F2_AutoSave.Checked = True And isRealFlag = True Then '자동 저장 기능 
+                If currentIndex_순매수 >= 800 Then
+
+                    chk_F2_AutoSave.Checked = False
+
+                    Dim random As New Random
+                    Timer_AutoSave111.Interval = random.Next(1000, 60000)
+                    Timer_AutoSave111.Enabled = True
+
+                End If
+            End If
         End If
 
     End Sub
@@ -860,7 +872,7 @@ Public Class Form2
 
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
-        Dim 기준가격 As String = "1.4"
+        Dim 기준가격 As String = "1.6"
         Dim 투자비율 As String = "1.0"
 
         If txt_week_정규.Text = "W" Then isWeekly = True
@@ -1055,9 +1067,9 @@ Public Class Form2
         grd_잔고조회.Columns(9).HeaderText = "현재가"
         grd_잔고조회.Columns(10).HeaderText = "평가금액"
         grd_잔고조회.Columns(11).HeaderText = "평가손익"
-        grd_잔고조회.Columns(12).HeaderText = "수익율"
+        grd_잔고조회.Columns(12).HeaderText = "수익율(%)"
 
-        Dim defaultWidth As Integer = 68
+        Dim defaultWidth As Integer = 72
         grd_잔고조회.Columns(0).Width = defaultWidth + 15
         grd_잔고조회.Columns(1).Width = defaultWidth
         grd_잔고조회.Columns(2).Width = defaultWidth
@@ -1099,7 +1111,7 @@ Public Class Form2
             grd_잔고조회.Rows(i).Cells(9).Value = List잔고(i).A10_현재가
             grd_잔고조회.Rows(i).Cells(10).Value = Format(List잔고(i).A11_평가금액, "###,###,###,##0")
             grd_잔고조회.Rows(i).Cells(11).Value = Format(List잔고(i).A12_평가손익, "###,###,###,##0")
-            grd_잔고조회.Rows(i).Cells(12).Value = Format(List잔고(i).A13_수익율, "##0.0%")
+            grd_잔고조회.Rows(i).Cells(12).Value = Format(List잔고(i).A13_수익율, "##0.0")
 
             If List잔고(i).A13_수익율 > 0 Then
                 grd_잔고조회.Rows(i).Cells(12).Style.BackColor = Color.Yellow
@@ -1171,11 +1183,11 @@ Public Class Form2
                     Dim count As Integer = 0
                     If callput = "2" Then
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
+                        'count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     Else
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
+                        'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
                     If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
@@ -1339,5 +1351,7 @@ Public Class Form2
         전체잔고정리하기()
     End Sub
 
-
+    Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
+        AutoSave()
+    End Sub
 End Class
