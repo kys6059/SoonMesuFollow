@@ -396,6 +396,34 @@ Public Class Form2
                         F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
                         If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, s.A05_신호해제순매수)
                     End If
+
+                    '주가지수 그리기
+                    Str = "kospi_" + i.ToString()
+
+                    F2_Chart_순매수.Series.Add(Str)
+                    F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
+                    F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                    F2_Chart_순매수.Series(Str).Color = Color.Green
+                    F2_Chart_순매수.Series(Str).YAxisType = AxisType.Secondary
+                    F2_Chart_순매수.Series(Str).BorderWidth = 1
+
+                    If s.A08_콜풋 = 0 Then
+                        F2_Chart_순매수.Series(Str).Color = Color.Green
+                    Else
+                        F2_Chart_순매수.Series(Str).Color = Color.Orange
+                    End If
+
+                    If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A06_신호발생종합주가지수)  '시작점
+
+
+                    If s.A15_현재상태 = 1 Then '끝점
+                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                        F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).코스피지수)
+                    Else
+                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+                        If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, s.A07_신호해제종합주가지수)
+                    End If
+
                 Next
             End If
 
@@ -1353,5 +1381,6 @@ Public Class Form2
 
     Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
         AutoSave()
+        Timer_AutoSave111.Enabled = False
     End Sub
 End Class
