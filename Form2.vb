@@ -721,27 +721,27 @@ Public Class Form2
                 Dim CandlestrickSeries As String = "CandleStick_" + callput.ToString()
 
                 For i = 0 To currentIndex_1MIn
-
                     ' main Series 입력
-                    retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
-                    Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+                    If 일분옵션데이터(callput).price(i, 1) > 0 Then
+                        retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
+                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
+                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
+                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
 
-                    If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
-                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
-                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
-                    ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
-                        Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
-                        Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                        If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
+                            Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                            Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                        ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
+                            Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                            Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                        End If
+
+                        Dim str As String = "시간:" & 일분옵션데이터(0).ctime(i) & vbCrLf & "시가:" & 일분옵션데이터(callput).price(i, 0) & vbCrLf & "종가:" & 일분옵션데이터(callput).price(i, 3)
+                        Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+
+                        If maxValue < 일분옵션데이터(callput).price(i, 1) Then maxValue = 일분옵션데이터(callput).price(i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                        If minValue > 일분옵션데이터(callput).price(i, 2) Then minValue = 일분옵션데이터(callput).price(i, 2)
                     End If
-
-                    Dim str As String = "시간:" & 일분옵션데이터(0).ctime(i) & vbCrLf & "시가:" & 일분옵션데이터(callput).price(i, 0) & vbCrLf & "종가:" & 일분옵션데이터(callput).price(i, 3)
-                    Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
-
-                    If maxValue < 일분옵션데이터(callput).price(i, 1) Then maxValue = 일분옵션데이터(callput).price(i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                    If minValue > 일분옵션데이터(callput).price(i, 2) Then minValue = 일분옵션데이터(callput).price(i, 2)
-
                 Next
             Next
 

@@ -444,12 +444,12 @@ Module realtime_ebest
                 If 종목구분 = "2" Then
                     If 콜구매가능개수 <> 신규주문가능수량 Then
                         콜구매가능개수 = 신규주문가능수량
-                        Add_Log("일반", "코드 : " & 종목코드 & ", 콜 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                        Form2.lbl_F2_콜구매가능개수.Text = String.Format("{0}  ({1})", 신규주문가능수량, 선물옵션현재가)
                     End If
                 ElseIf 종목구분 = "3" Then
                     If 풋구매가능개수 <> 신규주문가능수량 Then
                         풋구매가능개수 = 신규주문가능수량
-                        Add_Log("일반", "코드 : " & 종목코드 & ", 풋 구매가능개수 변경 " & 신규주문가능수량.ToString())
+                        Form2.lbl_F2_풋구매가능개수.Text = String.Format("{0}  ({1})", 신규주문가능수량, 선물옵션현재가)
                     End If
                 End If
             End If
