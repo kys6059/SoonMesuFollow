@@ -420,7 +420,7 @@ Module Algorithm_SoonMeSu
         Dim 현재신호 As Integer = Val(Form2.lbl_F2_매매신호.Text)
         Form2.lbl_F2_매매신호.Refresh()
 
-        If EBESTisConntected = True And 당일반복중_flag = False Then     '---------------- 당일반복 돌릴 때 문제 없도록 잘 해야 함
+        If EBESTisConntected = True And 당일반복중_flag = False And ReceiveCount > 2 Then     '---------------- 당일반복 돌릴 때 문제 없도록 잘 해야 함, 시작하자마자 팔리거나 사는 걸 방지하기 위해 수신횟수를 추가함
 
             Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
 

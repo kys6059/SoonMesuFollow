@@ -256,8 +256,11 @@ Module realtime_ebest
                         Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
                     ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
-                        If temp <> 콜현재환매개수 Then 콜현재환매개수 = temp
-                        Add_Log("일반", "콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                        If temp <> 콜현재환매개수 Then
+                            콜현재환매개수 = temp
+                            Add_Log("일반", "콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                        End If
+
                     End If
                     콜잔고있음 = True
                 ElseIf callput = "3" And it.A02_구분 = "매도" Then
@@ -266,8 +269,10 @@ Module realtime_ebest
                         Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
                     ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
-                        If temp <> 풋현재환매개수 Then 풋현재환매개수 = temp
-                        Add_Log("일반", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
+                        If temp <> 풋현재환매개수 Then
+                            풋현재환매개수 = temp
+                            Add_Log("일반", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
+                        End If
                     End If
                     풋잔고있음 = True
                 End If
@@ -440,7 +445,7 @@ Module realtime_ebest
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
 
         If currentIndex_순매수 >= 0 Then
-            If EBESTisConntected = True And Val(Form2.txt_F2_매수마감시간.Text) >= Val(순매수리스트(currentIndex_순매수).sTime) Then  '매수마감시간안에서만 보여줌
+            If EBESTisConntected = True Then  '매수마감시간안에서만 보여줌
                 If 종목구분 = "2" Then
                     If 콜구매가능개수 <> 신규주문가능수량 Then
                         콜구매가능개수 = 신규주문가능수량
