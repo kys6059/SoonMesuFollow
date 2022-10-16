@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea9 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend9 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series9 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea10 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend10 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series10 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -127,6 +127,10 @@ Partial Class Form2
         Me.chk_ChangeTargetIndex = New System.Windows.Forms.CheckBox()
         Me.txt_programversion = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel11 = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_F2_풋구매가능개수 = New System.Windows.Forms.Label()
+        Me.lbl_F2_콜구매가능개수 = New System.Windows.Forms.Label()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.Label36 = New System.Windows.Forms.Label()
         Me.txt_중간청산비율 = New System.Windows.Forms.TextBox()
         Me.Label35 = New System.Windows.Forms.Label()
         Me.chk_중간청산 = New System.Windows.Forms.CheckBox()
@@ -165,10 +169,6 @@ Partial Class Form2
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
-        Me.Label36 = New System.Windows.Forms.Label()
-        Me.Label44 = New System.Windows.Forms.Label()
-        Me.lbl_F2_콜구매가능개수 = New System.Windows.Forms.Label()
-        Me.lbl_F2_풋구매가능개수 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -322,16 +322,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea9.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea9)
-        Legend9.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend9)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series9.ChartArea = "ChartArea1"
-        Series9.Legend = "Legend1"
-        Series9.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series9)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -919,16 +919,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea10.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea10)
-        Legend10.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend10)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(2054, 205)
         Me.Chart1.Name = "Chart1"
-        Series10.ChartArea = "ChartArea1"
-        Series10.Legend = "Legend1"
-        Series10.Name = "Series1"
-        Me.Chart1.Series.Add(Series10)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1229, 635)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1478,6 +1478,58 @@ Partial Class Form2
         Me.TableLayoutPanel11.Size = New System.Drawing.Size(306, 245)
         Me.TableLayoutPanel11.TabIndex = 31
         '
+        'lbl_F2_풋구매가능개수
+        '
+        Me.lbl_F2_풋구매가능개수.AutoSize = True
+        Me.lbl_F2_풋구매가능개수.BackColor = System.Drawing.SystemColors.Control
+        Me.lbl_F2_풋구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_F2_풋구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_F2_풋구매가능개수.Location = New System.Drawing.Point(170, 140)
+        Me.lbl_F2_풋구매가능개수.Margin = New System.Windows.Forms.Padding(3)
+        Me.lbl_F2_풋구매가능개수.Name = "lbl_F2_풋구매가능개수"
+        Me.lbl_F2_풋구매가능개수.Size = New System.Drawing.Size(132, 27)
+        Me.lbl_F2_풋구매가능개수.TabIndex = 25
+        Me.lbl_F2_풋구매가능개수.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_F2_콜구매가능개수
+        '
+        Me.lbl_F2_콜구매가능개수.AutoSize = True
+        Me.lbl_F2_콜구매가능개수.BackColor = System.Drawing.SystemColors.Control
+        Me.lbl_F2_콜구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_F2_콜구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_F2_콜구매가능개수.Location = New System.Drawing.Point(170, 106)
+        Me.lbl_F2_콜구매가능개수.Margin = New System.Windows.Forms.Padding(3)
+        Me.lbl_F2_콜구매가능개수.Name = "lbl_F2_콜구매가능개수"
+        Me.lbl_F2_콜구매가능개수.Size = New System.Drawing.Size(132, 27)
+        Me.lbl_F2_콜구매가능개수.TabIndex = 24
+        Me.lbl_F2_콜구매가능개수.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label44
+        '
+        Me.Label44.AutoSize = True
+        Me.Label44.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label44.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label44.Location = New System.Drawing.Point(2, 138)
+        Me.Label44.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Size = New System.Drawing.Size(163, 31)
+        Me.Label44.TabIndex = 23
+        Me.Label44.Text = "풋 구매가능개수"
+        Me.Label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label36.Location = New System.Drawing.Point(2, 104)
+        Me.Label36.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(163, 31)
+        Me.Label36.TabIndex = 22
+        Me.Label36.Text = "콜 구매가능개수"
+        Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'txt_중간청산비율
         '
         Me.txt_중간청산비율.Anchor = System.Windows.Forms.AnchorStyles.None
@@ -1954,58 +2006,6 @@ Partial Class Form2
         '
         'Timer_AutoSave111
         '
-        '
-        'Label36
-        '
-        Me.Label36.AutoSize = True
-        Me.Label36.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label36.Location = New System.Drawing.Point(2, 104)
-        Me.Label36.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(163, 31)
-        Me.Label36.TabIndex = 22
-        Me.Label36.Text = "콜 구매가능개수"
-        Me.Label36.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label44
-        '
-        Me.Label44.AutoSize = True
-        Me.Label44.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label44.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label44.Location = New System.Drawing.Point(2, 138)
-        Me.Label44.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label44.Name = "Label44"
-        Me.Label44.Size = New System.Drawing.Size(163, 31)
-        Me.Label44.TabIndex = 23
-        Me.Label44.Text = "풋 구매가능개수"
-        Me.Label44.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_F2_콜구매가능개수
-        '
-        Me.lbl_F2_콜구매가능개수.AutoSize = True
-        Me.lbl_F2_콜구매가능개수.BackColor = System.Drawing.SystemColors.Control
-        Me.lbl_F2_콜구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_F2_콜구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_F2_콜구매가능개수.Location = New System.Drawing.Point(170, 106)
-        Me.lbl_F2_콜구매가능개수.Margin = New System.Windows.Forms.Padding(3)
-        Me.lbl_F2_콜구매가능개수.Name = "lbl_F2_콜구매가능개수"
-        Me.lbl_F2_콜구매가능개수.Size = New System.Drawing.Size(132, 27)
-        Me.lbl_F2_콜구매가능개수.TabIndex = 24
-        Me.lbl_F2_콜구매가능개수.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_F2_풋구매가능개수
-        '
-        Me.lbl_F2_풋구매가능개수.AutoSize = True
-        Me.lbl_F2_풋구매가능개수.BackColor = System.Drawing.SystemColors.Control
-        Me.lbl_F2_풋구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_F2_풋구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_F2_풋구매가능개수.Location = New System.Drawing.Point(170, 140)
-        Me.lbl_F2_풋구매가능개수.Margin = New System.Windows.Forms.Padding(3)
-        Me.lbl_F2_풋구매가능개수.Name = "lbl_F2_풋구매가능개수"
-        Me.lbl_F2_풋구매가능개수.Size = New System.Drawing.Size(132, 27)
-        Me.lbl_F2_풋구매가능개수.TabIndex = 25
-        Me.lbl_F2_풋구매가능개수.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Form2
         '

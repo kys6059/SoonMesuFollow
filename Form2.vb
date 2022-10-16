@@ -914,10 +914,10 @@ Public Class Form2
                 Case 1
                 Case 2
                 Case 3
-                    투자비율 = "0.1"
+                    '투자비율 = "0.1"
                     chk_실거래실행.Checked = False
                 Case 6
-                    투자비율 = "0.1"
+                    '투자비율 = "0.1"
                     chk_실거래실행.Checked = False
             End Select
         Else
@@ -926,15 +926,15 @@ Public Class Form2
                 Case 1
                 Case 2
                 Case 3
-                    투자비율 = "0.1"
+                    '투자비율 = "0.1"
                     chk_실거래실행.Checked = False
                 Case 6
-                    투자비율 = "0.1"
+                    '투자비율 = "0.1"
                     chk_실거래실행.Checked = False
             End Select
         End If
-        txt_투자비율.Text = 투자비율
-        txt_투자비율.Refresh()
+        'txt_투자비율.Text = 투자비율
+        'txt_투자비율.Refresh()
 
     End Sub
 
