@@ -936,6 +936,7 @@ Public Class Form2
         'txt_투자비율.Text = 투자비율
         'txt_투자비율.Refresh()
 
+
     End Sub
 
     Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
