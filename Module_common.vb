@@ -574,7 +574,8 @@ Module Module_common
 
         Form2.txt_월물.Text = txt월물
         Form2.txt_week_정규.Text = txtweekly
-        Add_Log("설정", "월물 = " & txt월물 & ", Week/정규 = " & txtweekly & ", 남은날짜 = " & 남은날짜.ToString() & ", CASE = " & sCase)
+        Dim str As String = String.Format("월물 = {0}, Week/정규 = {1}, 남은날짜 = {2}({3}), CASE = {4}", txt월물, txtweekly, 남은날짜, 남은날짜 Mod 7, sCase)
+        Add_Log("설정", str)
 
     End Sub
 
