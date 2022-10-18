@@ -207,7 +207,7 @@ Public Class Form2
                 grid_shinho.Rows(i).Cells(18).Value = s.A18_매도시간
                 grid_shinho.Rows(i).Cells(19).Value = s.A19_매도Index
                 grid_shinho.Rows(i).Cells(20).Value = s.A20_매도사유
-                grid_shinho.Rows(i).Cells(21).Value = s.A21_환산이익율
+                grid_shinho.Rows(i).Cells(21).Value = Format(s.A21_환산이익율, "##0.0%")
                 grid_shinho.Rows(i).Cells(22).Value = s.A55_메모
 
                 If s.A21_환산이익율 > 0 Then
