@@ -626,12 +626,12 @@ Public Class Form2
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
 
-        자동반복계산로직(0)
+        자동반복계산로직(0, "oneshot")
         Add_Log("Form2 자동 반복 계산로직 완료", "")
         당일반복중_flag = False
     End Sub
 
-    Private Sub 자동반복계산로직(ByVal cnt As Integer)
+    Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal str As String)
 
         isRealFlag = False
         당일반복중_flag = True
@@ -641,6 +641,7 @@ Public Class Form2
             HSc_F2_날짜조절.Refresh()
 
             chk_F2_화면끄기.Checked = True
+            If str = "oneshot" Then 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
 
             '당일 내부에서 변경
             For j As Integer = 0 To 순매수리스트카운트 - 1
@@ -911,25 +912,51 @@ Public Class Form2
         If isWeekly = True Then
             Select Case 남은날짜
                 Case 0
+                    txt_선행_포인트_마진.Text = "1.0"
+                    txt_F2_마감시간이후기울기.Text = "10.0"
+                    txt_F2_상승하락기울기기준.Text = "4.0"
                 Case 1
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.0"
                 Case 2
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                 Case 3
-                    '투자비율 = "0.1"
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                     chk_실거래실행.Checked = False
                 Case 6
-                    '투자비율 = "0.1"
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                     chk_실거래실행.Checked = False
             End Select
         Else
             Select Case 남은날짜
                 Case 0
+                    txt_선행_포인트_마진.Text = "1.0"
+                    txt_F2_마감시간이후기울기.Text = "10.0"
+                    txt_F2_상승하락기울기기준.Text = "4.0"
                 Case 1
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.0"
                 Case 2
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                 Case 3
-                    '투자비율 = "0.1"
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                     chk_실거래실행.Checked = False
                 Case 6
-                    '투자비율 = "0.1"
+                    txt_선행_포인트_마진.Text = "0.9"
+                    txt_F2_마감시간이후기울기.Text = "4.5"
+                    txt_F2_상승하락기울기기준.Text = "4.5"
                     chk_실거래실행.Checked = False
             End Select
         End If
@@ -1266,17 +1293,17 @@ Public Class Form2
         Dim 선행포인트수마진() As String = {"1.00", "0.9"} 'a
         Dim 순매수판정기준() As Integer = {0} 'b
         Dim 최대포인트수() As String = {"06"} 'c{"10", "08", "07", "06"} 'c
-        Dim 상승하락기울기기준() As String = {"4.0", "4.5", "5.0"} 'd
+        Dim 상승하락기울기기준() As String = {"4.0", "4.5"} 'd
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"16"} 'g
-        Dim 매수마감시간후기울기() As String = {"10.0"} 'h
+        Dim 매수마감시간후기울기() As String = {"10.0", "08.0", "06.0", "05.0", "04.5", "04.0"} 'h
         Dim 최초매매시작시간() As String = {"91000"} 'i
         Dim temp_시작전허용기울기() As String = {"60.0"} 'j
         Dim timeoutTime() As String = {"151500"} 'k
         Dim 매수시작시간() As String = {"102000"}
         Dim 매수마감시간() As String = {"113000"}
-        Dim 신호최소유지시간() As Integer = {2, 3, 4, 5, 6, 7, 8, 9}
+        Dim 신호최소유지시간() As Integer = {6}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1342,7 +1369,7 @@ Public Class Form2
                                                                 'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
                                                                 Console.WriteLine(SoonMesuSimulation_조건)
                                                                 Add_Log("조건 : ", SoonMesuSimulation_조건)
-                                                                자동반복계산로직(cnt)
+                                                                자동반복계산로직(cnt, "full")
                                                                 cnt += 1
                                                             Next
                                                         Next
@@ -1388,5 +1415,16 @@ Public Class Form2
     Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
         AutoSave()
         Timer_AutoSave111.Enabled = False
+    End Sub
+
+    Private Sub 일일조건설정(ByVal strToday As String)
+
+        Dim lDate As Long = Val(strToday)
+        Dim 월물 As Long = getsMonth(lDate)
+        sMonth = 월물
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+
+        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+        손절매수준설정(남은날짜)
     End Sub
 End Class
