@@ -208,13 +208,18 @@ Module Module_For1Min
 
         Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
         For i As Integer = 1 To maxPoint - minPoint
-            If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then
+            If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then  ' 앞에게 왜 필요한지 모르겠으나 표준편차가 매우 큰 조건에서 만족하지 못하는 현상이 있음 - 앞에 조건을 삭제하니까 더 안좋아져서 다시 부활함 221019
+
                 If PIP_Point_Lists(i).표준편차 > PIP_Point_Lists(i - 1).표준편차 * 선행_포인트_마진 Then
                     PIP적합포인트인덱스 = i - 1
                     Exit For
                 End If
             End If
         Next
+
+        '포인트를 고정하는 시험을 위해 복사함  -- 이거는 매우 안좋아서 다시는 검토하지 않기로 함 221019
+        'PIP적합포인트인덱스 = Math.Max(maxPoint - minPoint, 0)
+
         If PIP_Point_Lists.Length > 0 Then
             Form2.txt_TargetPointCount.Text = PIP_Point_Lists(PIP적합포인트인덱스).PointCount.ToString()
         End If
