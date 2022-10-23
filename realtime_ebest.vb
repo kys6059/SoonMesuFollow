@@ -84,6 +84,8 @@ Module realtime_ebest
     Public 콜중간청산개수 As Integer = 0
     Public 풋중간청산개수 As Integer = 0
 
+
+
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
 
