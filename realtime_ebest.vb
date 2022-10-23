@@ -81,6 +81,8 @@ Module realtime_ebest
     Public 풋최대구매개수 As Integer = 0
     Public 콜현재환매개수 As Integer = 0
     Public 풋현재환매개수 As Integer = 0
+    Public 콜중간청산개수 As Integer = 0
+    Public 풋중간청산개수 As Integer = 0
 
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
@@ -226,6 +228,8 @@ Module realtime_ebest
             콜현재환매개수 = 0
             풋최대구매개수 = 0
             풋현재환매개수 = 0
+            콜중간청산개수 = 0
+            풋중간청산개수 = 0
         Else
             Dim 콜잔고있음 As Boolean = False
             Dim 풋잔고있음 As Boolean = False
@@ -250,10 +254,15 @@ Module realtime_ebest
                 '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
 
+                Dim 중간청산비율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+                If 중간청산비율 <= 0 Then 중간청산비율 = 0.5
+
                 If callput = "2" And it.A02_구분 = "매도" Then
                     If 콜최대구매개수 < it.A03_잔고수량 Then
                         콜최대구매개수 = it.A03_잔고수량
-                        Add_Log("일반", "콜최대구매개수 변경 to  " & 콜최대구매개수.ToString())
+
+                        콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
+                        Add_Log("일반", String.Format("콜최대구매개수 변경 to  {0}, 중간청산갯수 = {1}", 콜최대구매개수, 콜중간청산개수))
                     ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
                         If temp <> 콜현재환매개수 Then
@@ -266,6 +275,8 @@ Module realtime_ebest
                 ElseIf callput = "3" And it.A02_구분 = "매도" Then
                     If 풋최대구매개수 < it.A03_잔고수량 Then
                         풋최대구매개수 = it.A03_잔고수량
+                        풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
+                        Add_Log("일반", String.Format("풋최대구매개수 변경 to {0}, 중간청산갯수 = {1}", 풋최대구매개수, 풋중간청산개수))
                         Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
                     ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
@@ -281,10 +292,12 @@ Module realtime_ebest
             If 콜잔고있음 = False Then
                 콜최대구매개수 = 0
                 콜현재환매개수 = 0
+                콜중간청산개수 = 0
             End If
             If 풋잔고있음 = False Then
                 풋최대구매개수 = 0
                 풋현재환매개수 = 0
+                풋중간청산개수 = 0
             End If
         End If
 
@@ -400,7 +413,7 @@ Module realtime_ebest
         '모의투자에서는 QryTp 일반/금액/비율이 동작하지 않음
         '실계좌에서는 금액으로 동작하는 거 확인하 (20220809)
 
-        Dim 투자비율반영금액 As Long = Math.Round(주문가능금액 * Val(Form2.txt_투자비율.Text))
+        Dim 투자비율반영금액 As Long = 1.0
 
         If optionList.Count > 0 And selectedJongmokIndex(callput) >= 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))

@@ -70,6 +70,10 @@ Public Class Form2
 
                 End If
             End If
+
+            lbl_F2_콜중간청산갯수.Text = 콜중간청산개수.ToString()
+            lbl_F2_풋중간청산갯수.Text = 풋중간청산개수.ToString()
+
         End If
 
     End Sub
@@ -906,7 +910,9 @@ Public Class Form2
         Dim isWeekly As Boolean = False
         Dim 상승하락기울기기준 As String = txt_F2_상승하락기울기기준.Text
         Dim 선행포인트마진 As String = txt_선행_포인트_마진.Text
-        Dim 마감시간이후기울기 = txt_F2_마감시간이후기울기.Text
+        Dim 마감시간이후기울기 As String = txt_F2_마감시간이후기울기.Text
+        Dim 중간청산목표이익 As String = txt_F2_중간청산비율.Text
+        Dim 기준가격 As String = txt_JongmokTargetPrice.Text
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         Select Case 남은날짜
@@ -914,29 +920,36 @@ Public Class Form2
                 선행포인트마진 = "1.0"
                 마감시간이후기울기 = "10.0"
                 상승하락기울기기준 = "4.0"
+                중간청산목표이익 = "0.45"
+                If isWeekly = True Then 기준가격 = "1.3"
             Case 1
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.0"
+                중간청산목표이익 = "0.3"
             Case 2
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
+                중간청산목표이익 = "0.3"
             Case 3
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
+                중간청산목표이익 = "0.2"
                 chk_실거래실행.Checked = False
             Case 6
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
+                중간청산목표이익 = "0.2"
                 chk_실거래실행.Checked = False
         End Select
         txt_선행_포인트_마진.Text = 선행포인트마진
         txt_F2_마감시간이후기울기.Text = 마감시간이후기울기
         txt_F2_상승하락기울기기준.Text = 상승하락기울기기준
-
+        txt_F2_중간청산비율.Text = 중간청산목표이익
+        txt_JongmokTargetPrice.Text = 기준가격
     End Sub
 
     Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
@@ -1261,18 +1274,18 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        Dim 선행포인트수마진() As String = {"1.00"} 'a
+        Dim 선행포인트수마진() As String = {"1.00"} 'a 일자별 자동 조절
         Dim 순매수판정기준() As Integer = {0} 'b
-        Dim 최대포인트수() As String = {"04", "05", "06", "07", "08", "09", "10"} 'c
-        Dim 상승하락기울기기준() As String = {"4.0", "4.5"} 'd
+        Dim 최대포인트수() As String = {"06"} 'c
+        Dim 상승하락기울기기준() As String = {"4.0"} 'd  일자별 자동 조절
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
-        Dim 손절차() As String = {"09"} 'f
-        Dim 익절차() As String = {"16"} 'g
-        Dim 매수마감시간후기울기() As String = {"04.5"} 'h
+        Dim 손절차() As String = {"09", "08", "07", "06"} 'f
+        Dim 익절차() As String = {"16", "14", "12"} 'g
+        Dim 매수마감시간후기울기() As String = {"04.5"} 'h 일자별 자동 조절
         Dim 최초매매시작시간() As String = {"91000"} 'i
         Dim temp_시작전허용기울기() As String = {"60.0"} 'j
         Dim timeoutTime() As String = {"151500"} 'k
-        Dim 매수시작시간() As String = {"102000"}
+        Dim 매수시작시간() As String = {"102000", "101000", "100000"}
         Dim 매수마감시간() As String = {"113000"}
         Dim 신호최소유지시간() As Integer = {6}
 
@@ -1340,7 +1353,7 @@ Public Class Form2
                                                                 'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
                                                                 Console.WriteLine(SoonMesuSimulation_조건)
                                                                 Add_Log("조건 : ", SoonMesuSimulation_조건)
-                                                                자동반복계산로직(cnt, True)
+                                                                자동반복계산로직(cnt, True) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
                                                                 cnt += 1
                                                             Next
                                                         Next
