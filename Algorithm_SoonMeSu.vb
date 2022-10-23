@@ -387,6 +387,8 @@ Module Algorithm_SoonMeSu
                     's.A16_이익률 = Math.Round(s.A14_현재가격 / s.A10_신호발생가격, 3)
                     's.A21_환산이익율 = Math.Round(s.A16_이익률 - 1.02, 3)
 
+
+
                     '매도의 경우
 
                     Dim 일분옵션데이터_CurrentIndex As Integer
