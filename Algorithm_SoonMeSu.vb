@@ -529,6 +529,8 @@ Module Algorithm_SoonMeSu
                                     End If
                                 End If
 
+
+
                             Else '풋일 때  -- 오른다를 산 상태
 
                                 If is중간청산Flag(1) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
