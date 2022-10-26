@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea9 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend9 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series9 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea10 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend10 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series10 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -229,7 +229,7 @@ Partial Class Form2
         Me.chk_F2_AutoSave.Name = "chk_F2_AutoSave"
         Me.chk_F2_AutoSave.Size = New System.Drawing.Size(212, 28)
         Me.chk_F2_AutoSave.TabIndex = 38
-        Me.chk_F2_AutoSave.Text = "자동저장(1540)"
+        Me.chk_F2_AutoSave.Text = "자동저장(1530)"
         Me.chk_F2_AutoSave.UseVisualStyleBackColor = True
         '
         'btn_InsertDB
@@ -324,16 +324,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea1.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
-        Legend1.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend1)
+        ChartArea9.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea9)
+        Legend9.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend9)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series1.ChartArea = "ChartArea1"
-        Series1.Legend = "Legend1"
-        Series1.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series1)
+        Series9.ChartArea = "ChartArea1"
+        Series9.Legend = "Legend1"
+        Series9.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series9)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -921,16 +921,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend2)
+        ChartArea10.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea10)
+        Legend10.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend10)
         Me.Chart1.Location = New System.Drawing.Point(2054, 205)
         Me.Chart1.Name = "Chart1"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.Chart1.Series.Add(Series2)
+        Series10.ChartArea = "ChartArea1"
+        Series10.Legend = "Legend1"
+        Series10.Name = "Series1"
+        Me.Chart1.Series.Add(Series10)
         Me.Chart1.Size = New System.Drawing.Size(1229, 635)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1352,7 +1352,7 @@ Partial Class Form2
         Me.txt_JongmokTargetPrice.Name = "txt_JongmokTargetPrice"
         Me.txt_JongmokTargetPrice.Size = New System.Drawing.Size(151, 24)
         Me.txt_JongmokTargetPrice.TabIndex = 9
-        Me.txt_JongmokTargetPrice.Text = "1.6"
+        Me.txt_JongmokTargetPrice.Text = "1.4"
         Me.txt_JongmokTargetPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label26
@@ -1468,7 +1468,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.0.0_20221014"
+        Me.txt_programversion.Text = "1.0.1_20221026"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TableLayoutPanel11
@@ -1630,7 +1630,7 @@ Partial Class Form2
         Me.txt_F2_중간청산비율.Name = "txt_F2_중간청산비율"
         Me.txt_F2_중간청산비율.Size = New System.Drawing.Size(132, 24)
         Me.txt_F2_중간청산비율.TabIndex = 21
-        Me.txt_F2_중간청산비율.Text = "0.3"
+        Me.txt_F2_중간청산비율.Text = "0.35"
         Me.txt_F2_중간청산비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label35
@@ -1649,6 +1649,8 @@ Partial Class Form2
         'chk_중간청산
         '
         Me.chk_중간청산.AutoSize = True
+        Me.chk_중간청산.Checked = True
+        Me.chk_중간청산.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_중간청산.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_중간청산.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.chk_중간청산.Location = New System.Drawing.Point(170, 4)

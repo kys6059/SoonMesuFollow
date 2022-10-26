@@ -398,9 +398,11 @@ Module Algorithm_SoonMeSu
                         일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
                     End If
                     If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                    s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
 
+                    If s.A14_현재가격 > 0 Then
+                        s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                    End If
 
                     If 매도사유 <> "" Then
                         s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
@@ -567,21 +569,26 @@ Module Algorithm_SoonMeSu
                         Dim 매도가능수량 As Integer = 0
                         If 현재신호 = 1 Then  '상승베팅 - put 매도
 
-                            Dim code As String = 일분옵션데이터(1).Code
+                            If is중간청산Flag(1) = False Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면 true임
+                                Dim code As String = 일분옵션데이터(1).Code
 
-                            Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
-                            Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
-                            count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                            Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
-                            If count > 0 Then 한종목매도(code, price, count)
+                                Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
+                                Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
+                                count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                                Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
+                                If count > 0 Then 한종목매도(code, price, count)
+                            End If
 
                         ElseIf 현재신호 = -1 Then
-                            Dim code As String = 일분옵션데이터(0).Code
-                            Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
-                            Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
-                            count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                            Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
-                            If count > 0 Then 한종목매도(code, price, count)
+
+                            If is중간청산Flag(0) = False Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면 true임
+                                Dim code As String = 일분옵션데이터(0).Code
+                                Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
+                                Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
+                                count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                                Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
+                                If count > 0 Then 한종목매도(code, price, count)
+                            End If
 
                         End If
 

@@ -60,12 +60,12 @@ Public Class Form2
             End If
 
             If chk_F2_AutoSave.Checked = True And isRealFlag = True Then '자동 저장 기능 
-                If currentIndex_순매수 >= 800 Then
+                If currentIndex_순매수 >= 780 Then
 
                     chk_F2_AutoSave.Checked = False
 
                     Dim random As New Random
-                    Timer_AutoSave111.Interval = random.Next(1000, 60000)
+                    Timer_AutoSave111.Interval = random.Next(1000, 50000)
                     Timer_AutoSave111.Enabled = True
 
                 End If
@@ -920,29 +920,33 @@ Public Class Form2
                 선행포인트마진 = "1.0"
                 마감시간이후기울기 = "10.0"
                 상승하락기울기기준 = "4.0"
-                중간청산목표이익 = "0.45"
-                If isWeekly = True Then 기준가격 = "1.3"
+                중간청산목표이익 = "0.35"
+                기준가격 = "1.3"
             Case 1
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.0"
-                중간청산목표이익 = "0.3"
+                중간청산목표이익 = "0.35"
+                기준가격 = "1.4"
             Case 2
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
                 중간청산목표이익 = "0.3"
+                기준가격 = "1.4"
             Case 3
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
-                중간청산목표이익 = "0.2"
+                중간청산목표이익 = "0.3"
+                기준가격 = "1.5"
                 chk_실거래실행.Checked = False
             Case 6
                 선행포인트마진 = "0.9"
                 마감시간이후기울기 = "4.5"
                 상승하락기울기기준 = "4.5"
-                중간청산목표이익 = "0.2"
+                중간청산목표이익 = "0.3"
+                기준가격 = "1.5"
                 chk_실거래실행.Checked = False
         End Select
         txt_선행_포인트_마진.Text = 선행포인트마진
@@ -1279,15 +1283,16 @@ Public Class Form2
         Dim 최대포인트수() As String = {"06"} 'c
         Dim 상승하락기울기기준() As String = {"4.0"} 'd  일자별 자동 조절
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
-        Dim 손절차() As String = {"09", "08", "07", "06"} 'f
-        Dim 익절차() As String = {"16", "14", "12"} 'g
+        Dim 손절차() As String = {"09"} 'f
+        Dim 익절차() As String = {"16"} 'g
         Dim 매수마감시간후기울기() As String = {"04.5"} 'h 일자별 자동 조절
         Dim 최초매매시작시간() As String = {"91000"} 'i
         Dim temp_시작전허용기울기() As String = {"60.0"} 'j
         Dim timeoutTime() As String = {"151500"} 'k
-        Dim 매수시작시간() As String = {"102000", "101000", "100000"}
+        Dim 매수시작시간() As String = {"102000"}
         Dim 매수마감시간() As String = {"113000"}
         Dim 신호최소유지시간() As Integer = {6}
+        Dim 중간청산이익목표() As String = {"0.50", "0.45", "0.40", "0.35", "0.30", "0.25", "0.20", "0.15"}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1311,50 +1316,54 @@ Public Class Form2
                                                     For L As Integer = 0 To 매수시작시간.Length - 1
                                                         For M As Integer = 0 To 매수마감시간.Length - 1
                                                             For n As Integer = 0 To 신호최소유지시간.Length - 1
-                                                                txt_선행_포인트_마진.Text = 선행포인트수마진(a)
-                                                                cmb_F2_순매수기준.SelectedIndex = 순매수판정기준(b)
-                                                                txt_F2_최대포인트수.Text = 최대포인트수(c)
-                                                                txt_F2_상승하락기울기기준.Text = 상승하락기울기기준(d)
-                                                                txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(ee)
-                                                                txt_F2_손절매차.Text = 손절차(f)
-                                                                txt_F2_익절차.Text = 익절차(g)
-                                                                txt_F2_마감시간이후기울기.Text = 매수마감시간후기울기(h)
-                                                                txt_F2_최초매매시작시간.Text = 최초매매시작시간(i)
-                                                                시작전허용기울기 = temp_시작전허용기울기(j)
-                                                                txt_F2_TimeoutTime.Text = timeoutTime(k)
-                                                                txt_F2_매수시작시간.Text = 매수시작시간(L)
-                                                                txt_F2_매수마감시간.Text = 매수마감시간(M)
-                                                                신호최소유지시간index = 신호최소유지시간(n)
+                                                                For q As Integer = 0 To 중간청산이익목표.Length - 1
+                                                                    txt_선행_포인트_마진.Text = 선행포인트수마진(a)
+                                                                    cmb_F2_순매수기준.SelectedIndex = 순매수판정기준(b)
+                                                                    txt_F2_최대포인트수.Text = 최대포인트수(c)
+                                                                    txt_F2_상승하락기울기기준.Text = 상승하락기울기기준(d)
+                                                                    txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(ee)
+                                                                    txt_F2_손절매차.Text = 손절차(f)
+                                                                    txt_F2_익절차.Text = 익절차(g)
+                                                                    txt_F2_마감시간이후기울기.Text = 매수마감시간후기울기(h)
+                                                                    txt_F2_최초매매시작시간.Text = 최초매매시작시간(i)
+                                                                    시작전허용기울기 = temp_시작전허용기울기(j)
+                                                                    txt_F2_TimeoutTime.Text = timeoutTime(k)
+                                                                    txt_F2_매수시작시간.Text = 매수시작시간(L)
+                                                                    txt_F2_매수마감시간.Text = 매수마감시간(M)
+                                                                    신호최소유지시간index = 신호최소유지시간(n)
+                                                                    txt_F2_중간청산비율.Text = 중간청산이익목표(q)
 
-                                                                txt_선행_포인트_마진.Refresh()
-                                                                txt_F2_최대포인트수.Refresh()
-                                                                txt_F2_상승하락기울기기준.Refresh()
-                                                                txt_F2_PIP_CALC_MAX_INDEX.Refresh()
-                                                                txt_F2_손절매차.Refresh()
-                                                                txt_F2_익절차.Refresh()
-                                                                txt_F2_마감시간이후기울기.Refresh()
-                                                                cmb_F2_순매수기준.Refresh()
-                                                                txt_F2_최초매매시작시간.Refresh()
-                                                                txt_F2_TimeoutTime.Refresh()
-                                                                txt_F2_매수시작시간.Refresh()
-                                                                txt_F2_매수마감시간.Refresh()
+                                                                    txt_선행_포인트_마진.Refresh()
+                                                                    txt_F2_최대포인트수.Refresh()
+                                                                    txt_F2_상승하락기울기기준.Refresh()
+                                                                    txt_F2_PIP_CALC_MAX_INDEX.Refresh()
+                                                                    txt_F2_손절매차.Refresh()
+                                                                    txt_F2_익절차.Refresh()
+                                                                    txt_F2_마감시간이후기울기.Refresh()
+                                                                    cmb_F2_순매수기준.Refresh()
+                                                                    txt_F2_최초매매시작시간.Refresh()
+                                                                    txt_F2_TimeoutTime.Refresh()
+                                                                    txt_F2_매수시작시간.Refresh()
+                                                                    txt_F2_매수마감시간.Refresh()
+                                                                    txt_F2_중간청산비율.Refresh()
 
-                                                                Dim cntstr As String
-                                                                If cnt < 10 Then
-                                                                    cntstr = "00" & cnt.ToString()
-                                                                ElseIf cnt >= 10 And cnt < 100 Then
-                                                                    cntstr = "0" & cnt.ToString()
-                                                                Else
-                                                                    cntstr = cnt.ToString()
-                                                                End If
+                                                                    Dim cntstr As String
+                                                                    If cnt < 10 Then
+                                                                        cntstr = "00" & cnt.ToString()
+                                                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                                                        cntstr = "0" & cnt.ToString()
+                                                                    Else
+                                                                        cntstr = cnt.ToString()
+                                                                    End If
 
-                                                                SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_B_{2}_C_{3}_D_{4}_E_{5}_F_{6}_G_{7}_H_{8}_I_{9}_J_{10}_K_{11}_L_{12}_M_{13}_N_{14}", cntstr, 선행포인트수마진(a), 순매수판정기준(b), 최대포인트수(c), 상승하락기울기기준(d), PIP_CALC_MAX_INDEX(ee), 손절차(f), 익절차(g), 매수마감시간후기울기(h), 최초매매시작시간(i), temp_시작전허용기울기(j), timeoutTime(k), 매수시작시간(L), 매수마감시간(M), 신호최소유지시간(n))
+                                                                    SoonMesuSimulation_조건 = String.Format("CNT_{0}_A_{1}_B_{2}_C_{3}_D_{4}_E_{5}_F_{6}_G_{7}_H_{8}_I_{9}_J_{10}_K_{11}_L_{12}_M_{13}_N_{14}_Q_{15}", cntstr, 선행포인트수마진(a), 순매수판정기준(b), 최대포인트수(c), 상승하락기울기기준(d), PIP_CALC_MAX_INDEX(ee), 손절차(f), 익절차(g), 매수마감시간후기울기(h), 최초매매시작시간(i), temp_시작전허용기울기(j), timeoutTime(k), 매수시작시간(L), 매수마감시간(M), 신호최소유지시간(n), 중간청산이익목표(q))
 
-                                                                'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
-                                                                Console.WriteLine(SoonMesuSimulation_조건)
-                                                                Add_Log("조건 : ", SoonMesuSimulation_조건)
-                                                                자동반복계산로직(cnt, True) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                                                                cnt += 1
+                                                                    'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
+                                                                    Console.WriteLine(SoonMesuSimulation_조건)
+                                                                    Add_Log("조건 : ", SoonMesuSimulation_조건)
+                                                                    자동반복계산로직(cnt, True) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                                    cnt += 1
+                                                                Next
                                                             Next
                                                         Next
                                                     Next
@@ -1386,10 +1395,6 @@ Public Class Form2
         AutoSave()
     End Sub
 
-    Private Sub HSc_F2_날짜조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_날짜조절.Scroll
-
-    End Sub
-
     Private Sub btn_전체정리_Click(sender As Object, e As EventArgs) Handles btn_전체정리.Click
 
         If 진짜할건지확인("매매") = False Then Return
@@ -1410,5 +1415,9 @@ Public Class Form2
 
         월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
         손절매수준설정(남은날짜)
+    End Sub
+
+    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles Label8.Click
+
     End Sub
 End Class
