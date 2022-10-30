@@ -365,6 +365,35 @@ Module Algorithm_SoonMeSu
                     'timeout 확인
                     If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
 
+
+
+                    '매매시작시간 전 신호 발생해제조건 확인  - 현재의 방향이 당초의 방향과 틀린걸 확인하면 청산한다
+                    Dim 최초매매시작시간 As Integer = Val(Form2.txt_F2_최초매매시작시간.Text)
+                    Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+                    If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then
+
+                        '0번의 기울기가 작아지는 것을 보고 해제하는 기준으로 하는 방식
+                        Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
+                        Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
+
+                        If 시작전기울기 < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
+                            매도사유 = "son_2"
+                        End If
+
+                        'Dim ret = CalcAlgorithm_AB()   '신호를 이용한 방식보다 위의 해제기울기를 적용한 방식이 더 성적이 좋아서 이건 제외함 20221030
+                        'If ret <> "중립" Then
+                        'If s.A03_신호ID = "A_UP" And ret = "하락" Then
+                        '매도사유 = "son_2"
+                        'ElseIf s.A03_신호ID = "A_DOWN" And ret = "상승" Then
+                        '   매도사유 = "son_2"
+                        'End If
+                        'End If
+
+                    End If
+
+
+
+
                     '반대방향기울기일정시간유지 시 reverse로 매도  '-- 이로직을 적용해도 켈리지수가 30이하라서 불필요함 삭제
                     'Dim 기울기 As Double = PIP_Point_Lists(PIP적합포인트인덱스).마지막선기울기
                     'If PIP_Point_Lists(PIP적합포인트인덱스).마지막선거리합 > Val(Form2.txt_F2_마지막선길이.Text) Then  '마지막선의 길이가 기준 이상이고
@@ -390,7 +419,6 @@ Module Algorithm_SoonMeSu
 
 
                     '매도의 경우
-
                     Dim 일분옵션데이터_CurrentIndex As Integer
                     If EBESTisConntected = True And currentIndex_1MIn >= 0 Then
                         일분옵션데이터_CurrentIndex = currentIndex_1MIn
@@ -404,6 +432,8 @@ Module Algorithm_SoonMeSu
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
                     End If
 
+
+                    '청산할 때 하는 프로세스
                     If 매도사유 <> "" Then
                         s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
                         s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
