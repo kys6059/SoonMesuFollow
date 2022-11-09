@@ -171,6 +171,7 @@ Partial Class Form2
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -2041,12 +2042,22 @@ Partial Class Form2
         'Timer_AutoSave111
         '
         '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(2126, 89)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(75, 23)
+        Me.Button3.TabIndex = 38
+        Me.Button3.Text = "Button3"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(3284, 1262)
+        Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.lbl_ReceiveCounter)
         Me.Controls.Add(Me.TLP_BuySell)
         Me.Controls.Add(Me.grd_잔고조회)
@@ -2253,4 +2264,5 @@ Partial Class Form2
     Friend WithEvents Label45 As Label
     Friend WithEvents Label31 As Label
     Friend WithEvents Label34 As Label
+    Friend WithEvents Button3 As Button
 End Class
