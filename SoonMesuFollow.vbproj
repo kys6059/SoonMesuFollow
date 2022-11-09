@@ -153,11 +153,10 @@
     <Compile Include="Algorithm.vb" />
     <Compile Include="Algorithm_SoonMeSu.vb" />
     <Compile Include="DBHandler.vb" />
-    <Compile Include="Form1.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Form1.Designer.vb">
       <DependentUpon>Form1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form2.Designer.vb">
