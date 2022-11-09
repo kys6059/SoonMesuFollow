@@ -359,6 +359,7 @@ Module Algorithm_SoonMeSu
                     '손절조건 확인
                     If s.A03_신호ID = "A_UP" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
                     If s.A03_신호ID = "A_DOWN" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
+
                     '익절조건 확인
                     If s.A03_신호ID = "A_UP" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
                     If s.A03_신호ID = "A_DOWN" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
@@ -430,6 +431,11 @@ Module Algorithm_SoonMeSu
                     If s.A14_현재가격 > 0 Then
                         s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                    End If
+                    '옵션가격 기준 손절매
+                    Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+                    If s.A21_환산이익율 < 옵션가손절매기준 Then
+                        매도사유 = "option_son"
                     End If
 
 
