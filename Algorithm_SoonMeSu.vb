@@ -593,7 +593,7 @@ Module Algorithm_SoonMeSu
                 If Form2.chk_실거래실행.Checked = True Then
                     Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
                     Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-                    If currentTime >= 매수시작시간 And currentTime <= 매수마감시간 Then
+                    If currentTime <= 매수마감시간 Then
 
                         '매도실행
                         Dim 매도가능수량 As Integer = 0
