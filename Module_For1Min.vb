@@ -62,8 +62,6 @@ Module Module_For1Min
 
     Public 이전순매수방향 As String
 
-    Public 시작전허용기울기 As Double = 30.0  '매수시작시간전 높은 기울기인 경우만 매수하도록 하는 변수
-    Public 시작전매도해제기울기 As Double = 25.0  '매수시작전 매도 후 신호해제 기준 기울기
     Public 신호최소유지시간index As Integer = 6 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
 
     'Public PIP_CALC_MAX_INDEX As Integer = 170 '매수 마감 시간 이후에도 이전과 동일한 알고리즘을 적용하기 위해 시간index를 166으로 하는 방법 - 170 = 85분으로 켈리지수가 가장 높은 10시 25분을 기준으로 함

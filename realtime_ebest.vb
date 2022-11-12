@@ -799,6 +799,7 @@ Module realtime_ebest
         순매수리스트카운트 = XAQuery_EBEST_순매수현황조회.GetBlockCount("t1621OutBlock1")
 
         ReDim 순매수리스트(순매수리스트카운트 - 1)
+        Dim 기관순매수적용비율 As Single = Val(Form2.txt_F2_기관순매수적용비율.Text)
 
         For i As Integer = 0 To 순매수리스트카운트 - 1
 
@@ -812,10 +813,12 @@ Module realtime_ebest
             기 = 순매수리스트(순매수리스트카운트 - 1 - i).기관순매수
             연 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "monmsamt", i))   '연기금
             외 = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "formsamt", i))   '외국인
-            순매수리스트(순매수리스트카운트 - 1 - i).외국인_연기금_순매수 = 외 + 연
+
             순매수리스트(순매수리스트카운트 - 1 - i).외국인순매수 = 외
             순매수리스트(순매수리스트카운트 - 1 - i).연기금순매수 = 연
-            순매수리스트(순매수리스트카운트 - 1 - i).외국인_기관_순매수 = 외 + 기
+
+            순매수리스트(순매수리스트카운트 - 1 - i).외국인_기관_순매수 = 외 + Math.Round(기 * 기관순매수적용비율)
+            순매수리스트(순매수리스트카운트 - 1 - i).외국인_연기금_순매수 = 외 + Math.Round(연 * 기관순매수적용비율)
         Next
         timeIndex_순매수 = 순매수리스트카운트
         currentIndex_순매수 = timeIndex_순매수 - 1

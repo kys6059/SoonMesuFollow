@@ -752,6 +752,8 @@ Module DBHandler
 
         Dim iList = DBTotalRawDataList_순매수.Item(iDate)
         Dim iIndex As Integer = 0
+        Dim 기관순매수적용비율 As Single = Val(Form2.txt_F2_기관순매수적용비율.Text)
+
         For Each row In iList
 
             '값을 읽어온다
@@ -770,8 +772,9 @@ Module DBHandler
             순매수리스트(iIndex).외국인순매수 = 외국인순매수
             순매수리스트(iIndex).연기금순매수 = 연기금순매수
             순매수리스트(iIndex).코스피지수 = 코스피지수
-            순매수리스트(iIndex).외국인_연기금_순매수 = 외국인순매수 + 연기금순매수
-            순매수리스트(iIndex).외국인_기관_순매수 = 외국인순매수 + 기관순매수
+
+            순매수리스트(iIndex).외국인_연기금_순매수 = 외국인순매수 + Math.Round(연기금순매수 * 기관순매수적용비율)
+            순매수리스트(iIndex).외국인_기관_순매수 = 외국인순매수 + Math.Round(기관순매수 * 기관순매수적용비율)
             iIndex += 1
 
         Next

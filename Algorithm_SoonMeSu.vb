@@ -97,6 +97,7 @@ Module Algorithm_SoonMeSu
 
                 Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
                 Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
+                Dim 시작전허용기울기 As Single = Val(Form2.txt_F2_1차매매_기준_기울기.Text)
                 If SoonMesuShinhoList.Count < 1 Then
                     If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
 
@@ -376,6 +377,7 @@ Module Algorithm_SoonMeSu
                         '0번의 기울기가 작아지는 것을 보고 해제하는 기준으로 하는 방식
                         Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
                         Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
+                        Dim 시작전매도해제기울기 As Single = Val(Form2.txt_F2_1차매매_해제_기울기.Text)
 
                         If 시작전기울기 < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
                             매도사유 = "son_2"
