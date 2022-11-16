@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea7 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend7 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series7 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea8 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend8 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series8 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -46,6 +46,10 @@ Partial Class Form2
         Me.btn_점의수늘리기 = New System.Windows.Forms.Button()
         Me.btn_점의수줄이기 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.Label49 = New System.Windows.Forms.Label()
+        Me.txt_F2_1차매매_기준_기울기 = New System.Windows.Forms.RichTextBox()
+        Me.txt_F2_1차매매_해제_기울기 = New System.Windows.Forms.RichTextBox()
         Me.txt_F2_기관순매수적용비율 = New System.Windows.Forms.RichTextBox()
         Me.Label47 = New System.Windows.Forms.Label()
         Me.txt_F2_PIP_CALC_MAX_INDEX = New System.Windows.Forms.RichTextBox()
@@ -179,10 +183,6 @@ Partial Class Form2
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
-        Me.txt_F2_1차매매_해제_기울기 = New System.Windows.Forms.RichTextBox()
-        Me.txt_F2_1차매매_기준_기울기 = New System.Windows.Forms.RichTextBox()
-        Me.Label49 = New System.Windows.Forms.Label()
-        Me.Label50 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -336,16 +336,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea7.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea7)
-        Legend7.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend7)
+        ChartArea3.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend3)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series7.ChartArea = "ChartArea1"
-        Series7.Legend = "Legend1"
-        Series7.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series7)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series3)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1396, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -437,6 +437,52 @@ Partial Class Form2
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.1137!))
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(331, 349)
         Me.TableLayoutPanel3.TabIndex = 6
+        '
+        'Label50
+        '
+        Me.Label50.AutoSize = True
+        Me.Label50.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.Label50.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label50.Location = New System.Drawing.Point(3, 307)
+        Me.Label50.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(183, 39)
+        Me.Label50.TabIndex = 21
+        Me.Label50.Text = "1차매매_해제_기울기"
+        Me.Label50.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label49
+        '
+        Me.Label49.AutoSize = True
+        Me.Label49.BackColor = System.Drawing.SystemColors.ActiveCaption
+        Me.Label49.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label49.Location = New System.Drawing.Point(3, 269)
+        Me.Label49.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label49.Name = "Label49"
+        Me.Label49.Size = New System.Drawing.Size(183, 34)
+        Me.Label49.TabIndex = 20
+        Me.Label49.Text = "1차매매_기준_기울기"
+        Me.Label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_F2_1차매매_기준_기울기
+        '
+        Me.txt_F2_1차매매_기준_기울기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_F2_1차매매_기준_기울기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_F2_1차매매_기준_기울기.Location = New System.Drawing.Point(192, 271)
+        Me.txt_F2_1차매매_기준_기울기.Name = "txt_F2_1차매매_기준_기울기"
+        Me.txt_F2_1차매매_기준_기울기.Size = New System.Drawing.Size(134, 30)
+        Me.txt_F2_1차매매_기준_기울기.TabIndex = 19
+        Me.txt_F2_1차매매_기준_기울기.Text = "35"
+        '
+        'txt_F2_1차매매_해제_기울기
+        '
+        Me.txt_F2_1차매매_해제_기울기.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txt_F2_1차매매_해제_기울기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.txt_F2_1차매매_해제_기울기.Location = New System.Drawing.Point(192, 309)
+        Me.txt_F2_1차매매_해제_기울기.Name = "txt_F2_1차매매_해제_기울기"
+        Me.txt_F2_1차매매_해제_기울기.Size = New System.Drawing.Size(134, 35)
+        Me.txt_F2_1차매매_해제_기울기.TabIndex = 18
+        Me.txt_F2_1차매매_해제_기울기.Text = "23"
         '
         'txt_F2_기관순매수적용비율
         '
@@ -1047,16 +1093,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea8.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea8)
-        Legend8.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend8)
+        ChartArea4.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea4)
+        Legend4.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend4)
         Me.Chart1.Location = New System.Drawing.Point(2054, 205)
         Me.Chart1.Name = "Chart1"
-        Series8.ChartArea = "ChartArea1"
-        Series8.Legend = "Legend1"
-        Series8.Name = "Series1"
-        Me.Chart1.Series.Add(Series8)
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "Series1"
+        Me.Chart1.Series.Add(Series4)
         Me.Chart1.Size = New System.Drawing.Size(1228, 635)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -2168,52 +2214,6 @@ Partial Class Form2
         '
         'Timer_AutoSave111
         '
-        '
-        'txt_F2_1차매매_해제_기울기
-        '
-        Me.txt_F2_1차매매_해제_기울기.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_1차매매_해제_기울기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_1차매매_해제_기울기.Location = New System.Drawing.Point(192, 309)
-        Me.txt_F2_1차매매_해제_기울기.Name = "txt_F2_1차매매_해제_기울기"
-        Me.txt_F2_1차매매_해제_기울기.Size = New System.Drawing.Size(134, 35)
-        Me.txt_F2_1차매매_해제_기울기.TabIndex = 18
-        Me.txt_F2_1차매매_해제_기울기.Text = "25"
-        '
-        'txt_F2_1차매매_기준_기울기
-        '
-        Me.txt_F2_1차매매_기준_기울기.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txt_F2_1차매매_기준_기울기.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_1차매매_기준_기울기.Location = New System.Drawing.Point(192, 271)
-        Me.txt_F2_1차매매_기준_기울기.Name = "txt_F2_1차매매_기준_기울기"
-        Me.txt_F2_1차매매_기준_기울기.Size = New System.Drawing.Size(134, 30)
-        Me.txt_F2_1차매매_기준_기울기.TabIndex = 19
-        Me.txt_F2_1차매매_기준_기울기.Text = "35"
-        '
-        'Label49
-        '
-        Me.Label49.AutoSize = True
-        Me.Label49.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Label49.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label49.Location = New System.Drawing.Point(3, 269)
-        Me.Label49.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label49.Name = "Label49"
-        Me.Label49.Size = New System.Drawing.Size(183, 34)
-        Me.Label49.TabIndex = 20
-        Me.Label49.Text = "1차매매_기준_기울기"
-        Me.Label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label50
-        '
-        Me.Label50.AutoSize = True
-        Me.Label50.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.Label50.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label50.Location = New System.Drawing.Point(3, 307)
-        Me.Label50.Margin = New System.Windows.Forms.Padding(1)
-        Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(183, 39)
-        Me.Label50.TabIndex = 21
-        Me.Label50.Text = "1차매매_해제_기울기"
-        Me.Label50.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Form2
         '

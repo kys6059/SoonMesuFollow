@@ -651,21 +651,30 @@ Public Class Form2
             HSc_F2_날짜조절.Refresh()
 
             chk_F2_화면끄기.Checked = True
-            If 일일조건설정flag = True Then 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
 
-            '당일 내부에서 변경
-            For j As Integer = 0 To 순매수리스트카운트 - 1
+            Dim lDate As Long = Val(TargetDate)
+            Dim 월물 As Long = getsMonth(lDate)
+            sMonth = 월물
 
-                currentIndex_순매수 = j
-                If currentIndex_순매수 = 순매수리스트카운트 - 1 Then chk_F2_화면끄기.Checked = False
-                F2_Clac_DisplayAllGrid()
-            Next
+            Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+            남은날짜 = 남은날짜 Mod 7
 
-            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-            For j = 0 To SoonMesuShinhoList.Count - 1
-                SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
-            Next
+            If 남은날짜 < 3 Then
+                If 일일조건설정flag = True Then 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
 
+                '당일 내부에서 변경
+                For j As Integer = 0 To 순매수리스트카운트 - 1
+
+                    currentIndex_순매수 = j
+                    If currentIndex_순매수 = 순매수리스트카운트 - 1 Then chk_F2_화면끄기.Checked = False
+                    F2_Clac_DisplayAllGrid()
+                Next
+
+                '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+                For j = 0 To SoonMesuShinhoList.Count - 1
+                    SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+                Next
+            End If
             Threading.Thread.Sleep(50)
 
         Next
@@ -1277,14 +1286,14 @@ Public Class Form2
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"16"} 'g
         Dim 매수마감시간후기울기() As String = {"4.5"} 'h 일자별 자동 조절
-        Dim 최초매매시작시간() As String = {"90800"} 'i
-        Dim temp_시작전허용기울기() As String = {"35"} 'j
+        Dim 최초매매시작시간() As String = {"90500", "90600", "90800", "91000"} 'i
+        Dim temp_시작전허용기울기() As String = {"45", "40", "35", "32", "28"} 'j
         Dim timeoutTime() As String = {"151500"} 'k
         Dim 매수시작시간() As String = {"102000"}
         Dim 매수마감시간() As String = {"113000"}
         Dim 신호최소유지시간() As Integer = {6}
         Dim 중간청산이익목표() As String = {"0.99"}
-        Dim 시작전매도해제기울기_TEMP() As Double = {"25"}
+        Dim 시작전매도해제기울기_TEMP() As Double = {"27", "25", "23", "21"}
         Dim 옵션기준손절매() As String = {"-0.30"}
         Dim 기관순매수적용비율() As String = {"1.0"}
 
