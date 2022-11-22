@@ -193,12 +193,13 @@ Module Module_For1Min
                 PIP_Point_Lists(i).마지막신호 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
                 'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount)
 
-                Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호)
-                For j As Integer = 0 To pipIndexList.Count - 1
-                    str += pipIndexList(j).ToString() & ", "
-                Next
-                'Console.WriteLine(str)
-
+                If Form2.chk_F2_화면끄기.Checked = False Then
+                    Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호)
+                    For j As Integer = 0 To pipIndexList.Count - 1
+                        str += pipIndexList(j).ToString() & ", "
+                    Next
+                    'Console.WriteLine(str)
+                End If
             End If
         Next
 

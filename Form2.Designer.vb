@@ -967,7 +967,7 @@ Partial Class Form2
         Me.txt_F2_익절차.Name = "txt_F2_익절차"
         Me.txt_F2_익절차.Size = New System.Drawing.Size(90, 29)
         Me.txt_F2_익절차.TabIndex = 6
-        Me.txt_F2_익절차.Text = "16"
+        Me.txt_F2_익절차.Text = "12"
         '
         'Label11
         '
@@ -1640,7 +1640,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.1.0_20221112"
+        Me.txt_programversion.Text = "1.1.1_20221119"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TableLayoutPanel11
@@ -2073,7 +2073,7 @@ Partial Class Form2
         Me.txt_F2_최대허용구매개수.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
         Me.txt_F2_최대허용구매개수.Size = New System.Drawing.Size(175, 23)
         Me.txt_F2_최대허용구매개수.TabIndex = 38
-        Me.txt_F2_최대허용구매개수.Text = "6"
+        Me.txt_F2_최대허용구매개수.Text = "8"
         '
         'grd_잔고조회
         '

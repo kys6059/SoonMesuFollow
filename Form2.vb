@@ -47,12 +47,13 @@ Public Class Form2
 
         If currentIndex_순매수 >= 0 Then
             lbl_ReceiveCounter.Text = "수신횟수 = " & ReceiveCount.ToString()
-            SetScrolData_F2()
+
             CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
             SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
 
             If chk_F2_화면끄기.Checked = False Then
+                SetScrolData_F2()
 
                 RedrawAll() 'grid1에 옵션리스트를 출력하고 선택된 것을 표시한다
                 DrawGrid_PIP_계산그리드()
@@ -1284,16 +1285,16 @@ Public Class Form2
         Dim 상승하락기울기기준() As String = {"4.0"} 'd  일자별 자동 조절
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
         Dim 손절차() As String = {"09"} 'f
-        Dim 익절차() As String = {"16"} 'g
+        Dim 익절차() As String = {"12"} 'g
         Dim 매수마감시간후기울기() As String = {"4.5"} 'h 일자별 자동 조절
-        Dim 최초매매시작시간() As String = {"90500", "90600", "90800", "91000"} 'i
-        Dim temp_시작전허용기울기() As String = {"45", "40", "35", "32", "28"} 'j
+        Dim 최초매매시작시간() As String = {"90800"} 'i
+        Dim temp_시작전허용기울기() As String = {"35"} 'j
         Dim timeoutTime() As String = {"151500"} 'k
         Dim 매수시작시간() As String = {"102000"}
         Dim 매수마감시간() As String = {"113000"}
         Dim 신호최소유지시간() As Integer = {6}
-        Dim 중간청산이익목표() As String = {"0.99"}
-        Dim 시작전매도해제기울기_TEMP() As Double = {"27", "25", "23", "21"}
+        Dim 중간청산이익목표() As String = {"0.35"}
+        Dim 시작전매도해제기울기_TEMP() As Double = {"25"}
         Dim 옵션기준손절매() As String = {"-0.30"}
         Dim 기관순매수적용비율() As String = {"1.0"}
 
@@ -1374,7 +1375,7 @@ Public Class Form2
                                                                                 'SoonMesuSimulation_조건 = String.Format("CNT_{0}_E_{1}_F_{2}", cntstr, 손절차(ee), 익절차(f))
                                                                                 Console.WriteLine(SoonMesuSimulation_조건)
                                                                                 Add_Log("조건 : ", SoonMesuSimulation_조건)
-                                                                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                                                자동반복계산로직(cnt, True) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
                                                                                 cnt += 1
                                                                             Next
                                                                         Next
