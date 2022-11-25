@@ -43,6 +43,23 @@ Public Class Form2
 
     End Sub
 
+    Private Sub 화면그리기()
+        SetScrolData_F2()
+
+        RedrawAll() 'grid1에 옵션리스트를 출력하고 선택된 것을 표시한다
+        DrawGrid_PIP_계산그리드()
+        Draw_Shinho_Grid()
+        DrawGraph()
+        txt_F2_최종방향.Text = 이전순매수방향
+
+        lbl_F2_콜중간청산갯수.Text = 콜중간청산개수.ToString()
+        lbl_F2_풋중간청산갯수.Text = 풋중간청산개수.ToString()
+
+        lbl_F2_외국인순매수.Text = Format(순매수리스트(currentIndex_순매수).외국인순매수, "###,##0")
+        lbl_F2_기관순매수.Text = Format(순매수리스트(currentIndex_순매수).기관순매수, "###,##0")
+        lbl_F2_순매수합계.Text = Format(순매수리스트(currentIndex_순매수).외국인_기관_순매수, "###,##0")
+    End Sub
+
     Private Sub F2_Clac_DisplayAllGrid()
 
         If currentIndex_순매수 >= 0 Then
@@ -53,20 +70,7 @@ Public Class Form2
             SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
 
             If chk_F2_화면끄기.Checked = False Then
-                SetScrolData_F2()
-
-                RedrawAll() 'grid1에 옵션리스트를 출력하고 선택된 것을 표시한다
-                DrawGrid_PIP_계산그리드()
-                Draw_Shinho_Grid()
-                DrawGraph()
-                txt_F2_최종방향.Text = 이전순매수방향
-
-                lbl_F2_콜중간청산갯수.Text = 콜중간청산개수.ToString()
-                lbl_F2_풋중간청산갯수.Text = 풋중간청산개수.ToString()
-
-                lbl_F2_외국인순매수.Text = Format(순매수리스트(currentIndex_순매수).외국인순매수, "###,##0")
-                lbl_F2_기관순매수.Text = Format(순매수리스트(currentIndex_순매수).기관순매수, "###,##0")
-                lbl_F2_순매수합계.Text = Format(순매수리스트(currentIndex_순매수).외국인_기관_순매수, "###,##0")
+                화면그리기()
 
             End If
 
@@ -675,6 +679,7 @@ Public Class Form2
                 For j = 0 To SoonMesuShinhoList.Count - 1
                     SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
                 Next
+
             End If
             Threading.Thread.Sleep(50)
 
@@ -1282,7 +1287,7 @@ Public Class Form2
         Dim 선행포인트수마진() As String = {"0.85"} 'a 일자별 자동 조절 취소
         Dim 순매수판정기준() As Integer = {0} 'b
         Dim 최대포인트수() As String = {"06"} 'c
-        Dim 상승하락기울기기준() As String = {"4.0"} 'd  일자별 자동 조절
+        Dim 상승하락기울기기준() As String = {"3.0", "3.5", "4.0", "4.5"} 'd  일자별 자동 조절
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"12"} 'g
@@ -1295,8 +1300,9 @@ Public Class Form2
         Dim 신호최소유지시간() As Integer = {6}
         Dim 중간청산이익목표() As String = {"0.35"}
         Dim 시작전매도해제기울기_TEMP() As Double = {"25"}
-        Dim 옵션기준손절매() As String = {"-0.30"}
+        Dim 옵션기준손절매() As String = {"-0.30", "-0.40", "-0.50", "-0.60", "-0.70"}
         Dim 기관순매수적용비율() As String = {"1.0"}
+
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1324,6 +1330,7 @@ Public Class Form2
                                                                     For r As Integer = 0 To 시작전매도해제기울기_TEMP.Length - 1
                                                                         For s As Integer = 0 To 옵션기준손절매.Length - 1
                                                                             For t As Integer = 0 To 기관순매수적용비율.Length - 1
+
                                                                                 txt_선행_포인트_마진.Text = 선행포인트수마진(a)
                                                                                 cmb_F2_순매수기준.SelectedIndex = 순매수판정기준(b)
                                                                                 txt_F2_최대포인트수.Text = 최대포인트수(c)
