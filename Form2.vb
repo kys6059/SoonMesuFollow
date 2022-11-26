@@ -71,7 +71,7 @@ Public Class Form2
 
             If chk_F2_화면끄기.Checked = False Then
                 화면그리기()
-
+                Update()
             End If
 
             If chk_F2_AutoSave.Checked = True And isRealFlag = True Then '자동 저장 기능 
@@ -652,10 +652,9 @@ Public Class Form2
         당일반복중_flag = True
         For i As Integer = 0 To 순매수데이터날짜수 - 1
 
+            chk_F2_화면끄기.Checked = True
             HSc_F2_날짜조절.Value = i     ' 이 안에서도 Clac_DisplayAllGrid  호출하지만 그건 그날짜 data의 첫번째만 호출하는 것임
             HSc_F2_날짜조절.Refresh()
-
-            chk_F2_화면끄기.Checked = True
 
             Dim lDate As Long = Val(TargetDate)
             Dim 월물 As Long = getsMonth(lDate)
@@ -664,23 +663,28 @@ Public Class Form2
             Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
             남은날짜 = 남은날짜 Mod 7
 
-            If 남은날짜 < 3 Then
-                If 일일조건설정flag = True Then 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
-
-                '당일 내부에서 변경
-                For j As Integer = 0 To 순매수리스트카운트 - 1
-
-                    currentIndex_순매수 = j
-                    If currentIndex_순매수 = 순매수리스트카운트 - 1 Then chk_F2_화면끄기.Checked = False
-                    F2_Clac_DisplayAllGrid()
-                Next
-
-                '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-                For j = 0 To SoonMesuShinhoList.Count - 1
-                    SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
-                Next
-
+            'If 남은날짜 < 3 Then
+            If 일일조건설정flag = True Then
+                일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
             End If
+
+            '당일 내부에서 변경
+            For j As Integer = 0 To 순매수리스트카운트 - 1
+
+                currentIndex_순매수 = j
+                If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
+                    chk_F2_화면끄기.Checked = False
+                End If
+                F2_Clac_DisplayAllGrid()
+
+            Next
+
+            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+            For j = 0 To SoonMesuShinhoList.Count - 1
+                SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+            Next
+
+            'End If
             Threading.Thread.Sleep(50)
 
         Next
@@ -1287,7 +1291,7 @@ Public Class Form2
         Dim 선행포인트수마진() As String = {"0.85"} 'a 일자별 자동 조절 취소
         Dim 순매수판정기준() As Integer = {0} 'b
         Dim 최대포인트수() As String = {"06"} 'c
-        Dim 상승하락기울기기준() As String = {"3.0", "3.5", "4.0", "4.5"} 'd  일자별 자동 조절
+        Dim 상승하락기울기기준() As String = {"4.0"} 'd  일자별 자동 조절
         Dim PIP_CALC_MAX_INDEX() As String = {"190"} 'ee
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"12"} 'g
@@ -1300,7 +1304,7 @@ Public Class Form2
         Dim 신호최소유지시간() As Integer = {6}
         Dim 중간청산이익목표() As String = {"0.35"}
         Dim 시작전매도해제기울기_TEMP() As Double = {"25"}
-        Dim 옵션기준손절매() As String = {"-0.30", "-0.40", "-0.50", "-0.60", "-0.70"}
+        Dim 옵션기준손절매() As String = {"-0.20", "-0.22", "-0.24", "-0.26", "-0.28", "-0.30", "-0.35", "-0.40", "-0.45", "-0.50"}
         Dim 기관순매수적용비율() As String = {"1.0"}
 
 
