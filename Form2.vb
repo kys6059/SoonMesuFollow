@@ -1,5 +1,6 @@
 ﻿Option Explicit On
 Imports System.Windows.Forms.DataVisualization.Charting
+Imports Google.Api
 
 Public Class Form2
 
@@ -65,7 +66,7 @@ Public Class Form2
         If currentIndex_순매수 >= 0 Then
             lbl_ReceiveCounter.Text = "수신횟수 = " & ReceiveCount.ToString()
 
-            CalcColorData()        '최대최소 계산
+            'CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
             SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
 
@@ -250,19 +251,7 @@ Public Class Form2
 
     End Sub
 
-    Private Sub CalcColorData()        '최대최소,제2저가 계산
-
-        Dim min = Single.MaxValue
-        Dim max = Single.MinValue
-
-        For i As Integer = 0 To 순매수리스트카운트 - 1
-            min = Math.Min(min, 순매수리스트(i).코스피지수)
-            max = Math.Max(max, 순매수리스트(i).코스피지수)
-        Next
-
-        KOSPI_MAX = max
-        KOSPI_MIN = min
-        KOSPI_CUR = 순매수리스트(순매수리스트카운트 - 1).코스피지수
+    Private Sub CalcColorData()
 
     End Sub
 
@@ -339,6 +328,10 @@ Public Class Form2
             Dim PIP_Series As String = "PIP_" + chartNumber.ToString()
             Dim retIndex As Integer = 0
 
+            Dim min As Single = Single.MaxValue
+            Dim max As Single = Single.MinValue
+
+
             For i As Integer = 0 To currentIndex_순매수
 
                 Dim target순매수 As Long = Get순매수(i)
@@ -356,10 +349,11 @@ Public Class Form2
                     F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
                 End If
 
+                min = Math.Min(min, 순매수리스트(i).코스피지수)
+                max = Math.Max(max, 순매수리스트(i).코스피지수)
             Next
-
-            F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = KOSPI_MAX + 1
-            F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = KOSPI_MIN - 1
+            F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = max + 1
+            F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = min - 1
 
             'PIP 시리즈를 표시한다
             If currentIndex_순매수 >= 4 Then

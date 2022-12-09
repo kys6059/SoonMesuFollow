@@ -47,7 +47,7 @@ Module Module_For1Min
     Public 순매수리스트() As 순매수탬플릿
     Public 순매수리스트카운트 As Integer '순매수리스트 카운트
     Public PIP_Point_Lists() As PIP탬플릿
-    Public KOSPI_MIN, KOSPI_MAX, KOSPI_CUR As Single
+
 
     Public currentIndex_1MIn As Integer = -1
     Public timeIndex_1Min As Integer
@@ -74,10 +74,6 @@ Module Module_For1Min
         Next
 
         ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
-
-        KOSPI_MIN = 0
-        KOSPI_MAX = 0
-        KOSPI_CUR = 0
 
         TargetDate = 0
         currentIndex_1MIn = -1
