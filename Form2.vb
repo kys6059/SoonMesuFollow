@@ -265,54 +265,63 @@ Public Class Form2
         F2_Chart_순매수.Legends.Clear()
         F2_Chart_순매수.Annotations.Clear()
 
-        For i As Integer = 0 To 0 '0번은 메인으로쓰고 나머지 3개 정도를 왼쪽에 그려서 쓸 계획임 일단 하나만 구현함
+        ChartAreaStr = "ChartArea_0"
+        F2_Chart_순매수.ChartAreas.Add(ChartAreaStr)
 
-            ChartAreaStr = "ChartArea_" + i.ToString()
-            F2_Chart_순매수.ChartAreas.Add(ChartAreaStr)
+        str = "oneMinute_0"
+        F2_Chart_순매수.Series.Add(str)
+        F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+        F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+        F2_Chart_순매수.Series(str).Color = Color.Black
+        F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
-            str = "oneMinute_" + i.ToString()
-            F2_Chart_순매수.Series.Add(str)
-            F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-            F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            F2_Chart_순매수.Series(str).Color = Color.Black
-            F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
+        For i As Integer = 0 To 2 '0 - 외+기
 
-            'str = "For_" + i.ToString()
-            'F2_Chart_순매수.Series.Add(str)
-            'F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-            'F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            'F2_Chart_순매수.Series(str).Color = Color.Blue
-            'F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+            If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
+                str = "For_Kig_" + i.ToString()
+                F2_Chart_순매수.Series.Add(str)
+                F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+                F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+                If i = 0 Then
+                    F2_Chart_순매수.Series(str).Color = Color.Magenta
+                ElseIf i = 1 Then
+                    F2_Chart_순매수.Series(str).Color = Color.YellowGreen
+                Else
+                    F2_Chart_순매수.Series(str).Color = Color.Violet
+                End If
 
-            str = "For_Kig_" + i.ToString()
-            F2_Chart_순매수.Series.Add(str)
-            F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-            F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            F2_Chart_순매수.Series(str).Color = Color.Magenta
-            F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+                str = "PIP_" + i.ToString()
+                F2_Chart_순매수.Series.Add(str)
+                F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+                F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+                F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
+                F2_Chart_순매수.Series(str).BorderWidth = 2
 
-            str = "PIP_" + i.ToString()
-            F2_Chart_순매수.Series.Add(str)
-            F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-            F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-            F2_Chart_순매수.Series(str).Color = Color.DarkRed
-            F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
-            F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
-            F2_Chart_순매수.Series(str).BorderWidth = 2
+                If i = 0 Then
+                    F2_Chart_순매수.Series(str).Color = Color.DarkRed
+                ElseIf i = 1 Then
+                    F2_Chart_순매수.Series(str).Color = Color.Red
+                Else
+                    F2_Chart_순매수.Series(str).Color = Color.OrangeRed
+                End If
 
-            ''Lebel 설정 - 이건 소수점 2째자리까지만 표기하도록 하는 기능인거 같음 - 필요 없을 듯
-            'txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
 
-            '축 선 속성 설정
-            F2_Chart_순매수.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-            F2_Chart_순매수.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
-            F2_Chart_순매수.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
-            F2_Chart_순매수.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+                ''Lebel 설정 - 이건 소수점 2째자리까지만 표기하도록 하는 기능인거 같음 - 필요 없을 듯
+                'txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+            End If
 
-            F2_Chart_순매수.ChartAreas(i).AxisY2.LabelStyle.Format = "{0:0.00}"
         Next
 
+        '축 선 속성 설정
+        F2_Chart_순매수.ChartAreas("ChartArea_0").AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        F2_Chart_순매수.ChartAreas("ChartArea_0").AxisX.MajorGrid.LineColor = Color.Gray
+        F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY.MajorGrid.LineColor = Color.Gray
+        F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.LabelStyle.Format = "{0:0.00}"
         F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY.IsStartedFromZero = False
+
     End Sub
     Private Sub F2_DrawWinFormGraph(ByVal chartNumber As Integer)
 
@@ -321,58 +330,58 @@ Public Class Form2
             For i As Integer = 0 To F2_Chart_순매수.Series.Count - 1
                 F2_Chart_순매수.Series(i).Points.Clear()
             Next
-
-            'Dim For_Series As String = "For_" + chartNumber.ToString()
-            Dim For_Kig_Series As String = "For_Kig_" + chartNumber.ToString()
-            Dim oneMinute_Series As String = "oneMinute_" + chartNumber.ToString()
-            Dim PIP_Series As String = "PIP_" + chartNumber.ToString()
+            Dim oneMinute_Series As String = "oneMinute_0"
             Dim retIndex As Integer = 0
 
             Dim min As Single = Single.MaxValue
             Dim max As Single = Single.MinValue
 
-
             For i As Integer = 0 To currentIndex_순매수
-
-                Dim target순매수 As Long = Get순매수(i)
-
+                '코스피 지수 입력
                 F2_Chart_순매수.Series(oneMinute_Series).Points.AddXY(i, 순매수리스트(i).코스피지수) '오른쪽 이중축에 적용 - 
                 F2_Chart_순매수.Series(oneMinute_Series).Points(i).AxisLabel = Format("{0}", 순매수리스트(i).sTime)
-
-                If i >= 4 Then
-                    'F2_Chart_순매수.Series(For_Series).Points.AddXY(i, 순매수리스트(i).외국인순매수) '순매수는 2분이 지나야 정상적인 데이터를 가지기 때문에 3번인덱스 이상에서만 표시한다
-                    retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
-
-                    Dim str As String = String.Format("시간:{0}{1}외국인:{2}{3}외+연:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).외국인순매수, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
-                    'F2_Chart_순매수.Series(For_Series).Points(retIndex).ToolTip = str
-                    F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
-                    F2_Chart_순매수.Series(oneMinute_Series).Points(i).ToolTip = str
-                End If
-
                 min = Math.Min(min, 순매수리스트(i).코스피지수)
                 max = Math.Max(max, 순매수리스트(i).코스피지수)
             Next
+
+            For j As Integer = 0 To 2
+
+                Dim For_Kig_Series As String = "For_Kig_" + j.ToString()
+
+                For i As Integer = 4 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
+
+                    If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
+                        Dim target순매수 As Long = Get순매수(i, j)
+                        retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
+                        Dim str As String = String.Format("시간:{0}{1}구분:{2}{3}순매수:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, j, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
+                        F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
+                    End If
+
+                Next
+            Next
+
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = max + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = min - 1
 
             'PIP 시리즈를 표시한다
             If currentIndex_순매수 >= 4 Then
-                For i As Integer = 0 To PIP_Point_Lists.Length - 1
-                    Dim targetPointCount As Integer = Val(txt_TargetPointCount.Text)
 
-                    If PIP_Point_Lists(i).PointCount = targetPointCount Then '원하는 pointCount와 같은 점수만을 화면에 표시한다
+                For i As Integer = 0 To 2
+                    Dim PIP_Series As String = "PIP_" + i.ToString()
+                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
                         If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
-
                             For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
                                 Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-                                Dim target순매수 As Long = Get순매수(point)
+                                Dim target순매수 As Long = Get순매수(point, i)
                                 F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
                             Next
 
                         End If
 
                     End If
+
                 Next
+
             End If
 
             '신호를 그린다
@@ -400,7 +409,7 @@ Public Class Form2
 
                     If s.A15_현재상태 = 1 Then '끝점
                         F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
-                        F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, Get순매수(currentIndex_순매수))
+                        F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, Get순매수(currentIndex_순매수, 0))
                     Else
                         F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
                         If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, s.A05_신호해제순매수)
@@ -561,22 +570,9 @@ Public Class Form2
 
     End Sub
 
-    Private Sub btn_점의수줄이기_Click(sender As Object, e As EventArgs) Handles btn_점의수줄이기.Click
 
-        If Val(txt_TargetPointCount.Text) >= 3 Then
-            Dim n As Integer = Val(txt_TargetPointCount.Text) - 1
-            txt_TargetPointCount.Text = n.ToString()
-            DrawGraph()
-        End If
-    End Sub
 
-    Private Sub btn_점의수늘리기_Click(sender As Object, e As EventArgs) Handles btn_점의수늘리기.Click
-        If Val(txt_TargetPointCount.Text) <= 9 Then
-            Dim n As Integer = Val(txt_TargetPointCount.Text) + 1
-            txt_TargetPointCount.Text = n.ToString()
-            DrawGraph()
-        End If
-    End Sub
+
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cmb_F2_순매수기준.Items.Clear()
@@ -1439,7 +1435,7 @@ Public Class Form2
         손절매수준설정(남은날짜)
     End Sub
 
-    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles Label8.Click
+    Private Sub Label8_Click(sender As Object, e As EventArgs)
 
     End Sub
 

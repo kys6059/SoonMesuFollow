@@ -39,6 +39,7 @@ Module Module_For1Min
         Dim 마지막선기울기 As Double
         Dim 마지막선거리합 As Double
         Dim PoinIndexList As List(Of Integer)
+        Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관
 
     End Structure
 
@@ -73,7 +74,8 @@ Module Module_For1Min
             일분옵션데이터(i).Initialize()
         Next
 
-        ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
+        'ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
+        ReDim PIP_Point_Lists(2) '0 - 외국인 + 기관, 1 - 외국인, 2 - 기관
 
         TargetDate = 0
         currentIndex_1MIn = -1
@@ -160,13 +162,12 @@ Module Module_For1Min
 
         Dim minPoint = 2
         Dim 최대포인트수 As Single = Val(Form2.txt_F2_최대포인트수.Text)
-        Dim maxPoint As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 6), 최대포인트수)
+        Dim pointCount As Integer = Math.Min(Math.Ceiling(currentIndex_순매수 / 6), 최대포인트수)
 
-        If maxPoint >= 2 Then
-            ReDim PIP_Point_Lists(maxPoint - minPoint)
-        Else
+        If pointCount < 2 Then pointCount = 2
+
+        If currentIndex_순매수 <= 4 Then
             이전순매수방향 = "중립"
-            ReDim PIP_Point_Lists(0)
             If SoonMesuShinhoList Is Nothing Then
                 SoonMesuShinhoList = New List(Of 순매수신호_탬플릿)
             Else
@@ -174,17 +175,18 @@ Module Module_For1Min
             End If
         End If
 
-        For i As Integer = 0 To maxPoint - minPoint 'PIP Point수가 2개부터 최대점(10개)까지 표준편차와 point들을 계산한다
+        For i As Integer = 0 To 2 '0 - 외국인+기관, 1 - 외국인, 2 - 기관
             If currentIndex_순매수 >= 4 Then
-                Dim pointCount = i + minPoint
-                Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount)
 
+                Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount, i)
+
+                PIP_Point_Lists(i).dataSource = i
                 PIP_Point_Lists(i).PointCount = pointCount
                 PIP_Point_Lists(i).PoinIndexList = pipIndexList
-                PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount)
-                PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount)
+                PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount, i)
+                PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount, i)
                 PIP_Point_Lists(i).마지막신호 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
-                'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount)
+                'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount,i)
 
                 If Form2.chk_F2_화면끄기.Checked = False Then
                     Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호)
@@ -196,32 +198,10 @@ Module Module_For1Min
             End If
         Next
 
-        '평균거리가 줄어들다가 늘어나는 점이 있으면 그 점을 화면에 표시한다. 단 평균거리는 0보다 크고 1보다 작아야 한다
-        PIP적합포인트인덱스 = Math.Max(maxPoint - minPoint, 0)
-
-        Dim 선행_포인트_마진 As Single = Val(Form2.txt_선행_포인트_마진.Text)
-        For i As Integer = 1 To maxPoint - minPoint
-            If PIP_Point_Lists(i - 1).표준편차 < currentIndex_순매수 / 10 And PIP_Point_Lists(i - 1).표준편차 > 0 Then  ' 앞에게 왜 필요한지 모르겠으나 표준편차가 매우 큰 조건에서 만족하지 못하는 현상이 있음 - 앞에 조건을 삭제하니까 더 안좋아져서 다시 부활함 221019
-
-                If PIP_Point_Lists(i).표준편차 > PIP_Point_Lists(i - 1).표준편차 * 선행_포인트_마진 Then
-                    PIP적합포인트인덱스 = i - 1
-                    Exit For
-                End If
-            End If
-        Next
-
-        '포인트를 고정하는 시험을 위해 복사함  -- 이거는 매우 안좋아서 다시는 검토하지 않기로 함 221019
-        'PIP적합포인트인덱스 = Math.Max(maxPoint - minPoint, 0)
-
-        If PIP_Point_Lists.Length > 0 Then
-            Form2.txt_TargetPointCount.Text = PIP_Point_Lists(PIP적합포인트인덱스).PointCount.ToString()
-        End If
-
-
     End Sub
 
     '아직 사용하지 않음
-    Private Function Calc_PIP마지막선거리합계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+    Private Function Calc_PIP마지막선거리합계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer, ByVal dataSource As Integer) As Double
 
         If PointCount < 3 Then Return 0
 
@@ -229,19 +209,19 @@ Module Module_For1Min
         Dim RightPipIndex = pipIndexList(PointCount - 2)
         Dim LastPoint = pipIndexList(PointCount - 1)
 
-        Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), LastPoint, Get순매수(LastPoint)) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
+        Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex, dataSource), RightPipIndex, Get순매수(RightPipIndex, dataSource), LastPoint, Get순매수(LastPoint, dataSource)) '이전 선을 기준으로 현재 마지막점의 거리를 계산한다
         Return distance
 
     End Function
 
-    Public Function Get순매수(ByVal index As Integer) As Long
+    Public Function Get순매수(ByVal index As Integer, ByVal dataSource As Integer) As Long
         Dim ret As Long = 0
-        If Form2.cmb_F2_순매수기준.SelectedIndex = 0 Then
+        If dataSource = 0 Then
             ret = 순매수리스트(index).외국인_기관_순매수
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 1 Then
-            ret = 순매수리스트(index).외국인_연기금_순매수
-        ElseIf Form2.cmb_F2_순매수기준.SelectedIndex = 2 Then
+        ElseIf dataSource = 1 Then
             ret = 순매수리스트(index).외국인순매수
+        ElseIf dataSource = 2 Then
+            ret = 순매수리스트(index).기관순매수
         End If
         Return ret
     End Function
@@ -265,12 +245,12 @@ Module Module_For1Min
         Return 신호
     End Function
 
-    Private Function Calc_PIP마지막선기울기계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+    Private Function Calc_PIP마지막선기울기계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer, ByVal dataSource As Integer) As Double
 
         Dim x1 As Double = pipIndexList(PointCount - 2)
         Dim x2 As Double = pipIndexList(PointCount - 1)
-        Dim y1 As Double = Get순매수(x1)
-        Dim y2 As Double = Get순매수(x2)
+        Dim y1 As Double = Get순매수(x1, dataSource)
+        Dim y2 As Double = Get순매수(x2, dataSource)
 
         Dim 기울기 As Double = (y2 - y1) / (x2 - x1)
 
@@ -278,7 +258,7 @@ Module Module_For1Min
 
     End Function
 
-    Private Function Calc_PIP거리계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer) As Double
+    Private Function Calc_PIP거리계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer, ByVal dataSource As Integer) As Double
 
         LastIndex = Math.Min(LastIndex, 760) '759번째 인덱스가 1520분이다 항상 이때까지만 계산한다
 
@@ -305,7 +285,7 @@ Module Module_For1Min
 
             Else '거리측정
 
-                Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), i, Get순매수(i))
+                Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex, dataSource), RightPipIndex, Get순매수(RightPipIndex, dataSource), i, Get순매수(i, dataSource))
 
                 If distance > maxDistance Then
                     maxDistance = distance
@@ -324,10 +304,7 @@ Module Module_For1Min
 
     End Function
 
-    Public Function PIP_PD(ByVal LastIndex As Integer, ByVal n As Integer) As List(Of Integer)
-
-        'rawData는 외국인순매수+연기금순매수값으로 한다
-        '9시 2분부터 값이 정상적으로 들어오기 때문에 0,1,2번 값은 버리고 3번인덱스부터 계산한다
+    Public Function PIP_PD(ByVal LastIndex As Integer, ByVal n As Integer, ByVal dataSource As Integer) As List(Of Integer) '여기서 dataSource은 0 - 외국인+기관, 1 - 외국인, 2 - 기관
 
         LastIndex = Math.Min(LastIndex, 760) '759번째 인덱스가 1520분이다 항상 이때까지만 계산한다
 
@@ -360,7 +337,7 @@ Module Module_For1Min
 
                 Else '거리측정
 
-                    Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex), RightPipIndex, Get순매수(RightPipIndex), i, Get순매수(i))
+                    Dim distance As Double = PerpendichalrDistance(leftPipIndex, Get순매수(leftPipIndex, dataSource), RightPipIndex, Get순매수(RightPipIndex, dataSource), i, Get순매수(i, dataSource))
 
                     If distance > maxDistance Then
                         maxDistance = distance

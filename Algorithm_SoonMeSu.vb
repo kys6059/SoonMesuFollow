@@ -189,7 +189,7 @@ Module Algorithm_SoonMeSu
         shinho.A02_발생시간 = 순매수리스트(currentIndex_순매수).sTime
         shinho.A03_신호ID = 신호ID
 
-        shinho.A04_신호발생순매수 = Get순매수(currentIndex_순매수)
+        shinho.A04_신호발생순매수 = Get순매수(currentIndex_순매수, 0)
         shinho.A05_신호해제순매수 = 0
         shinho.A06_신호발생종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
         shinho.A07_신호해제종합주가지수 = 0
@@ -259,7 +259,7 @@ Module Algorithm_SoonMeSu
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A03_신호ID = str And s.A15_현재상태 = 1 Then  '죽어야하는 신호이고 현재상태가 살아있는 상태라면
 
-                    s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
+                    s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
                     s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
                     s.A15_현재상태 = 0
@@ -389,7 +389,7 @@ Module Algorithm_SoonMeSu
 
                     '청산할 때 하는 프로세스
                     If 매도사유 <> "" Then
-                        s.A05_신호해제순매수 = Get순매수(currentIndex_순매수)
+                        s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
                         s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
                         s.A15_현재상태 = 0
