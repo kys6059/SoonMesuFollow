@@ -1,4 +1,6 @@
 ﻿Option Explicit On
+Imports System.Drawing.Text
+Imports System.Net.Security
 
 Module Module_For1Min
 
@@ -35,7 +37,7 @@ Module Module_For1Min
     Structure PIP탬플릿
         Dim PointCount As Integer
         Dim 표준편차 As Double
-        Dim 마지막신호 As String '상승 -1, 보합 - 0, 하락 = -1
+        Dim 마지막신호_점수 As Integer '매우상승 2, 상승 1, 0, 하락 -1, 매우하락 -2
         Dim 마지막선기울기 As Double
         Dim 마지막선거리합 As Double
         Dim PoinIndexList As List(Of Integer)
@@ -61,7 +63,7 @@ Module Module_For1Min
 
     Public PIP적합포인트인덱스 As Integer = 0
 
-    Public 이전순매수방향 As String
+
 
     Public 신호최소유지시간index As Integer = 6 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
 
@@ -185,11 +187,11 @@ Module Module_For1Min
                 PIP_Point_Lists(i).PoinIndexList = pipIndexList
                 PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount, i)
                 PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount, i)
-                PIP_Point_Lists(i).마지막신호 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
+                PIP_Point_Lists(i).마지막신호_점수 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
                 'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount,i)
 
                 If Form2.chk_F2_화면끄기.Checked = False Then
-                    Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호)
+                    Dim str As String = String.Format("pipIndexList({0}), 평균거리는={1},기울기={2},신호점수={3}  ", pointCount, Math.Round(PIP_Point_Lists(i).표준편차, 2), Math.Round(PIP_Point_Lists(i).마지막선기울기, 2), PIP_Point_Lists(i).마지막신호_점수)
                     For j As Integer = 0 To pipIndexList.Count - 1
                         str += pipIndexList(j).ToString() & ", "
                     Next
@@ -197,6 +199,26 @@ Module Module_For1Min
                 End If
             End If
         Next
+
+        CalcTotalShinhoLevel()  '외국인과 기관의 합계 신호를 계산하여  전역변수에 넣는다  ---------------- 신규합계_마지막신호
+
+    End Sub
+    '외국인과 기관의 합계 신호를 계산하여  전역변수에 넣는다  ---------------- 신규합계_마지막신호
+    Private Sub CalcTotalShinhoLevel()
+
+        Dim ret As Integer = 0
+        Dim 신호발생점수기준 As Integer = Val(Form2.txt_F2_신호발생점수기준.Text)
+        For i As Integer = 1 To 2
+            ret = ret + PIP_Point_Lists(i).마지막신호_점수
+        Next
+
+        If ret >= 신호발생점수기준 Then
+            신규합계_마지막신호 = "상승"
+        ElseIf ret <= (신호발생점수기준 * -1) Then
+            신규합계_마지막신호 = "하락"
+        Else
+            신규합계_마지막신호 = "중립"
+        End If
 
     End Sub
 
@@ -226,23 +248,30 @@ Module Module_For1Min
         Return ret
     End Function
 
-    Private Function 마지막신호판단(ByVal 기울기 As Double) As String
+    Private Function 마지막신호판단(ByVal 기울기 As Double) As Integer
 
-        Dim 신호 As String = "중립"
-        Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-        Dim 기준 As Single
-        If Val(순매수리스트(currentIndex_순매수).sTime) > 매수마감시간 Then
-            기준 = Val(Form2.txt_F2_마감시간이후기울기.Text)
-        Else
-            기준 = Val(Form2.txt_F2_상승하락기울기기준.Text)
+        Dim ret As Integer = 0
+        Dim 기준_1차 As Single = Val(Form2.txt_F2_상승하락기울기기준.Text)
+        Dim 기준_2차 As Single = Val(Form2.txt_F2_2차상승판정기준기울기.Text)
+
+        Dim 절대치_기울기 As Single = Math.Abs(기울기)
+        If 절대치_기울기 > 기준_2차 Then
+
+            If 기울기 > 0 Then
+                ret = 2
+            Else
+                ret = -2
+            End If
+
+        ElseIf 절대치_기울기 > 기준_1차 Then
+            If 기울기 > 0 Then
+                ret = 1
+            Else
+                ret = -1
+            End If
         End If
 
-        If 기울기 > 기준 Then
-            신호 = "상승"
-        ElseIf 기울기 < (기준 * -1) Then
-            신호 = "하락"
-        End If
-        Return 신호
+        Return ret
     End Function
 
     Private Function Calc_PIP마지막선기울기계산(ByVal pipIndexList As List(Of Integer), ByVal LastIndex As Integer, ByVal PointCount As Integer, ByVal dataSource As Integer) As Double

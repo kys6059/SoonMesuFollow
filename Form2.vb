@@ -120,7 +120,7 @@ Public Class Form2
             grid_3.Columns(1).HeaderText = "포인트수"
             grid_3.Columns(2).HeaderText = "평균거리"
             grid_3.Columns(3).HeaderText = "기울기"
-            grid_3.Columns(4).HeaderText = "신호"
+            grid_3.Columns(4).HeaderText = "신호_점수"
             grid_3.Columns(5).HeaderText = "포인트 리스트"
             grid_3.Columns(0).Width = 50
             grid_3.Columns(5).Width = 250
@@ -131,8 +131,13 @@ Public Class Form2
                 grid_3.Rows(i).Cells(0).Value = i
                 grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
                 grid_3.Rows(i).Cells(2).Value = Math.Round(PIP_Point_Lists(i).표준편차, 2)
-                grid_3.Rows(i).Cells(3).Value = Math.Round(PIP_Point_Lists(i).마지막선기울기, 2)
-                grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(i).마지막신호
+
+                If i = 0 Then
+                    grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
+                Else
+                    grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(i).마지막신호_점수
+                    grid_3.Rows(i).Cells(3).Value = Math.Round(PIP_Point_Lists(i).마지막선기울기, 2)
+                End If
 
                 Dim str As String = ""
                 For j = 0 To PIP_Point_Lists(i).PointCount - 1
@@ -142,12 +147,12 @@ Public Class Form2
                 grid_3.Rows(i).Cells(5).Value = str
                 grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
 
-                For k = 0 To grid_3.ColumnCount - 1
-                    If PIP적합포인트인덱스 = i Then
-                        grid_3.Rows(i).Cells(k).Style.BackColor = Color.Yellow
-                        grid_3.Rows(i).Cells(k).Style.ForeColor = Color.Red
-                    End If
-                Next
+                'For k = 0 To grid_3.ColumnCount - 1
+                '    If PIP적합포인트인덱스 = i Then
+                '        grid_3.Rows(i).Cells(k).Style.BackColor = Color.Yellow
+                '        grid_3.Rows(i).Cells(k).Style.ForeColor = Color.Red
+                '    End If
+                'Next
 
             Next
 
@@ -284,11 +289,11 @@ Public Class Form2
                 F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
                 F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
                 If i = 0 Then
-                    F2_Chart_순매수.Series(str).Color = Color.Magenta
+                    F2_Chart_순매수.Series(str).Color = Color.Gray
                 ElseIf i = 1 Then
-                    F2_Chart_순매수.Series(str).Color = Color.YellowGreen
+                    F2_Chart_순매수.Series(str).Color = Color.Blue
                 Else
-                    F2_Chart_순매수.Series(str).Color = Color.Violet
+                    F2_Chart_순매수.Series(str).Color = Color.Green
                 End If
 
                 str = "PIP_" + i.ToString()
@@ -302,9 +307,9 @@ Public Class Form2
                 If i = 0 Then
                     F2_Chart_순매수.Series(str).Color = Color.DarkRed
                 ElseIf i = 1 Then
-                    F2_Chart_순매수.Series(str).Color = Color.Red
+                    F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
                 Else
-                    F2_Chart_순매수.Series(str).Color = Color.OrangeRed
+                    F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
                 End If
 
 
@@ -345,9 +350,7 @@ Public Class Form2
             Next
 
             For j As Integer = 0 To 2
-
                 Dim For_Kig_Series As String = "For_Kig_" + j.ToString()
-
                 For i As Integer = 4 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
 
                     If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
@@ -923,7 +926,6 @@ Public Class Form2
 
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
-        Dim 마감시간이후기울기 As String = txt_F2_마감시간이후기울기.Text
         Dim 중간청산목표이익 As String = txt_F2_중간청산비율.Text
         Dim 기준가격 As String = txt_JongmokTargetPrice.Text
         If txt_week_정규.Text = "W" Then isWeekly = True
@@ -1332,7 +1334,7 @@ Public Class Form2
                                                                                 txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(ee)
                                                                                 txt_F2_손절매차.Text = 손절차(f)
                                                                                 txt_F2_익절차.Text = 익절차(g)
-                                                                                txt_F2_마감시간이후기울기.Text = 매수마감시간후기울기(h)
+                                                                                txt_F2_2차상승판정기준기울기.Text = 매수마감시간후기울기(h)
                                                                                 txt_F2_최초매매시작시간.Text = 최초매매시작시간(i)
                                                                                 txt_F2_1차매매_기준_기울기.Text = temp_시작전허용기울기(j)
                                                                                 txt_F2_TimeoutTime.Text = timeoutTime(k)
@@ -1350,7 +1352,7 @@ Public Class Form2
                                                                                 txt_F2_PIP_CALC_MAX_INDEX.Refresh()
                                                                                 txt_F2_손절매차.Refresh()
                                                                                 txt_F2_익절차.Refresh()
-                                                                                txt_F2_마감시간이후기울기.Refresh()
+                                                                                txt_F2_2차상승판정기준기울기.Refresh()
                                                                                 cmb_F2_순매수기준.Refresh()
                                                                                 txt_F2_최초매매시작시간.Refresh()
                                                                                 txt_F2_TimeoutTime.Refresh()
