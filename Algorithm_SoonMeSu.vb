@@ -199,7 +199,7 @@ Module Algorithm_SoonMeSu
 
         shinho.A50_조건전체 = SoonMesuSimulation_조건
         shinho.A51_순매수기준 = Form2.cmb_F2_순매수기준.Text
-        shinho.A52_기울기 = Form2.txt_F2_상승하락기울기기준.Text
+        shinho.A52_기울기 = Form2.txt_F2_1차상승판정기울기기준.Text
         shinho.A53_선행포인트수_마진 = Form2.txt_선행_포인트_마진.Text
         shinho.A54_IsReal = 0
         shinho.A56_기준가격 = Form2.txt_JongmokTargetPrice.Text
@@ -311,11 +311,20 @@ Module Algorithm_SoonMeSu
                     '매수매도가 약해짐을 인지하여 청산함  - 최소 유지시간 필요
 
                     Dim 마지막순매수index As Integer = Get마지막순매수Index()
+                    Dim 해제기준점수 As Integer = Val(Form2.txt_F2_신호해제점수기준.Text)
+                    Dim 해제기준점수_UP, 해제기준점수_DOWN As Integer
+                    If 해제기준점수 = 0 Then
+                        해제기준점수_UP = 0
+                        해제기준점수_DOWN = 0
+                    Else
+                        해제기준점수_UP = 1
+                        해제기준점수_DOWN = -1
+                    End If
 
                     If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
                         Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
-                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 1 Then 매도사유 = "weaked"
-                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > -1 Then 매도사유 = "weaked"
+                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 해제기준점수_UP Then 매도사유 = "weaked"
+                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 해제기준점수_DOWN Then 매도사유 = "weaked"
                     End If
 
                     'timeout 확인

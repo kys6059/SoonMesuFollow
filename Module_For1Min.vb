@@ -251,7 +251,7 @@ Module Module_For1Min
     Private Function 마지막신호판단(ByVal 기울기 As Double) As Integer
 
         Dim ret As Integer = 0
-        Dim 기준_1차 As Single = Val(Form2.txt_F2_상승하락기울기기준.Text)
+        Dim 기준_1차 As Single = Val(Form2.txt_F2_1차상승판정기울기기준.Text)
         Dim 기준_2차 As Single = Val(Form2.txt_F2_2차상승판정기준기울기.Text)
 
         Dim 절대치_기울기 As Single = Math.Abs(기울기)
