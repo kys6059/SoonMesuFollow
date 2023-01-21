@@ -283,7 +283,7 @@ Module Algorithm_SoonMeSu
                     End If
                     SoonMesuShinhoList(i) = s
 
-                    이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
+                    '이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
                 End If
             Next
         End If
@@ -392,9 +392,9 @@ Module Algorithm_SoonMeSu
                             Form2.lbl_F2_매매신호.Text = "0"  '해제가 되면 타이머로 돌면서 체크해서 매매신호와 잔고를 비교해서 다르면 청산한다  -- 이건 시간에 관계없이 해야 함
                             Form2.lbl_F2_매매신호.BackColor = Color.White
 
-                            이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
+                        '이걸 하면 같은 방향으로 다시 사는데 그걸 방지하도록 주석처리 함 ------------------  이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
 
-                            If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
+                        If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
                         Else  '살아 있으면 중간청산 체크하기
                             Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
                             If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다

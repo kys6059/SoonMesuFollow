@@ -1280,16 +1280,16 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"1.0", "2.0", "3.0", "4.0", "5.0"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0", "08.0", "10.0", "12.0", "14.0"}       'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120", "160", "200"}        'D
-        Dim 매수시작시간() As String = {"102000"}           'E
-        Dim 매수마감시간() As String = {"113000"}           'F
+        Dim 최대포인트수() As String = {"03", "04"}               'A
+        Dim 일차상승기울기기준() As String = {"3.0", "3.5", "4.0", "4.5"}        'B
+        Dim 이차상승기울기기준() As String = {"05.0", "06.0", "07.0"}       'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
+        Dim 매수시작시간() As String = {"101000", "102000"}           'E
+        Dim 매수마감시간() As String = {"113000", "120000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
         Dim timeoutTime() As String = {"151500"}            'H
         Dim 신호발생점수() As String = {"3"}       'I
-        Dim 해제기준점수() As String = {"0"}       'J
+        Dim 해제기준점수() As String = {"0", "1"}       'J
 
         Dim 손절차() As String = {"09"} 'f
         Dim 익절차() As String = {"12"} 'g
