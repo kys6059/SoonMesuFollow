@@ -59,7 +59,6 @@ Module Algorithm_SoonMeSu
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-        Dim 최초매매시작시간 As Integer = Val(Form2.txt_F2_최초매매시작시간.Text)
         Dim timeoutTime As Integer = Val(Form2.txt_F2_TimeoutTime.Text)
         'If Val(순매수리스트(currentIndex_순매수).sTime) > startTime Then Return  '매수시작시간전에는 아예 신호가 안뜨게 만든다 ---- 이걸 하니깐 켈리지수가 급락함 제외함
 
@@ -102,36 +101,49 @@ Module Algorithm_SoonMeSu
                 End If
             End If
 
-        Else  '시작시간 전에 1개만 매매 - 31일 중 2건 발생함 2건 다 성공 
-            'If currentIndex_순매수 > 4 Then
+        Else  '시작시간 전에 1개만 매매
+            If currentIndex_순매수 > 4 Then
 
-            '    Dim 시작전신호 = PIP_Point_Lists(0).마지막신호
-            '    Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
-            '    Dim 시작전허용기울기 As Single = Val(Form2.txt_F2_1차매매_기준_기울기.Text)
-            '    If SoonMesuShinhoList.Count < 1 Then
-            '        If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
 
-            '            If 시작전신호 = "상승" Then
-            '                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
-            '                SoonMesuShinhoList.Add(shinho)
-            '                If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
-            '                Form2.lbl_F2_매매신호.Text = "1"
-            '                Form2.lbl_F2_매매신호.BackColor = Color.Magenta
-            '                이전순매수방향 = 시작전신호
-            '            ElseIf 시작전신호 = "하락" Then
-            '                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")             '신규 신호 입력하기
-            '                SoonMesuShinhoList.Add(shinho)
-            '                If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
-            '                Form2.lbl_F2_매매신호.Text = "-1"
-            '                Form2.lbl_F2_매매신호.BackColor = Color.Green
-            '                이전순매수방향 = 시작전신호
-            '            End If
-            '        End If
+                Dim 시작전허용기울기 As Single = Val(Form2.txt_F2_1차매매_기준_기울기.Text)
+                Dim 최초매매시작시간 As Integer = Val(Form2.txt_F2_최초매매시작시간.Text)
 
-            '    Else
-            '        살아있는신호확인하기()
-            '    End If
-            'End If
+                Dim 시작전기울기 = Calc_직선기울기계산(0)
+
+                Dim 현재상승하락상태 As String
+                If 시작전기울기 > 0 Then
+                    현재상승하락상태 = "상승"
+                Else
+                    현재상승하락상태 = "하락"
+                End If
+
+
+                If SoonMesuShinhoList.Count < 1 Then
+                    If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
+
+                        Dim 현재신호점수합계 = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수  '현재도 직선의 방향과 같은 방향이 유지되는 걸 확인하기 위해서 현재 마지막신호점수를 확인한다   '전체적으로 오르지만 만약 둘이 다른 방향이라면 매수하지 않는다
+
+                        If 현재상승하락상태 = "상승" Then ' And 현재신호점수합계 > 0 Then
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
+                            SoonMesuShinhoList.Add(shinho)
+                            If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
+                            Form2.lbl_F2_매매신호.Text = "1"
+                            Form2.lbl_F2_매매신호.BackColor = Color.Magenta
+                            이전순매수방향 = 현재상승하락상태
+                        ElseIf 현재상승하락상태 = "하락" Then ' And 현재신호점수합계 < 0 Then
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")             '신규 신호 입력하기
+                            SoonMesuShinhoList.Add(shinho)
+                            If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
+                            Form2.lbl_F2_매매신호.Text = "-1"
+                            Form2.lbl_F2_매매신호.BackColor = Color.Green
+                            이전순매수방향 = 현재상승하락상태
+                        End If
+                    End If
+
+                Else
+                    살아있는신호확인하기()
+                End If
+            End If
 
         End If
 
@@ -209,19 +221,6 @@ Module Algorithm_SoonMeSu
         shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
         shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
-
-        '콜풋종목정보 - 매수의 경우
-        '        If 신호ID = "A_UP" Then
-        '       shinho.A08_콜풋 = 0
-        '      ElseIf 신호ID = "A_DOWN" Then
-        '     shinho.A08_콜풋 = 1
-        '    End If
-        '   shinho.A09_행사가 = 일분옵션데이터(shinho.A08_콜풋).HangSaGa
-        '
-        'Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(shinho.A02_발생시간))
-        'shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-        'shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-        'shinho.A16_이익률 = Math.Round(shinho.A14_현재가격 / shinho.A10_신호발생가격, 3)
 
 
         '콜풋종목정보 - 매도의 경우
@@ -328,52 +327,57 @@ Module Algorithm_SoonMeSu
                     End If
 
                     'timeout 확인
-                    If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
+                    If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
+                        매도사유 = "timeout"
+                    End If
 
-                        '매매시작시간 전 신호 발생해제조건 확인  - 현재의 방향이 당초의 방향과 틀린걸 확인하면 청산한다
-                        Dim 최초매매시작시간 As Integer = Val(Form2.txt_F2_최초매매시작시간.Text)
-                        Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
-                        If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then
+                    '매매시작시간 전 신호 발생해제조건 확인  - 현재의 방향이 당초의 방향과 틀린걸 확인하면 청산한다
+                    Dim 최초매매시작시간 As Integer = Val(Form2.txt_F2_최초매매시작시간.Text)
+                    Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+                    If Val(순매수리스트(currentIndex_순매수).sTime) >= 최초매매시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then
 
-                            '0번의 기울기가 작아지는 것을 보고 해제하는 기준으로 하는 방식
-                            Dim 시작전신호 = 신규합계_마지막신호
-                            Dim 시작전기울기 = Math.Abs(PIP_Point_Lists(0).마지막선기울기)
-                            Dim 시작전매도해제기울기 As Single = Val(Form2.txt_F2_1차매매_해제_기울기.Text)
+                        '0번의 기울기가 작아지는 것을 보고 해제하는 기준으로 하는 방식
+                        Dim 시작전기울기 = Calc_직선기울기계산(0)
+                        Dim 시작전매도해제기울기 As Single = Val(Form2.txt_F2_1차매매_해제_기울기.Text)
 
-                            If 시작전기울기 < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
-                                매도사유 = "son_2"
-                            End If
-
+                        If 시작전기울기 < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
+                            매도사유 = "son_2"
                         End If
 
-                        If s.A03_신호ID = "A_UP" Then
-                            s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
-                        ElseIf s.A03_신호ID = "A_DOWN" Then
-                            s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
-                        End If
+                        Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
+                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 0 Then 매도사유 = "B_weaked"
+                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 0 Then 매도사유 = "B_weaked"
 
-                        '매도의 경우
-                        Dim 일분옵션데이터_CurrentIndex As Integer
-                        If EBESTisConntected = True And currentIndex_1MIn >= 0 Then
-                            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-                        Else
-                            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-                        End If
-                        If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                    End If
 
-                        If s.A14_현재가격 > 0 Then
-                            s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                        End If
-                        '옵션가격 기준 손절매
-                        Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-                        If s.A21_환산이익율 < 옵션가손절매기준 Then
-                            매도사유 = "option_son"
-                        End If
+                    '아래는 그냥 정보를 업데이트하는 코드들
+                    '종합주가지수 차이를 계산한다
+                    If s.A03_신호ID = "A_UP" Then
+                        s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
+                    ElseIf s.A03_신호ID = "A_DOWN" Then
+                        s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+                    End If
 
+                    Dim 일분옵션데이터_CurrentIndex As Integer   '----------------------------------------------------------------------------------------------------------  당일 계산하면 오류 나는게 아마도 이부분일 듯
+                    If EBESTisConntected = True And currentIndex_1MIn >= 0 Then
+                        일분옵션데이터_CurrentIndex = currentIndex_1MIn  '----------------------------------------------------------------------------------------------------------  당일 계산하면 오류 나는게 아마도 이부분일 듯
+                    Else
+                        일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    End If
+                    If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
 
-                        '청산할 때 하는 프로세스
-                        If 매도사유 <> "" Then
+                    If s.A14_현재가격 > 0 Then
+                        s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                    End If
+                    '옵션가격 기준 손절매
+                    Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+                    If s.A21_환산이익율 < 옵션가손절매기준 Then
+                        매도사유 = "option_son"
+                    End If
+
+                    '청산할 때 하는 프로세스
+                    If 매도사유 <> "" Then
                             s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
                             s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
@@ -392,11 +396,17 @@ Module Algorithm_SoonMeSu
                             Form2.lbl_F2_매매신호.Text = "0"  '해제가 되면 타이머로 돌면서 체크해서 매매신호와 잔고를 비교해서 다르면 청산한다  -- 이건 시간에 관계없이 해야 함
                             Form2.lbl_F2_매매신호.BackColor = Color.White
 
-                        '이걸 하면 같은 방향으로 다시 사는데 그걸 방지하도록 주석처리 함 ------------------  이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
+                        If EBESTisConntected = True Then
+                            Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
+                        End If
 
-                        If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
-                        Else  '살아 있으면 중간청산 체크하기
-                            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+                        If Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then   'B알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
+                            이전순매수방향 = "중립"
+                        End If
+
+
+                    Else  '살아 있으면 중간청산 체크하기
+                        Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
                             If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다
 
                             Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked

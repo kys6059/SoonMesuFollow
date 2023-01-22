@@ -203,6 +203,21 @@ Module Module_For1Min
         CalcTotalShinhoLevel()  '외국인과 기관의 합계 신호를 계산하여  전역변수에 넣는다  ---------------- 신규합계_마지막신호
 
     End Sub
+
+    Public Function Calc_직선기울기계산(ByVal DataSourceNumber As Integer) As Single
+
+        Dim ret = 0.0
+
+        If currentIndex_순매수 >= 4 Then
+            Dim pointCount As Integer = 2
+            Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount, DataSourceNumber)
+            ret = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount, DataSourceNumber)
+        End If
+
+        Return ret
+
+    End Function
+
     '외국인과 기관의 합계 신호를 계산하여  전역변수에 넣는다  ---------------- 신규합계_마지막신호
     Private Sub CalcTotalShinhoLevel()
 
