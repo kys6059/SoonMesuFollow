@@ -340,7 +340,7 @@ Module Algorithm_SoonMeSu
                         Dim 시작전기울기 = Calc_직선기울기계산(0)
                         Dim 시작전매도해제기울기 As Single = Val(Form2.txt_F2_1차매매_해제_기울기.Text)
 
-                        If 시작전기울기 < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
+                        If Math.Abs(시작전기울기) < 시작전매도해제기울기 Then   '최소유지시간을 적용하니 성적이 안좋아서 제거함 20221030
                             매도사유 = "son_2"
                         End If
 

@@ -502,7 +502,7 @@ Partial Class Form2
         Me.txt_F2_1차매매_기준_기울기.Name = "txt_F2_1차매매_기준_기울기"
         Me.txt_F2_1차매매_기준_기울기.Size = New System.Drawing.Size(134, 28)
         Me.txt_F2_1차매매_기준_기울기.TabIndex = 19
-        Me.txt_F2_1차매매_기준_기울기.Text = "35"
+        Me.txt_F2_1차매매_기준_기울기.Text = "40"
         '
         'txt_F2_1차매매_해제_기울기
         '
@@ -512,7 +512,7 @@ Partial Class Form2
         Me.txt_F2_1차매매_해제_기울기.Name = "txt_F2_1차매매_해제_기울기"
         Me.txt_F2_1차매매_해제_기울기.Size = New System.Drawing.Size(134, 28)
         Me.txt_F2_1차매매_해제_기울기.TabIndex = 18
-        Me.txt_F2_1차매매_해제_기울기.Text = "15"
+        Me.txt_F2_1차매매_해제_기울기.Text = "26"
         '
         'txt_F2_기관순매수적용비율
         '

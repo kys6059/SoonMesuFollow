@@ -1295,9 +1295,9 @@ Public Class Form2
         Dim 옵션기준손절매() As String = {"-0.24"} 'M
         Dim 중간청산이익목표() As String = {"0.45"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"20", "25", "30", "35", "40"} 'O
-        Dim 최초매매시작시간() As String = {"98000", "91000", "91200", "91500", "92000"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"18", "16", "14", "12"} 'Q
+        Dim temp_시작전허용기울기() As String = {"40"} 'O
+        Dim 최초매매시작시간() As String = {"91000"} 'P
+        Dim 시작전매도해제기울기_TEMP() As Double = {"22", "26", "28", "24", "30", "32", "34"} 'Q
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then

@@ -657,7 +657,6 @@ Module realtime_ebest
             If Count <= 1 Then
                 If 거래량AtFirst > 0 Then
                     timeIndex = Count   'Time의 Count
-
                 Else
                     timeIndex = 0
                 End If
@@ -681,9 +680,9 @@ Module realtime_ebest
             Next
 
 
-            ''이게 왜 여기 있는지 모르겠음
+
             If callput = 1 Then 'DB 저장 로직
-                'InsertTargetDateData(TargetDate, "option_weekly") '1분데이터 저장
+                InsertTargetDateData(TargetDate, "option_weekly") '5분데이터 저장 마지막에 저장 누를 때나 자동 저장될 때 5분 데이터를 따로 모아서 저장함
             End If
 
         Else  '1분봉이면 1분 데이터에 저장한다
@@ -774,6 +773,7 @@ Module realtime_ebest
             XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "1")
             XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "500") '비압축모델인 경우 최대 500건 - 8.3시간
             XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "sdate", 0, TargetDate) '종료일자
             XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate) '종료일자
             XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N") '비압축모델 N
 
