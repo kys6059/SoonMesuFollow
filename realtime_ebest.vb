@@ -680,8 +680,10 @@ Module realtime_ebest
                 Data(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
             Next
 
+
+            ''이게 왜 여기 있는지 모르겠음
             If callput = 1 Then 'DB 저장 로직
-                InsertTargetDateData(TargetDate, "option_weekly") '1분데이터 저장
+                'InsertTargetDateData(TargetDate, "option_weekly") '1분데이터 저장
             End If
 
         Else  '1분봉이면 1분 데이터에 저장한다

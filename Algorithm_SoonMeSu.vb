@@ -119,7 +119,7 @@ Module Algorithm_SoonMeSu
 
 
                 If SoonMesuShinhoList.Count < 1 Then
-                    If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And 시작전기울기 > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
+                    If Val(순매수리스트(currentIndex_순매수).sTime) > 최초매매시작시간 And Math.Abs(시작전기울기) > 시작전허용기울기 Then   '최초매매시작시간보다 클 때 방향이 생기고 신호가 하나도 없는 상태일 때 - 기울기조건 추가
 
                         Dim 현재신호점수합계 = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수  '현재도 직선의 방향과 같은 방향이 유지되는 걸 확인하기 위해서 현재 마지막신호점수를 확인한다   '전체적으로 오르지만 만약 둘이 다른 방향이라면 매수하지 않는다
 

@@ -123,7 +123,9 @@ Public Class Form2
             grid_3.Columns(4).HeaderText = "신호_점수"
             grid_3.Columns(5).HeaderText = "포인트 리스트"
             grid_3.Columns(0).Width = 50
+            grid_3.Columns(3).Width = 120
             grid_3.Columns(5).Width = 250
+
 
             '데이터 입력하기
 
@@ -133,10 +135,13 @@ Public Class Form2
                 grid_3.Rows(i).Cells(2).Value = Math.Round(PIP_Point_Lists(i).표준편차, 2)
 
                 If i = 0 Then
+                    Dim 시작전기울기 = Calc_직선기울기계산(0)
+                    grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(PIP_Point_Lists(i).마지막선기울기, 2).ToString() & ", (0) " & Math.Round(시작전기울기, 2).ToString()
                     grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
                 Else
+                    grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(PIP_Point_Lists(i).마지막선기울기, 2).ToString()
                     grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(i).마지막신호_점수
-                    grid_3.Rows(i).Cells(3).Value = Math.Round(PIP_Point_Lists(i).마지막선기울기, 2)
+
                 End If
 
                 Dim str As String = ""
@@ -146,13 +151,7 @@ Public Class Form2
                 Next
                 grid_3.Rows(i).Cells(5).Value = str
                 grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
-
-                'For k = 0 To grid_3.ColumnCount - 1
-                '    If PIP적합포인트인덱스 = i Then
-                '        grid_3.Rows(i).Cells(k).Style.BackColor = Color.Yellow
-                '        grid_3.Rows(i).Cells(k).Style.ForeColor = Color.Red
-                '    End If
-                'Next
+                grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
 
             Next
 
@@ -1296,9 +1295,9 @@ Public Class Form2
         Dim 옵션기준손절매() As String = {"-0.24"} 'M
         Dim 중간청산이익목표() As String = {"0.45"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"20", "25", "30", "35", "40", "45"} 'O
-        Dim 최초매매시작시간() As String = {"91000", "90800", "91200"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"12", "15", "18"} 'Q
+        Dim temp_시작전허용기울기() As String = {"20", "25", "30", "35", "40"} 'O
+        Dim 최초매매시작시간() As String = {"98000", "91000", "91200", "91500", "92000"} 'P
+        Dim 시작전매도해제기울기_TEMP() As Double = {"18", "16", "14", "12"} 'Q
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
