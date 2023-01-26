@@ -116,21 +116,29 @@ Public Class Form2
                 grid_3.Columns(i).Width = 70
             Next
 
-            grid_3.Columns(0).HeaderText = "번호"
+            grid_3.Columns(0).HeaderText = " 주체"
             grid_3.Columns(1).HeaderText = "포인트수"
             grid_3.Columns(2).HeaderText = "평균거리"
             grid_3.Columns(3).HeaderText = "기울기"
             grid_3.Columns(4).HeaderText = "신호_점수"
             grid_3.Columns(5).HeaderText = "포인트 리스트"
-            grid_3.Columns(0).Width = 50
-            grid_3.Columns(3).Width = 120
-            grid_3.Columns(5).Width = 250
+            grid_3.Columns(3).Width = 100
+            grid_3.Columns(5).Width = 140
 
 
             '데이터 입력하기
 
             For i = 0 To PIP_Point_Lists.Length - 1
-                grid_3.Rows(i).Cells(0).Value = i
+
+                Dim 주체 As String
+                If i = 0 Then
+                    주체 = " (합계)"
+                ElseIf i = 1 Then
+                    주체 = " (외국인)"
+                Else
+                    주체 = " (기관)"
+                End If
+                grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
                 grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
                 grid_3.Rows(i).Cells(2).Value = Math.Round(PIP_Point_Lists(i).표준편차, 2)
 

@@ -296,6 +296,8 @@ Module Algorithm_SoonMeSu
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A15_현재상태 = 1 Then
 
+                    Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
+
                     Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
                     Dim 매도사유 As String = ""
 
@@ -303,9 +305,9 @@ Module Algorithm_SoonMeSu
                     If s.A03_신호ID = "A_UP" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
                     If s.A03_신호ID = "A_DOWN" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
 
-                    '익절조건 확인
-                    If s.A03_신호ID = "A_UP" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-                    If s.A03_신호ID = "A_DOWN" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+                    '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126
+                    If s.A03_신호ID = "A_UP" And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 And 현재매수매도점수 < 3 Then 매도사유 = "ik"
+                    If s.A03_신호ID = "A_DOWN" And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 And 현재매수매도점수 > -3 Then 매도사유 = "ik"
 
                     '매수매도가 약해짐을 인지하여 청산함  - 최소 유지시간 필요
 
@@ -321,9 +323,12 @@ Module Algorithm_SoonMeSu
                     End If
 
                     If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
-                        Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
-                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 해제기준점수_UP Then 매도사유 = "weaked"
-                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 해제기준점수_DOWN Then 매도사유 = "weaked"
+                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 해제기준점수_UP Then
+                            매도사유 = "weak"
+                        End If
+                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 해제기준점수_DOWN Then
+                            매도사유 = "weak"
+                        End If
                     End If
 
                     'timeout 확인
@@ -344,9 +349,8 @@ Module Algorithm_SoonMeSu
                             매도사유 = "son_2"
                         End If
 
-                        Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
-                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 0 Then 매도사유 = "B_weaked"
-                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 0 Then 매도사유 = "B_weaked"
+                        If s.A03_신호ID = "A_UP" And 현재매수매도점수 < 0 Then 매도사유 = "B_weak"
+                        If s.A03_신호ID = "A_DOWN" And 현재매수매도점수 > 0 Then 매도사유 = "B_weak"
 
                     End If
 
@@ -359,7 +363,7 @@ Module Algorithm_SoonMeSu
                     End If
 
                     Dim 일분옵션데이터_CurrentIndex As Integer   '----------------------------------------------------------------------------------------------------------  당일 계산하면 오류 나는게 아마도 이부분일 듯
-                    If EBESTisConntected = True And currentIndex_1MIn >= 0 Then
+                    If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
                         일분옵션데이터_CurrentIndex = currentIndex_1MIn  '----------------------------------------------------------------------------------------------------------  당일 계산하면 오류 나는게 아마도 이부분일 듯
                     Else
                         일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
@@ -378,23 +382,23 @@ Module Algorithm_SoonMeSu
 
                     '청산할 때 하는 프로세스
                     If 매도사유 <> "" Then
-                            s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
-                            s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
+                        s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
+                        s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
 
-                            s.A15_현재상태 = 0
-                            s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
-                            s.A19_매도Index = currentIndex_순매수
-                            s.A20_매도사유 = 매도사유
-                            s.A22_신호해제가격 = s.A14_현재가격
+                        s.A15_현재상태 = 0
+                        s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
+                        s.A19_매도Index = currentIndex_순매수
+                        s.A20_매도사유 = 매도사유
+                        s.A22_신호해제가격 = s.A14_현재가격
 
-                            If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                                If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다
-                                s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
-                            End If
+                        If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
+                            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+                            If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다
+                            s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
+                        End If
 
-                            Form2.lbl_F2_매매신호.Text = "0"  '해제가 되면 타이머로 돌면서 체크해서 매매신호와 잔고를 비교해서 다르면 청산한다  -- 이건 시간에 관계없이 해야 함
-                            Form2.lbl_F2_매매신호.BackColor = Color.White
+                        Form2.lbl_F2_매매신호.Text = "0"  '해제가 되면 타이머로 돌면서 체크해서 매매신호와 잔고를 비교해서 다르면 청산한다  -- 이건 시간에 관계없이 해야 함
+                        Form2.lbl_F2_매매신호.BackColor = Color.White
 
                         If EBESTisConntected = True Then
                             Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
@@ -407,17 +411,17 @@ Module Algorithm_SoonMeSu
 
                     Else  '살아 있으면 중간청산 체크하기
                         Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                            If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다
+                        If s.A59_남은날짜 Mod 7 = 0 And s.A10_신호발생가격 > 2.0 Then 중간청산목표이익율 = 중간청산목표이익율 * 0.7   '마지막날 큰게 사지면 중간청산 목표이익을 0.315로 바꾼다
 
-                            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-                            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
-                                s.A17_중간매도Flag = 1
-                            End If
+                        Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+                        If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
+                            s.A17_중간매도Flag = 1
                         End If
-
-                        SoonMesuShinhoList(i) = s
-
                     End If
+
+                    SoonMesuShinhoList(i) = s
+
+                End If
             Next
         End If
     End Sub
@@ -550,7 +554,7 @@ Module Algorithm_SoonMeSu
                         Dim 매도가능수량 As Integer = 0
                         If 현재신호 = 1 Then  '상승베팅 - put 매도
 
-                            If is중간청산Flag(1) = False Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면 true임
+                            If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
                                 Dim code As String = 일분옵션데이터(1).Code
 
                                 Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
@@ -562,7 +566,7 @@ Module Algorithm_SoonMeSu
 
                         ElseIf 현재신호 = -1 Then
 
-                            If is중간청산Flag(0) = False Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면 true임
+                            If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
                                 Dim code As String = 일분옵션데이터(0).Code
                                 Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_최대허용구매개수.Text)
                                 Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
