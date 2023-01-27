@@ -226,6 +226,9 @@ Module realtime_ebest
 
         Dim count As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.GetBlockCount("t0441OutBlock1")        ' Occurs 의 갯수를 구한다.
         If count = 0 Then
+            If 콜현재환매개수 > 0 Or 풋현재환매개수 > 0 Then
+                Add_Log("일반", "잔고청산 완료")
+            End If
             콜최대구매개수 = 0
             콜현재환매개수 = 0
             풋최대구매개수 = 0
