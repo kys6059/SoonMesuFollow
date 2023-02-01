@@ -122,7 +122,7 @@ Public Class Form2
             grid_3.Columns(3).HeaderText = "기울기"
             grid_3.Columns(4).HeaderText = "신호_점수"
             grid_3.Columns(5).HeaderText = "포인트 리스트"
-            grid_3.Columns(3).Width = 100
+            grid_3.Columns(3).Width = 120
             grid_3.Columns(5).Width = 140
 
 
