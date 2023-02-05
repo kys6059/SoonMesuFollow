@@ -312,12 +312,12 @@ Module realtime_ebest
     End Sub
 
 
-    Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer)
+    Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String)
 
         If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
         XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-        Dim adjustPrice As Single = Math.Max(price - 1.0, 0.1)
+        Dim adjustPrice As Single = Math.Max(price - 0.3, 0.1)
 
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
@@ -330,11 +330,11 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
         If nSuccess < 0 Then Add_Log("일반", " 한종목매도 오류: " & nSuccess.ToString())
 
-        Add_Log("일반", "매도 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
+        Add_Log(str, "매도 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
 
     End Sub
 
-    Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer)
+    Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String)
 
         If count > 0 Then
 
@@ -354,9 +354,9 @@ Module realtime_ebest
             Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
             If nSuccess < 0 Then Add_Log("일반", " 한종목매수 오류: " & nSuccess.ToString())
 
-            Add_Log("일반", "매수 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
+            Add_Log(str, "매수 진입 Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
         Else
-            Add_Log("일반", code & " 0개 매수가 호출됨" & " Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
+            Add_Log(str, code & " 0개 매수가 호출됨" & " Code : " & code & ", 가격 = " & price.ToString() & ", 수량 = " & count.ToString())
         End If
 
     End Sub
@@ -461,6 +461,9 @@ Module realtime_ebest
         Dim 사용예정증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMgn", 0))
         Dim 사용예정현금증거금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "UsePreargMnyMgn", 0))
         Dim 주문가능금액 As Long = Val(XAQuery_구매가능수량조회.GetFieldData("CFOAQ10100OutBlock2", "OrdAbleAmt", 0))
+
+        '매수를 위해서 여유를 남긴다
+        신규주문가능수량 = Math.Min(Math.Round(신규주문가능수량 * 0.9, 0), 신규주문가능수량 - 1)
 
         If currentIndex_순매수 >= 0 Then
             If EBESTisConntected = True Then  '매수마감시간안에서만 보여줌
@@ -738,7 +741,7 @@ Module realtime_ebest
         Dim price As Single = it.price(callput, 3)
         Dim count As Integer = 1
 
-        한종목매도(code, price, count)
+        한종목매도(code, price, count, "테스트")
         Return True
     End Function
 
@@ -856,13 +859,13 @@ Module realtime_ebest
                         'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
-                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
 
                 End If
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
                     Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매도(종목번호, it.A10_현재가, count)
+                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
                 End If
 
             Next

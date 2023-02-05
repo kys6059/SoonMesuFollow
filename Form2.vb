@@ -1248,7 +1248,7 @@ Public Class Form2
                         'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
-                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count)
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
                 End If
 
             Next
@@ -1266,7 +1266,7 @@ Public Class Form2
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
                     Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매도(종목번호, it.A10_현재가, count)
+                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
                 End If
 
             Next

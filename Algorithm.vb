@@ -334,7 +334,7 @@ Module Algorithm
                         str = str & "-8개로 조정"
                     End If
                     If count > 0 Then
-                        한종목매수(it.A01_종복번호, it.A10_현재가, count)
+                        한종목매수(it.A01_종복번호, it.A10_현재가, count, "매도를청산")
                         Add_Log("", str)
                     End If
 
@@ -373,7 +373,7 @@ Module Algorithm
                         count = Math.Min(count, 8) '한번에 최대 8개만 청산한다
                         str = str & "-8개로 조정"
                     End If
-                    If count > 0 Then 한종목매도(it.A01_종복번호, it.A10_현재가, count)
+                    If count > 0 Then 한종목매도(it.A01_종복번호, it.A10_현재가, count, "매수를청산")
                     Add_Log("", str)
                 End If
             Next
