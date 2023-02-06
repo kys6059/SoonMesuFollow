@@ -284,7 +284,8 @@ Public Class Form2
         F2_Chart_순매수.Series.Add(str)
         F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
         F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-        F2_Chart_순매수.Series(str).Color = Color.Black
+        F2_Chart_순매수.Series(str).Color = Color.Gray
+        F2_Chart_순매수.Series(str).BorderWidth = 3
         F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
         For i As Integer = 0 To 2 '0 - 외+기
@@ -319,9 +320,15 @@ Public Class Form2
                     F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
                 End If
 
+                str = "Shinho_" + i.ToString()
+                F2_Chart_순매수.Series.Add(str)
+                F2_Chart_순매수.Series(str).ChartArea = "ChartArea_0"
+                F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                F2_Chart_순매수.Series(str).Color = Color.DarkRed
+                F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+                F2_Chart_순매수.Series(str).BorderWidth = 3
 
-                ''Lebel 설정 - 이건 소수점 2째자리까지만 표기하도록 하는 기능인거 같음 - 필요 없을 듯
-                'txt_ebest_id.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+
             End If
 
         Next
@@ -373,12 +380,13 @@ Public Class Form2
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Maximum = max + 1
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = min - 1
 
-            'PIP 시리즈를 표시한다
+
             If currentIndex_순매수 >= 4 Then
 
                 For i As Integer = 0 To 2
                     Dim PIP_Series As String = "PIP_" + i.ToString()
                     If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
+                        'PIP 시리즈를 표시한다
                         If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
                             For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
                                 Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
@@ -394,20 +402,46 @@ Public Class Form2
 
             End If
 
-            '신호를 그린다
             If SoonMesuShinhoList IsNot Nothing Then
                 For i As Integer = 0 To SoonMesuShinhoList.Count - 1
 
-                    Dim Str As String = "Shinho_" + i.ToString()
+                    Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                    Dim Str As String
+
+                    For j As Integer = 0 To 2  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
+                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
+                            '신호를 그리든데 각각의 순매수라인에 그린다
+                            Str = "Shinho_" + j.ToString()
+
+                            If s.A08_콜풋 = 0 Then
+                                F2_Chart_순매수.Series(Str).Color = Color.Blue
+                            Else
+                                F2_Chart_순매수.Series(Str).Color = Color.Red
+                            End If
+
+                            'If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A04_신호발생순매수)  '시작점 - 오리지날
+                            If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, Get순매수(s.A01_발생Index, j))  '시작점
+
+                            If s.A15_현재상태 = 1 Then '끝점
+                                F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                                F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, Get순매수(currentIndex_순매수, j))
+                            Else
+                                F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+                                If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, Get순매수(s.A19_매도Index, j))
+                            End If
+                        End If
+
+                    Next
+
+                    '주가지수 그리기
+
+                    Str = "kospi_" + i.ToString()
                     F2_Chart_순매수.Series.Add(Str)
                     F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
                     F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                    F2_Chart_순매수.Series(Str).Color = Color.DarkRed
-                    F2_Chart_순매수.Series(Str).YAxisType = AxisType.Primary
-
-                    F2_Chart_순매수.Series(Str).BorderWidth = 3
-
-                    Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                    F2_Chart_순매수.Series(Str).Color = Color.Green
+                    F2_Chart_순매수.Series(Str).YAxisType = AxisType.Secondary
+                    F2_Chart_순매수.Series(Str).BorderWidth = 2
 
                     If s.A08_콜풋 = 0 Then
                         F2_Chart_순매수.Series(Str).Color = Color.Blue
@@ -415,35 +449,7 @@ Public Class Form2
                         F2_Chart_순매수.Series(Str).Color = Color.Red
                     End If
 
-                    If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A04_신호발생순매수)  '시작점
-
-                    If s.A15_현재상태 = 1 Then '끝점
-                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
-                        F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, Get순매수(currentIndex_순매수, 0))
-                    Else
-                        F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
-                        If currentIndex_순매수 >= s.A19_매도Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A19_매도Index, s.A05_신호해제순매수)
-                    End If
-
-                    '주가지수 그리기
-                    Str = "kospi_" + i.ToString()
-
-                    F2_Chart_순매수.Series.Add(Str)
-                    F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
-                    F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                    F2_Chart_순매수.Series(Str).Color = Color.Green
-                    F2_Chart_순매수.Series(Str).YAxisType = AxisType.Secondary
-                    F2_Chart_순매수.Series(Str).BorderWidth = 1
-
-                    If s.A08_콜풋 = 0 Then
-                        F2_Chart_순매수.Series(Str).Color = Color.Green
-                    Else
-                        F2_Chart_순매수.Series(Str).Color = Color.Orange
-                    End If
-
                     If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A06_신호발생종합주가지수)  '시작점
-
-
                     If s.A15_현재상태 = 1 Then '끝점
                         F2_Chart_순매수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
                         F2_Chart_순매수.Series(Str).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).코스피지수)
@@ -1248,7 +1254,7 @@ Public Class Form2
                         'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
-                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
                 End If
 
             Next
@@ -1266,7 +1272,7 @@ Public Class Form2
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
                     Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
+                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
                 End If
 
             Next

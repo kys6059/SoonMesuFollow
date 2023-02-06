@@ -312,7 +312,7 @@ Module realtime_ebest
     End Sub
 
 
-    Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String)
+    Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String, ByVal 지정가시장가타입 As String)
 
         If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
         XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
@@ -324,7 +324,7 @@ Module realtime_ebest
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "1")      '매매구분 매도-1, 매수 -2
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
-        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
+        XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, 지정가시장가타입)   '호가유형 지정가 00, 시장가 03
         XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
         Dim nSuccess As Integer = XAQuery_매수매도.Request(False)
@@ -334,20 +334,20 @@ Module realtime_ebest
 
     End Sub
 
-    Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String)
+    Public Sub 한종목매수(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String, ByVal 지정가시장가타입 As String)
 
         If count > 0 Then
 
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = price + 1.1
+            Dim adjustPrice As Single = Math.Round(price + 0.2)
 
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoIsuNo", 0, code) '종목번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "BnsTpCode", 0, "2")      '매매구분 매도-1, 매수 -2
-            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, "03")   '호가유형 지정가 00, 시장가 03
+            XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdprcPtnCode", 0, 지정가시장가타입)   '호가유형 지정가 00, 시장가 03
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "FnoOrdPrc", 0, adjustPrice)             '주문가격 double 타입
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "OrdQty", 0, count) ' 주문수량 long타입
 
@@ -741,7 +741,7 @@ Module realtime_ebest
         Dim price As Single = it.price(callput, 3)
         Dim count As Integer = 1
 
-        한종목매도(code, price, count, "테스트")
+        한종목매도(code, price, count, "테스트", "03") '호가유형 지정가 00, 시장가 03
         Return True
     End Function
 
@@ -859,13 +859,13 @@ Module realtime_ebest
                         'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
-                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03")  '호가유형 지정가 00, 시장가 03
 
                 End If
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
                     Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
+                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
                 End If
 
             Next

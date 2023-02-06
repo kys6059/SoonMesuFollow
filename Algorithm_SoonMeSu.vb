@@ -475,7 +475,7 @@ Module Algorithm_SoonMeSu
                                 count = Math.Min(잔고와청산가능, 콜최대구매개수 - 콜현재환매개수)
                                 count = Math.Min(count, 매매1회최대수량)
                                 If count > 0 Then
-                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
+                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
                                     is처분중 = True
                                 End If
 
@@ -491,7 +491,7 @@ Module Algorithm_SoonMeSu
                                 count = Math.Min(잔고와청산가능, 풋최대구매개수 - 풋현재환매개수)
                                 count = Math.Min(count, 매매1회최대수량)
                                 If count > 0 Then
-                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산")
+                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
                                     is처분중 = True
                                 End If
                             End If
@@ -511,7 +511,7 @@ Module Algorithm_SoonMeSu
                                     count = Math.Min(잔고와청산가능, 콜중간청산개수 - 콜현재환매개수)
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매수(종목번호, it.A10_현재가, count, "매도중간청산")
+                                        한종목매수(종목번호, it.A10_현재가, count, "매도중간청산", "03")  '호가유형 지정가 00, 시장가 03
                                         is처분중 = True
                                     End If
                                 End If
@@ -528,7 +528,7 @@ Module Algorithm_SoonMeSu
                                     count = Math.Min(잔고와청산가능, 풋중간청산개수 - 풋현재환매개수)  '중간청산개수는 최대구매개수와 동일하게 증가, 초기화하기 때문에 이걸 기준으로 환매개수를 빼서 중간청산개수까지만 매수한다
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매수(종목번호, it.A10_현재가, count, "매도중간청산")
+                                        한종목매수(종목번호, it.A10_현재가, count, "매도중간청산", "03")  '호가유형 지정가 00, 시장가 03
                                         is처분중 = True
                                     End If
                                 End If
@@ -546,7 +546,7 @@ Module Algorithm_SoonMeSu
 
                                 Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
                                 If count > 0 Then
-                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
+                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
                                 End If
 
                             End If
@@ -559,7 +559,7 @@ Module Algorithm_SoonMeSu
 
                                 Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
                                 If count > 0 Then
-                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산")
+                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03)
                                 End If
                             End If
                         End If
@@ -588,7 +588,7 @@ Module Algorithm_SoonMeSu
                                 Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
                                 count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
                                 Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
-                                If count > 0 Then 한종목매도(code, price, count, "신규매도")
+                                If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
 
                                 '매수를 추가함 - 20230205  - 상승베팅
                                 If Form2.chk_F2_매수도실행.Checked = True Then 추가매수실행(0)
@@ -602,7 +602,7 @@ Module Algorithm_SoonMeSu
                                 Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
                                 count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
                                 Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
-                                If count > 0 Then 한종목매도(code, price, count, "신규매도")
+                                If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
 
                                 '매수를 추가함 - 20230205 - 하락베팅
                                 If Form2.chk_F2_매수도실행.Checked = True Then 추가매수실행(1)
@@ -625,7 +625,7 @@ Module Algorithm_SoonMeSu
             Dim price As Single = it.price(direction, 3)
             Dim count As Integer = 매수수량계산(price)
             If count > 0 Then
-                한종목매수(종목번호, price, count, "신규매수")
+                한종목매수(종목번호, price, count, "신규매수", "00")  '호가유형 지정가 00, 시장가 03
             End If
         End If
     End Sub
@@ -633,9 +633,9 @@ Module Algorithm_SoonMeSu
     Private Function 매수수량계산(ByVal price As Single) As Integer
         Dim count As Integer = 0
 
-        Dim adj_price As Single = price + 0.1
-
-        count = Math.Round(주문가능금액 / adj_price, 0)   '단순히 현재금액으로 가능한 최대구매개수만 먼저 뽑는다
+        Dim adj_price As Single = price + 0.2
+        Dim totalAmount As Long = adj_price * 250000
+        count = Math.Round(주문가능금액 / totalAmount, 0)   '단순히 현재금액으로 가능한 최대구매개수만 먼저 뽑는다
 
         '매수 최대구매개수와 비교를 한다         현재계좌에서 최대구매개수 가져오기
         Dim max매수카운트 As Integer = 0
