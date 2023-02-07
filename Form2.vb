@@ -320,15 +320,6 @@ Public Class Form2
                     F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
                 End If
 
-                str = "Shinho_" + i.ToString()
-                F2_Chart_순매수.Series.Add(str)
-                F2_Chart_순매수.Series(str).ChartArea = "ChartArea_0"
-                F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                F2_Chart_순매수.Series(str).Color = Color.DarkRed
-                F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
-                F2_Chart_순매수.Series(str).BorderWidth = 3
-
-
             End If
 
         Next
@@ -411,12 +402,18 @@ Public Class Form2
                     For j As Integer = 0 To 2  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
                         If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
                             '신호를 그리든데 각각의 순매수라인에 그린다
-                            Str = "Shinho_" + j.ToString()
+                            Str = "Shinho_" + i.ToString() + j.ToString()
+                            F2_Chart_순매수.Series.Add(Str)
+                            F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
+                            F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                            F2_Chart_순매수.Series(Str).Color = Color.DarkRed
+                            F2_Chart_순매수.Series(Str).YAxisType = AxisType.Primary
+                            F2_Chart_순매수.Series(Str).BorderWidth = 3
 
                             If s.A08_콜풋 = 0 Then
-                                F2_Chart_순매수.Series(Str).Color = Color.Blue
+                                F2_Chart_순매수.Series(Str).Color = Color.SpringGreen
                             Else
-                                F2_Chart_순매수.Series(Str).Color = Color.Red
+                                F2_Chart_순매수.Series(Str).Color = Color.Orange
                             End If
 
                             'If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A04_신호발생순매수)  '시작점 - 오리지날
@@ -433,15 +430,15 @@ Public Class Form2
 
                     Next
 
-                    '주가지수 그리기
+                    '주가지수에 신호 그리기
 
                     Str = "kospi_" + i.ToString()
                     F2_Chart_순매수.Series.Add(Str)
                     F2_Chart_순매수.Series(Str).ChartArea = "ChartArea_0"
                     F2_Chart_순매수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                    F2_Chart_순매수.Series(Str).Color = Color.Green
+                    F2_Chart_순매수.Series(Str).Color = Color.Red
                     F2_Chart_순매수.Series(Str).YAxisType = AxisType.Secondary
-                    F2_Chart_순매수.Series(Str).BorderWidth = 2
+                    F2_Chart_순매수.Series(Str).BorderWidth = 3
 
                     If s.A08_콜풋 = 0 Then
                         F2_Chart_순매수.Series(Str).Color = Color.Blue
@@ -1449,11 +1446,5 @@ Public Class Form2
         손절매수준설정(남은날짜)
     End Sub
 
-    Private Sub Label8_Click(sender As Object, e As EventArgs)
 
-    End Sub
-
-    Private Sub F2_Chart_순매수_PaddingChanged(sender As Object, e As EventArgs) Handles F2_Chart_순매수.PaddingChanged
-
-    End Sub
 End Class

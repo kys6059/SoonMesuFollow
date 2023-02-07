@@ -635,7 +635,7 @@ Module Algorithm_SoonMeSu
 
         Dim adj_price As Single = price + 0.2
         Dim totalAmount As Long = adj_price * 250000
-        count = Math.Round(주문가능금액 / totalAmount, 0)   '단순히 현재금액으로 가능한 최대구매개수만 먼저 뽑는다
+        count = Math.Round((주문가능금액 / totalAmount) / 2, 0)   '단순히 현재금액으로 가능한 최대구매개수만 먼저 뽑는다  - 가능갯수의 50%만 매수한다 (분산투자)
 
         '매수 최대구매개수와 비교를 한다         현재계좌에서 최대구매개수 가져오기
         Dim max매수카운트 As Integer = 0
