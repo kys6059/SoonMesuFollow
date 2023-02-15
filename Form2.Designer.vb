@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea9 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend9 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series9 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea10 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend10 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series10 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -342,16 +342,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea9.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea9)
-        Legend9.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend9)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(559, 222)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series9.ChartArea = "ChartArea1"
-        Series9.Legend = "Legend1"
-        Series9.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series9)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1197, 688)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -1139,16 +1139,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea10.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea10)
-        Legend10.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend10)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(1761, 222)
         Me.Chart1.Name = "Chart1"
-        Series10.ChartArea = "ChartArea1"
-        Series10.Legend = "Legend1"
-        Series10.Name = "Series1"
-        Me.Chart1.Series.Add(Series10)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1053, 688)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"

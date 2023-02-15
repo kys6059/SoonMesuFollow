@@ -264,30 +264,32 @@ Module realtime_ebest
 
                 If callput = "2" And it.A02_구분 = "매도" Then
                     If 콜최대구매개수 < it.A03_잔고수량 Then
+                        Add_Log("신규매도", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
                         콜최대구매개수 = it.A03_잔고수량
 
                         콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
-                        Add_Log("일반", String.Format("콜최대구매개수 변경 to  {0}, 중간청산갯수 = {1}", 콜최대구매개수, 콜중간청산개수))
+
                     ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
                         If temp <> 콜현재환매개수 Then
                             콜현재환매개수 = temp
-                            Add_Log("일반", "콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                            Add_Log("청산", "청산으로 안한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
                         End If
 
                     End If
                     콜잔고있음 = True
                 ElseIf callput = "3" And it.A02_구분 = "매도" Then
                     If 풋최대구매개수 < it.A03_잔고수량 Then
+                        Add_Log("신규매도", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
                         풋최대구매개수 = it.A03_잔고수량
                         풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
-                        Add_Log("일반", String.Format("풋최대구매개수 변경 to {0}, 중간청산갯수 = {1}", 풋최대구매개수, 풋중간청산개수))
-                        Add_Log("일반", "풋최대구매개수 변경 to  " & 풋최대구매개수.ToString())
+
+
                     ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
                         If temp <> 풋현재환매개수 Then
                             풋현재환매개수 = temp
-                            Add_Log("일반", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
+                            Add_Log("청산", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
                         End If
                     End If
                     풋잔고있음 = True
