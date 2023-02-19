@@ -319,8 +319,8 @@ Module Algorithm_SoonMeSu
                         해제기준점수_UP = 0
                         해제기준점수_DOWN = 0
                     Else
-                        해제기준점수_UP = 1
-                        해제기준점수_DOWN = -1
+                        해제기준점수_UP = 해제기준점수
+                        해제기준점수_DOWN = 해제기준점수 * -1
                     End If
 
                     If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
@@ -408,6 +408,15 @@ Module Algorithm_SoonMeSu
                         If Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then   'B알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
                             이전순매수방향 = "중립"
                         End If
+
+
+
+
+                        '이건 테스트용 - 이걸 하면 같은 방향일 때 다시 사짐 - 20230219
+                        '이전순매수방향 = "중립"
+
+
+
 
 
                     Else  '살아 있으면 중간청산 체크하기
