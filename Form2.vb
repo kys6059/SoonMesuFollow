@@ -288,6 +288,7 @@ Public Class Form2
         F2_Chart_순매수.Series(str).BorderWidth = 3
         F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
+
         For i As Integer = 0 To 2 '0 - 외+기
 
             If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then

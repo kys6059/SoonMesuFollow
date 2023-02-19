@@ -62,7 +62,8 @@ Module Algorithm_SoonMeSu
         Dim timeoutTime As Integer = Val(Form2.txt_F2_TimeoutTime.Text)
         'If Val(순매수리스트(currentIndex_순매수).sTime) > startTime Then Return  '매수시작시간전에는 아예 신호가 안뜨게 만든다 ---- 이걸 하니깐 켈리지수가 급락함 제외함
 
-        Dim ret As String = CalcAlgorithm_AB()
+        Dim ret As String = CalcAlgorithm_AB()  '상승이던 하강이던 기준점수(현재 3점)을 넘으면 신호를 만든다
+
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime Then  '매수시작시간전에는 아예 신호가 안뜨게 만들고 아래 이전순매수방향만 지정한다  '끝나는 시간도 정하니까 신호가 안떠서 반대방향 신호를 죽이지 않는 문제점 발생해서 시작 시간만 체크함
             If Val(순매수리스트(currentIndex_순매수).sTime) < timeoutTime + 500 Then
 
