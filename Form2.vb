@@ -412,9 +412,9 @@ Public Class Form2
                             F2_Chart_순매수.Series(Str).BorderWidth = 3
 
                             If s.A08_콜풋 = 0 Then
-                                F2_Chart_순매수.Series(Str).Color = Color.SpringGreen
-                            Else
                                 F2_Chart_순매수.Series(Str).Color = Color.Orange
+                            Else
+                                F2_Chart_순매수.Series(Str).Color = Color.SpringGreen
                             End If
 
                             'If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A04_신호발생순매수)  '시작점 - 오리지날
@@ -442,9 +442,9 @@ Public Class Form2
                     F2_Chart_순매수.Series(Str).BorderWidth = 3
 
                     If s.A08_콜풋 = 0 Then
-                        F2_Chart_순매수.Series(Str).Color = Color.Blue
-                    Else
                         F2_Chart_순매수.Series(Str).Color = Color.Red
+                    Else
+                        F2_Chart_순매수.Series(Str).Color = Color.Blue
                     End If
 
                     If currentIndex_순매수 >= s.A01_발생Index Then F2_Chart_순매수.Series(Str).Points.AddXY(s.A01_발생Index, s.A06_신호발생종합주가지수)  '시작점
@@ -906,21 +906,16 @@ Public Class Form2
                 If EBESTisConntected = True Then
                     XAQuery_EBEST_순매수현황조회함수() ' +  Received면 콜 분봉 조회
                 End If
-
             Case 2
                 If EBESTisConntected = True Then 계좌조회()
-                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
-
             Case 3
-                If EBESTisConntected = True Then 구매가능수량조회(0)
-
+                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
             Case 4
                 If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수_1분(1)
 
             Case 5
-                If EBESTisConntected = True Then 구매가능수량조회(1)
+                If EBESTisConntected = True Then 계좌조회()
                 If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
-
 
             Case 8
                 If EBESTisConntected = True Then F2_Clac_DisplayAllGrid()
@@ -938,7 +933,7 @@ Public Class Form2
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
         Dim 중간청산목표이익 As String = txt_F2_중간청산비율.Text
-        Dim 기준가격 As String = txt_JongmokTargetPrice.Text
+        Dim 기준가격 As String = txt_F2_켈리지수비율.Text
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         Select Case 남은날짜
@@ -1029,6 +1024,7 @@ Public Class Form2
 
             End If
             txt_TargetDate.Text = TargetDate
+            lbl_F2_최종투자금액.Text = Format(최종투자금액, "###,###,###,###,##0")
         End If
     End Sub
 
@@ -1304,12 +1300,12 @@ Public Class Form2
 
         Dim 손절차() As String = {"07"} 'K
         Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.24"} 'M
-        Dim 중간청산이익목표() As String = {"0.45"} 'N
+        Dim 옵션기준손절매() As String = {"-0.18", "-0.21", "-0.24", "-0.27", "-0.30", "-0.33", "-0.36"} 'M
+        Dim 중간청산이익목표() As String = {"0.30", "0.40", "0.45", "0.50", "0.60"} 'N
 
         Dim temp_시작전허용기울기() As String = {"40"} 'O
         Dim 최초매매시작시간() As String = {"91000"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"22", "26", "28", "24", "30", "32", "34"} 'Q
+        Dim 시작전매도해제기울기_TEMP() As Double = {"26"} 'Q
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then

@@ -50,6 +50,7 @@ Structure 평가종합Type
     Dim cts_medocd As String
     Dim 평가금액 As Long
     Dim 평가손익 As Long
+    Dim 현재까지주문금액 As Long
 End Structure
 
 Module realtime_ebest
@@ -84,7 +85,7 @@ Module realtime_ebest
     Public 콜중간청산개수 As Integer = 0
     Public 풋중간청산개수 As Integer = 0
 
-
+    Public 최종투자금액 As Long = 0
 
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
@@ -185,6 +186,11 @@ Module realtime_ebest
         주문가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "OrdAbleAmt", 0)) '주문가능금액
         인출가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "WthdwAbleAmt", 0))
 
+        If 최종투자금액 = 0 Then
+            Dim 켈리지수비율 As Single = Val(Form2.txt_F2_켈리지수비율.Text)
+            최종투자금액 = 주문가능금액 * 켈리지수비율
+        End If
+
         If TargetDate > 0 Then
 
         End If
@@ -224,6 +230,8 @@ Module realtime_ebest
         평가종합.평가금액 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tappamt", 0))
         평가종합.평가손익 = Val(XAQuery_선물옵션_잔고평가_이동평균조회.GetFieldData("t0441OutBlock", "tsunik", 0))
 
+        평가종합.현재까지주문금액 = 평가종합.평가금액 - 평가종합.평가손익
+
         Dim count As Integer = XAQuery_선물옵션_잔고평가_이동평균조회.GetBlockCount("t0441OutBlock1")        ' Occurs 의 갯수를 구한다.
         If count = 0 Then
             If 콜현재환매개수 > 0 Or 풋현재환매개수 > 0 Then
@@ -262,9 +270,9 @@ Module realtime_ebest
                 Dim 중간청산비율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
                 If 중간청산비율 <= 0 Then 중간청산비율 = 0.5
 
-                If callput = "2" And it.A02_구분 = "매도" Then
+                If callput = "2" And it.A02_구분 = "매수" Then
                     If 콜최대구매개수 < it.A03_잔고수량 Then
-                        Add_Log("신규매도", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
+                        Add_Log("신규매수", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
                         콜최대구매개수 = it.A03_잔고수량
 
                         콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
@@ -273,14 +281,14 @@ Module realtime_ebest
                         Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
                         If temp <> 콜현재환매개수 Then
                             콜현재환매개수 = temp
-                            Add_Log("청산", "청산으로 안한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                            Add_Log("청산", "청산으로 인한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
                         End If
 
                     End If
                     콜잔고있음 = True
-                ElseIf callput = "3" And it.A02_구분 = "매도" Then
+                ElseIf callput = "3" And it.A02_구분 = "매수" Then
                     If 풋최대구매개수 < it.A03_잔고수량 Then
-                        Add_Log("신규매도", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
+                        Add_Log("신규매수", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
                         풋최대구매개수 = it.A03_잔고수량
                         풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
 
@@ -307,6 +315,8 @@ Module realtime_ebest
                 풋중간청산개수 = 0
             End If
         End If
+
+
 
         Console.WriteLine(String.Format("잔고조회 카운트:{0}", count))
         Form2.Display계좌정보() '계좌정보를 다 가져 오면 화면에 한번 refresh해준다

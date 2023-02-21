@@ -424,7 +424,7 @@ Module Module_For1Min
 
             Console.WriteLine(str)
 
-            Dim Targetprice As Single = Val(Form2.txt_JongmokTargetPrice.Text)
+            Dim Targetprice As Single = Val(Form2.txt_F2_매수_기준가.Text)
             Dim targetCallIndex As Single = 1100.0
             Dim targetPutIndex As Single = 1100.0
 
