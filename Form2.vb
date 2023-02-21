@@ -938,24 +938,19 @@ Public Class Form2
 
         Select Case 남은날짜
             Case 0
-
-                중간청산목표이익 = "0.45"
+                중간청산목표이익 = "0.60"
 
             Case 1
 
-                중간청산목표이익 = "0.45"
-
             Case 2
 
-                중간청산목표이익 = "0.45"
 
             Case 3
 
-                중간청산목표이익 = "0.45"
                 chk_실거래실행.Checked = False
             Case 6
 
-                중간청산목표이익 = "0.45"
+
                 chk_실거래실행.Checked = False
         End Select
 

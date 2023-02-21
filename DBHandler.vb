@@ -417,10 +417,10 @@ Module DBHandler
                 InsertTargetDateData_1분(tempTargetDate)
                 Insert순매수이력데이터(tempTargetDate)
 
-                Threading.Thread.Sleep(2000)
+                Threading.Thread.Sleep(3000)
                 XAQuery_EBEST_분봉데이터호출함수(0)
 
-                Threading.Thread.Sleep(2000)
+                Threading.Thread.Sleep(4000)
                 XAQuery_EBEST_분봉데이터호출함수(1)
 
                 '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
