@@ -86,6 +86,8 @@ Module realtime_ebest
     Public 풋중간청산개수 As Integer = 0
 
     Public 최종투자금액 As Long = 0
+    Public 콜현재까지매수금액 As Long = 0
+    Public 풋현재까지매수금액 As Long = 0
 
     Public totalBuyingCount As Integer '--------------------------------------------------------------- 더이상 사용하지 않음
     Public BuyList As List(Of buytemplete) '--------------------------------------------------------------- 더이상 사용하지 않음
@@ -243,6 +245,8 @@ Module realtime_ebest
             풋현재환매개수 = 0
             콜중간청산개수 = 0
             풋중간청산개수 = 0
+            콜현재까지매수금액 = 0
+            풋현재까지매수금액 = 0
         Else
             Dim 콜잔고있음 As Boolean = False
             Dim 풋잔고있음 As Boolean = False
@@ -279,7 +283,7 @@ Module realtime_ebest
 
                     ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
-                        If temp <> 콜현재환매개수 Then
+                        If temp > 콜현재환매개수 Then
                             콜현재환매개수 = temp
                             Add_Log("청산", "청산으로 인한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
                         End If
@@ -295,7 +299,7 @@ Module realtime_ebest
 
                     ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                         Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
-                        If temp <> 풋현재환매개수 Then
+                        If temp > 풋현재환매개수 Then
                             풋현재환매개수 = temp
                             Add_Log("청산", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
                         End If
@@ -308,11 +312,13 @@ Module realtime_ebest
                 콜최대구매개수 = 0
                 콜현재환매개수 = 0
                 콜중간청산개수 = 0
+                콜현재까지매수금액 = 0
             End If
             If 풋잔고있음 = False Then
                 풋최대구매개수 = 0
                 풋현재환매개수 = 0
                 풋중간청산개수 = 0
+                풋현재까지매수금액 = 0
             End If
         End If
 
@@ -353,7 +359,7 @@ Module realtime_ebest
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = Math.Round(price + 0.2)
+            Dim adjustPrice As Single = Math.Round(price + 0.1)
 
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"

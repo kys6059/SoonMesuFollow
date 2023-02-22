@@ -588,7 +588,7 @@ Module Algorithm_SoonMeSu
                         Dim 매도가능수량 As Integer = 0
                         If 현재신호 = 1 Then  '상승베팅 
 
-                            If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+                            If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
 
                                 '매도 코드 주석처리함 20230221
                                 'Dim code As String = 일분옵션데이터(1).Code
@@ -604,7 +604,7 @@ Module Algorithm_SoonMeSu
 
                         ElseIf 현재신호 = -1 Then
 
-                            If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+                            If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
 
                                 '매도 코드 주석처리함 20230221
                                 'Dim code As String = 일분옵션데이터(0).Code
@@ -633,22 +633,38 @@ Module Algorithm_SoonMeSu
             Dim it As ListTemplate = optionList(targetIndex)
             Dim 종목번호 As String = it.Code(direction)
             Dim price As Single = it.price(direction, 3)
-            Dim count As Integer = 매수수량계산(price)
+            Dim count As Integer = 매수수량계산(price, direction)
             If count > 0 Then
                 한종목매수(종목번호, price, count, "신규매수", "00")  '호가유형 지정가 00, 시장가 03
 
+                If direction = 0 Then
+                    콜현재까지매수금액 = 콜현재까지매수금액 + (price * count * 250000)
+                Else
+                    풋현재까지매수금액 = 풋현재까지매수금액 + (price * count * 250000)
+                End If
             End If
         End If
     End Sub
 
-    Private Function 매수수량계산(ByVal price As Single) As Integer
+    Private Function 매수수량계산(ByVal price As Single, ByVal direction As Integer) As Integer
         Dim count As Integer = 0
 
         Dim adj_price As Single = price + 0.1
         Dim totalAmount As Long = adj_price * 250000
 
         If 최종투자금액 > 0 Then
-            Dim 남은금액 As Long = 최종투자금액 - 평가종합.현재까지주문금액
+
+            Dim 평가금액기준남은금액 As Long = 최종투자금액 - 평가종합.현재까지주문금액   '평가금액 기준 주문금액
+
+            Dim 현재까지매수금액 As Long
+            If direction = 0 Then
+                현재까지매수금액 = 콜현재까지매수금액
+            Else
+                현재까지매수금액 = 풋현재까지매수금액
+            End If
+            Dim 현재까지매수금액기준남은금액 As Long = 최종투자금액 - 현재까지매수금액      '주문할 때 계산한 주문금액 - 평가금액 반영이 늦어서 더 많이 사지는 걸 방지하는 기능
+            Dim 남은금액 As Long = Math.Min(평가금액기준남은금액, 현재까지매수금액기준남은금액)  '평가금액 기준과 주문할 때 기준 중 작은 값으로 수량을 계산한다
+
             count = Math.Round((남은금액 / totalAmount), 0)
 
             '매수 최대구매개수와 비교를 한다         현재계좌에서 최대구매개수 가져오기
