@@ -1283,9 +1283,9 @@ Public Class Form2
         당일반복중_flag = True
 
         Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0"}       'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
+        Dim 일차상승기울기기준() As String = {"3.0", "4.0"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0", "07.0"}       'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120", "100", "080", "060", "040", "030", "020"}        'D
         Dim 매수시작시간() As String = {"102000"}           'E
         Dim 매수마감시간() As String = {"113000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
@@ -1295,8 +1295,8 @@ Public Class Form2
 
         Dim 손절차() As String = {"07"} 'K
         Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.18", "-0.21", "-0.24", "-0.27", "-0.30", "-0.33", "-0.36"} 'M
-        Dim 중간청산이익목표() As String = {"0.30", "0.40", "0.45", "0.50", "0.60"} 'N
+        Dim 옵션기준손절매() As String = {"-0.30"} 'M
+        Dim 중간청산이익목표() As String = {"0.50"} 'N
 
         Dim temp_시작전허용기울기() As String = {"40"} 'O
         Dim 최초매매시작시간() As String = {"91000"} 'P
