@@ -359,7 +359,7 @@ Module realtime_ebest
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = Math.Round(price + 0.1)
+            Dim adjustPrice As Single = price + 0.1
 
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
@@ -431,7 +431,7 @@ Module realtime_ebest
 
     End Sub
 
-    Public Sub 구매가능수량조회(ByVal callput As Integer)
+    Public Sub 구매가능수량조회(ByVal callput As Integer)  '매도에서 필요한 기능으로 현재 사용하지 않음
 
         '모의투자에서는 QryTp 일반/금액/비율이 동작하지 않음
         '실계좌에서는 금액으로 동작하는 거 확인하 (20220809)
@@ -465,7 +465,7 @@ Module realtime_ebest
     End Sub
 
     'XAQuery_구매가능수량조회
-    Private Sub XAQuery_구매가능수량조회_ReceiveData(ByVal szTrCode As String)
+    Private Sub XAQuery_구매가능수량조회_ReceiveData(ByVal szTrCode As String)  ' 매도에서 필요한 기능으로 현재 사용하지 않음
 
         'Add_Log("일반", "XAQuery_구매가능수량조회 Received 이벤트 진입")
 
@@ -611,12 +611,9 @@ Module realtime_ebest
 
             Next
 
-
-
             TotalCount = retCount
 
             SetSelectedIndex_For_순매수()  '순매수용으로 변경함
-
 
             Console.WriteLine("옵션 종목 Count =  " & optionList.Count.ToString())
 
@@ -854,38 +851,24 @@ Module realtime_ebest
 
     End Sub
 
-    Public Sub 전체잔고정리하기()
+    Public Sub 전체잔고정리하기() '현재 청산 가능한 수량을 가진 수량을 모두 판다
 
         If List잔고 IsNot Nothing Then
 
             Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
             For i As Integer = 0 To List잔고.Count - 1
-
                 Dim it As 잔고Type = List잔고(i)
-
                 If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
-
-                    Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                     Dim count As Integer
-                    If callput = "2" Then
-                        count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        'count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
-                        count = Math.Min(count, 매매1회최대수량)
-                    Else
-                        count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
-                        count = Math.Min(count, 매매1회최대수량)
-                    End If
-                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03")  '호가유형 지정가 00, 시장가 03
-
+                    count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                    If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도전체를청산", "03")  '호가유형 지정가 00, 시장가 03
                 End If
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
-                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
-                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
+                    Dim count As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                    If count > 0 Then 한종목매도(종목번호, it.A10_현재가, count, "매수전체를청산", "03") '호가유형 지정가 00, 시장가 03
                 End If
-
             Next
         End If
     End Sub

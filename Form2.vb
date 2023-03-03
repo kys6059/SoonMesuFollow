@@ -584,10 +584,6 @@ Public Class Form2
 
     End Sub
 
-
-
-
-
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cmb_F2_순매수기준.Items.Clear()
         cmb_F2_순매수기준.Items.Add("0.FOR_SYS")
@@ -939,17 +935,16 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.60"
-
+                chk_모의투자연결.Checked = False
             Case 1
-
+                chk_모의투자연결.Checked = False
             Case 2
-
+                chk_모의투자연결.Checked = False
 
             Case 3
-
-                chk_실거래실행.Checked = False
+                chk_모의투자연결.Checked = True
             Case 6
-
+                chk_모의투자연결.Checked = True
 
                 chk_실거래실행.Checked = False
         End Select
@@ -1207,17 +1202,13 @@ Public Class Form2
         End If
     End Function
 
-    Private Sub btn_call_매도_Click(sender As Object, e As EventArgs) Handles btn_call_매도.Click
+    Private Sub btn_call_매도_Click(sender As Object, e As EventArgs)
 
-        If 진짜할건지확인("매매") = False Then Return
-        If 매도실행호출_1개(0) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 콜")
 
     End Sub
 
-    Private Sub btn_put_매도_Click(sender As Object, e As EventArgs) Handles btn_put_매도.Click
+    Private Sub btn_put_매도_Click(sender As Object, e As EventArgs)
 
-        If 진짜할건지확인("매매") = False Then Return
-        If 매도실행호출_1개(1) = False Then Add_Log("일반", "매도 시 최소구매가능개수 부족. 방향 = 풋")
 
     End Sub
 
@@ -1236,11 +1227,9 @@ Public Class Form2
                     Dim count As Integer = 0
                     If callput = "2" Then
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        'count = Math.Min(count, 콜최대구매개수 - 콜현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     Else
                         count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                        'count = Math.Min(count, 풋최대구매개수 - 풋현재환매개수)
                         count = Math.Min(count, 매매1회최대수량)
                     End If
                     If count > 0 Then 한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
@@ -1260,7 +1249,9 @@ Public Class Form2
                 Dim it As 잔고Type = List잔고(i)
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
-                    Dim count As Integer = Math.Min(it.A03_잔고수량, 매매1회최대수량)
+                    Dim count As Integer
+                    count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+                    count = Math.Min(count, 매매1회최대수량)
                     한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
                 End If
 
@@ -1268,12 +1259,12 @@ Public Class Form2
         End If
     End Sub
 
-    Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_call_구매가능수.Click
-        If currentIndex_1MIn >= 0 Then 구매가능수량조회(0)
+    Private Sub btn_call_구매가능수_Click(sender As Object, e As EventArgs)
+
     End Sub
 
-    Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs) Handles btn_put_구매가능수.Click
-        If currentIndex_1MIn >= 0 Then 구매가능수량조회(1)
+    Private Sub btn_put_구매가능수_Click(sender As Object, e As EventArgs)
+
     End Sub
 
     Private Sub btn_F2_전체조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_전체조건반복.Click
