@@ -55,6 +55,8 @@ Module Algorithm_SoonMeSu
     Public 이전순매수방향 As String = "중립"
     Public 신규합계_마지막신호 As String = "중립"
 
+    Public variable_1 As String
+
     Public Sub SoonMesuCalcAlrotithmAll()
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
@@ -296,6 +298,21 @@ Module Algorithm_SoonMeSu
         End If
     End Sub
 
+    Public Function 현재살아있는신호의종목리턴하는함수(ByVal callput As Integer) As String
+
+        Dim str As String = ""
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 And s.A08_콜풋 = callput Then
+                    str = Left(s.A09_행사가, 3)
+                End If
+            Next
+        End If
+        Return str
+    End Function
+
     Private Sub 살아있는신호확인하기()
         If SoonMesuShinhoList IsNot Nothing Then
 
@@ -414,6 +431,7 @@ Module Algorithm_SoonMeSu
                         If Val(순매수리스트(currentIndex_순매수).sTime) < startTime Then   'B알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
                             이전순매수방향 = "중립"
                         End If
+
 
                         '이건 테스트용 - 이걸 하면 같은 방향일 때 다시 사짐 - 20230219
                         '이전순매수방향 = "중립"

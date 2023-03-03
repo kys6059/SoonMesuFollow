@@ -275,33 +275,43 @@ Module realtime_ebest
                 If 중간청산비율 <= 0 Then 중간청산비율 = 0.5
 
                 If callput = "2" And it.A02_구분 = "매수" Then
-                    If 콜최대구매개수 < it.A03_잔고수량 Then
-                        Add_Log("신규매수", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
-                        콜최대구매개수 = it.A03_잔고수량
 
-                        콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
+                    Dim 현재종목번호 As String = Right(it.A01_종복번호, 3)
+                    Dim 신호의종목번호 As String = 현재살아있는신호의종목리턴하는함수(0)
+                    If 현재종목번호 = 신호의종목번호 Then   '2개이상의 종목이 생기는 경우 신호가 발생할 때의 종목번호에 대해서만 최대구매개수 등 변경 진행함
+                        If 콜최대구매개수 < it.A03_잔고수량 Then
+                            Add_Log("신규매수", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
+                            콜최대구매개수 = it.A03_잔고수량
 
-                    ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
-                        Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
-                        If temp > 콜현재환매개수 Then
-                            콜현재환매개수 = temp
-                            Add_Log("청산", "청산으로 인한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                            콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
+
+                        ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
+                            Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
+                            If temp > 콜현재환매개수 Then
+                                콜현재환매개수 = temp
+                                Add_Log("청산", "청산으로 인한 콜현재환매개수 변경 to  " & 콜현재환매개수.ToString())
+                            End If
+
                         End If
-
                     End If
                     콜잔고있음 = True
                 ElseIf callput = "3" And it.A02_구분 = "매수" Then
-                    If 풋최대구매개수 < it.A03_잔고수량 Then
-                        Add_Log("신규매수", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
-                        풋최대구매개수 = it.A03_잔고수량
-                        풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
+
+                    Dim 현재종목번호 As String = Right(it.A01_종복번호, 3)
+                    Dim 신호의종목번호 As String = 현재살아있는신호의종목리턴하는함수(1)
+                    If 현재종목번호 = 신호의종목번호 Then   '2개이상의 종목이 생기는 경우 신호가 발생할 때의 종목번호에 대해서만 최대구매개수 등 변경 진행함
+                        If 풋최대구매개수 < it.A03_잔고수량 Then
+                            Add_Log("신규매수", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
+                            풋최대구매개수 = it.A03_잔고수량
+                            풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
 
 
-                    ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
-                        Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
-                        If temp > 풋현재환매개수 Then
-                            풋현재환매개수 = temp
-                            Add_Log("청산", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
+                        ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
+                            Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
+                            If temp > 풋현재환매개수 Then
+                                풋현재환매개수 = temp
+                                Add_Log("청산", "풋현재환매개수 변경 to  " & 풋현재환매개수.ToString())
+                            End If
                         End If
                     End If
                     풋잔고있음 = True

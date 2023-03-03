@@ -1273,6 +1273,17 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
+        fullTest()
+
+        당일반복중_flag = False
+        SoonMesuSimulation_조건 = ""
+    End Sub
+    Private Sub simpleTest()
+
+
+    End Sub
+
+    Private Sub fullTest()
         Dim 최대포인트수() As String = {"04"}               'A
         Dim 일차상승기울기기준() As String = {"3.0", "4.0"}        'B
         Dim 이차상승기울기기준() As String = {"06.0", "07.0"}       'C
@@ -1390,9 +1401,9 @@ Public Class Form2
             Next
         Next
 
-        당일반복중_flag = False
-        SoonMesuSimulation_조건 = ""
+
     End Sub
+
 
     Public Sub Timer_Change()
         If btn_TimerStart.Text = "START" Then
