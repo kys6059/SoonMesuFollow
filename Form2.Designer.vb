@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -179,11 +179,11 @@ Partial Class Form2
         Me.grd_잔고조회 = New System.Windows.Forms.DataGridView()
         Me.TLP_BuySell = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_매수를청산 = New System.Windows.Forms.Button()
+        Me.btn_전체정리 = New System.Windows.Forms.Button()
         Me.btn_매도를청산 = New System.Windows.Forms.Button()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
-        Me.btn_전체정리 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -337,16 +337,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend3)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(559, 222)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series3)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1197, 688)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -501,7 +501,7 @@ Partial Class Form2
         Me.txt_F2_1차매매_기준_기울기.Name = "txt_F2_1차매매_기준_기울기"
         Me.txt_F2_1차매매_기준_기울기.Size = New System.Drawing.Size(114, 29)
         Me.txt_F2_1차매매_기준_기울기.TabIndex = 19
-        Me.txt_F2_1차매매_기준_기울기.Text = "40"
+        Me.txt_F2_1차매매_기준_기울기.Text = "42"
         '
         'txt_F2_1차매매_해제_기울기
         '
@@ -1134,16 +1134,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend4)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(1761, 222)
         Me.Chart1.Name = "Chart1"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.Chart1.Series.Add(Series4)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1053, 688)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -2207,6 +2207,18 @@ Partial Class Form2
         Me.btn_매수를청산.Text = "매수를 청산"
         Me.btn_매수를청산.UseVisualStyleBackColor = True
         '
+        'btn_전체정리
+        '
+        Me.btn_전체정리.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_전체정리.Font = New System.Drawing.Font("굴림", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.btn_전체정리.Location = New System.Drawing.Point(134, 4)
+        Me.btn_전체정리.Name = "btn_전체정리"
+        Me.TLP_BuySell.SetRowSpan(Me.btn_전체정리, 2)
+        Me.btn_전체정리.Size = New System.Drawing.Size(123, 134)
+        Me.btn_전체정리.TabIndex = 3
+        Me.btn_전체정리.Text = "전체 정리"
+        Me.btn_전체정리.UseVisualStyleBackColor = True
+        '
         'btn_매도를청산
         '
         Me.btn_매도를청산.Dock = System.Windows.Forms.DockStyle.Fill
@@ -2235,18 +2247,6 @@ Partial Class Form2
         '
         'Timer_AutoSave111
         '
-        '
-        'btn_전체정리
-        '
-        Me.btn_전체정리.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_전체정리.Font = New System.Drawing.Font("굴림", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.btn_전체정리.Location = New System.Drawing.Point(134, 4)
-        Me.btn_전체정리.Name = "btn_전체정리"
-        Me.TLP_BuySell.SetRowSpan(Me.btn_전체정리, 2)
-        Me.btn_전체정리.Size = New System.Drawing.Size(123, 134)
-        Me.btn_전체정리.TabIndex = 3
-        Me.btn_전체정리.Text = "전체 정리"
-        Me.btn_전체정리.UseVisualStyleBackColor = True
         '
         'Form2
         '

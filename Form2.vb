@@ -1285,9 +1285,9 @@ Public Class Form2
 
     Private Sub fullTest()
         Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0", "4.0"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0", "07.0"}       'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120", "100", "080", "060", "040", "030", "020"}        'D
+        Dim 일차상승기울기기준() As String = {"3.0"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0"}       'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
         Dim 매수시작시간() As String = {"102000"}           'E
         Dim 매수마감시간() As String = {"113000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
@@ -1300,9 +1300,9 @@ Public Class Form2
         Dim 옵션기준손절매() As String = {"-0.30"} 'M
         Dim 중간청산이익목표() As String = {"0.50"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"40"} 'O
-        Dim 최초매매시작시간() As String = {"91000"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"26"} 'Q
+        Dim temp_시작전허용기울기() As String = {"40", "35", "33", "42", "44", "46"} 'O
+        Dim 최초매매시작시간() As String = {"91000", "90900", "90800", "91100"} 'P
+        Dim 시작전매도해제기울기_TEMP() As Double = {"26", "28", "30", "32"} 'Q
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
