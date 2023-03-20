@@ -67,6 +67,8 @@ Module Module_For1Min
 
     Public 신호최소유지시간index As Integer = 6 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
 
+    Public 시작전_개별기울기 As Integer = 15  '시작전 외국인/기관 각각의 기울기 기준 - 2개가 같은 방향일때를 확인하기 위함
+
     Public Sub InitDataStructure_1Min()
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821

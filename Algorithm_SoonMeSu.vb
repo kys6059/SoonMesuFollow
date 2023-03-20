@@ -126,14 +126,18 @@ Module Algorithm_SoonMeSu
 
                         Dim 현재신호점수합계 = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수  '현재도 직선의 방향과 같은 방향이 유지되는 걸 확인하기 위해서 현재 마지막신호점수를 확인한다   '전체적으로 오르지만 만약 둘이 다른 방향이라면 매수하지 않는다
 
-                        If 현재상승하락상태 = "상승" Then ' And 현재신호점수합계 > 0 Then
+
+                        Dim 최저기울기 As Single = Math.Min(Math.Abs(PIP_Point_Lists(1).마지막선기울기), Math.Abs(PIP_Point_Lists(2).마지막선기울기))  '둘다 일정이상 팔거나 사는걸 확인하기 위해 둘 중 최저기울기를 뽑아서 허용기준과 비교한다
+                        Dim 기울기방향성 As Single = PIP_Point_Lists(1).마지막선기울기 * PIP_Point_Lists(2).마지막선기울기
+
+                        If 현재상승하락상태 = "상승" And 최저기울기 > 시작전_개별기울기 And 기울기방향성 > 0 Then ' And 현재신호점수합계 > 0 Then
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_UP")               '신규 신호 입력하기
                             SoonMesuShinhoList.Add(shinho)
                             If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
                             Form2.lbl_F2_매매신호.Text = "1"
                             Form2.lbl_F2_매매신호.BackColor = Color.Magenta
                             이전순매수방향 = 현재상승하락상태
-                        ElseIf 현재상승하락상태 = "하락" Then ' And 현재신호점수합계 < 0 Then
+                        ElseIf 현재상승하락상태 = "하락" And 최저기울기 > 시작전_개별기울기 And 기울기방향성 > 0 Then ' And 현재신호점수합계 < 0 Then
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A_DOWN")             '신규 신호 입력하기
                             SoonMesuShinhoList.Add(shinho)
                             If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
