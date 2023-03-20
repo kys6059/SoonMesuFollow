@@ -929,27 +929,33 @@ Public Class Form2
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
         Dim 중간청산목표이익 As String = txt_F2_중간청산비율.Text
-        Dim 기준가격 As String = txt_F2_켈리지수비율.Text
+        Dim 켈리지수비율 As String = txt_F2_켈리지수비율.Text
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.60"
+                켈리지수비율 = "0.35"
                 chk_모의투자연결.Checked = False
             Case 1
+                켈리지수비율 = "0.31"
                 chk_모의투자연결.Checked = False
             Case 2
+                켈리지수비율 = "0.26"
                 chk_모의투자연결.Checked = False
 
             Case 3
+                켈리지수비율 = "0.20"
                 chk_모의투자연결.Checked = True
             Case 6
+                켈리지수비율 = "0.20"
                 chk_모의투자연결.Checked = True
 
                 chk_실거래실행.Checked = False
         End Select
 
         txt_F2_중간청산비율.Text = 중간청산목표이익
+        txt_F2_켈리지수비율.Text = 켈리지수비율
 
     End Sub
 

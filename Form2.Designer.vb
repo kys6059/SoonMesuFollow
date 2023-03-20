@@ -2254,7 +2254,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(3084, 1273)
+        Me.ClientSize = New System.Drawing.Size(3284, 1273)
         Me.Controls.Add(Me.lbl_ReceiveCounter)
         Me.Controls.Add(Me.TLP_BuySell)
         Me.Controls.Add(Me.grd_잔고조회)
