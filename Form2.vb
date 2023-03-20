@@ -1301,7 +1301,7 @@ Public Class Form2
         Dim 중간청산이익목표() As String = {"0.50"} 'N
 
         Dim temp_시작전허용기울기() As String = {"40", "35", "33", "42", "44", "46"} 'O
-        Dim 최초매매시작시간() As String = {"91000"} 'P
+        Dim 최초매매시작시간() As String = {"91000", "90900", "90800", "91100"} 'P
         Dim 시작전매도해제기울기_TEMP() As Double = {"26", "28", "30", "32"} 'Q
         Dim 시작전_개별기울기_temp() As Integer = {5, 10, 15, 20} 'R
 
@@ -1351,7 +1351,7 @@ Public Class Form2
                                                                                 txt_F2_1차매매_기준_기울기.Text = temp_시작전허용기울기(o)
                                                                                 txt_F2_최초매매시작시간.Text = 최초매매시작시간(p)
                                                                                 txt_F2_1차매매_해제_기울기.Text = 시작전매도해제기울기_TEMP(q)
-                                                                                시작전_개별기울기 = 시작전_개별기울기_temp(r)
+
 
                                                                                 txt_F2_최대포인트수.Refresh()
                                                                                 txt_F2_1차상승판정기울기기준.Refresh()
@@ -1378,6 +1378,7 @@ Public Class Form2
                                                                                 Else
                                                                                     cntstr = cnt.ToString()
                                                                                 End If
+
                                                                                 SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
                                                                                 'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}", 최대포인트수(a), 일차상승기울기기준(b), 이차상승기울기기준(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g), timeoutTime(h), 신호발생점수(i), 해제기준점수(j))
                                                                                 'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}_N_{3}", 손절차(k), 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
