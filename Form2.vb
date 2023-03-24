@@ -1291,25 +1291,25 @@ Public Class Form2
 
     Private Sub fullTest()
         Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0"}       'C
+        Dim 일차상승기울기기준() As String = {"3.0", "4.0", "5.0", "2.5"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0", "07.0", "08.0", "09.0"}       'C
         Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"102000"}           'E
+        Dim 매수시작시간() As String = {"102000", "101000", "100000", "95000", "940000", "930000", "920000"}           'E
         Dim 매수마감시간() As String = {"113000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
         Dim timeoutTime() As String = {"151500"}            'H
-        Dim 신호발생점수() As String = {"3"}       'I
-        Dim 해제기준점수() As String = {"1"}       'J
+        Dim 신호발생점수() As String = {"4"}       'I
+        Dim 해제기준점수() As String = {"1", "2"}       'J
 
         Dim 손절차() As String = {"07"} 'K
         Dim 익절차() As String = {"11"} 'L
         Dim 옵션기준손절매() As String = {"-0.30"} 'M
         Dim 중간청산이익목표() As String = {"0.50"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"40", "35", "33", "42", "44", "46"} 'O
-        Dim 최초매매시작시간() As String = {"91000", "90900", "90800", "91100"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"26", "28", "30", "32"} 'Q
-        Dim 시작전_개별기울기_temp() As Integer = {5, 10, 15, 20} 'R
+        Dim temp_시작전허용기울기() As String = {"42"} 'O
+        Dim 최초매매시작시간() As String = {"91000"} 'P
+        Dim 시작전매도해제기울기_TEMP() As Double = {"30"} 'Q
+        Dim 시작전_개별기울기_temp() As Integer = {15} 'R
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -1386,9 +1386,9 @@ Public Class Form2
                                                                                 End If
 
                                                                                 SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                                                                                'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}", 최대포인트수(a), 일차상승기울기기준(b), 이차상승기울기기준(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g), timeoutTime(h), 신호발생점수(i), 해제기준점수(j))
+                                                                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}", 최대포인트수(a), 일차상승기울기기준(b), 이차상승기울기기준(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g), timeoutTime(h), 신호발생점수(i), 해제기준점수(j))
                                                                                 'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}_N_{3}", 손절차(k), 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
-                                                                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_O_{0}_P_{1}_Q_{2}_R_{3}", temp_시작전허용기울기(o), 최초매매시작시간(p), 시작전매도해제기울기_TEMP(q), 시작전_개별기울기_temp(r))
+                                                                                'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_O_{0}_P_{1}_Q_{2}_R_{3}", temp_시작전허용기울기(o), 최초매매시작시간(p), 시작전매도해제기울기_TEMP(q), 시작전_개별기울기_temp(r))
 
                                                                                 Console.WriteLine(SoonMesuSimulation_조건)
                                                                                 Add_Log("", SoonMesuSimulation_조건)
