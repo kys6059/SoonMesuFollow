@@ -68,7 +68,8 @@ Public Class Form2
 
             'CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
-            SoonMesuCalcAlrotithmAll() '--------------------------- 신호 만들기, 해제 검사하기 등
+
+            CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
             If chk_F2_화면끄기.Checked = False Then
                 화면그리기()
@@ -731,6 +732,7 @@ Public Class Form2
             Chart1.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+            Chart1.ChartAreas(i).AxisY.Interval = 0.2
         Next
     End Sub
 
@@ -743,12 +745,11 @@ Public Class Form2
                 Chart1.Series(i).Points.Clear()
             Next
 
-            Dim maxValue As Single = Single.MinValue
-            Dim minValue As Single = Single.MaxValue
-
             For callput = 0 To 1
 
                 Dim CandlestrickSeries As String = "CandleStick_" + callput.ToString()
+                Dim maxValue As Single = Single.MinValue
+                Dim minValue As Single = Single.MaxValue
 
                 For i = 0 To currentIndex_1MIn
                     ' main Series 입력
@@ -772,20 +773,14 @@ Public Class Form2
                         Dim str As String = "시간:" & 일분옵션데이터(0).ctime(i) & vbCrLf & "시가:" & 일분옵션데이터(callput).price(i, 0) & vbCrLf & "종가:" & 일분옵션데이터(callput).price(i, 3)
                         Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
 
-                        If maxValue < 일분옵션데이터(callput).price(i, 1) Then maxValue = 일분옵션데이터(callput).price(i, 1) '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                        If minValue > 일분옵션데이터(callput).price(i, 2) Then minValue = 일분옵션데이터(callput).price(i, 2)
+                        If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                        If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
                     End If
                 Next
+                Chart1.ChartAreas(callput).AxisY.Minimum = minValue
+                Chart1.ChartAreas(callput).AxisY.Maximum = maxValue
             Next
 
-            '콜 풋 차트의 크기를 똑같이 하기 위해서 최대,최소값을 맞춘다
-            maxValue = maxValue + 0.1
-            minValue = minValue - 0.1
-            For i = 0 To 1
-                Chart1.ChartAreas(i).AxisY.Minimum = minValue
-                Chart1.ChartAreas(i).AxisY.Maximum = maxValue
-                Chart1.ChartAreas(i).AxisY.Interval = 0.2
-            Next
         End If
 
         '신호를 그린다
@@ -1290,23 +1285,23 @@ Public Class Form2
     End Sub
 
     Private Sub fullTest()
-        Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0", "4.0", "5.0", "2.5"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0", "07.0", "08.0", "09.0"}       'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"102000", "101000", "100000", "95000", "940000", "930000", "920000"}           'E
+        Dim 최대포인트수() As String = {"04", "05"}               'A
+        Dim 일차상승기울기기준() As String = {"3.0", "4.0", "3.5", "2.5"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0", "06.5", "05.5"}       'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120", "110", "130", "140", "150"}        'D
+        Dim 매수시작시간() As String = {"102000"}           'E
         Dim 매수마감시간() As String = {"113000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
         Dim timeoutTime() As String = {"151500"}            'H
-        Dim 신호발생점수() As String = {"4"}       'I
-        Dim 해제기준점수() As String = {"1", "2"}       'J
+        Dim 신호발생점수() As String = {"3"}       'I
+        Dim 해제기준점수() As String = {"1"}       'J
 
         Dim 손절차() As String = {"07"} 'K
         Dim 익절차() As String = {"11"} 'L
         Dim 옵션기준손절매() As String = {"-0.30"} 'M
         Dim 중간청산이익목표() As String = {"0.50"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"42"} 'O
+        Dim temp_시작전허용기울기() As String = {"40"} 'O
         Dim 최초매매시작시간() As String = {"91000"} 'P
         Dim 시작전매도해제기울기_TEMP() As Double = {"30"} 'Q
         Dim 시작전_개별기울기_temp() As Integer = {15} 'R
@@ -1453,5 +1448,11 @@ Public Class Form2
         손절매수준설정(남은날짜)
     End Sub
 
+    Private Sub HSc_F2_시간조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_시간조절.Scroll
 
+    End Sub
+
+    Private Sub HSc_F2_날짜조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_날짜조절.Scroll
+
+    End Sub
 End Class
