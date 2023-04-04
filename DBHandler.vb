@@ -827,7 +827,7 @@ Module DBHandler
             rows(i).Add("A50_ConditionAll", s.A50_조건전체)
             rows(i).Add("A51_SoonMesuItems", s.A51_순매수기준)
             rows(i).Add("A52_Slope", s.A52_기울기)
-            rows(i).Add("A53_prevPointMargin", s.A53_선행포인트수_마진)
+            rows(i).Add("A53_prevPointMargin", s.A53_장대양봉손절가)
             rows(i).Add("A54_IsReal", s.A54_IsReal)
             rows(i).Add("A55_Memo", s.A55_메모)
             rows(i).Add("A56_TargetPrice", s.A56_기준가격)

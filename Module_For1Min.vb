@@ -26,11 +26,13 @@ Module Module_For1Min
         Dim ctime() As String  '시간 100개 콜풋 구분 없음
         Dim price(,) As Single '시간index, 시고저종
         Dim 거래량() As Long ' 100개
+        Dim 이동평균선() As Single '콜풋
 
         Public Sub Initialize()
             ReDim ctime(400) '
             ReDim price(400, 3)  '콜풋, 시간, 시고저종
             ReDim 거래량(400) '1분단위는 약 396개임
+            ReDim 이동평균선(400)
         End Sub
     End Structure
 
@@ -505,5 +507,23 @@ Module Module_For1Min
         Next
 
     End Sub
+
+    Public Function 이동평균선값계산(ByVal 이동평균선기준일자 As Integer, ByVal callput As Integer, ByVal index As Integer) As Single
+
+        Dim sumValue As Single = 0
+        Dim cnt As Integer = 0
+
+        For i As Integer = 0 To 이동평균선기준일자 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
+
+            If 일분옵션데이터(callput).price(index - i, 3) <= 0 Then Return -1
+
+            sumValue = sumValue + 일분옵션데이터(callput).price(index - i, 3)
+            cnt += 1
+        Next
+
+        Dim 이동평균값 As Single = sumValue / 이동평균선기준일자
+        Return 이동평균값
+
+    End Function
 
 End Module

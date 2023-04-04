@@ -64,6 +64,7 @@ Public Class Form2
 
             'CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
+            Calc이동평균Data() '일분옵션데이터의 값을 루프를 돌면서 이동평균을 계산해서 다시 입력한다
 
             CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
@@ -250,9 +251,9 @@ Public Class Form2
                     grid_shinho.Rows(i).Cells(21).Style.ForeColor = Color.Black
                 End If
 
-                For j As Integer = 0 To grid_shinho.ColumnCount - 1 '매수시간에 아닌 때 발생한 신호는 회색처리한다
-                    If Val(s.A02_발생시간) > Val(txt_F2_매수마감시간.Text) Then grid_shinho.Rows(i).Cells(j).Style.ForeColor = Color.Gray
-                Next
+                'For j As Integer = 0 To grid_shinho.ColumnCount - 1 '매수시간에 아닌 때 발생한 신호는 회색처리한다
+                'If Val(s.A02_발생시간) > Val(txt_F2_매수마감시간.Text) Then grid_shinho.Rows(i).Cells(j).Style.ForeColor = Color.Gray
+                'Next
             Next
         End If
     End Sub
@@ -728,6 +729,13 @@ Public Class Form2
             Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Candlestick
             Chart1.Series(str).CustomProperties = “PriceDownColor=Blue, PriceUpColor=Red”
 
+            str = "ipLine_" + i.ToString()  '이동평균선라인
+            Chart1.Series.Add(str)
+            Chart1.Series(str).ChartArea = ChartAreaStr
+            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Chart1.Series(str).Color = Color.Black
+            Chart1.Series(str).BorderWidth = 1
+
             ''Lebel 설정
             Chart1.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
             '축 선 속성 설정
@@ -751,6 +759,7 @@ Public Class Form2
             For callput = 0 To 1
 
                 Dim CandlestrickSeries As String = "CandleStick_" + callput.ToString()
+                Dim 이동평균시리즈 As String = "ipLine_" + callput.ToString()
                 Dim maxValue As Single = Single.MinValue
                 Dim minValue As Single = Single.MaxValue
 
@@ -773,7 +782,10 @@ Public Class Form2
                             Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
                         End If
 
-                        Dim str As String = "시간:" & 일분옵션데이터(0).ctime(i) & vbCrLf & "시가:" & 일분옵션데이터(callput).price(i, 0) & vbCrLf & "종가:" & 일분옵션데이터(callput).price(i, 3)
+                        '이동평균선 그리기
+                        If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
+
+                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
                         Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
 
                         If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
@@ -801,7 +813,7 @@ Public Class Form2
                 End If
 
                 Chart1.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                Chart1.Series(Str).Color = Color.Black
+                Chart1.Series(Str).Color = Color.DarkGreen
                 Chart1.Series(Str).BorderWidth = 3
 
                 '시작점,끝점 찾기
@@ -825,11 +837,11 @@ Public Class Form2
         Chart1.Visible = True
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
 
     End Sub
 
-    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+    Private Sub Button2_Click(sender As Object, e As EventArgs)
 
     End Sub
 

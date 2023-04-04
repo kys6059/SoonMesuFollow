@@ -34,7 +34,7 @@ Module Algorithm_SoonMeSu
         Dim A50_조건전체 As String
         Dim A51_순매수기준 As String '0.외국인_기관, 1.외국인, .외국인_연기금
         Dim A52_기울기 As Single
-        Dim A53_선행포인트수_마진 As Single  '--------------------------------- 이까지 38건
+        Dim A53_장대양봉손절가 As Single  '이걸 안쓰니까 장대양봉손절가로 사용함
         Dim A54_IsReal As Integer
         Dim A55_메모 As String
         Dim A56_기준가격 As String '매수할 때 기준가격
@@ -58,12 +58,28 @@ Module Algorithm_SoonMeSu
 
     Public variable_1 As String
 
+
+    'D 알고리즘용 시작
+    Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
+
+    Public X_계산기준봉비율 As Single = 0.55         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함
+    Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
+
+    Public 손절기준차 As String = "-0.3"
+    Public 익절기준차 As String = "1.0"
+    Public 마감시간 As String = "1515"
+
+    Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
+    Public 이평선하향돌파익절기준 As Single = 0.5   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
+    'D 알고리즘용 끝
+
     Public Sub CalcAlgorithmAll()
 
-        모든살아있는신호확인하기() 'A,B알고리즘용임 일단은
+        모든살아있는신호확인하기()
 
         If Form2.chk_Algorithm_A.Checked = True Then CalcAlgorithm_A()
         If Form2.chk_Algorithm_B.Checked = True Then CalcAlgorithm_B()
+        If Form2.chk_Algorithm_D.Checked = True Then CalcAlgorithm_D()
 
     End Sub
 
@@ -72,6 +88,8 @@ Module Algorithm_SoonMeSu
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
         Dim timeoutTime As Integer = Val(Form2.txt_F2_TimeoutTime.Text)
+
+
 
         Dim ret As String = CalcAlgorithm_AB()  '상승이던 하강이던 기준점수(현재 3점)을 넘으면 신호를 만든다
 
@@ -90,7 +108,7 @@ Module Algorithm_SoonMeSu
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A", 0)               '신규 신호 입력하기
                         SoonMesuShinhoList.Add(shinho)
 
-                        If EBESTisConntected = True Then Add_Log("신호", String.Format("상승신호 발생 AT {0}", shinho.A02_발생시간))
+                        If EBESTisConntected = True Then Add_Log("신호", String.Format("A 상승신호 발생 AT {0}", shinho.A02_발생시간))
 
                     ElseIf ret = "하락" Then '중립에서 하락으로 전환
 
@@ -99,7 +117,7 @@ Module Algorithm_SoonMeSu
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A", 1)             '신규 신호 입력하기
                         SoonMesuShinhoList.Add(shinho)
 
-                        If EBESTisConntected = True Then Add_Log("신호", String.Format("하락신호 발생 AT {0}", shinho.A02_발생시간))
+                        If EBESTisConntected = True Then Add_Log("신호", String.Format("A 하락신호 발생 AT {0}", shinho.A02_발생시간))
                     End If
 
                     이전순매수방향 = ret '신호가 뜬걸 의미한다 이걸 바꿔 놓는다
@@ -132,12 +150,12 @@ Module Algorithm_SoonMeSu
                         If PIP_Point_Lists(1).마지막선기울기 > 0 And PIP_Point_Lists(2).마지막선기울기 > 0 Then '기울기가 둘 다 양수이면
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 0)               '신규 신호 입력하기
                             SoonMesuShinhoList.Add(shinho)
-                            If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
+                            If EBESTisConntected = True Then Add_Log("B 신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
 
                         ElseIf PIP_Point_Lists(1).마지막선기울기 < 0 And PIP_Point_Lists(2).마지막선기울기 < 0 Then  '기울기가 둘 다 음수이면
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 1)             '신규 신호 입력하기
                             SoonMesuShinhoList.Add(shinho)
-                            If EBESTisConntected = True Then Add_Log("신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
+                            If EBESTisConntected = True Then Add_Log("B 신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
                         End If
                     End If
                 End If
@@ -180,9 +198,102 @@ Module Algorithm_SoonMeSu
 
     End Function
 
+    Public Sub CalcAlgorithm_D() '이동평균선 알고리즘
+
+
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
+        If 일분옵션데이터_CurrentIndex < 이동평균선_기준일자 Then Return
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < 1020 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > 1445 Then Return
+
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+
+        For i As Integer = 0 To 1
+            If is동일신호가현재살아있나("D", i) Then Return
+
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Return '0.2보다 작으면 신호를 만들지 않는다
+
+            Dim is장대양봉 As Integer = CALC_IS_장대양봉(i, Index)
+
+            Dim flag As Boolean = False
+
+
+            Select Case is장대양봉
+                Case 1
+                    If 일분옵션데이터(i).price(Index, 0) < 일분옵션데이터(i).이동평균선(Index) And 일분옵션데이터(i).price(Index, 3) > 일분옵션데이터(i).이동평균선(Index) Then flag = True
+                Case 2
+                    'If 일분옵션데이터(i).price(Index - 1, 0) < 일분옵션데이터(i).이동평균선(Index) And 일분옵션데이터(i).price(Index, 3) > 일분옵션데이터(i).이동평균선(Index) Then flag = True
+                    'Add_Log("신호", "2개를 더한 양봉 신호 발생")
+                Case Else
+
+            End Select
+            If flag = True Then                'D신호 발생
+
+                Dim str As String = String.Format("D 신호 발생 콜풋 : {0}, 인덱스 : {1}", i, Index)
+                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("D", i)
+                SoonMesuShinhoList.Add(shinho)
+
+            End If
+
+        Next
+
+    End Sub
+
+    Private Function is동일신호가현재살아있나(ByVal 신호id As String, ByVal callput As Integer) As Boolean
+
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A03_신호ID = 신호id And s.A15_현재상태 = 1 And s.A08_콜풋 = callput Then Return 1
+            Next
+        End If
+
+        Return False
+    End Function
+
+    Private Function CALC_IS_장대양봉(ByVal callput As Integer, ByVal index As Integer) As Integer
+
+        Dim 기준캔들수 As Integer = Math.Round(이동평균선_기준일자 * X_계산기준봉비율)
+        Dim max As Single = Single.MinValue
+        Dim min As Single = Single.MaxValue
+
+        For i As Integer = 0 To 기준캔들수 - 1
+            max = Math.Max(일분옵션데이터(callput).price(index - i, 3), max)
+            min = Math.Min(일분옵션데이터(callput).price(index - i, 3), min)
+        Next
+
+        Dim 기준캔들내최대크기 As Single = max - min          '최대-최소값을 구한다
+
+        Dim 현재분봉크기 As Single = 일분옵션데이터(callput).price(index, 3) - 일분옵션데이터(callput).price(index, 0)  '종가 - 시가 : 이러면 양봉인지 확인됨
+        Dim 이차분봉크기 As Single = 일분옵션데이터(callput).price(index, 3) - 일분옵션데이터(callput).price(index - 1, 0)  '한틱전의 값과 더해서 양봉이 길어진다면  ------------------ 너무 많이 뜨고 결과가 안좋아 일단 폐기 20230404
+
+        If 기준캔들내최대크기 * Y_장대양봉기준비율 < 현재분봉크기 Then
+            Return 1 '현재분봉이 기준보다 크면 장대양봉이라고 판단함
+            'ElseIf 기준캔들내최대크기 * Y_장대양봉기준비율 < 이차분봉크기 Then
+            '   Return 2  '2개의 캔들이 더해져서 장대양봉인걸 알려준다
+
+        End If
+
+        Return 0
+    End Function
+
+
+
     Private Function MakeSoonMesuShinho(ByVal 신호ID As String, ByVal callput As Integer) As 순매수신호_탬플릿
 
         Dim shinho As 순매수신호_탬플릿 = New 순매수신호_탬플릿
+
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
 
         shinho.A00_신호차수 = SoonMesuShinhoList.Count + 1
         shinho.A01_발생Index = currentIndex_순매수
@@ -193,9 +304,9 @@ Module Algorithm_SoonMeSu
         shinho.A05_신호해제순매수 = 0
         shinho.A06_신호발생종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
         shinho.A07_신호해제종합주가지수 = 0
-
-        shinho.A09_행사가 = 0
-        shinho.A10_신호발생가격 = 0
+        shinho.A08_콜풋 = callput
+        shinho.A09_행사가 = 일분옵션데이터(callput).HangSaGa
+        shinho.A10_신호발생가격 = 0 '------------------------------------------------ 이거
 
         shinho.A15_현재상태 = 1
         shinho.A16_이익률 = 0
@@ -205,29 +316,37 @@ Module Algorithm_SoonMeSu
         shinho.A50_조건전체 = SoonMesuSimulation_조건
         shinho.A51_순매수기준 = Form2.cmb_F2_순매수기준.Text
         shinho.A52_기울기 = Form2.txt_F2_1차상승판정기울기기준.Text
-        shinho.A53_선행포인트수_마진 = Form2.txt_선행_포인트_마진.Text
+
         shinho.A54_IsReal = 0
         shinho.A56_기준가격 = Form2.txt_F2_매수_기준가.Text
         shinho.A57_월물 = sMonth
         shinho.A58_날짜 = 순매수리스트(currentIndex_순매수).sDate
         shinho.A59_남은날짜 = getRemainDate(sMonth, Val(shinho.A58_날짜))
-        shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
-        shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
-        shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
 
-
-        '콜풋종목정보 - 매수의 경우
-
-        shinho.A08_콜풋 = callput
-        shinho.A09_행사가 = 일분옵션데이터(shinho.A08_콜풋).HangSaGa
-
-        Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(shinho.A02_발생시간))
-        If 일분옵션데이터_CurrentIndex >= 0 Then
-            shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-            shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-            shinho.A16_이익률 = Math.Round((shinho.A14_현재가격 - shinho.A10_신호발생가격) / shinho.A10_신호발생가격, 3)
+        If shinho.A03_신호ID = "D" Then
+            shinho.A60_손절기준차 = 손절기준차
+            shinho.A61_익절기준차 = 익절기준차
+            Dim 장대양봉크기 As Single = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 0)
+            shinho.A53_장대양봉손절가 = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - (장대양봉크기 * 장대양봉손절기준비율)
+        Else
+            shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
+            shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         End If
 
+        shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
+
+        If 일분옵션데이터_CurrentIndex >= 0 Then
+
+            If shinho.A03_신호ID = "D" Then
+                shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+                shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+            Else
+                shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+            End If
+
+            shinho.A16_이익률 = Math.Round((shinho.A14_현재가격 - shinho.A10_신호발생가격) / shinho.A10_신호발생가격, 3)
+        End If
         shinho.B00_etc = Form2.txt_F2_실험조건.Text
 
         Return shinho
@@ -304,7 +423,7 @@ Module Algorithm_SoonMeSu
                         Case "B"
                             살아있는신호확인하기_A(s)
                         Case "D"
-
+                            살아있는신호확인하기_D(s)
 
                     End Select
 
@@ -315,6 +434,101 @@ Module Algorithm_SoonMeSu
                 SoonMesuShinhoList(i) = s
 
             Next
+        End If
+
+    End Sub
+
+    Private Sub 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿)
+
+        Dim 매도사유 As String = ""
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
+        If s.A15_현재상태 = 1 Then
+
+            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+
+            If s.A14_현재가격 > 0 Then
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            End If
+
+
+            '옵션가격 기준 손절매, 익절
+            Dim 옵션가손절매기준 As Single = Val(손절기준차)
+            Dim 옵션익절기준 As Single = Val(익절기준차)
+            If s.A21_환산이익율 < 옵션가손절매기준 Then
+
+                매도사유 = "option_son"
+
+                If isRealFlag = False Then
+                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
+                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                End If
+
+            End If
+            If s.A21_환산이익율 > 옵션익절기준 Then
+                매도사유 = "ik"
+
+                If isRealFlag = False Then
+                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션익절기준), 2)
+                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                End If
+            End If
+
+            '타임아웃
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
+                매도사유 = "timeout"
+                If isRealFlag = False Then
+                    s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                End If
+            End If
+
+            '양봉크기비례 손절  - 장대양봉의 하단*비율을 하향 돌파하면 손절함  -- 없는게 결과가 더 좋아서 잠정 보류함 20230402
+            If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2) < s.A53_장대양봉손절가 Then
+                's.A14_현재가격 = s.A53_장대양봉손절가 - 0.01
+                's.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                's.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                '매도사유 = "son"
+            End If
+
+            '이평선 하양돌파 익절  
+            Dim 현재이평선 As Single = 일분옵션데이터(s.A08_콜풋).이동평균선(일분옵션데이터_CurrentIndex)
+            Dim 현재이평선기준이익률 As Single = (현재이평선 - s.A10_신호발생가격) / s.A10_신호발생가격
+            If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2) < 현재이평선 And 현재이평선기준이익률 > 이평선하향돌파익절기준 Then
+                s.A14_현재가격 = 현재이평선 - 0.01
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                매도사유 = "ik_ip"
+            End If
+
+            '청산할 때 하는 프로세스
+            If 매도사유 <> "" Then
+
+                s.A15_현재상태 = 0
+                s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
+                s.A19_매도Index = currentIndex_순매수
+                s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
+                s.A20_매도사유 = 매도사유
+                s.A22_신호해제가격 = s.A14_현재가격
+
+            Else  '살아 있으면 중간청산 체크하기
+                'Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+                'Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+                'If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
+                's.A17_중간매도Flag = 1
+                'End If
+
+            End If
+
         End If
 
     End Sub
@@ -759,4 +973,16 @@ Module Algorithm_SoonMeSu
         End If
         Return ret
     End Function
+
+    Public Sub Calc이동평균Data()   '이동평균선을 계산하여 일분데이터에 추가한다
+
+        If currentIndex_1MIn < 이동평균선_기준일자 Then Return         ' 현재 index가 이동평균계산기준일자보다 작으면 패스한다
+
+        For callput As Integer = 0 To 1
+            For j As Integer = 이동평균선_기준일자 - 1 To currentIndex_1MIn
+                If 일분옵션데이터(callput).이동평균선(j) <= 0 Then 일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j)   '빈것들만 계산하여 속도를 빠르게 한다
+            Next
+        Next
+
+    End Sub
 End Module
