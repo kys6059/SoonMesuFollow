@@ -362,7 +362,7 @@ Public Class Form2
 
             For j As Integer = 0 To 2
                 Dim For_Kig_Series As String = "For_Kig_" + j.ToString()
-                For i As Integer = 4 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
+                For i As Integer = 0 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
 
                     If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
                         Dim target순매수 As Long = Get순매수(i, j)
@@ -378,7 +378,7 @@ Public Class Form2
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = min - 1
 
 
-            If currentIndex_순매수 >= 4 Then
+            If currentIndex_순매수 >= 0 Then
 
                 For i As Integer = 0 To 2
                     Dim PIP_Series As String = "PIP_" + i.ToString()
@@ -945,23 +945,24 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.60"
-                켈리지수비율 = "0.35"
-                chk_모의투자연결.Checked = False
+                켈리지수비율 = "0.36"
+
             Case 1
                 켈리지수비율 = "0.31"
-                chk_모의투자연결.Checked = False
+
             Case 2
                 켈리지수비율 = "0.26"
-                chk_모의투자연결.Checked = False
 
             Case 3
-                켈리지수비율 = "0.20"
-                chk_모의투자연결.Checked = True
-            Case 6
-                켈리지수비율 = "0.20"
-                chk_모의투자연결.Checked = True
+                켈리지수비율 = "0.16"
+                중간청산목표이익 = "0.3"
+                chk_Algorithm_A.Checked = False
 
-                chk_실거래실행.Checked = False
+            Case 6
+                켈리지수비율 = "0.16"
+                중간청산목표이익 = "0.3"
+                chk_Algorithm_A.Checked = False
+
         End Select
 
         txt_F2_중간청산비율.Text = 중간청산목표이익
@@ -1031,6 +1032,9 @@ Public Class Form2
             End If
             txt_TargetDate.Text = TargetDate
             lbl_F2_최종투자금액.Text = Format(최종투자금액, "###,###,###,###,##0")
+            txt_금일투자금_A.Text = Format(최종투자금액, "###,###,###,###,##0")
+            txt_투자금_B.Text = Format(최종투자금액, "###,###,###,###,##0")
+            txt_투자금_D.Text = Format(최종투자금액 * 1.1, "###,###,###,###,##0")
         End If
     End Sub
 

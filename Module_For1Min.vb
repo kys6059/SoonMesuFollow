@@ -320,6 +320,10 @@ Module Module_For1Min
         Dim cnt As Integer = 0
 
         Dim startIndex As Integer = 4
+        For i As Integer = 0 To 4    '처음에는 0에 0900이 들어오고 이때 순매수 빈값이 들어왔는데 어느날에선가부터 2분부터 들어오는 걸로 바뀌었거나 내가 필터링 해서 0902부터 인덱스 0에 쌓이고 있는 현상 확인
+            If Get순매수(i, dataSource) <> 0 Then startIndex = i
+            Exit For
+        Next
         Dim PIP_CALC_MAX_INDEX As Integer = Val(Form2.txt_F2_PIP_CALC_MAX_INDEX.Text)
         If PIP_CALC_MAX_INDEX > 0 Then startIndex = Math.Max(LastIndex - PIP_CALC_MAX_INDEX, 4)
 
@@ -359,7 +363,12 @@ Module Module_For1Min
         Dim pipData(n) As Double
         Dim pipIndexList As List(Of Integer) = New List(Of Integer)
 
+
         Dim startIndex As Integer = 4
+        For i As Integer = 0 To 4
+            If Get순매수(i, dataSource) <> 0 Then startIndex = i
+            Exit For
+        Next
         Dim PIP_CALC_MAX_INDEX As Integer = Val(Form2.txt_F2_PIP_CALC_MAX_INDEX.Text)
         If PIP_CALC_MAX_INDEX > 0 Then startIndex = Math.Max(LastIndex - PIP_CALC_MAX_INDEX, 4)
 
@@ -515,13 +524,14 @@ Module Module_For1Min
 
         For i As Integer = 0 To 이동평균선기준일자 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
 
-            If 일분옵션데이터(callput).price(index - i, 3) <= 0 Then Return -1
+            If 일분옵션데이터(callput).price(index - i, 3) > 0 Then
+                sumValue = sumValue + 일분옵션데이터(callput).price(index - i, 3)
+                cnt += 1
+            End If
 
-            sumValue = sumValue + 일분옵션데이터(callput).price(index - i, 3)
-            cnt += 1
         Next
 
-        Dim 이동평균값 As Single = sumValue / 이동평균선기준일자
+        Dim 이동평균값 As Single = sumValue / cnt
         Return 이동평균값
 
     End Function

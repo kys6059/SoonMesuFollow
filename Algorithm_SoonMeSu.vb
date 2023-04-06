@@ -519,6 +519,7 @@ Module Algorithm_SoonMeSu
                 s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
                 s.A20_매도사유 = 매도사유
                 s.A22_신호해제가격 = s.A14_현재가격
+                If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
 
             Else  '살아 있으면 중간청산 체크하기
                 'Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
@@ -685,8 +686,8 @@ Module Algorithm_SoonMeSu
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A15_현재상태 = 1 Then
                     If s.A03_신호ID = "D" Then    'A,B보다 D를 우선시 한다
-                        If s.A08_콜풋 = 0 Then ret = 1
-                        If s.A08_콜풋 = 1 Then ret = -1
+                        If s.A08_콜풋 = 0 Then ret = 2
+                        If s.A08_콜풋 = 1 Then ret = -2
                     End If
 
                 End If
@@ -724,7 +725,7 @@ Module Algorithm_SoonMeSu
                     If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
 
                         If Mid(it.A01_종복번호, 1, 1) = "2" Then
-                            If 현재신호 = 0 Or 현재신호 = 1 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
+                            If 현재신호 >= 0 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
                                 Dim 종목번호 As String = it.A01_종복번호
 
                                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
@@ -740,7 +741,7 @@ Module Algorithm_SoonMeSu
                             End If
 
                         Else '풋일 때  -- 오른다를 산 상태
-                            If 현재신호 = 0 Or 현재신호 = -1 Then
+                            If 현재신호 <= 0 Then
                                 Dim 종목번호 As String = it.A01_종복번호
                                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                 Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
@@ -757,7 +758,7 @@ Module Algorithm_SoonMeSu
                     ElseIf it.A02_구분 = "매수" Then  '매수된 항목 처리하는 로직 
 
                         If Mid(it.A01_종복번호, 1, 1) = "3" Then
-                            If 현재신호 = 0 Or 현재신호 = 1 Then  '풋을 샀는데  -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
+                            If 현재신호 >= 0 Then  '풋을 샀는데  -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
 
                                 Dim 종목번호 As String = it.A01_종복번호
                                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
@@ -771,7 +772,7 @@ Module Algorithm_SoonMeSu
                             End If
 
                         Else '콜을 매수한 상태이면 -  오른다를 산 상태
-                            If 현재신호 = 0 Or 현재신호 = -1 Then
+                            If 현재신호 <= 0 Then
                                 Dim 종목번호 As String = it.A01_종복번호
                                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                 Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
@@ -823,65 +824,68 @@ Module Algorithm_SoonMeSu
             End If
 
 
-            '신규매수를 한다 - 이건 시간 체크한다
+            '신규매수를 한다 - 시간체크는 별도로 하지 않고 신호 생성에서 담당한다
             If currentIndex_순매수 >= 0 Then
-                Dim currentTime As Integer = Val(순매수리스트(currentIndex_순매수).sTime)
 
                 If Form2.chk_실거래실행.Checked = True Then
-                    Dim 매수시작시간 As Integer = Val(Form2.txt_F2_매수시작시간.Text)
-                    Dim 매수마감시간 As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-                    If currentTime <= 매수마감시간 Then
 
-                        '매도실행
-                        Dim 매도가능수량 As Integer = 0
-                        If 현재신호 = 1 Then  '상승베팅 
+                    If 현재신호 > 0 Then  '상승베팅 
 
-                            If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+                        If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
 
-                                '매도 코드 주석처리함 20230221
-                                'Dim code As String = 일분옵션데이터(1).Code
-                                'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
-                                'Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
-                                'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                                'Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
-                                'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
+                            '매도 코드 주석처리함 20230221
+                            'Dim code As String = 일분옵션데이터(1).Code
+                            'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
+                            'Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
+                            'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                            'Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
+                            'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
 
-                                '매수를 추가함 - 20230205  - 상승베팅
-                                추가매수실행(0) '콜을 매수한다
-                            End If
+                            '매수를 추가함 - 20230205  - 상승베팅
+                            추가매수실행(0, 현재신호) '콜을 매수한다
+                        End If
 
-                        ElseIf 현재신호 = -1 Then
+                    ElseIf 현재신호 < 0 Then
 
-                            If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+                        If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
 
-                                '매도 코드 주석처리함 20230221
-                                'Dim code As String = 일분옵션데이터(0).Code
-                                'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
-                                'Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
-                                'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                                'Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
-                                'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
+                            '매도 코드 주석처리함 20230221
+                            'Dim code As String = 일분옵션데이터(0).Code
+                            'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
+                            'Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
+                            'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                            'Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
+                            'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
 
-                                '매수를 추가함 - 20230205 - 하락베팅
-                                추가매수실행(1) '풋을 매수한다
-                            End If
-
+                            '매수를 추가함 - 20230205 - 하락베팅
+                            추가매수실행(1, 현재신호) '풋을 매수한다
                         End If
 
                     End If
+
                 End If
             End If
         End If
     End Sub
 
-    Private Sub 추가매수실행(ByVal direction As Integer)
+    Private Sub 추가매수실행(ByVal direction As Integer, ByVal 투자그레이드 As Integer)
 
         Dim targetIndex As Integer = 매수종목index찾기(direction)
         If targetIndex >= 0 Then
             Dim it As ListTemplate = optionList(targetIndex)
             Dim 종목번호 As String = it.Code(direction)
             Dim price As Single = it.price(direction, 3)
-            Dim count As Integer = 매수수량계산(price, direction)
+
+
+            Dim 진짜최종투자금액 As Long = 최종투자금액
+            If Math.Abs(투자그레이드) = 1 Then
+                진짜최종투자금액 = Val(Form2.txt_금일투자금_A.Text)
+            ElseIf Math.Abs(투자그레이드) = 2 Then
+                진짜최종투자금액 = Val(Form2.txt_투자금_D.Text)
+            End If
+
+            Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
+
             If count > 0 Then
                 한종목매수(종목번호, price, count, "신규매수", "00")  '호가유형 지정가 00, 시장가 03
 
@@ -894,15 +898,15 @@ Module Algorithm_SoonMeSu
         End If
     End Sub
 
-    Private Function 매수수량계산(ByVal price As Single, ByVal direction As Integer) As Integer
+    Private Function 매수수량계산(ByVal price As Single, ByVal direction As Integer, ByVal 진짜최종투자금액 As Long) As Integer
         Dim count As Integer = 0
 
         Dim adj_price As Single = price + 0.1
         Dim totalAmount As Long = adj_price * 250000
 
-        If 최종투자금액 > 0 Then
+        If 진짜최종투자금액 > 0 Then
 
-            Dim 평가금액기준남은금액 As Long = 최종투자금액 - 평가종합.현재까지주문금액   '평가금액 기준 주문금액
+            Dim 평가금액기준남은금액 As Long = 진짜최종투자금액 - 평가종합.현재까지주문금액   '평가금액 기준 주문금액
 
             Dim 현재까지매수금액 As Long
             If direction = 0 Then
@@ -910,7 +914,7 @@ Module Algorithm_SoonMeSu
             Else
                 현재까지매수금액 = 풋현재까지매수금액
             End If
-            Dim 현재까지매수금액기준남은금액 As Long = 최종투자금액 - 현재까지매수금액      '주문할 때 계산한 주문금액 - 평가금액 반영이 늦어서 더 많이 사지는 걸 방지하는 기능
+            Dim 현재까지매수금액기준남은금액 As Long = 진짜최종투자금액 - 현재까지매수금액      '주문할 때 계산한 주문금액 - 평가금액 반영이 늦어서 더 많이 사지는 걸 방지하는 기능
             Dim 남은금액 As Long = Math.Min(평가금액기준남은금액, 현재까지매수금액기준남은금액)  '평가금액 기준과 주문할 때 기준 중 작은 값으로 수량을 계산한다
 
             count = Math.Round((남은금액 / totalAmount), 0)
@@ -980,7 +984,12 @@ Module Algorithm_SoonMeSu
 
         For callput As Integer = 0 To 1
             For j As Integer = 이동평균선_기준일자 - 1 To currentIndex_1MIn
-                If 일분옵션데이터(callput).이동평균선(j) <= 0 Then 일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j)   '빈것들만 계산하여 속도를 빠르게 한다
+
+                If isRealFlag = False Then
+                    If 일분옵션데이터(callput).이동평균선(j) <= 0 Then 일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j)   '빈것들만 계산하여 속도를 빠르게 한다
+                Else
+                    일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
+                End If
             Next
         Next
 
