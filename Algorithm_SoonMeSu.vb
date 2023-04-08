@@ -878,10 +878,8 @@ Module Algorithm_SoonMeSu
 
 
             Dim 진짜최종투자금액 As Long = 최종투자금액
-            If Math.Abs(투자그레이드) = 1 Then
-                진짜최종투자금액 = Val(Form2.txt_금일투자금_A.Text)
-            ElseIf Math.Abs(투자그레이드) = 2 Then
-                진짜최종투자금액 = Val(Form2.txt_투자금_D.Text)
+            If Math.Abs(투자그레이드) = 2 Then
+                진짜최종투자금액 = 투자금_D
             End If
 
             Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
@@ -956,7 +954,7 @@ Module Algorithm_SoonMeSu
         For i As Integer = 0 To optionList.Count - 1
             Dim it As ListTemplate = optionList(i)
             Dim gap As Single = Math.Abs(Targetprice - it.price(direction, 3))
-            If gap < minGap Then
+            If gap < minGap And it.price(direction, 3) > 0.2 Then
                 targetIndex = i
                 minGap = gap
             End If

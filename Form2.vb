@@ -1034,7 +1034,7 @@ Public Class Form2
             lbl_F2_최종투자금액.Text = Format(최종투자금액, "###,###,###,###,##0")
             txt_금일투자금_A.Text = Format(최종투자금액, "###,###,###,###,##0")
             txt_투자금_B.Text = Format(최종투자금액, "###,###,###,###,##0")
-            txt_투자금_D.Text = Format(최종투자금액 * 1.1, "###,###,###,###,##0")
+            txt_투자금_D.Text = Format(투자금_D, "###,###,###,###,##0")
         End If
     End Sub
 
@@ -1294,7 +1294,7 @@ Public Class Form2
         당일반복중_flag = True
 
         'fullTest_A()
-        fullTest_B()
+        fullTest_D()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1471,6 +1471,56 @@ Public Class Form2
                 Next
             Next
         Next
+
+    End Sub
+
+    'Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
+    'Public X_계산기준봉비율 As Single = 0.55         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함
+    'Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
+
+    Private Sub fullTest_D()
+        Dim 이동평균선_기준일자_temp() As Integer = {50}               'A
+        Dim X_계산기준봉비율_temp() As Single = {0.55, 0.5, 0.45}
+        Dim Y_장대양봉기준비율_temp() As Single = {0.6, 0.55, 0.5, 0.45, 0.4}
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To 이동평균선_기준일자_temp.Length - 1
+            For b As Integer = 0 To X_계산기준봉비율_temp.Length - 1
+                For c As Integer = 0 To Y_장대양봉기준비율_temp.Length - 1
+
+                    이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
+                    X_계산기준봉비율 = X_계산기준봉비율_temp(b)
+                    Y_장대양봉기준비율 = Y_장대양봉기준비율_temp(c)
+
+                    Dim cntstr As String
+                    If cnt < 10 Then
+                        cntstr = "00" & cnt.ToString()
+                    ElseIf cnt >= 10 And cnt < 100 Then
+                        cntstr = "0" & cnt.ToString()
+                    Else
+                        cntstr = cnt.ToString()
+                    End If
+
+                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}", 이동평균선_기준일자_temp(a), X_계산기준봉비율_temp(b), Y_장대양봉기준비율_temp(c))
+
+                    Console.WriteLine(SoonMesuSimulation_조건)
+                    Add_Log("", SoonMesuSimulation_조건)
+                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                    cnt += 1
+                Next
+            Next
+        Next
+
+
 
     End Sub
 
