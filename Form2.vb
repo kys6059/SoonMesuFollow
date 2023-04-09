@@ -668,7 +668,6 @@ Public Class Form2
             Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
             남은날짜 = 남은날짜 Mod 7
 
-            'If 남은날짜 < 3 Then
             If 일일조건설정flag = True Then
                 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
             End If
@@ -946,12 +945,13 @@ Public Class Form2
             Case 0
                 중간청산목표이익 = "0.60"
                 켈리지수비율 = "0.36"
-
+                chk_Algorithm_A.Checked = True
             Case 1
                 켈리지수비율 = "0.31"
-
+                chk_Algorithm_A.Checked = True
             Case 2
                 켈리지수비율 = "0.26"
+                chk_Algorithm_A.Checked = True
 
             Case 3
                 켈리지수비율 = "0.16"
