@@ -961,7 +961,7 @@ Public Class Form2
             Case 6
                 켈리지수비율 = "0.16"
                 중간청산목표이익 = "0.3"
-                chk_Algorithm_A.Checked = False
+                chk_모의투자연결.Checked = True
 
         End Select
 
@@ -1484,12 +1484,12 @@ Public Class Form2
     'Dim b_최소유지INDEX_temp() As Integer = {4, 6, 8}
 
     Private Sub fullTest_C()
-        Dim C_StartTime_temp() As Integer = {90200}               'A
-        Dim C_EndTime_temp() As Integer = {90500, 90700, 91000}                   'B
-        Dim C_개별금액_temp() As Single = {10, 100, 200, 300}       'C
-        Dim C_합계금액_temp() As Single = {400, 600, 800, 1000}        'D
-        Dim C_해제기울기_temp() As Integer = {3, 10, 20, 30}
-        Dim b_최소유지INDEX_temp() As Integer = {3, 5}
+        Dim C_StartTime_temp() As Integer = {90400, 90300}               'A
+        Dim C_EndTime_temp() As Integer = {90500, 90600, 97000}                   'B
+        Dim C_개별금액_temp() As Single = {50, 100, 150, 200}       'C
+        Dim C_합계금액_temp() As Single = {700, 800, 900}        'D
+        Dim C_해제기울기_temp() As Integer = {10, 5}
+        Dim b_최소유지INDEX_temp() As Integer = {3}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)

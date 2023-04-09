@@ -60,11 +60,11 @@ Module Algorithm_SoonMeSu
 
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
-    Public C_StartTime As Integer = 90200
-    Public C_EndTime As Integer = 90700
-    Public C_개별금액 As Integer = 300
-    Public C_합계금액 As Integer = 700
-    Public C_해제기울기 As Integer = 20
+    Public C_StartTime As Integer = 90400
+    Public C_EndTime As Integer = 90600
+    Public C_개별금액 As Integer = 50
+    Public C_합계금액 As Integer = 800
+    Public C_해제기울기 As Integer = 10
     'C알고리즘 끝
 
 
@@ -639,9 +639,6 @@ Module Algorithm_SoonMeSu
         If s.A03_신호ID = "C" Then
 
             Dim 현재기울기 As Single = PIP_Point_Lists(0).마지막선기울기
-
-            'C_해제기울기
-
             Dim 해제기준인덱스 As Integer = s.A01_발생Index + b_최소유지INDEX
 
             If s.A08_콜풋 = 0 Then
@@ -653,7 +650,6 @@ Module Algorithm_SoonMeSu
                 Dim 해제기준기울기_음수 As Single = C_해제기울기 * -1
                 If 현재기울기 > 해제기준기울기_음수 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weak"
             End If
-
 
         End If
 
@@ -710,7 +706,7 @@ Module Algorithm_SoonMeSu
 
             If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
 
-            If s.A03_신호ID = "B" Then 이전순매수방향 = "중립"   'B알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
+            If s.A03_신호ID = "B" Or s.A03_신호ID = "C" Then 이전순매수방향 = "중립"   'B,C알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
 
         Else  '살아 있으면 중간청산 체크하기
             Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
@@ -759,7 +755,7 @@ Module Algorithm_SoonMeSu
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A15_현재상태 = 1 Then
-                    If s.A03_신호ID = "D" Then    'A,B보다 D를 우선시 한다
+                    If s.A03_신호ID = "C" Or s.A03_신호ID = "D" Then    'A,B보다 D를 우선시 한다
                         If s.A08_콜풋 = 0 Then ret = 2
                         If s.A08_콜풋 = 1 Then ret = -2
                     End If
@@ -1010,11 +1006,6 @@ Module Algorithm_SoonMeSu
             count = Math.Min(count, 남은매매가능개수)
             count = Math.Min(count, Val(Form2.txt_F2_1회최대매매수량.Text))
         End If
-
-
-
-
-
 
         Return count
     End Function
