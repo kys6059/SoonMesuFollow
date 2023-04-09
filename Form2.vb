@@ -1294,7 +1294,9 @@ Public Class Form2
         당일반복중_flag = True
 
         'fullTest_A()
-        fullTest_D()
+        'fullTest_D()
+
+        fullTest_C()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1466,6 +1468,69 @@ Public Class Form2
                             Add_Log("", SoonMesuSimulation_조건)
                             자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
                             cnt += 1
+                        Next
+                    Next
+                Next
+            Next
+        Next
+
+    End Sub
+
+    'Public C_StartTime As Integer = 90200
+    'Public C_EndTime As Integer = 90500
+    'Public C_개별금액 As Integer = 500
+    'Public C_합계금액 As Integer = 1000
+    'Public C_해제기울기 As Integer = 20
+    'Dim b_최소유지INDEX_temp() As Integer = {4, 6, 8}
+
+    Private Sub fullTest_C()
+        Dim C_StartTime_temp() As Integer = {90200}               'A
+        Dim C_EndTime_temp() As Integer = {90500, 90700, 91000}                   'B
+        Dim C_개별금액_temp() As Single = {10, 100, 200, 300}       'C
+        Dim C_합계금액_temp() As Single = {400, 600, 800, 1000}        'D
+        Dim C_해제기울기_temp() As Integer = {3, 10, 20, 30}
+        Dim b_최소유지INDEX_temp() As Integer = {3, 5}
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To C_StartTime_temp.Length - 1
+            For b As Integer = 0 To C_EndTime_temp.Length - 1
+                For c As Integer = 0 To C_개별금액_temp.Length - 1
+                    For d As Integer = 0 To C_합계금액_temp.Length - 1
+                        For e As Integer = 0 To C_해제기울기_temp.Length - 1
+                            For f As Integer = 0 To b_최소유지INDEX_temp.Length - 1
+
+                                C_StartTime = C_StartTime_temp(a)
+                                C_EndTime = C_EndTime_temp(b)
+                                C_개별금액 = C_개별금액_temp(c)
+                                C_합계금액 = C_합계금액_temp(d)
+                                C_해제기울기 = C_해제기울기_temp(e)
+                                b_최소유지INDEX = b_최소유지INDEX_temp(f)
+
+                                Dim cntstr As String
+                                If cnt < 10 Then
+                                    cntstr = "00" & cnt.ToString()
+                                ElseIf cnt >= 10 And cnt < 100 Then
+                                    cntstr = "0" & cnt.ToString()
+                                Else
+                                    cntstr = cnt.ToString()
+                                End If
+
+                                SoonMesuSimulation_조건 = String.Format("C_TEST_CNT_{0}", cntstr)
+                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}", C_StartTime_temp(a), C_EndTime_temp(b), C_개별금액_temp(c), C_합계금액_temp(d), C_해제기울기_temp(e), b_최소유지INDEX_temp(f))
+
+                                Console.WriteLine(SoonMesuSimulation_조건)
+                                Add_Log("", SoonMesuSimulation_조건)
+                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                cnt += 1
+                            Next
+
                         Next
                     Next
                 Next
