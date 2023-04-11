@@ -58,6 +58,10 @@ Module Algorithm_SoonMeSu
 
     Public variable_1 As String
 
+    'A알고리즘용
+    Public 합계순매수기준기울기 As Single = 11.0  ' 이걸 해봤으나 29 이상으로 높아지면 켈리지수는 높지만 이익이 2.얼마로 낮아져서 포기함
+
+
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
     Public C_StartTime As Integer = 90400
@@ -223,10 +227,13 @@ Module Algorithm_SoonMeSu
 
         If 이전순매수방향 <> CurrentIndex_순매수_마지막방향 Then
 
+            'Dim 현재순매수기울기 As Single = PIP_Point_Lists(0).마지막선기울기
+
+
             If 이전순매수방향 = "중립" Then
-                If CurrentIndex_순매수_마지막방향 = "상승" Then
+                If CurrentIndex_순매수_마지막방향 = "상승" Then 'And 합계순매수기준기울기 <= 현재순매수기울기
                     ret = "상승" '상승 베팅
-                ElseIf CurrentIndex_순매수_마지막방향 = "하락" Then
+                ElseIf CurrentIndex_순매수_마지막방향 = "하락" Then ' And 합계순매수기준기울기 * -1 >= 현재순매수기울기
                     ret = "하락" '하락 베팅
                 End If
             ElseIf 이전순매수방향 = "상승" Then
@@ -613,6 +620,8 @@ Module Algorithm_SoonMeSu
                 End If
             End If
         End If
+
+        '둘 중 하나의 점수나 기울기가 반대방향이라면 매도하는 로직은 효과가 없어서 삭제함
 
         If s.A03_신호ID = "B" Then
 

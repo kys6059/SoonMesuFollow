@@ -948,20 +948,21 @@ Public Class Form2
                 chk_Algorithm_A.Checked = True
             Case 1
                 켈리지수비율 = "0.31"
+                중간청산목표이익 = "0.5"
                 chk_Algorithm_A.Checked = True
             Case 2
                 켈리지수비율 = "0.26"
+                중간청산목표이익 = "0.5"
                 chk_Algorithm_A.Checked = True
-
             Case 3
-                켈리지수비율 = "0.16"
-                중간청산목표이익 = "0.3"
+                켈리지수비율 = "0.26"
+                중간청산목표이익 = "0.35"
                 chk_Algorithm_A.Checked = False
-
             Case 6
-                켈리지수비율 = "0.16"
+                켈리지수비율 = "0.26"
                 중간청산목표이익 = "0.3"
                 chk_모의투자연결.Checked = True
+                chk_Algorithm_A.Checked = False
 
         End Select
 
@@ -1293,10 +1294,10 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        'fullTest_A()
+        fullTest_A()
         'fullTest_D()
 
-        fullTest_C()
+        'fullTest_C()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1307,10 +1308,10 @@ Public Class Form2
     End Sub
 
     Private Sub fullTest_A()
-        Dim 최대포인트수() As String = {"04", "05"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0", "4.0", "3.5", "2.5"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0", "06.5", "05.5"}       'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120", "110", "130", "140", "150"}        'D
+        Dim 최대포인트수() As String = {"04"}               'A
+        Dim 일차상승기울기기준() As String = {"3.0"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0"}       'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
         Dim 매수시작시간() As String = {"102000"}           'E
         Dim 매수마감시간() As String = {"113000"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
@@ -1318,16 +1319,17 @@ Public Class Form2
         Dim 신호발생점수() As String = {"3"}       'I
         Dim 해제기준점수() As String = {"1"}       'J
 
+
         Dim 손절차() As String = {"07"} 'K
         Dim 익절차() As String = {"11"} 'L
         Dim 옵션기준손절매() As String = {"-0.30"} 'M
         Dim 중간청산이익목표() As String = {"0.50"} 'N
 
-        Dim temp_시작전허용기울기() As String = {"40"} 'O
-        Dim 최초매매시작시간() As String = {"91000"} 'P
-        Dim 시작전매도해제기울기_TEMP() As Double = {"30"} 'Q
-        Dim 시작전_개별기울기_temp() As Integer = {15} 'R
 
+
+        chk_Algorithm_A.Checked = True
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1368,7 +1370,6 @@ Public Class Form2
                                                                 txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
                                                                 txt_F2_중간청산비율.Text = 중간청산이익목표(n)
 
-
                                                                 txt_F2_최대포인트수.Refresh()
                                                                 txt_F2_1차상승판정기울기기준.Refresh()
                                                                 txt_F2_2차상승판정기준기울기.Refresh()
@@ -1400,9 +1401,10 @@ Public Class Form2
                                                                 Console.WriteLine(SoonMesuSimulation_조건)
                                                                 Add_Log("", SoonMesuSimulation_조건)
                                                                 자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                                                                cnt += 1
-                                                            Next
 
+                                                                cnt += 1
+
+                                                            Next
                                                         Next
                                                     Next
                                                 Next
