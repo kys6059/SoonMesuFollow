@@ -867,7 +867,6 @@ Module realtime_ebest
 
         If List잔고 IsNot Nothing Then
 
-            Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
             For i As Integer = 0 To List잔고.Count - 1
                 Dim it As 잔고Type = List잔고(i)
                 If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
