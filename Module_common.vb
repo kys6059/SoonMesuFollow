@@ -151,7 +151,7 @@ Module Module_common
 
     End Function
 
-    '4방향 모두 검사하는 방식으로 변경함 
+    '4방향 모두 검사하는 방식으로 변경함 - 2023.04.20 동작 중 이 함수에 안들어와서 좀 이상함
     Public Function CalcTargetJonhmokIndex(ByVal callput As Integer, ByVal 방향 As Single) As Integer
 
 
@@ -164,7 +164,7 @@ Module Module_common
             Dim it As ListTemplate = optionList(i)
 
             If 방향 = 0 Then
-                If it.price(callput, 3) > 0 And it.price(callput, 3) < TargetPrice Then
+                If it.price(callput, 3) >= 0.2 And it.price(callput, 3) < TargetPrice Then
                     Dim gap = Math.Abs(it.price(callput, 3) - TargetPrice)
                     If gap < mingap Then
                         mingap = gap
@@ -173,7 +173,7 @@ Module Module_common
                 End If
 
             Else
-                If it.price(callput, 3) > 0 And it.price(callput, 3) >= TargetPrice Then
+                If it.price(callput, 3) >= 0.2 And it.price(callput, 3) >= TargetPrice Then
                     Dim gap = Math.Abs(it.price(callput, 3) - TargetPrice)
                     If gap < mingap Then
                         mingap = gap

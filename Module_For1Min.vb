@@ -452,7 +452,7 @@ Module Module_For1Min
                 For j = 0 To optionList.Count - 1
                     Dim it As ListTemplate = optionList(j)
                     Dim gap As Single = Math.Abs(Targetprice - it.price(i, 3))
-                    If gap < minGap Then
+                    If gap < minGap And it.price(i, 3) >= 0.2 Then '0.2보다 높은 종목만 선택함
                         targetIndex = j
                         minGap = gap
                     End If

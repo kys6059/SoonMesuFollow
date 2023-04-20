@@ -948,12 +948,12 @@ Public Class Form2
                 chk_Algorithm_A.Checked = True
                 chk_Algorithm_C.Checked = True
             Case 1
-                켈리지수비율 = "0.30"
+                켈리지수비율 = "0.28"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_A.Checked = True
                 chk_Algorithm_C.Checked = True
             Case 2
-                켈리지수비율 = "0.30"
+                켈리지수비율 = "0.32"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_A.Checked = True
                 chk_Algorithm_C.Checked = True
@@ -1314,14 +1314,14 @@ Public Class Form2
 
     Private Sub fullTest_A()
         Dim 최대포인트수() As String = {"04"}               'A
-        Dim 일차상승기울기기준() As String = {"3.0"}        'B
-        Dim 이차상승기울기기준() As String = {"06.0"}       'C
+        Dim 일차상승기울기기준() As String = {"3.0", "4.0"}        'B
+        Dim 이차상승기울기기준() As String = {"06.0", "07.0", "08.0"}       'C
         Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"102000"}           'E
-        Dim 매수마감시간() As String = {"113000"}           'F
+        Dim 매수시작시간() As String = {"140000"}           'E
+        Dim 매수마감시간() As String = {"144500"}           'F
         Dim 신호최소유지시간() As Integer = {6}             'G
         Dim timeoutTime() As String = {"151500"}            'H
-        Dim 신호발생점수() As String = {"3"}       'I
+        Dim 신호발생점수() As String = {"3", "4"}       'I
         Dim 해제기준점수() As String = {"1"}       'J
 
 
