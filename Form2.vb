@@ -616,6 +616,16 @@ Public Class Form2
         손절매수준설정(남은날짜)
         currentIndex = -1
 
+        Dim ct As Integer = Val(DateTime.Now.ToString("HHmm"))
+
+        If ct >= 830 And ct <= 840 Then  '자동시작 - 8시30분~8시40분 사이에 켜지면 자동으로 시작한다
+            Add_Log("", "자동시작")
+            InitDataStructure()
+            InitDataStructure_1Min()
+            이베스트로그인함수()
+            ReceiveCount = 0
+        End If
+
     End Sub
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
