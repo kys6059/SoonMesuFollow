@@ -23,12 +23,12 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
         Me.btn_InsertDB = New System.Windows.Forms.Button()
@@ -176,6 +176,7 @@ Partial Class Form2
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel13 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_Algorithm_E = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_C = New System.Windows.Forms.CheckBox()
         Me.txt_투자금_D = New System.Windows.Forms.TextBox()
         Me.txt_투자금_B = New System.Windows.Forms.TextBox()
@@ -336,16 +337,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea3.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea3)
-        Legend3.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend3)
+        ChartArea5.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend5)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(559, 222)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series3.ChartArea = "ChartArea1"
-        Series3.Legend = "Legend1"
-        Series3.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series3)
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series5)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1100, 688)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -896,7 +897,7 @@ Partial Class Form2
         Me.txt_F2_매수마감시간.Name = "txt_F2_매수마감시간"
         Me.txt_F2_매수마감시간.Size = New System.Drawing.Size(76, 29)
         Me.txt_F2_매수마감시간.TabIndex = 7
-        Me.txt_F2_매수마감시간.Text = "113000"
+        Me.txt_F2_매수마감시간.Text = "111000"
         '
         'txt_F2_익절차
         '
@@ -1032,16 +1033,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend4)
+        ChartArea6.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea6)
+        Legend6.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend6)
         Me.Chart1.Location = New System.Drawing.Point(1681, 16)
         Me.Chart1.Name = "Chart1"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.Chart1.Series.Add(Series4)
+        Series6.ChartArea = "ChartArea1"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        Me.Chart1.Series.Add(Series6)
         Me.Chart1.Size = New System.Drawing.Size(1132, 894)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -1455,7 +1456,7 @@ Partial Class Form2
         Me.txt_F2_켈리지수비율.Name = "txt_F2_켈리지수비율"
         Me.txt_F2_켈리지수비율.Size = New System.Drawing.Size(130, 24)
         Me.txt_F2_켈리지수비율.TabIndex = 9
-        Me.txt_F2_켈리지수비율.Text = "0.3"
+        Me.txt_F2_켈리지수비율.Text = "0.4"
         Me.txt_F2_켈리지수비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label26
@@ -1557,7 +1558,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(130, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.4.0_230409"
+        Me.txt_programversion.Text = "1.5.0_230512"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -2131,10 +2132,11 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnCount = 2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_E, 0, 4)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_C, 0, 2)
-        Me.TableLayoutPanel13.Controls.Add(Me.txt_투자금_D, 1, 3)
+        Me.TableLayoutPanel13.Controls.Add(Me.txt_투자금_D, 1, 2)
         Me.TableLayoutPanel13.Controls.Add(Me.txt_투자금_B, 1, 1)
-        Me.TableLayoutPanel13.Controls.Add(Me.txt_금일투자금_A, 1, 0)
+        Me.TableLayoutPanel13.Controls.Add(Me.txt_금일투자금_A, 1, 4)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_D, 0, 3)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_B, 0, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_A, 0, 0)
@@ -2148,6 +2150,21 @@ Partial Class Form2
         Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel13.Size = New System.Drawing.Size(268, 173)
         Me.TableLayoutPanel13.TabIndex = 38
+        '
+        'chk_Algorithm_E
+        '
+        Me.chk_Algorithm_E.AutoSize = True
+        Me.chk_Algorithm_E.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_E.Checked = True
+        Me.chk_Algorithm_E.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_E.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_E.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_E.Location = New System.Drawing.Point(3, 139)
+        Me.chk_Algorithm_E.Name = "chk_Algorithm_E"
+        Me.chk_Algorithm_E.Size = New System.Drawing.Size(128, 31)
+        Me.chk_Algorithm_E.TabIndex = 7
+        Me.chk_Algorithm_E.Text = "Algorithm_E"
+        Me.chk_Algorithm_E.UseVisualStyleBackColor = False
         '
         'chk_Algorithm_C
         '
@@ -2168,7 +2185,7 @@ Partial Class Form2
         '
         Me.txt_투자금_D.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_투자금_D.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_투자금_D.Location = New System.Drawing.Point(137, 105)
+        Me.txt_투자금_D.Location = New System.Drawing.Point(137, 71)
         Me.txt_투자금_D.Name = "txt_투자금_D"
         Me.txt_투자금_D.Size = New System.Drawing.Size(128, 24)
         Me.txt_투자금_D.TabIndex = 5
@@ -2190,7 +2207,7 @@ Partial Class Form2
         '
         Me.txt_금일투자금_A.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_금일투자금_A.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_금일투자금_A.Location = New System.Drawing.Point(137, 3)
+        Me.txt_금일투자금_A.Location = New System.Drawing.Point(137, 139)
         Me.txt_금일투자금_A.Name = "txt_금일투자금_A"
         Me.txt_금일투자금_A.Size = New System.Drawing.Size(128, 24)
         Me.txt_금일투자금_A.TabIndex = 3
@@ -2230,8 +2247,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_A.AutoSize = True
         Me.chk_Algorithm_A.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_A.Checked = True
-        Me.chk_Algorithm_A.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_A.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_A.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_A.Location = New System.Drawing.Point(3, 3)
@@ -2247,7 +2262,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(2184, 1379)
+        Me.ClientSize = New System.Drawing.Size(2184, 1396)
         Me.Controls.Add(Me.TableLayoutPanel13)
         Me.Controls.Add(Me.lbl_ReceiveCounter)
         Me.Controls.Add(Me.TLP_BuySell)
@@ -2464,4 +2479,5 @@ Partial Class Form2
     Friend WithEvents txt_투자금_B As TextBox
     Friend WithEvents txt_금일투자금_A As TextBox
     Friend WithEvents chk_Algorithm_C As CheckBox
+    Friend WithEvents chk_Algorithm_E As CheckBox
 End Class

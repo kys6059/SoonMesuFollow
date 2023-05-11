@@ -433,6 +433,8 @@ Module Module_For1Min
 
         If selectedJongmokIndex(0) < 0 Or Form2.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
 
+
+
             Dim str As String = "SetSelectedIndex 진입 - selectedJongmokIndex(0) = " & selectedJongmokIndex(0).ToString() & " Form2.chk_ChangeTargetIndex.Checked = " & Form2.chk_ChangeTargetIndex.Checked.ToString()
 
             Console.WriteLine(str)
@@ -446,6 +448,8 @@ Module Module_For1Min
             Dim str10 As String = ""
 
             For i = 0 To 1 '방향
+
+                If is동일신호가현재살아있나("ALL", i) Then Return   '해당 방향의 어떤 신호라도 살아있으면 인덱스를 바꾸지 않고 리턴한다
 
                 Dim targetIndex As Integer
                 Dim minGap As Single = 1100.0
