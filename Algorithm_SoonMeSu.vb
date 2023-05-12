@@ -653,6 +653,11 @@ Module Algorithm_SoonMeSu
                 매도사유 = "ik_ip"
             End If
 
+            '아래는 그냥 정보를 업데이트하는 코드들
+            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+            If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
+            If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+
             '청산할 때 하는 프로세스
             If 매도사유 <> "" Then
 
@@ -758,6 +763,11 @@ Module Algorithm_SoonMeSu
                     End If
                 End If
             End If
+
+            '아래는 그냥 정보를 업데이트하는 코드들
+            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+            If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
+            If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
 
 
             '청산할 때 하는 프로세스
