@@ -62,6 +62,12 @@ Module Algorithm_SoonMeSu
     'A알고리즘용
     Public 합계순매수기준기울기 As Single = 11.0  ' 이걸 해봤으나 29 이상으로 높아지면 켈리지수는 높지만 이익이 2.얼마로 낮아져서 포기함
 
+    'B 알고리즘용  
+    Public B_StartTime As Integer = 92500
+    Public B_EndTime As Integer = 101900
+    Public B_기준기울기 As Single = 50.0
+    Public B_해제기울기 As Single = 2.0
+
 
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
@@ -152,7 +158,7 @@ Module Algorithm_SoonMeSu
 
 
 
-    Public Sub CalcAlgorithm_E()  '기관순매수의 가중치를 조절하면서 두개의 순매수량을 합친 값으로 신호 발생여부를 결정하는 알고리즘
+    Public Sub CalcAlgorithm_E()  '외국인만의 순매를 기준으로 매수하는 알고리즘으로 변경 - 기관순매수가 0~0.05일 때 최고가 되어 기관순매수는 무시함
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
@@ -171,6 +177,7 @@ Module Algorithm_SoonMeSu
 
                     '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다
                     If is동일신호가있나("E", 0) = True Then Return
+                    If is동일신호가현재살아있나("B", 0) = True Then Return 'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     If is동일신호가현재살아있나("E", 0) = False Then
                         Dim str As String = String.Format("E 신호 발생 콜풋 : {0} 방향", 0)
@@ -181,6 +188,7 @@ Module Algorithm_SoonMeSu
                 Else ' 풋 방향
 
                     If is동일신호가있나("E", 1) = True Then Return
+                    If is동일신호가현재살아있나("B", 1) = True Then Return   'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     If is동일신호가현재살아있나("E", 1) = False Then
                         Dim str As String = String.Format("E 신호 발생 콜풋 : {0} 방향", 1)
@@ -194,40 +202,41 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
-    Public B_StartIndex As Integer = 8
-    Public B_EndIndex As Integer = 20
-    Public B_기준기울기 As Single = 20.0
-    Public B_해제기울기 As Single = 10.0
-    Public b_최소유지INDEX As Integer = 6
-
     Public Sub CalcAlgorithm_B() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403
 
-        Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= B_StartTime And Val(순매수리스트(currentIndex_순매수).sTime) <= B_EndTime Then
 
-        If currentIndex_순매수 >= B_StartIndex And currentIndex_순매수 <= B_EndIndex Then  '최초 매우 강할 때 사서 낮아지면 바로 판다
+            Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기  '0 통합, 1 -'외국인기울기, 2 기관
 
-            If SoonMesuShinhoList.Count <= 0 Then  '신호가 현재까지 한번도 안떳을 때만 수행한다
+            Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
 
-                Dim 최저기울기 As Single = Math.Min(Math.Abs(PIP_Point_Lists(1).마지막선기울기), Math.Abs(PIP_Point_Lists(2).마지막선기울기))
-                Dim 기울기방향성 As Single = PIP_Point_Lists(1).마지막선기울기 * PIP_Point_Lists(2).마지막선기울기
+            If 현재순매수기울기_절대치 > B_기준기울기 Then
 
-                If 기울기방향성 > 0 Then   '외국인, 기관이 둘 다 같은 방향이고
-                    If 최저기울기 > B_기준기울기 Then  '기준기울기보다 큰 경우
-                        If PIP_Point_Lists(1).마지막선기울기 > 0 And PIP_Point_Lists(2).마지막선기울기 > 0 Then '기울기가 둘 다 양수이면
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 0)               '신규 신호 입력하기
-                            SoonMesuShinhoList.Add(shinho)
-                            If EBESTisConntected = True Then Add_Log("B 신호", String.Format("최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
+                If 현재순매수기울기 > 0 Then  '  콜 방향
 
-                        ElseIf PIP_Point_Lists(1).마지막선기울기 < 0 And PIP_Point_Lists(2).마지막선기울기 < 0 Then  '기울기가 둘 다 음수이면
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 1)             '신규 신호 입력하기
-                            SoonMesuShinhoList.Add(shinho)
-                            If EBESTisConntected = True Then Add_Log("B 신호", String.Format("최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
-                        End If
+
+                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다
+                    If is동일신호가있나("B", 0) = True Then Return
+
+                    If is동일신호가현재살아있나("B", 0) = False Then
+                        Dim str As String = String.Format("B 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 0)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+
+                Else ' 풋 방향
+
+                    If is동일신호가있나("B", 1) = True Then Return
+
+                    If is동일신호가현재살아있나("B", 1) = False Then
+                        Dim str As String = String.Format("B 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("B", 1)
+                        SoonMesuShinhoList.Add(shinho)
                     End If
                 End If
+
             End If
         End If
-
     End Sub
 
     Public Sub CalcAlgorithm_C() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403
@@ -563,7 +572,7 @@ Module Algorithm_SoonMeSu
                         Case "A"
                             살아있는신호확인하기_A(s)
                         Case "B"
-                            살아있는신호확인하기_A(s)
+                            살아있는신호확인하기_E(s)
                         Case "C"
                             살아있는신호확인하기_A(s)
                         Case "D"
@@ -578,6 +587,10 @@ Module Algorithm_SoonMeSu
 
             Next
         End If
+
+    End Sub
+
+    Private Sub 살아있는신호확인하기_통합(ByRef s As 순매수신호_탬플릿)
 
     End Sub
 
@@ -748,18 +761,51 @@ Module Algorithm_SoonMeSu
             If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
 
                 If s.A08_콜풋 = 0 Then
-                    If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+
+                    If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 1) = True Then  '반대방향 E 신호 발생
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                        매도사유 = "weak_E"
+                        매도사유 = "E_Occur"
                     End If
+                    If s.A03_신호ID = "E" Then
+                        If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            매도사유 = "weak_E"
+                        End If
+                    ElseIf s.A03_신호ID = "B" Then
+                        If B_해제기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            매도사유 = "weak_B"
+                        End If
+                    End If
+
+
                 Else
-                    If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                    If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 0) = True Then  '반대방향 E 신호 발생
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                        매도사유 = "weak_E"
+                        매도사유 = "E_Occur"
+                    End If
+                    If s.A03_신호ID = "E" Then
+                        If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            매도사유 = "weak_E"
+                        End If
+                    ElseIf s.A03_신호ID = "B" Then
+                        If (B_해제기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            매도사유 = "weak_B"
+                        End If
                     End If
                 End If
             End If
@@ -829,34 +875,10 @@ Module Algorithm_SoonMeSu
             End If
         End If
 
-        '둘 중 하나의 점수나 기울기가 반대방향이라면 매도하는 로직은 효과가 없어서 삭제함
-
-        If s.A03_신호ID = "B" Then
-
-            Dim 기울기A As Single = PIP_Point_Lists(1).마지막선기울기
-            Dim 기울기B As Single = PIP_Point_Lists(2).마지막선기울기
-
-            Dim 해제기준기울기 As Single = B_기준기울기 - B_해제기울기
-
-            Dim 해제기준인덱스 As Integer = s.A01_발생Index + b_최소유지INDEX
-
-            If s.A08_콜풋 = 0 Then
-
-                If (기울기A < 해제기준기울기 Or 기울기B < 해제기준기울기) And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weak"
-
-            ElseIf s.A08_콜풋 = 1 Then
-
-                Dim 해제기준기울기_음수 As Single = B_해제기울기 * -1
-                If (기울기A > 해제기준기울기_음수 Or 기울기B > 해제기준기울기_음수) And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weak"
-            End If
-
-
-        End If
-
         If s.A03_신호ID = "C" Then
 
             Dim 현재기울기 As Single = PIP_Point_Lists(0).마지막선기울기
-            Dim 해제기준인덱스 As Integer = s.A01_발생Index + b_최소유지INDEX
+            Dim 해제기준인덱스 As Integer = s.A01_발생Index + 신호최소유지시간index
 
             If s.A08_콜풋 = 0 Then
 

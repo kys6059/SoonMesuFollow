@@ -683,7 +683,7 @@ Public Class Form2
             End If
 
             '당일 내부에서 변경
-            For j As Integer = 0 To 순매수리스트카운트 - 1
+            For j As Integer = 0 To 순매수리스트카운트 - 1  '---------------------------------------------------------------------------------최초로직 테스트용 짧게
 
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
@@ -957,27 +957,32 @@ Public Class Form2
                 '켈리지수비율 = "0.33"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_B.Checked = True
             Case 1
                 '켈리지수비율 = "0.33"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_B.Checked = True
             Case 2
                 '켈리지수비율 = "0.33"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_B.Checked = True
             Case 3
                 '켈리지수비율 = "0.30"
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = False
+                chk_Algorithm_B.Checked = False
             Case 6
                 '켈리지수비율 = "0.30"
                 중간청산목표이익 = "0.3"
                 chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = False
+                chk_Algorithm_B.Checked = False
 
         End Select
 
@@ -1310,10 +1315,11 @@ Public Class Form2
         당일반복중_flag = True
 
         'fullTest_A()
+        fullTest_B()
         'fullTest_D()
 
         'fullTest_C()
-        fullTest_E()
+        'fullTest_E()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1443,11 +1449,12 @@ Public Class Form2
     '    Public B_해제기울기 As Single = 10.0
     '    Public b_최소유지INDEX As Integer = 0
     Private Sub fullTest_B()
-        Dim B_StartIndex_temp() As Integer = {12, 16, 20}               'A
-        Dim B_EndIndex_temp() As Integer = {25}        'B
-        Dim B_기준기울기_temp() As Single = {20, 23, 26, 29}       'C
-        Dim B_해제기울기_temp() As Single = {5.0, 10.0, 15.0}        'D
-        Dim b_최소유지INDEX_temp() As Integer = {4, 6, 8}
+        Dim B_StartIndex_temp() As Integer = {111600}               'A
+        Dim B_EndIndex_temp() As Integer = {120000, 123000, 130000, 133000, 140000, 144500}        'B
+        Dim B_기준기울기_temp() As Single = {40, 45, 50, 55, 60}       'C
+        Dim B_해제기울기_temp() As Single = {1, 3, 5}        'D
+        Dim b_최소유지INDEX_temp() As Integer = {6}
+        Dim B_순매수주체_temp() As Integer = {1}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1457,16 +1464,23 @@ Public Class Form2
 
         Dim cnt As Integer = 0
 
+        chk_Algorithm_B.Checked = True
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+
         For a As Integer = 0 To B_StartIndex_temp.Length - 1
             For b As Integer = 0 To B_EndIndex_temp.Length - 1
                 For c As Integer = 0 To B_기준기울기_temp.Length - 1
                     For d As Integer = 0 To B_해제기울기_temp.Length - 1
                         For e As Integer = 0 To b_최소유지INDEX_temp.Length - 1
-                            B_StartIndex = B_StartIndex_temp(a)
-                            B_EndIndex = B_EndIndex_temp(b)
+
+                            B_StartTime = B_StartIndex_temp(a)
+                            B_EndTime = B_EndIndex_temp(b)
                             B_기준기울기 = B_기준기울기_temp(c)
                             B_해제기울기 = B_해제기울기_temp(d)
-                            b_최소유지INDEX = b_최소유지INDEX_temp(e)
+                            신호최소유지시간index = b_최소유지INDEX_temp(e)
+
 
                             Dim cntstr As String
                             If cnt < 10 Then
@@ -1484,6 +1498,7 @@ Public Class Form2
                             Add_Log("", SoonMesuSimulation_조건)
                             자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
                             cnt += 1
+
                         Next
                     Next
                 Next
@@ -1527,7 +1542,7 @@ Public Class Form2
                                 C_개별금액 = C_개별금액_temp(c)
                                 C_합계금액 = C_합계금액_temp(d)
                                 C_해제기울기 = C_해제기울기_temp(e)
-                                b_최소유지INDEX = b_최소유지INDEX_temp(f)
+                                신호최소유지시간index = b_최소유지INDEX_temp(f)
 
                                 Dim cntstr As String
                                 If cnt < 10 Then
