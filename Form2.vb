@@ -954,30 +954,30 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.60"
-                '켈리지수비율 = "0.33"
+                켈리지수비율 = "0.33"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
             Case 1
-                '켈리지수비율 = "0.33"
+                켈리지수비율 = "0.33"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
             Case 2
-                '켈리지수비율 = "0.33"
+                켈리지수비율 = "0.33"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
             Case 3
-                '켈리지수비율 = "0.30"
+                켈리지수비율 = "0.22"
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = False
-                chk_Algorithm_B.Checked = False
+                chk_Algorithm_B.Checked = True
             Case 6
-                '켈리지수비율 = "0.30"
+                켈리지수비율 = "0.30"
                 중간청산목표이익 = "0.3"
                 chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
@@ -987,7 +987,7 @@ Public Class Form2
         End Select
 
         txt_F2_중간청산비율.Text = 중간청산목표이익
-        'txt_F2_켈리지수비율.Text = 켈리지수비율
+        txt_F2_켈리지수비율.Text = 켈리지수비율
 
     End Sub
 
