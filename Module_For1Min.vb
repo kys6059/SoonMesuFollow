@@ -449,7 +449,7 @@ Module Module_For1Min
 
             For i = 0 To 1 '방향
 
-                If is동일신호가현재살아있나("ALL", i) Then Return   '해당 방향의 어떤 신호라도 살아있으면 인덱스를 바꾸지 않고 리턴한다
+                'If is동일신호가현재살아있나("ALL", i) Then Return   '해당 방향의 어떤 신호라도 살아있으면 인덱스를 바꾸지 않고 리턴한다  -- 밑에서 순매수리스트에 있는 행사가에서 인덱스 가져오는 기능이 있음 - 이건 콜풋 종목의 크기가 변하기 때문에 인덱스를 반드시 바꾸어야 함
 
                 Dim targetIndex As Integer
                 Dim minGap As Single = 1100.0
