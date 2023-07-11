@@ -68,6 +68,11 @@ Module Algorithm_SoonMeSu
     Public B_기준기울기 As Single = 50.0
     Public B_해제기울기 As Single = 2.0
 
+    'Public B_StartTime As Integer = 90400  이하 테스트용으로 재정의했던 부분임
+    'Public B_EndTime As Integer = 91200
+    'Public B_기준기울기 As Single = 50.0
+    'Public B_해제기울기 As Single = 2.0
+
 
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
@@ -85,9 +90,9 @@ Module Algorithm_SoonMeSu
     Public X_계산기준봉비율 As Single = 0.55         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
 
-    Public 손절기준차 As String = "-0.3"
-    Public 익절기준차 As String = "1.0"
-    Public 마감시간 As String = "1515"
+
+
+
 
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
     Public 이평선하향돌파익절기준 As Single = 0.5   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
@@ -473,18 +478,16 @@ Module Algorithm_SoonMeSu
         shinho.A57_월물 = sMonth
         shinho.A58_날짜 = 순매수리스트(currentIndex_순매수).sDate
         shinho.A59_남은날짜 = getRemainDate(sMonth, Val(shinho.A58_날짜))
+        shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
+        shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
+        shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
 
         If shinho.A03_신호ID = "D" Then
-            shinho.A60_손절기준차 = 손절기준차
-            shinho.A61_익절기준차 = 익절기준차
             Dim 장대양봉크기 As Single = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 0)
             shinho.A53_장대양봉손절가 = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - (장대양봉크기 * 장대양봉손절기준비율)
-        Else
-            shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
-            shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         End If
 
-        shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
+
 
         If 일분옵션데이터_CurrentIndex >= 0 Then
 
@@ -615,8 +618,8 @@ Module Algorithm_SoonMeSu
 
 
             '옵션가격 기준 손절매, 익절
-            Dim 옵션가손절매기준 As Single = Val(손절기준차)
-            Dim 옵션익절기준 As Single = Val(익절기준차)
+            Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+            Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
             If s.A21_환산이익율 < 옵션가손절매기준 Then
 
                 매도사유 = "option_son"
@@ -628,15 +631,11 @@ Module Algorithm_SoonMeSu
                 End If
 
             End If
-            If s.A21_환산이익율 > 옵션익절기준 Then
-                매도사유 = "ik"
 
-                If isRealFlag = False Then
-                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션익절기준), 2)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-            End If
+            '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
+            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+            If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+            If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
 
             '타임아웃
             If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
@@ -667,7 +666,6 @@ Module Algorithm_SoonMeSu
             End If
 
             '아래는 그냥 정보를 업데이트하는 코드들
-            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
             If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
             If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
 
@@ -721,9 +719,10 @@ Module Algorithm_SoonMeSu
             End If
 
 
+
             '옵션가격 기준 손절매, 익절
-            Dim 옵션가손절매기준 As Single = Val(손절기준차)
-            Dim 옵션익절기준 As Single = Val(익절기준차)
+            Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+            Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
             If s.A21_환산이익율 < 옵션가손절매기준 Then
 
                 매도사유 = "option_son"
@@ -735,15 +734,11 @@ Module Algorithm_SoonMeSu
                 End If
 
             End If
-            If s.A21_환산이익율 > 옵션익절기준 Then
-                매도사유 = "ik"
 
-                If isRealFlag = False Then
-                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션익절기준), 2)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-            End If
+            '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
+            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+            If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+            If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
 
             '타임아웃
             If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
@@ -811,7 +806,6 @@ Module Algorithm_SoonMeSu
             End If
 
             '아래는 그냥 정보를 업데이트하는 코드들
-            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
             If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
             If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
 
@@ -897,9 +891,9 @@ Module Algorithm_SoonMeSu
         If s.A08_콜풋 = 0 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
         If s.A08_콜풋 = 1 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
 
-        '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126
-        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 And 현재매수매도점수 < 3 Then 매도사유 = "ik"
-        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 And 현재매수매도점수 > -3 Then 매도사유 = "ik"
+        '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
+        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
 
         'timeout 확인
         If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"

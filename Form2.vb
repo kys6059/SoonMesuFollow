@@ -1314,6 +1314,8 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
+        '매도조건테스트()
+
         'fullTest_A()
         fullTest_B()
         'fullTest_D()
@@ -1323,6 +1325,61 @@ Public Class Form2
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
+    End Sub
+
+    Private Sub 매도조건테스트()
+
+
+        Dim 익절차() As String = {"11", "10", "09", "12", "13", "14"} 'L
+        Dim 옵션기준손절매() As String = {"-0.30", "-0.32", "-0.34", "-0.28", "-0.26", "-0.24", "-0.22"} 'M
+        Dim 중간청산이익목표() As String = {"0.50", "0.45", "0.55", "0.60", "0.40"} 'N
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For l As Integer = 0 To 익절차.Length - 1
+            For m As Integer = 0 To 옵션기준손절매.Length - 1
+                For n As Integer = 0 To 중간청산이익목표.Length - 1
+
+
+                    txt_F2_익절차.Text = 익절차(l)
+                    txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
+                    txt_F2_중간청산비율.Text = 중간청산이익목표(n)
+
+                    txt_F2_손절매차.Refresh()
+                    txt_F2_익절차.Refresh()
+                    txt_F2_옵션가기준손절매.Refresh()
+                    txt_F2_중간청산비율.Refresh()
+
+
+                    Dim cntstr As String
+                    If cnt < 10 Then
+                        cntstr = "00" & cnt.ToString()
+                    ElseIf cnt >= 10 And cnt < 100 Then
+                        cntstr = "0" & cnt.ToString()
+                    Else
+                        cntstr = cnt.ToString()
+                    End If
+
+                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+
+                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
+
+                    Console.WriteLine(SoonMesuSimulation_조건)
+                    Add_Log("", SoonMesuSimulation_조건)
+                    자동반복계산로직(cnt, True) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                    cnt += 1
+
+                Next
+            Next
+        Next
+
     End Sub
     Private Sub simpleTest()
 
@@ -1449,11 +1506,11 @@ Public Class Form2
     '    Public B_해제기울기 As Single = 10.0
     '    Public b_최소유지INDEX As Integer = 0
     Private Sub fullTest_B()
-        Dim B_StartIndex_temp() As Integer = {111600}               'A
-        Dim B_EndIndex_temp() As Integer = {120000, 123000, 130000, 133000, 140000, 144500}        'B
-        Dim B_기준기울기_temp() As Single = {40, 45, 50, 55, 60}       'C
-        Dim B_해제기울기_temp() As Single = {1, 3, 5}        'D
-        Dim b_최소유지INDEX_temp() As Integer = {6}
+        Dim B_StartIndex_temp() As Integer = {90400, 90600}               'A
+        Dim B_EndIndex_temp() As Integer = {90700, 90900, 91100}        'B
+        Dim B_기준기울기_temp() As Single = {50, 80, 110, 140}       'C
+        Dim B_해제기울기_temp() As Single = {10, 20, 30}        'D
+        Dim b_최소유지INDEX_temp() As Integer = {4, 6}
         Dim B_순매수주체_temp() As Integer = {1}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
