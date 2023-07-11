@@ -60,19 +60,13 @@ Module Algorithm_SoonMeSu
     Public variable_1 As String
 
     'A알고리즘용
-    Public 합계순매수기준기울기 As Single = 11.0  ' 이걸 해봤으나 29 이상으로 높아지면 켈리지수는 높지만 이익이 2.얼마로 낮아져서 포기함
+    Public 합계순매수기준기울기 As Single = 11.0  ' 이걸 해봤으나 29 이상으로 높아지면 켈리지수는 높지만 이익이 2.얼마로 낮아져서 포기함  ----------- A 알고리즘 더이상 사용하지 않음
 
     'B 알고리즘용  
     Public B_StartTime As Integer = 92500
     Public B_EndTime As Integer = 101900
     Public B_기준기울기 As Single = 50.0
     Public B_해제기울기 As Single = 2.0
-
-    'Public B_StartTime As Integer = 90400  이하 테스트용으로 재정의했던 부분임
-    'Public B_EndTime As Integer = 91200
-    'Public B_기준기울기 As Single = 50.0
-    'Public B_해제기울기 As Single = 2.0
-
 
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
@@ -86,14 +80,8 @@ Module Algorithm_SoonMeSu
 
     'D 알고리즘용 시작
     Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
-
     Public X_계산기준봉비율 As Single = 0.55         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
-
-
-
-
-
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
     Public 이평선하향돌파익절기준 As Single = 0.5   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
     'D 알고리즘용 끝
