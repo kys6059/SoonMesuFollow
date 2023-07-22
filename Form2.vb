@@ -958,36 +958,52 @@ Public Class Form2
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
+                chk_Algorithm_D.Checked = True
+                txt_F2_옵션가기준손절매.Text = "-0.30"
+                txt_F2_익절차.Text = "11"
             Case 1
-                켈리지수비율 = "0.33"
+                켈리지수비율 = "0.27"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
+                chk_Algorithm_D.Checked = True
+                txt_F2_옵션가기준손절매.Text = "-0.30"
+                txt_F2_익절차.Text = "11"
             Case 2
                 켈리지수비율 = "0.33"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_B.Checked = True
+                chk_Algorithm_D.Checked = True
+                txt_F2_옵션가기준손절매.Text = "-0.24"
+                txt_F2_익절차.Text = "11"
             Case 3
-                켈리지수비율 = "0.22"
+                켈리지수비율 = "0.25"
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = False
                 chk_Algorithm_B.Checked = True
+                chk_Algorithm_D.Checked = True
+                txt_F2_옵션가기준손절매.Text = "-0.24"
+                txt_F2_익절차.Text = "11"
             Case 6
-                켈리지수비율 = "0.30"
-                중간청산목표이익 = "0.3"
-                chk_모의투자연결.Checked = True
+                켈리지수비율 = "0.25"
+                중간청산목표이익 = "0.35"
+                'chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
-                chk_Algorithm_C.Checked = False
-                chk_Algorithm_B.Checked = False
+                chk_Algorithm_C.Checked = True
+                chk_Algorithm_B.Checked = True
+                chk_Algorithm_D.Checked = False
+                txt_F2_옵션가기준손절매.Text = "-0.22"
+                txt_F2_익절차.Text = "09"
 
         End Select
 
         txt_F2_중간청산비율.Text = 중간청산목표이익
         txt_F2_켈리지수비율.Text = 켈리지수비율
+        txt_F2_옵션가기준손절매.Refresh()
 
     End Sub
 
@@ -1314,10 +1330,10 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
-        fullTest_B()
+        'fullTest_B()
         'fullTest_D()
 
         'fullTest_C()
@@ -1330,9 +1346,9 @@ Public Class Form2
     Private Sub 매도조건테스트()
 
 
-        Dim 익절차() As String = {"11", "10", "09", "12", "13", "14"} 'L
+        Dim 익절차() As String = {"11", "10", "09", "08"} 'L
         Dim 옵션기준손절매() As String = {"-0.30", "-0.32", "-0.34", "-0.28", "-0.26", "-0.24", "-0.22"} 'M
-        Dim 중간청산이익목표() As String = {"0.50", "0.45", "0.55", "0.60", "0.40"} 'N
+        Dim 중간청산이익목표() As String = {"0.50"} 'N
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1341,6 +1357,12 @@ Public Class Form2
         End If
 
         Dim cnt As Integer = 0
+
+
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = True
+        chk_Algorithm_E.Checked = False
 
         For l As Integer = 0 To 익절차.Length - 1
             For m As Integer = 0 To 옵션기준손절매.Length - 1
