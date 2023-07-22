@@ -431,6 +431,12 @@ Module Module_For1Min
 
     Public Sub SetSelectedIndex_For_순매수()  '순매수로직을 위해 기존 양매도로직을 수정함
 
+        If currentIndex_순매수 > 0 Then
+            If Val(순매수리스트(currentIndex_순매수).sTime) > 144500 Then  '14시 45분에는 자동 변경을 끈다
+                Form2.chk_ChangeTargetIndex.Checked = False
+            End If
+        End If
+
         If selectedJongmokIndex(0) < 0 Or Form2.chk_ChangeTargetIndex.Checked = True Then '아직 한번도 선택하지 않았거나 Checked가 True일 때만 자동으로 변경함
 
 
