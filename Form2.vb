@@ -957,6 +957,7 @@ Public Class Form2
                 켈리지수비율 = "0.33"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_C1.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -966,6 +967,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_C1.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -975,6 +977,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_C1.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -983,7 +986,8 @@ Public Class Form2
                 켈리지수비율 = "0.25"
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
-                chk_Algorithm_C.Checked = False
+                chk_Algorithm_C.Checked = True
+                chk_Algorithm_C1.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -994,6 +998,7 @@ Public Class Form2
                 'chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = True
+                chk_Algorithm_C1.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = False
                 txt_F2_옵션가기준손절매.Text = "-0.22"
@@ -1330,13 +1335,16 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
         'fullTest_D()
 
         'fullTest_C()
+
+        fullTest_C1()
+
         'fullTest_E()
 
         당일반복중_flag = False
@@ -1398,6 +1406,65 @@ Public Class Form2
 
                     cnt += 1
 
+                Next
+            Next
+        Next
+
+    End Sub
+
+    Private Sub fullTest_C1()
+        Dim C1_StartTime_temp() As Integer = {90400}               'A
+        Dim C1_EndTime_temp() As Integer = {90600}                   'B
+        Dim C1_개별금액_temp() As Single = {800, 900, 1000}       'C
+        Dim C1_해제기울기_temp() As Integer = {10, 13, 16, 7, 4, 2}
+        Dim b_최소유지INDEX_temp() As Integer = {6}
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_C1.Checked = True
+
+        For a As Integer = 0 To C1_StartTime_temp.Length - 1
+            For b As Integer = 0 To C1_EndTime_temp.Length - 1
+                For c As Integer = 0 To C1_개별금액_temp.Length - 1
+                    For e As Integer = 0 To C1_해제기울기_temp.Length - 1
+                        For f As Integer = 0 To b_최소유지INDEX_temp.Length - 1
+
+                            C1_StartTime = C1_StartTime_temp(a)
+                            C1_EndTime = C1_EndTime_temp(b)
+                            C1_개별금액 = C1_개별금액_temp(c)
+                            C1_해제기울기 = C1_해제기울기_temp(e)
+                            신호최소유지시간index = b_최소유지INDEX_temp(f)
+
+                            Dim cntstr As String
+                            If cnt < 10 Then
+                                cntstr = "00" & cnt.ToString()
+                            ElseIf cnt >= 10 And cnt < 100 Then
+                                cntstr = "0" & cnt.ToString()
+                            Else
+                                cntstr = cnt.ToString()
+                            End If
+
+                            SoonMesuSimulation_조건 = String.Format("C_TEST_CNT_{0}", cntstr)
+                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", C1_StartTime_temp(a), C1_EndTime_temp(b), C1_개별금액_temp(c), C1_해제기울기_temp(e), b_최소유지INDEX_temp(f))
+
+                            Console.WriteLine(SoonMesuSimulation_조건)
+                            Add_Log("", SoonMesuSimulation_조건)
+                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            cnt += 1
+                        Next
+
+                    Next
                 Next
             Next
         Next

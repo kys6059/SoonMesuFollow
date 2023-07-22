@@ -77,6 +77,13 @@ Module Algorithm_SoonMeSu
     Public C_해제기울기 As Integer = 10
     'C알고리즘 끝
 
+    'C1 알고리즘 - 외국인만의 시작하자마자 매수를 검증하는 코드
+    Public C1_StartTime As Integer = 90400
+    Public C1_EndTime As Integer = 90600
+    Public C1_개별금액 As Integer = 1000
+    Public C1_해제기울기 As Integer = 13
+
+    'C1 알고리즘 끝
 
     'D 알고리즘용 시작
     Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
@@ -97,6 +104,7 @@ Module Algorithm_SoonMeSu
         If Form2.chk_Algorithm_A.Checked = True Then CalcAlgorithm_A()
         If Form2.chk_Algorithm_B.Checked = True Then CalcAlgorithm_B()
         If Form2.chk_Algorithm_C.Checked = True Then CalcAlgorithm_C()
+        If Form2.chk_Algorithm_C1.Checked = True Then CalcAlgorithm_C1()
         If Form2.chk_Algorithm_D.Checked = True Then CalcAlgorithm_D()
         If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E()
 
@@ -261,6 +269,39 @@ Module Algorithm_SoonMeSu
                             End If
 
                         End If
+
+                    End If
+
+                End If
+
+            End If
+
+        End If
+
+    End Sub
+
+    Public Sub CalcAlgorithm_C1() '외국인만의 --- 9시10분전 급격한 기울기
+
+        Dim currentTime As Integer = Val(순매수리스트(currentIndex_순매수).sTime)
+
+        If currentTime >= C1_StartTime And currentTime <= C1_EndTime Then  '변수 2건
+
+            If SoonMesuShinhoList.Count <= 0 Then  '신호가 현재까지 한번도 안떳을 때만 수행한다
+
+                If Math.Abs(순매수리스트(currentIndex_순매수).외국인순매수) > C1_개별금액 Then  '개별 항목들이 기준 금액을 넘었고
+
+
+                    If 순매수리스트(currentIndex_순매수).외국인순매수 > 0 Then
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("C1", 0)               '신규 신호 입력하기
+                        SoonMesuShinhoList.Add(shinho)
+                        If EBESTisConntected = True Then Add_Log("C1 신호", String.Format("C1 - 최초 상승신호 발생 AT {0}", shinho.A02_발생시간))
+
+                    Else
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("C1", 1)             '신규 신호 입력하기
+                        SoonMesuShinhoList.Add(shinho)
+                        If EBESTisConntected = True Then Add_Log("C1 신호", String.Format("C1 - 최초 하락신호 발생 AT {0}", shinho.A02_발생시간))
 
                     End If
 
@@ -564,14 +605,17 @@ Module Algorithm_SoonMeSu
                     If ret = "" Then
                         Select Case s.A03_신호ID
 
-                            Case "B"
-                                ret = 살아있는신호확인하기_E(s)
                             Case "C"
-                                ret = 살아있는신호확인하기_A(s)
+                                ret = 살아있는신호확인하기_C(s)
+                            Case "C1"
+                                ret = 살아있는신호확인하기_C(s)
                             Case "D"
                                 ret = 살아있는신호확인하기_D(s)
+                            Case "B"
+                                ret = 살아있는신호확인하기_E(s)
                             Case "E"
                                 ret = 살아있는신호확인하기_E(s)
+
                         End Select
                     End If
 
@@ -783,7 +827,7 @@ Module Algorithm_SoonMeSu
     End Function
 
     'C 9시 10분 이전 발생하는 신호에서 사용함
-    Private Function 살아있는신호확인하기_A(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_C(ByRef s As 순매수신호_탬플릿) As String
 
         Dim 매도사유 As String = ""
 
@@ -794,14 +838,27 @@ Module Algorithm_SoonMeSu
 
             If s.A08_콜풋 = 0 Then
 
-                If 현재기울기 < C_해제기울기 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weak"
+                If 현재기울기 < C_해제기울기 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weakC"
 
             ElseIf s.A08_콜풋 = 1 Then
 
                 Dim 해제기준기울기_음수 As Single = C_해제기울기 * -1
-                If 현재기울기 > 해제기준기울기_음수 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weak"
+                If 현재기울기 > 해제기준기울기_음수 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weakC"
             End If
+        ElseIf s.A03_신호ID = "C1" Then
 
+            Dim 현재기울기 As Single = PIP_Point_Lists(1).마지막선기울기  '외국인만의 기울기
+            Dim 해제기준인덱스 As Integer = s.A01_발생Index + 신호최소유지시간index
+
+            If s.A08_콜풋 = 0 Then
+
+                If 현재기울기 < C1_해제기울기 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weakC1"
+
+            ElseIf s.A08_콜풋 = 1 Then
+
+                Dim 해제기준기울기_음수 As Single = C1_해제기울기 * -1
+                If 현재기울기 > 해제기준기울기_음수 And currentIndex_순매수 > 해제기준인덱스 Then 매도사유 = "weakC1"
+            End If
         End If
 
         '청산할 때 하는 프로세스  - C에만 이걸 넣는다
@@ -842,7 +899,7 @@ Module Algorithm_SoonMeSu
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A15_현재상태 = 1 Then
-                    If s.A03_신호ID = "A" Or s.A03_신호ID = "B" Or s.A03_신호ID = "E" Then
+                    If s.A03_신호ID = "A" Or s.A03_신호ID = "B" Or s.A03_신호ID = "E" Or s.A03_신호ID = "C1" Then
                         If s.A08_콜풋 = 0 Then ret = 1        '상승베팅
                         If s.A08_콜풋 = 1 Then ret = -1
                     End If

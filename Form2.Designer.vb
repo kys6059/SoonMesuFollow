@@ -184,6 +184,7 @@ Partial Class Form2
         Me.chk_Algorithm_D = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_B = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_A = New System.Windows.Forms.CheckBox()
+        Me.chk_Algorithm_C1 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -2132,23 +2133,25 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnCount = 2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_E, 0, 4)
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_C1, 0, 3)
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_E, 0, 5)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_C, 0, 2)
         Me.TableLayoutPanel13.Controls.Add(Me.txt_투자금_D, 1, 2)
         Me.TableLayoutPanel13.Controls.Add(Me.txt_투자금_B, 1, 1)
-        Me.TableLayoutPanel13.Controls.Add(Me.txt_금일투자금_A, 1, 4)
-        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_D, 0, 3)
+        Me.TableLayoutPanel13.Controls.Add(Me.txt_금일투자금_A, 1, 5)
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_D, 0, 4)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_B, 0, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_A, 0, 0)
         Me.TableLayoutPanel13.Location = New System.Drawing.Point(964, 1064)
         Me.TableLayoutPanel13.Name = "TableLayoutPanel13"
-        Me.TableLayoutPanel13.RowCount = 5
-        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel13.Size = New System.Drawing.Size(313, 160)
+        Me.TableLayoutPanel13.RowCount = 6
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.Size = New System.Drawing.Size(313, 190)
         Me.TableLayoutPanel13.TabIndex = 38
         '
         'chk_Algorithm_E
@@ -2159,9 +2162,9 @@ Partial Class Form2
         Me.chk_Algorithm_E.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_E.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_E.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_E.Location = New System.Drawing.Point(3, 131)
+        Me.chk_Algorithm_E.Location = New System.Drawing.Point(3, 158)
         Me.chk_Algorithm_E.Name = "chk_Algorithm_E"
-        Me.chk_Algorithm_E.Size = New System.Drawing.Size(150, 26)
+        Me.chk_Algorithm_E.Size = New System.Drawing.Size(150, 29)
         Me.chk_Algorithm_E.TabIndex = 7
         Me.chk_Algorithm_E.Text = "Algorithm_E"
         Me.chk_Algorithm_E.UseVisualStyleBackColor = False
@@ -2174,9 +2177,9 @@ Partial Class Form2
         Me.chk_Algorithm_C.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_C.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_C.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_C.Location = New System.Drawing.Point(3, 67)
+        Me.chk_Algorithm_C.Location = New System.Drawing.Point(3, 65)
         Me.chk_Algorithm_C.Name = "chk_Algorithm_C"
-        Me.chk_Algorithm_C.Size = New System.Drawing.Size(150, 26)
+        Me.chk_Algorithm_C.Size = New System.Drawing.Size(150, 25)
         Me.chk_Algorithm_C.TabIndex = 6
         Me.chk_Algorithm_C.Text = "Algorithm_C"
         Me.chk_Algorithm_C.UseVisualStyleBackColor = False
@@ -2185,7 +2188,7 @@ Partial Class Form2
         '
         Me.txt_투자금_D.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_투자금_D.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_투자금_D.Location = New System.Drawing.Point(159, 67)
+        Me.txt_투자금_D.Location = New System.Drawing.Point(159, 65)
         Me.txt_투자금_D.Name = "txt_투자금_D"
         Me.txt_투자금_D.Size = New System.Drawing.Size(151, 24)
         Me.txt_투자금_D.TabIndex = 5
@@ -2196,7 +2199,7 @@ Partial Class Form2
         '
         Me.txt_투자금_B.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_투자금_B.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_투자금_B.Location = New System.Drawing.Point(159, 35)
+        Me.txt_투자금_B.Location = New System.Drawing.Point(159, 34)
         Me.txt_투자금_B.Name = "txt_투자금_B"
         Me.txt_투자금_B.Size = New System.Drawing.Size(151, 24)
         Me.txt_투자금_B.TabIndex = 4
@@ -2207,7 +2210,7 @@ Partial Class Form2
         '
         Me.txt_금일투자금_A.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_금일투자금_A.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txt_금일투자금_A.Location = New System.Drawing.Point(159, 131)
+        Me.txt_금일투자금_A.Location = New System.Drawing.Point(159, 158)
         Me.txt_금일투자금_A.Name = "txt_금일투자금_A"
         Me.txt_금일투자금_A.Size = New System.Drawing.Size(151, 24)
         Me.txt_금일투자금_A.TabIndex = 3
@@ -2222,9 +2225,9 @@ Partial Class Form2
         Me.chk_Algorithm_D.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_D.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_D.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_D.Location = New System.Drawing.Point(3, 99)
+        Me.chk_Algorithm_D.Location = New System.Drawing.Point(3, 127)
         Me.chk_Algorithm_D.Name = "chk_Algorithm_D"
-        Me.chk_Algorithm_D.Size = New System.Drawing.Size(150, 26)
+        Me.chk_Algorithm_D.Size = New System.Drawing.Size(150, 25)
         Me.chk_Algorithm_D.TabIndex = 2
         Me.chk_Algorithm_D.Text = "Algorithm_D"
         Me.chk_Algorithm_D.UseVisualStyleBackColor = False
@@ -2237,9 +2240,9 @@ Partial Class Form2
         Me.chk_Algorithm_B.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_B.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_B.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_B.Location = New System.Drawing.Point(3, 35)
+        Me.chk_Algorithm_B.Location = New System.Drawing.Point(3, 34)
         Me.chk_Algorithm_B.Name = "chk_Algorithm_B"
-        Me.chk_Algorithm_B.Size = New System.Drawing.Size(150, 26)
+        Me.chk_Algorithm_B.Size = New System.Drawing.Size(150, 25)
         Me.chk_Algorithm_B.TabIndex = 1
         Me.chk_Algorithm_B.Text = "Algorithm_B"
         Me.chk_Algorithm_B.UseVisualStyleBackColor = False
@@ -2253,10 +2256,25 @@ Partial Class Form2
         Me.chk_Algorithm_A.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_A.Location = New System.Drawing.Point(3, 3)
         Me.chk_Algorithm_A.Name = "chk_Algorithm_A"
-        Me.chk_Algorithm_A.Size = New System.Drawing.Size(150, 26)
+        Me.chk_Algorithm_A.Size = New System.Drawing.Size(150, 25)
         Me.chk_Algorithm_A.TabIndex = 0
         Me.chk_Algorithm_A.Text = "Algorithm_A"
         Me.chk_Algorithm_A.UseVisualStyleBackColor = False
+        '
+        'chk_Algorithm_C1
+        '
+        Me.chk_Algorithm_C1.AutoSize = True
+        Me.chk_Algorithm_C1.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_C1.Checked = True
+        Me.chk_Algorithm_C1.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_C1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_C1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_C1.Location = New System.Drawing.Point(3, 96)
+        Me.chk_Algorithm_C1.Name = "chk_Algorithm_C1"
+        Me.chk_Algorithm_C1.Size = New System.Drawing.Size(150, 25)
+        Me.chk_Algorithm_C1.TabIndex = 8
+        Me.chk_Algorithm_C1.Text = "Algorithm_C1"
+        Me.chk_Algorithm_C1.UseVisualStyleBackColor = False
         '
         'Form2
         '
@@ -2482,4 +2500,5 @@ Partial Class Form2
     Friend WithEvents txt_금일투자금_A As TextBox
     Friend WithEvents chk_Algorithm_C As CheckBox
     Friend WithEvents chk_Algorithm_E As CheckBox
+    Friend WithEvents chk_Algorithm_C1 As CheckBox
 End Class
