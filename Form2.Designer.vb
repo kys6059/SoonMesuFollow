@@ -1559,7 +1559,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.5.3_230722"
+        Me.txt_programversion.Text = "1.5.4_230722"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
