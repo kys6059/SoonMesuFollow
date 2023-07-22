@@ -550,6 +550,7 @@ Module Algorithm_SoonMeSu
     End Function
 
     Private Sub 모든살아있는신호확인하기()
+
         If SoonMesuShinhoList IsNot Nothing Then
 
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
@@ -558,19 +559,26 @@ Module Algorithm_SoonMeSu
 
                 If s.A15_현재상태 = 1 Then
 
-                    Select Case s.A03_신호ID
+                    Dim ret As String = 살아있는신호확인하기_통합(s)
 
-                        Case "A"
-                            살아있는신호확인하기_A(s)
-                        Case "B"
-                            살아있는신호확인하기_E(s)
-                        Case "C"
-                            살아있는신호확인하기_A(s)
-                        Case "D"
-                            살아있는신호확인하기_D(s)
-                        Case "E"
-                            살아있는신호확인하기_E(s)
-                    End Select
+                    If ret = "" Then
+                        Select Case s.A03_신호ID
+
+                            Case "B"
+                                ret = 살아있는신호확인하기_E(s)
+                            Case "C"
+                                ret = 살아있는신호확인하기_A(s)
+                            Case "D"
+                                ret = 살아있는신호확인하기_D(s)
+                            Case "E"
+                                ret = 살아있는신호확인하기_E(s)
+                        End Select
+                    End If
+
+
+                    If ret <> "" Then
+                        죽은신호처리하기(s, ret)
+                    End If
 
                 End If
 
@@ -581,11 +589,93 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
-    Private Sub 살아있는신호확인하기_통합(ByRef s As 순매수신호_탬플릿)
+    Private Sub 죽은신호처리하기(ByRef s As 순매수신호_탬플릿, ByVal 매도사유 As String)
+
+        '청산할 때 하는 프로세스
+        If 매도사유 <> "" Then
+
+            s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
+            s.A15_현재상태 = 0
+            s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
+            s.A19_매도Index = currentIndex_순매수
+            s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
+            s.A20_매도사유 = 매도사유
+            s.A22_신호해제가격 = s.A14_현재가격
+
+            If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
+                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+                s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
+            End If
+
+            If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
+
+        Else  '살아 있으면 중간청산 체크하기
+            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
+                s.A17_중간매도Flag = 1
+            End If
+
+        End If
+
 
     End Sub
 
-    Private Sub 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿)
+    Private Function 살아있는신호확인하기_통합(ByRef s As 순매수신호_탬플릿) As String
+
+
+        Dim 매도사유 As String = ""
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
+        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        If s.A14_현재가격 > 0 Then
+            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+        End If
+
+        '옵션가격 기준 손절매, 익절
+        Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+        Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
+        If s.A21_환산이익율 < 옵션가손절매기준 Then
+
+            매도사유 = "option_son"
+
+            If isRealFlag = False Then
+                s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            End If
+
+        End If
+
+        '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
+        Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
+        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+
+        '타임아웃
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
+            매도사유 = "timeout"
+            If isRealFlag = False Then
+                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            End If
+        End If
+
+        '아래는 그냥 정보를 업데이트하는 코드들
+        If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
+        If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+
+        Return 매도사유
+    End Function
+
+    Private Function 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿) As String
 
         Dim 매도사유 As String = ""
         Dim 일분옵션데이터_CurrentIndex As Integer
@@ -596,44 +686,6 @@ Module Algorithm_SoonMeSu
         End If
 
         If s.A15_현재상태 = 1 Then
-
-            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-
-            If s.A14_현재가격 > 0 Then
-                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-            End If
-
-
-            '옵션가격 기준 손절매, 익절
-            Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-            Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
-            If s.A21_환산이익율 < 옵션가손절매기준 Then
-
-                매도사유 = "option_son"
-
-                If isRealFlag = False Then
-                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-
-            End If
-
-            '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
-            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
-            If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-            If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-
-            '타임아웃
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
-                매도사유 = "timeout"
-                If isRealFlag = False Then
-                    s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-            End If
 
             '양봉크기비례 손절  - 장대양봉의 하단*비율을 하향 돌파하면 손절함  -- 없는게 결과가 더 좋아서 잠정 보류함 20230402
             If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2) < s.A53_장대양봉손절가 Then
@@ -653,41 +705,13 @@ Module Algorithm_SoonMeSu
                 매도사유 = "ik_ip"
             End If
 
-            '아래는 그냥 정보를 업데이트하는 코드들
-            If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
-            If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
-
-            '청산할 때 하는 프로세스
-            If 매도사유 <> "" Then
-
-                s.A15_현재상태 = 0
-                s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
-                s.A19_매도Index = currentIndex_순매수
-                s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
-                s.A20_매도사유 = 매도사유
-                s.A22_신호해제가격 = s.A14_현재가격
-
-                If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                    Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                    s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
-                End If
-
-                If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
-
-            Else  '살아 있으면 중간청산 체크하기
-                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-                If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
-                    s.A17_중간매도Flag = 1
-                End If
-
-            End If
-
         End If
 
-    End Sub
+        Return 매도사유
 
-    Private Sub 살아있는신호확인하기_E(ByRef s As 순매수신호_탬플릿)
+    End Function
+
+    Private Function 살아있는신호확인하기_E(ByRef s As 순매수신호_탬플릿) As String
 
         Dim 매도사유 As String = ""
         Dim 일분옵션데이터_CurrentIndex As Integer
@@ -698,45 +722,6 @@ Module Algorithm_SoonMeSu
         End If
 
         If s.A15_현재상태 = 1 Then
-
-            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-
-            If s.A14_현재가격 > 0 Then
-                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-            End If
-
-
-
-            '옵션가격 기준 손절매, 익절
-            Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-            Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
-            If s.A21_환산이익율 < 옵션가손절매기준 Then
-
-                매도사유 = "option_son"
-
-                If isRealFlag = False Then
-                    s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-
-            End If
-
-            '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
-            Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
-            If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-            If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-
-            '타임아웃
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
-                매도사유 = "timeout"
-                If isRealFlag = False Then
-                    s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-                End If
-            End If
 
             '순매수가 기준이하로 작아질 때 weak_E로 매도함
             Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기
@@ -767,7 +752,6 @@ Module Algorithm_SoonMeSu
                         End If
                     End If
 
-
                 Else
                     If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 0) = True Then  '반대방향 E 신호 발생
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
@@ -793,69 +777,15 @@ Module Algorithm_SoonMeSu
                 End If
             End If
 
-            '아래는 그냥 정보를 업데이트하는 코드들
-            If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
-            If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
-
-
-            '청산할 때 하는 프로세스
-            If 매도사유 <> "" Then
-
-                s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
-                s.A15_현재상태 = 0
-                s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
-                s.A19_매도Index = currentIndex_순매수
-                s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
-                s.A20_매도사유 = 매도사유
-                s.A22_신호해제가격 = s.A14_현재가격
-
-                If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                    Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                    s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
-                End If
-
-                If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
-
-            Else  '살아 있으면 중간청산 체크하기
-                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-                If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
-                    s.A17_중간매도Flag = 1
-                End If
-
-            End If
-
         End If
 
-    End Sub
+        Return 매도사유
+    End Function
 
-    Private Sub 살아있는신호확인하기_A(ByRef s As 순매수신호_탬플릿)
+    'C 9시 10분 이전 발생하는 신호에서 사용함
+    Private Function 살아있는신호확인하기_A(ByRef s As 순매수신호_탬플릿) As String
 
         Dim 매도사유 As String = ""
-        Dim 현재매수매도점수 As Integer = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
-        Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
-
-        If s.A03_신호ID = "A" Then
-            Dim 마지막순매수index As Integer = Get마지막순매수Index()
-            Dim 해제기준점수 As Integer = Val(Form2.txt_F2_신호해제점수기준.Text)
-            Dim 해제기준점수_UP, 해제기준점수_DOWN As Integer
-            If 해제기준점수 = 0 Then
-                해제기준점수_UP = 0
-                해제기준점수_DOWN = 0
-            Else
-                해제기준점수_UP = 해제기준점수
-                해제기준점수_DOWN = 해제기준점수 * -1
-            End If
-
-            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
-                If s.A08_콜풋 = 0 And 현재매수매도점수 < 해제기준점수_UP Then
-                    매도사유 = "weak"
-                End If
-                If s.A08_콜풋 = 1 And 현재매수매도점수 > 해제기준점수_DOWN Then
-                    매도사유 = "weak"
-                End If
-            End If
-        End If
 
         If s.A03_신호ID = "C" Then
 
@@ -874,70 +804,15 @@ Module Algorithm_SoonMeSu
 
         End If
 
-
-        '손절조건 확인
-        If s.A08_콜풋 = 0 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
-        If s.A08_콜풋 = 1 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A60_손절기준차 Then 매도사유 = "son"
-
-        '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
-        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-
-        'timeout 확인
-        If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then 매도사유 = "timeout"
-
-        '옵션가격 기준 손절매
-        Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-        If s.A21_환산이익율 < 옵션가손절매기준 Then 매도사유 = "option_son"
-
-        '아래는 그냥 정보를 업데이트하는 코드들
-        If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
-        If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
-
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
-
-        If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-
-        If s.A14_현재가격 > 0 Then
-            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-        End If
-
-
-        '청산할 때 하는 프로세스
+        '청산할 때 하는 프로세스  - C에만 이걸 넣는다
         If 매도사유 <> "" Then
             s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
             s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
-
-            s.A15_현재상태 = 0
-            s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
-            s.A19_매도Index = currentIndex_순매수
-            s.A20_매도사유 = 매도사유
-            s.A22_신호해제가격 = s.A14_현재가격
-
-            If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
-            End If
-
-            If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
-
-            If s.A03_신호ID = "B" Or s.A03_신호ID = "C" Then 이전순매수방향 = "중립"   'B,C알고리즘에 의해 매수 했다면 A도 살수 있게 조치한다
-
-        Else  '살아 있으면 중간청산 체크하기
-            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
-                s.A17_중간매도Flag = 1
-            End If
         End If
 
-    End Sub
+        Return 매도사유
+
+    End Function
 
     Public Function is중간청산Flag(ByVal callput As Integer) As Boolean
 
