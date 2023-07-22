@@ -288,7 +288,7 @@ Module Algorithm_SoonMeSu
 
             If SoonMesuShinhoList.Count <= 0 Then  '신호가 현재까지 한번도 안떳을 때만 수행한다
 
-                If Math.Abs(순매수리스트(currentIndex_순매수).외국인순매수) > C1_개별금액 Then  '개별 항목들이 기준 금액을 넘었고
+                If Math.Abs(순매수리스트(currentIndex_순매수).외국인순매수) > C1_개별금액 And 순매수리스트(currentIndex_순매수).외국인순매수 * 순매수리스트(currentIndex_순매수).기관순매수 < 0 Then  '개별 항목들이 기준 금액을 넘었고 기관과 외국인의 방향이 다를 때
 
 
                     If 순매수리스트(currentIndex_순매수).외국인순매수 > 0 Then
