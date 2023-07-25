@@ -87,10 +87,16 @@ Module Algorithm_SoonMeSu
 
     'D 알고리즘용 시작
     Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
-    Public X_계산기준봉비율 As Single = 0.55         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함
+    Public X_계산기준봉비율 As Single = 0.59         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함     230725 조건 재설정함 켈리지수 54. 승률 67%
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
     Public 이평선하향돌파익절기준 As Single = 0.5   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
+
+    '20230725 추가
+    'Public D신호_유지_IndexCount As Integer = 16
+    'Public D신호_유지_비율 As Single = 1.0
+
+
     'D 알고리즘용 끝
 
     'E 알고리즘
@@ -749,9 +755,17 @@ Module Algorithm_SoonMeSu
                 매도사유 = "ik_ip"
             End If
 
+
+            'D 신호 발생 후 일정 시간이 지났는데도 올라가지 않으면 손절  ---- 없는게 제일 나아서 제외함
+            'If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < s.A10_신호발생가격 * D신호_유지_비율 And currentIndex_순매수 > s.A01_발생Index + D신호_유지_IndexCount Then
+            's.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+            's.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            's.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            '매도사유 = "Weak_D"
+            'End If
         End If
 
-        Return 매도사유
+            Return 매도사유
 
     End Function
 
