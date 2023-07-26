@@ -43,6 +43,7 @@ Module Module_For1Min
         Dim 마지막선기울기 As Double
         Dim 마지막선거리합 As Double
         Dim PoinIndexList As List(Of Integer)
+        Dim 마지막점과그앞점간INDEXCOUNT As Integer
         Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관
 
     End Structure
@@ -192,6 +193,7 @@ Module Module_For1Min
                 PIP_Point_Lists(i).표준편차 = Calc_PIP거리계산(pipIndexList, currentIndex_순매수, pointCount, i)
                 PIP_Point_Lists(i).마지막선기울기 = Calc_PIP마지막선기울기계산(pipIndexList, currentIndex_순매수, pointCount, i)
                 PIP_Point_Lists(i).마지막신호_점수 = 마지막신호판단(PIP_Point_Lists(i).마지막선기울기)
+                PIP_Point_Lists(i).마지막점과그앞점간INDEXCOUNT = pipIndexList(pointCount - 1) - pipIndexList(pointCount - 2)     '마지막점과 그 앞의 점까지의 index - 이게 만약 2라면 신호가 안뜨도록 만들도록 사용할 계획임 20230726
                 'PIP_Point_Lists(i).마지막선거리합 = Calc_PIP마지막선거리합계산(pipIndexList, currentIndex_순매수, pointCount,i)
 
                 If Form2.chk_F2_화면끄기.Checked = False Then

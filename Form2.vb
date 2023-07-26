@@ -1338,8 +1338,8 @@ Public Class Form2
         '매도조건테스트()
 
         'fullTest_A()
-        'fullTest_B()
-        fullTest_D()
+        fullTest_B()
+        'fullTest_D()
 
         'fullTest_C()
 
@@ -1589,18 +1589,20 @@ Public Class Form2
 
     End Sub
 
-    '    Public B_StartIndex As Integer = 8
-    '    Public B_EndIndex As Integer = 20
-    '    Public B_기준기울기 As Single = 15.0
-    '    Public B_해제기울기 As Single = 10.0
-    '    Public b_최소유지INDEX As Integer = 0
+
+    'Public B_StartTime As Integer = 92500
+    'Public B_EndTime As Integer = 101900
+    'Public B_기준기울기 As Single = 50.0
+    'Public B_해제기울기 As Single = 2.0
+
     Private Sub fullTest_B()
-        Dim B_StartIndex_temp() As Integer = {90400, 90600}               'A
-        Dim B_EndIndex_temp() As Integer = {90700, 90900, 91100}        'B
-        Dim B_기준기울기_temp() As Single = {50, 80, 110, 140}       'C
-        Dim B_해제기울기_temp() As Single = {10, 20, 30}        'D
-        Dim b_최소유지INDEX_temp() As Integer = {4, 6}
-        Dim B_순매수주체_temp() As Integer = {1}
+        Dim B_StartIndex_temp() As Integer = {92500}               'A
+        Dim B_EndIndex_temp() As Integer = {101900}   'B
+        Dim B_기준기울기_temp() As Single = {50, 45, 40, 35, 30, 25}       'C
+        Dim B_해제기울기_temp() As Single = {2}        'D
+        Dim b_최소유지INDEX_temp() As Integer = {6}
+        Dim B_마지막점과그앞점거리최소INDEX_temp() As Integer = {2}
+        Dim B_마지막점과그앞점거리최대INDEX_temp() As Integer = {50}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -1612,6 +1614,7 @@ Public Class Form2
 
         chk_Algorithm_B.Checked = True
         chk_Algorithm_C.Checked = False
+        chk_Algorithm_C1.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = False
 
@@ -1620,31 +1623,35 @@ Public Class Form2
                 For c As Integer = 0 To B_기준기울기_temp.Length - 1
                     For d As Integer = 0 To B_해제기울기_temp.Length - 1
                         For e As Integer = 0 To b_최소유지INDEX_temp.Length - 1
+                            For f As Integer = 0 To B_마지막점과그앞점거리최소INDEX_temp.Length - 1
+                                For g As Integer = 0 To B_마지막점과그앞점거리최대INDEX_temp.Length - 1
+                                    B_StartTime = B_StartIndex_temp(a)
+                                    B_EndTime = B_EndIndex_temp(b)
+                                    B_기준기울기 = B_기준기울기_temp(c)
+                                    B_해제기울기 = B_해제기울기_temp(d)
+                                    신호최소유지시간index = b_최소유지INDEX_temp(e)
+                                    B_마지막점과그앞점거리최소INDEX = B_마지막점과그앞점거리최소INDEX_temp(f)
+                                    B_마지막점과그앞점거리최대INDEX = B_마지막점과그앞점거리최대INDEX_temp(g)
 
-                            B_StartTime = B_StartIndex_temp(a)
-                            B_EndTime = B_EndIndex_temp(b)
-                            B_기준기울기 = B_기준기울기_temp(c)
-                            B_해제기울기 = B_해제기울기_temp(d)
-                            신호최소유지시간index = b_최소유지INDEX_temp(e)
+                                    Dim cntstr As String
+                                    If cnt < 10 Then
+                                        cntstr = "00" & cnt.ToString()
+                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                        cntstr = "0" & cnt.ToString()
+                                    Else
+                                        cntstr = cnt.ToString()
+                                    End If
 
+                                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", B_StartIndex_temp(a), B_EndIndex_temp(b), B_기준기울기_temp(c), B_해제기울기_temp(d), b_최소유지INDEX_temp(e), B_마지막점과그앞점거리최소INDEX_temp(f), B_마지막점과그앞점거리최대INDEX_temp(g))
 
-                            Dim cntstr As String
-                            If cnt < 10 Then
-                                cntstr = "00" & cnt.ToString()
-                            ElseIf cnt >= 10 And cnt < 100 Then
-                                cntstr = "0" & cnt.ToString()
-                            Else
-                                cntstr = cnt.ToString()
-                            End If
+                                    Console.WriteLine(SoonMesuSimulation_조건)
+                                    Add_Log("", SoonMesuSimulation_조건)
+                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                    cnt += 1
 
-                            SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", B_StartIndex_temp(a), B_EndIndex_temp(b), B_기준기울기_temp(c), B_해제기울기_temp(d), b_최소유지INDEX_temp(e))
-
-                            Console.WriteLine(SoonMesuSimulation_조건)
-                            Add_Log("", SoonMesuSimulation_조건)
-                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                            cnt += 1
-
+                                Next
+                            Next
                         Next
                     Next
                 Next

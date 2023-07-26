@@ -67,6 +67,8 @@ Module Algorithm_SoonMeSu
     Public B_EndTime As Integer = 101900
     Public B_기준기울기 As Single = 50.0
     Public B_해제기울기 As Single = 2.0
+    Public B_마지막점과그앞점거리최소INDEX = 2   '추가 - 20230726  - 1틱만으로 50이 넘어서 신호가 생성되는 거를 제외함
+    Public B_마지막점과그앞점거리최대INDEX = 50   '추가 - 20230726 - 상한으로는 안걸려서 큰 의미 없음 그냥 큰 숫자로 세팅함
 
     'C알고리즘 시작 - 시작하자마자 순매수가 몰리면 바로 사는 것
 
@@ -174,8 +176,9 @@ Module Algorithm_SoonMeSu
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
             Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기
-
             Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
+
+            'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(1).마지막점과그앞점간INDEXCOUNT
 
             If 현재순매수기울기_절대치 > E_신호발생기준기울기 Then
 
@@ -214,10 +217,11 @@ Module Algorithm_SoonMeSu
         If Val(순매수리스트(currentIndex_순매수).sTime) >= B_StartTime And Val(순매수리스트(currentIndex_순매수).sTime) <= B_EndTime Then
 
             Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기  '0 통합, 1 -'외국인기울기, 2 기관
-
             Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
 
-            If 현재순매수기울기_절대치 > B_기준기울기 Then
+            Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(1).마지막점과그앞점간INDEXCOUNT
+
+            If 현재순매수기울기_절대치 > B_기준기울기 And 마지막점과그앞점Index차 > B_마지막점과그앞점거리최소INDEX And 마지막점과그앞점Index차 < B_마지막점과그앞점거리최대INDEX Then
 
                 If 현재순매수기울기 > 0 Then  '  콜 방향
 
