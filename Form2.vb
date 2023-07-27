@@ -953,11 +953,11 @@ Public Class Form2
 
         Select Case 남은날짜
             Case 0
-                중간청산목표이익 = "0.60"
+                중간청산목표이익 = "0.57"
                 켈리지수비율 = "0.33"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = True
+                chk_Algorithm_C1.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -967,7 +967,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = True
+                chk_Algorithm_C1.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -977,7 +977,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = True
+                chk_Algorithm_C1.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -987,7 +987,7 @@ Public Class Form2
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = True
+                chk_Algorithm_C1.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -998,7 +998,7 @@ Public Class Form2
                 'chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = True
+                chk_Algorithm_C1.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = False
                 txt_F2_옵션가기준손절매.Text = "-0.22"
@@ -1306,12 +1306,25 @@ Public Class Form2
         If List잔고 IsNot Nothing Then
 
             Dim 매매1회최대수량 As Integer = Val(txt_F2_1회최대매매수량.Text)
+
+
             For i As Integer = 0 To List잔고.Count - 1
 
                 Dim it As 잔고Type = List잔고(i)
                 If it.A02_구분 = "매수" Then  '무엇인가 매수된 상태라면
                     Dim 종목번호 As String = it.A01_종복번호
+
+                    Dim price As Single = it.A10_현재가
+
+                    Dim 계산count As Integer = Val(txt_F2_1회최대매매수량.Text)
+                    If price < 0.8 Then
+                        계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+                    End If
+
+                    매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
+
                     Dim count As Integer
+
                     count = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
                     count = Math.Min(count, 매매1회최대수량)
                     한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
@@ -1945,5 +1958,9 @@ Public Class Form2
 
     Private Sub HSc_F2_날짜조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_날짜조절.Scroll
 
+    End Sub
+
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+        '매매신호처리함수()
     End Sub
 End Class

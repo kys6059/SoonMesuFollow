@@ -722,6 +722,17 @@ Module Algorithm_SoonMeSu
             End If
         End If
 
+        If 매도사유 = "" Then  '살아 있으면 중간청산 체크하기
+
+            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
+            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
+                s.A17_중간매도Flag = 1
+
+            End If
+        End If
+
+
         '아래는 그냥 정보를 업데이트하는 코드들
         If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
         If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
@@ -953,160 +964,187 @@ Module Algorithm_SoonMeSu
 
         Dim is처분중 As Boolean = False
 
+        'If EBESTisConntected = True Then     '---------------- 테스트할 때 쓰기 위해서 다 삭제한 버전
         If EBESTisConntected = True And 당일반복중_flag = False And ReceiveCount > 3 Then     '---------------- 당일반복 돌릴 때 문제 없도록 잘 해야 함, 시작하자마자 팔리거나 사는 걸 방지하기 위해 수신횟수를 추가함
 
-            Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+                Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
 
-            '현재잔고를 검사해서 방향과 다르면 처분하기 - 이건 시간에 관계없이 한다  
-            If List잔고 IsNot Nothing Then
-                For i As Integer = 0 To List잔고.Count - 1
+                '현재잔고를 검사해서 방향과 다르면 처분하기 - 이건 시간에 관계없이 한다  
+                If List잔고 IsNot Nothing Then
+                    For i As Integer = 0 To List잔고.Count - 1
 
-                    Dim it As 잔고Type = List잔고(i)
+                        Dim it As 잔고Type = List잔고(i)
 
-                    If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
+                        If it.A02_구분 = "매도" Then  '무엇인가 매도된 상태라면
 
-                        If Mid(it.A01_종복번호, 1, 1) = "2" Then
-                            If 현재신호 >= 0 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
-                                Dim 종목번호 As String = it.A01_종복번호
-
-                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
-                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                                Dim count As Integer = 0
-
-                                count = Math.Min(잔고와청산가능, 콜최대구매개수 - 콜현재환매개수)
-                                count = Math.Min(count, 매매1회최대수량)
-                                If count > 0 Then
-                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
-                                End If
-
-                            End If
-
-                        Else '풋일 때  -- 오른다를 산 상태
-                            If 현재신호 <= 0 Then
-                                Dim 종목번호 As String = it.A01_종복번호
-                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
-                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-                                Dim count As Integer = 0
-
-                                count = Math.Min(잔고와청산가능, 풋최대구매개수 - 풋현재환매개수)
-                                count = Math.Min(count, 매매1회최대수량)
-                                If count > 0 Then
-                                    한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
-                                End If
-                            End If
-                        End If
-
-                    ElseIf it.A02_구분 = "매수" Then  '매수된 항목 처리하는 로직 
-
-                        If Mid(it.A01_종복번호, 1, 1) = "3" Then
-                            If 현재신호 >= 0 Then  '풋을 샀는데  -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
-
-                                Dim 종목번호 As String = it.A01_종복번호
-                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
-                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-
-                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
-                                If count > 0 Then
-                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
-                                    is처분중 = True
-                                End If
-                            End If
-
-                        Else '콜을 매수한 상태이면 -  오른다를 산 상태
-                            If 현재신호 <= 0 Then
-                                Dim 종목번호 As String = it.A01_종복번호
-                                Dim callput As String = Mid(it.A01_종복번호, 1, 1)
-                                Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
-
-                                Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
-                                If count > 0 Then
-                                    한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03)
-                                    is처분중 = True
-                                End If
-                            End If
-                        End If
-
-                        '중간청산 처리 로직
-                        If is처분중 = False Then '위에서 처분하고 있다면 중간청산로직은 건너뛴다
-
-                            If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜 매수의 경우
-
-                                If is중간청산Flag(0) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                            If Mid(it.A01_종복번호, 1, 1) = "2" Then
+                                If 현재신호 >= 0 Then  '콜일 때 -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
                                     Dim 종목번호 As String = it.A01_종복번호
 
                                     Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                     Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
                                     Dim count As Integer = 0
-                                    count = Math.Min(잔고와청산가능, 콜중간청산개수 - 콜현재환매개수)
+
+                                    count = Math.Min(잔고와청산가능, 콜최대구매개수 - 콜현재환매개수)
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매도(종목번호, it.A10_현재가, count, "콜__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
                                     End If
+
                                 End If
 
                             Else '풋일 때  -- 오른다를 산 상태
-
-                                If is중간청산Flag(1) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                                If 현재신호 <= 0 Then
                                     Dim 종목번호 As String = it.A01_종복번호
                                     Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                     Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
                                     Dim count As Integer = 0
-                                    count = Math.Min(잔고와청산가능, 풋중간청산개수 - 풋현재환매개수)  '중간청산개수는 최대구매개수와 동일하게 증가, 초기화하기 때문에 이걸 기준으로 환매개수를 빼서 중간청산개수까지만 매수한다
+
+                                    count = Math.Min(잔고와청산가능, 풋최대구매개수 - 풋현재환매개수)
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매도(종목번호, it.A10_현재가, count, "풋__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        한종목매수(종목번호, it.A10_현재가, count, "매도를청산", "03") '호가유형 지정가 00, 시장가 03
                                     End If
                                 End If
                             End If
+
+                        ElseIf it.A02_구분 = "매수" Then  '매수된 항목 처리하는 로직 
+
+                            If Mid(it.A01_종복번호, 1, 1) = "3" Then
+                                If 현재신호 >= 0 Then  '풋을 샀는데  -내린다를 산 상태인데 앞으로 오르거나 신호해제가 되면
+
+                                    Dim 종목번호 As String = it.A01_종복번호
+                                    Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                                    Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+
+                                    '매매 수량을 가격에 따라 가변적으로 변하게 설정한다
+                                    Dim price As Single = it.A10_현재가
+                                    Dim 계산count As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+                                    If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+                                    매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
+
+                                    Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                    If count > 0 Then
+                                        한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03
+                                        is처분중 = True
+                                    End If
+                                End If
+
+                            Else '콜을 매수한 상태이면 -  오른다를 산 상태
+                                If 현재신호 <= 0 Then
+                                    Dim 종목번호 As String = it.A01_종복번호
+                                    Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                                    Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+
+                                    '매매 수량을 가격에 따라 가변적으로 변하게 설정한다
+                                    Dim price As Single = it.A10_현재가
+                                    Dim 계산count As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+                                    If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+                                    매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
+
+                                    Dim count As Integer = Math.Min(잔고와청산가능, 매매1회최대수량)
+                                    If count > 0 Then
+                                        한종목매도(종목번호, it.A10_현재가, count, "매수를청산", "03") '호가유형 지정가 00, 시장가 03)
+                                        is처분중 = True
+                                    End If
+                                End If
+                            End If
+
+                            '중간청산 처리 로직
+                            If is처분중 = False Then '위에서 처분하고 있다면 중간청산로직은 건너뛴다
+
+                                If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜 매수의 경우
+
+                                    If is중간청산Flag(0) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                                        Dim 종목번호 As String = it.A01_종복번호
+
+                                        Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                                        Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+
+                                        '매매 수량을 가격에 따라 가변적으로 변하게 설정한다
+                                        Dim price As Single = it.A10_현재가
+                                        Dim 계산count As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+                                        If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+                                        매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
+
+                                        Dim count As Integer = 0
+                                        count = Math.Min(잔고와청산가능, 콜중간청산개수 - 콜현재환매개수)
+                                        count = Math.Min(count, 매매1회최대수량)
+                                        If count > 0 Then
+                                            한종목매도(종목번호, it.A10_현재가, count, "콜__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        End If
+                                    End If
+
+                                Else '풋일 때  -- 오른다를 산 상태
+
+                                    If is중간청산Flag(1) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                                        Dim 종목번호 As String = it.A01_종복번호
+                                        Dim callput As String = Mid(it.A01_종복번호, 1, 1)
+                                        Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
+
+                                        '매매 수량을 가격에 따라 가변적으로 변하게 설정한다
+                                        Dim price As Single = it.A10_현재가
+                                        Dim 계산count As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+                                        If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+                                        매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
+
+                                        Dim count As Integer = 0
+                                        count = Math.Min(잔고와청산가능, 풋중간청산개수 - 풋현재환매개수)  '중간청산개수는 최대구매개수와 동일하게 증가, 초기화하기 때문에 이걸 기준으로 환매개수를 빼서 중간청산개수까지만 매수한다
+                                        count = Math.Min(count, 매매1회최대수량)
+                                        If count > 0 Then
+                                            한종목매도(종목번호, it.A10_현재가, count, "풋__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        End If
+                                    End If
+                                End If
+                            End If
+
+                        End If
+                    Next
+                End If
+
+
+                '신규매수를 한다 - 시간체크는 별도로 하지 않고 신호 생성에서 담당한다
+                If currentIndex_순매수 >= 0 Then
+
+                    If Form2.chk_실거래실행.Checked = True Then
+
+                        If 현재신호 > 0 Then  '상승베팅 
+
+                            If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+
+                                '매도 코드 주석처리함 20230221
+                                'Dim code As String = 일분옵션데이터(1).Code
+                                'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
+                                'Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
+                                'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                                'Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
+                                'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
+
+                                '매수를 추가함 - 20230205  - 상승베팅
+                                추가매수실행(0, 현재신호) '콜을 매수한다
+                            End If
+
+                        ElseIf 현재신호 < 0 Then
+
+                            If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
+
+                                '매도 코드 주석처리함 20230221
+                                'Dim code As String = 일분옵션데이터(0).Code
+                                'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
+                                'Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
+                                'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
+                                'Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
+                                'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
+
+                                '매수를 추가함 - 20230205 - 하락베팅
+                                추가매수실행(1, 현재신호) '풋을 매수한다
+                            End If
+
                         End If
 
                     End If
-                Next
-            End If
-
-
-            '신규매수를 한다 - 시간체크는 별도로 하지 않고 신호 생성에서 담당한다
-            If currentIndex_순매수 >= 0 Then
-
-                If Form2.chk_실거래실행.Checked = True Then
-
-                    If 현재신호 > 0 Then  '상승베팅 
-
-                        If is중간청산Flag(0) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
-
-                            '매도 코드 주석처리함 20230221
-                            'Dim code As String = 일분옵션데이터(1).Code
-                            'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
-                            'Dim count As Integer = Math.Min(풋구매가능개수, 최대허용구매개수 - 풋최대구매개수)
-                            'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                            'Dim price As Single = 일분옵션데이터(1).price(currentIndex_1MIn, 3)
-                            'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
-
-                            '매수를 추가함 - 20230205  - 상승베팅
-                            추가매수실행(0, 현재신호) '콜을 매수한다
-                        End If
-
-                    ElseIf 현재신호 < 0 Then
-
-                        If is중간청산Flag(1) = False Then '중간 청산 후 다시 사는 걸 방지하기 위해 현재 중간청산 중인지 확인하는 함수. 현재 신호가 살아있고 중간청산 Flag가 set 되어 있는지 확인하여 중간청산이 아닐 때만 매도 실행
-
-                            '매도 코드 주석처리함 20230221
-                            'Dim code As String = 일분옵션데이터(0).Code
-                            'Dim 최대허용구매개수 As Integer = Val(Form2.txt_F2_매도허용구매개수.Text)
-                            'Dim count As Integer = Math.Min(콜구매가능개수, 최대허용구매개수 - 콜최대구매개수)
-                            'count = Math.Min(count, 매매1회최대수량)   '매도했으나 체결이 늦게되어 더 많이 구매하는 문제처리 로직 검토
-                            'Dim price As Single = 일분옵션데이터(0).price(currentIndex_1MIn, 3)
-                            'If count > 0 Then 한종목매도(code, price, count, "신규매도", "03") '호가유형 지정가 00, 시장가 03
-
-                            '매수를 추가함 - 20230205 - 하락베팅
-                            추가매수실행(1, 현재신호) '풋을 매수한다
-                        End If
-
-                    End If
-
                 End If
             End If
-        End If
     End Sub
 
     Private Sub 추가매수실행(ByVal direction As Integer, ByVal 투자그레이드 As Integer)
@@ -1175,7 +1213,13 @@ Module Algorithm_SoonMeSu
             If tmp >= 0 Then 남은매매가능개수 = tmp
 
             count = Math.Min(count, 남은매매가능개수)
-            count = Math.Min(count, Val(Form2.txt_F2_1회최대매매수량.Text))
+
+            Dim 계산count As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
+            If price < 0.8 Then
+                계산count = Math.Max(CInt(-250 * price + 250), 계산count)
+            End If
+
+            count = Math.Min(count, 계산count)
         End If
 
         Return count
