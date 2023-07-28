@@ -439,7 +439,11 @@ Module realtime_ebest
         'End If
 
         Dim str As String = "주문No=" & OrdNo.ToString() & ",코드=" & 종목코드 & ",가격=" & 주문가격.ToString() & ",수량=" & 주문수량.ToString() & ",구분=" & 매수매도구분 ' & 환매개수string
-        Add_Log("일반", str)
+
+        If CInt(OrdNo) = 0 Then
+            Add_Log("일반", str)
+        End If
+
 
     End Sub
 

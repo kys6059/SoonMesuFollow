@@ -566,7 +566,7 @@ Module Algorithm_SoonMeSu
                     Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
                     If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                     s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                     s.A22_신호해제가격 = s.A14_현재가격
 
                     If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
@@ -689,11 +689,13 @@ Module Algorithm_SoonMeSu
         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
         If s.A14_현재가격 > 0 Then
             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
         End If
 
         '옵션가격 기준 손절매, 익절
         Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+        If s.A17_중간매도Flag = 1 Then 옵션가손절매기준 = 0   ' 중간매도가 되면 손절매 기준으로 0으로 강제로 바꿔서 수익을 좋게 만든다
+
         Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
         If s.A21_환산이익율 < 옵션가손절매기준 Then
 
@@ -702,7 +704,7 @@ Module Algorithm_SoonMeSu
             If isRealFlag = False Then
                 s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
                 s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
             End If
 
         End If
@@ -718,7 +720,7 @@ Module Algorithm_SoonMeSu
             If isRealFlag = False Then
                 s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
                 s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
             End If
         End If
 
@@ -766,7 +768,7 @@ Module Algorithm_SoonMeSu
             If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2) < 현재이평선 And 현재이평선기준이익률 > 이평선하향돌파익절기준 Then
                 s.A14_현재가격 = 현재이평선 - 0.01
                 s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                 매도사유 = "ik_ip"
             End If
 
@@ -806,21 +808,21 @@ Module Algorithm_SoonMeSu
                     If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 1) = True Then  '반대방향 E 신호 발생
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                         매도사유 = "E_Occur"
                     End If
                     If s.A03_신호ID = "E" Then
                         If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
                             s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                             매도사유 = "weak_E"
                         End If
                     ElseIf s.A03_신호ID = "B" Then
                         If B_해제기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
                             s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                             매도사유 = "weak_B"
                         End If
                     End If
@@ -829,21 +831,21 @@ Module Algorithm_SoonMeSu
                     If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 0) = True Then  '반대방향 E 신호 발생
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                         매도사유 = "E_Occur"
                     End If
                     If s.A03_신호ID = "E" Then
                         If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
                             s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                             매도사유 = "weak_E"
                         End If
                     ElseIf s.A03_신호ID = "B" Then
                         If (B_해제기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
                             s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.03, 3)
                             매도사유 = "weak_B"
                         End If
                     End If
