@@ -29,10 +29,10 @@ Module Module_For1Min
         Dim 이동평균선() As Single '콜풋
 
         Public Sub Initialize()
-            ReDim ctime(430) '
-            ReDim price(430, 3)  '콜풋, 시간, 시고저종
-            ReDim 거래량(430) '1분단위는 약 396개임
-            ReDim 이동평균선(430)
+            ReDim ctime(480) '
+            ReDim price(480, 3)  '콜풋, 시간, 시고저종
+            ReDim 거래량(480) '1분단위는 약 396개임
+            ReDim 이동평균선(480)
         End Sub
     End Structure
 
