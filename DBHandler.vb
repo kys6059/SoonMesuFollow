@@ -446,7 +446,7 @@ Module DBHandler
         iDate = iDate Mod 20000000
 
         For callput = 0 To 1
-            For j = 0 To 399
+            For j = 0 To 479
                 If 일분옵션데이터(callput).price(j, 0) > 0 Then
                     영보다큰갯수 += 1
                 End If
@@ -459,7 +459,7 @@ Module DBHandler
 
             Dim hangsaga As Integer = Val(일분옵션데이터(callput).HangSaGa)
 
-            For j = 0 To 399
+            For j = 0 To 479
 
                 If callput = 0 Then
                     iFlag = 1
