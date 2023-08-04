@@ -642,16 +642,21 @@ Module DBHandler
                 End If
 
                 Dim iIndex As Integer = FindIndexFormTime_1Min(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
-                currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
-                timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
 
-                일분옵션데이터(callput).price(iIndex, 0) = si
-                일분옵션데이터(callput).price(iIndex, 1) = go
-                일분옵션데이터(callput).price(iIndex, 2) = jue
-                일분옵션데이터(callput).price(iIndex, 3) = jong
-                일분옵션데이터(callput).거래량(iIndex) = volume
+                If iIndex >= 0 Then
+                    currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
+                    timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
 
-                cnt += 1
+                    일분옵션데이터(callput).price(iIndex, 0) = si
+                    일분옵션데이터(callput).price(iIndex, 1) = go
+                    일분옵션데이터(callput).price(iIndex, 2) = jue
+                    일분옵션데이터(callput).price(iIndex, 3) = jong
+                    일분옵션데이터(callput).거래량(iIndex) = volume
+
+                    cnt += 1
+                End If
+
+
             End If
 
         Next
