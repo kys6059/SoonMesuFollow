@@ -414,12 +414,12 @@ Module DBHandler
             If tempTargetDate > 0 Then rowCount = GetRowCount(tempTargetDate, Form2.txt_F2_TableName.Text)
 
             If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
-                InsertTargetDateData_1분(tempTargetDate)
                 Insert순매수이력데이터(tempTargetDate)
+                InsertTargetDateData_1분(tempTargetDate)
 
-                'Threading.Thread.Sleep(3000)
+
+
                 'XAQuery_EBEST_분봉데이터호출함수(0)
-
                 'Threading.Thread.Sleep(4000)
                 'XAQuery_EBEST_분봉데이터호출함수(1)
                 '5분 데이터 수집하는 기능인데 불필요한 거 같아 더이상 수집하지 않음 2023.08.04
