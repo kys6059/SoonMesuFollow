@@ -417,13 +417,15 @@ Module DBHandler
                 InsertTargetDateData_1분(tempTargetDate)
                 Insert순매수이력데이터(tempTargetDate)
 
-                Threading.Thread.Sleep(3000)
-                XAQuery_EBEST_분봉데이터호출함수(0)
+                'Threading.Thread.Sleep(3000)
+                'XAQuery_EBEST_분봉데이터호출함수(0)
 
-                Threading.Thread.Sleep(4000)
-                XAQuery_EBEST_분봉데이터호출함수(1)
-
+                'Threading.Thread.Sleep(4000)
+                'XAQuery_EBEST_분봉데이터호출함수(1)
+                '5분 데이터 수집하는 기능인데 불필요한 거 같아 더이상 수집하지 않음 2023.08.04
                 '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
+
+                '2023.08.02 ~ 03 데이터다 저장되지 않은 문제가 발생했으나 04일에는 정상 입력이 됨 - 문제 확인 필요
 
             Else
                 Add_Log("일반", tempTargetDate.ToString() & " 날에는 이미 순매수데이터가 등록되어 있습니다")
