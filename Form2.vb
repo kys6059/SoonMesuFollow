@@ -601,6 +601,9 @@ Public Class Form2
 
         ReceiveCount = 0
 
+        '폼의 켑션
+        Text = txt_programversion.Text & "__알고리즘_매수"
+
 
         Dim dt As Date = Now.AddDays(-30)  '여기 원래 -30을 넣어야 함
         Dim strdt As String = Format(dt, "yyMM01")
