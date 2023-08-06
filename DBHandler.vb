@@ -818,7 +818,7 @@ Module DBHandler
             rows(i).Add("A08_Callput", s.A08_콜풋)
             rows(i).Add("A09_Hangsaga", s.A09_행사가)
             rows(i).Add("A10_Price", s.A10_신호발생가격)
-            rows(i).Add("A11_OrderNumber", s.A11_주문번호)
+            rows(i).Add("A11_OrderNumber", s.A11_손절기준가격)
             rows(i).Add("A12_OptionCode", s.A12_종목코드)
             rows(i).Add("A13_BuyingStatus", s.A13_체결상태)
             rows(i).Add("A14_CurrentPrice", s.A14_현재가격)

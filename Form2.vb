@@ -200,7 +200,7 @@ Public Class Form2
             grid_shinho.Columns(8).HeaderText = "콜풋"
             grid_shinho.Columns(9).HeaderText = "행사가"
             grid_shinho.Columns(10).HeaderText = "발생가격"
-            grid_shinho.Columns(11).HeaderText = "주문번호"
+            grid_shinho.Columns(11).HeaderText = "F손절가"
             grid_shinho.Columns(12).HeaderText = "종목코드"
             grid_shinho.Columns(13).HeaderText = "체결상태"
             grid_shinho.Columns(14).HeaderText = "현재가격"
@@ -230,7 +230,7 @@ Public Class Form2
                 grid_shinho.Rows(i).Cells(8).Value = s.A08_콜풋
                 grid_shinho.Rows(i).Cells(9).Value = s.A09_행사가
                 grid_shinho.Rows(i).Cells(10).Value = s.A10_신호발생가격
-                grid_shinho.Rows(i).Cells(11).Value = s.A11_주문번호
+                grid_shinho.Rows(i).Cells(11).Value = s.A11_손절기준가격
                 grid_shinho.Rows(i).Cells(12).Value = s.A12_종목코드
                 grid_shinho.Rows(i).Cells(13).Value = s.A13_체결상태
                 grid_shinho.Rows(i).Cells(14).Value = s.A14_현재가격
@@ -656,7 +656,7 @@ Public Class Form2
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
 
-        자동반복계산로직(0, False)
+        자동반복계산로직(0, True)
         Add_Log("Form2 자동 반복 계산로직 완료", "")
         당일반복중_flag = False
     End Sub
@@ -753,6 +753,16 @@ Public Class Form2
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
             Chart1.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
             Chart1.ChartAreas(i).AxisY.Interval = 0.2
+
+            'F 알고리즘을 위한 설정
+            str = "PIP_" + i.ToString()
+            Chart1.Series.Add(str)
+            Chart1.Series(str).ChartArea = ChartAreaStr
+            Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Chart1.Series(str).YAxisType = AxisType.Primary
+            Chart1.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
+            Chart1.Series(str).BorderWidth = 2
+            Chart1.Series(str).Color = Color.MediumVioletRed
         Next
     End Sub
 
@@ -803,6 +813,26 @@ Public Class Form2
                 Next
                 Chart1.ChartAreas(callput).AxisY.Minimum = minValue
                 Chart1.ChartAreas(callput).AxisY.Maximum = maxValue
+
+                'F알고리즘용 PIP 그리기
+                If currentIndex_1MIn >= 0 Then
+                    Dim PIP_Series As String = "PIP_" + callput.ToString()
+
+                    If F_PoinIndexList(callput) IsNot Nothing Then
+                        If F_PoinIndexList(callput).Count > 0 Then
+
+                            Dim pipIndexList_temp As List(Of Integer) = New List(Of Integer)
+                            pipIndexList_temp = F_PoinIndexList(callput)
+
+                            For j As Integer = 0 To pipIndexList_temp.Count - 1
+                                Dim point As Integer = pipIndexList_temp(j)   ' 이건 X에 해당
+                                Dim 옵션가격 As Single = 일분옵션데이터(callput).price(point, 3)     '이건 Y값에 해당
+                                Chart1.Series(PIP_Series).Points.AddXY(point, 옵션가격)
+                            Next
+
+                        End If
+                    End If
+                End If
             Next
 
         End If
@@ -842,6 +872,8 @@ Public Class Form2
                 End If
             Next
         End If
+
+
 
         Chart1.Visible = True
     End Sub
@@ -960,6 +992,7 @@ Public Class Form2
                 chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
+                chk_Algorithm_F.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
                 txt_F2_익절차.Text = "11"
             Case 1
@@ -970,6 +1003,7 @@ Public Class Form2
                 chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
+                chk_Algorithm_F.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
                 txt_F2_익절차.Text = "11"
             Case 2
@@ -980,6 +1014,7 @@ Public Class Form2
                 chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
+                chk_Algorithm_F.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
                 txt_F2_익절차.Text = "11"
             Case 3
@@ -990,6 +1025,7 @@ Public Class Form2
                 chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
+                chk_Algorithm_F.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
                 txt_F2_익절차.Text = "11"
             Case 6
@@ -1001,6 +1037,7 @@ Public Class Form2
                 chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = False
+                chk_Algorithm_F.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.22"
                 txt_F2_익절차.Text = "09"
 
