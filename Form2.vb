@@ -1888,6 +1888,6 @@ Public Class Form2
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
-        매매신호처리함수()
+        '매매신호처리함수()
     End Sub
 End Class
