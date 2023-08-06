@@ -86,7 +86,6 @@ Module realtime_ebest
     Public 풋중간청산개수 As Integer = 0
 
     Public 최종투자금액 As Long = 0
-    Public 투자금_D = 0
     Public 콜현재까지매수금액 As Long = 0
     Public 풋현재까지매수금액 As Long = 0
 
@@ -192,7 +191,6 @@ Module realtime_ebest
         If 최종투자금액 = 0 Then
             Dim 켈리지수비율 As Single = Val(Form2.txt_F2_켈리지수비율.Text)
             최종투자금액 = 주문가능금액 * 켈리지수비율
-            투자금_D = 최종투자금액 * 1.1
         End If
 
         If TargetDate > 0 Then
@@ -441,7 +439,7 @@ Module realtime_ebest
         Dim str As String = "주문No=" & OrdNo.ToString() & ",코드=" & 종목코드 & ",가격=" & 주문가격.ToString() & ",수량=" & 주문수량.ToString() & ",구분=" & 매수매도구분 ' & 환매개수string
 
         If CInt(OrdNo) = 0 Then
-            Add_Log("일반", str)
+            Add_Log("에러", str)
         End If
 
 

@@ -656,7 +656,7 @@ Public Class Form2
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
 
-        자동반복계산로직(0, True)
+        자동반복계산로직(0, False)
         Add_Log("Form2 자동 반복 계산로직 완료", "")
         당일반복중_flag = False
     End Sub
@@ -957,7 +957,7 @@ Public Class Form2
                 켈리지수비율 = "0.33"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = False
+                chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -967,7 +967,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = False
+                chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.30"
@@ -977,7 +977,7 @@ Public Class Form2
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = False
+                chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -987,7 +987,7 @@ Public Class Form2
                 중간청산목표이익 = "0.40"
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = False
+                chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = True
                 txt_F2_옵션가기준손절매.Text = "-0.24"
@@ -998,7 +998,7 @@ Public Class Form2
                 'chk_모의투자연결.Checked = True
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_C.Checked = True
-                chk_Algorithm_C1.Checked = False
+                chk_Algorithm_F.Checked = False
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_D.Checked = False
                 txt_F2_옵션가기준손절매.Text = "-0.22"
@@ -1074,9 +1074,9 @@ Public Class Form2
             End If
             txt_TargetDate.Text = TargetDate
             lbl_F2_최종투자금액.Text = Format(최종투자금액, "###,###,###,###,##0")
-            txt_금일투자금_A.Text = Format(최종투자금액, "###,###,###,###,##0")
+            'txt_금일투자금_A.Text = Format(최종투자금액, "###,###,###,###,##0")
             'txt_투자금_B.Text = Format(최종투자금액, "###,###,###,###,##0")
-            txt_투자금_D.Text = Format(투자금_D, "###,###,###,###,##0")
+            'txt_투자금_D.Text = Format(투자금_D, "###,###,###,###,##0")
         End If
     End Sub
 
@@ -1445,7 +1445,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = False
-        chk_Algorithm_C1.Checked = True
+        chk_Algorithm_F.Checked = True
 
         For a As Integer = 0 To C1_StartTime_temp.Length - 1
             For b As Integer = 0 To C1_EndTime_temp.Length - 1
@@ -1514,7 +1514,7 @@ Public Class Form2
 
         chk_Algorithm_B.Checked = True
         chk_Algorithm_C.Checked = False
-        chk_Algorithm_C1.Checked = False
+        chk_Algorithm_F.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = False
 
@@ -1640,7 +1640,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = True
         chk_Algorithm_E.Checked = False
-        chk_Algorithm_C1.Checked = False
+        chk_Algorithm_F.Checked = False
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -1848,6 +1848,6 @@ Public Class Form2
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
-        '매매신호처리함수()
+        매매신호처리함수()
     End Sub
 End Class
