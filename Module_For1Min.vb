@@ -434,7 +434,7 @@ Module Module_For1Min
     Public Sub SetSelectedIndex_For_순매수()  '순매수로직을 위해 기존 양매도로직을 수정함
 
         If currentIndex_순매수 > 0 Then
-            If Val(순매수리스트(currentIndex_순매수).sTime) > 144500 Then  '14시 45분에는 자동 변경을 끈다
+            If Val(순매수리스트(currentIndex_순매수).sTime) > 151000 Then  '14시 45분에는 자동 변경을 끈다  --- F 알고리즘 때문에 15시 10분으로 바꾼다 
                 Form2.chk_ChangeTargetIndex.Checked = False
             End If
         End If
