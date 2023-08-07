@@ -615,7 +615,8 @@ Module Algorithm_SoonMeSu
 
                     Dim ret As String = 살아있는신호확인하기_통합(s)
 
-                    If ret = "" Then
+                    If ret = "" And s.A14_현재가격 > 0 Then
+
                         Select Case s.A03_신호ID
 
                             Case "C"
@@ -699,7 +700,7 @@ Module Algorithm_SoonMeSu
 
         '신호리스트의 최신을 찾아서 만약 현재와 방향이 다르면 reverse한다   -- 20230806 추가
         Dim 최종신호 As Integer = 현재신호계산하기()
-        If (s.A08_콜풋 = 0 And 최종신호 < 0) Or s.A08_콜풋 = 1 And 최종신호 > 0 Then
+        If (s.A08_콜풋 = 0 And 최종신호 < 0) Or (s.A08_콜풋 = 1 And 최종신호 > 0) Then
             매도사유 = "reverse"
         End If
 
@@ -811,7 +812,7 @@ Module Algorithm_SoonMeSu
         If s.A15_현재상태 = 1 Then
             'F알고리즘 특화
             Dim 손절기준가 As Single = s.A11_손절기준가격 * F_손절배율
-            If s.A14_현재가격 < 손절기준가 Then
+            If s.A14_현재가격 < 손절기준가 And s.A14_현재가격 > 0.01 Then  '현재가격이 순간적으로 0일 때 팔려버리는 문제가 있어서 fix함
 
                 매도사유 = "F_son"
 
