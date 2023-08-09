@@ -94,7 +94,9 @@ Module Algorithm_SoonMeSu
     Public X_계산기준봉비율 As Single = 0.59         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함     230725 조건 재설정함 켈리지수 54. 승률 67%
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
-    Public 이평선하향돌파익절기준 As Single = 0.5   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
+    Public 이평선하향돌파익절기준 As Single = 0.1   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
+    Public D_MAX이익율 As Single = 0.0              '상한치를 찍고 내려와서 이평선을 하향 돌파하면 매도하는 현재값
+    Public D_MAX이익율상한 As Single = 0.33         '상한치를 찍고 내려와서 이평선을 하향 돌파하면 매도하는 기준 2023.08.09 추가함
 
     '20230725 추가
     'Public D신호_유지_IndexCount As Integer = 16
@@ -402,6 +404,7 @@ Module Algorithm_SoonMeSu
                 Dim str As String = String.Format("D 신호 발생 콜풋 : {0}, 인덱스 : {1}", i, Index)
                 Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("D", i)
                 SoonMesuShinhoList.Add(shinho)
+                D_MAX이익율 = 0.0
 
             End If
 
@@ -755,6 +758,8 @@ Module Algorithm_SoonMeSu
         Return 매도사유
     End Function
 
+
+
     Private Function 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿) As String
 
         Dim 매도사유 As String = ""
@@ -785,6 +790,25 @@ Module Algorithm_SoonMeSu
                 매도사유 = "ik_ip"
             End If
 
+            If s.A21_환산이익율 > D_MAX이익율 Then
+                D_MAX이익율 = s.A21_환산이익율
+            End If
+
+            If D_MAX이익율 > D_MAX이익율상한 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2) < 현재이평선 Then
+                매도사유 = "D_weak"
+                s.A14_현재가격 = 현재이평선 - 0.01
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+            End If
+
+            '이전 tick의 고가가 낮을 때 비교
+            'If D_MAX이익율 > D_MAX이익율상한 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex - 1, 1) < 현재이평선 Then
+            '매도사유 = "D_weak2"
+            's.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) ' 현재틱의 시가
+            's.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            's.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+            'End If
+
 
             'D 신호 발생 후 일정 시간이 지났는데도 올라가지 않으면 손절  ---- 없는게 제일 나아서 제외함
             'If 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < s.A10_신호발생가격 * D신호_유지_비율 And currentIndex_순매수 > s.A01_발생Index + D신호_유지_IndexCount Then
@@ -795,7 +819,7 @@ Module Algorithm_SoonMeSu
             'End If
         End If
 
-        Return 매도사유
+            Return 매도사유
 
     End Function
 

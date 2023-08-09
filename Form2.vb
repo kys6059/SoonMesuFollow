@@ -1391,8 +1391,8 @@ Public Class Form2
         '매도조건테스트()
 
         'fullTest_A()
-        fullTest_B()
-        'fullTest_D()
+        'fullTest_B()
+        fullTest_D()
 
         'fullTest_C()
 
@@ -1669,8 +1669,9 @@ Public Class Form2
 
     Private Sub fullTest_D()
         Dim 이동평균선_기준일자_temp() As Integer = {50}               'A
-        Dim X_계산기준봉비율_temp() As Single = {0.57, 0.59, 0.61}
-        Dim Y_장대양봉기준비율_temp() As Single = {0.6, 0.62, 0.64}
+        Dim X_계산기준봉비율_temp() As Single = {0.59}
+        Dim Y_장대양봉기준비율_temp() As Single = {0.6}
+        Dim D_MAX이익율상한_temp() As Single = {0.4, 1.0}
 
         'Dim D신호_유지_IndexCount_temp() As Integer = {6, 10, 20, 30, 40}
         'Dim D신호_유지_비율_temp() As Single = {1.0, 0.9, 1.1, 1.2}
@@ -1694,31 +1695,33 @@ Public Class Form2
         For a As Integer = 0 To 이동평균선_기준일자_temp.Length - 1
             For b As Integer = 0 To X_계산기준봉비율_temp.Length - 1
                 For c As Integer = 0 To Y_장대양봉기준비율_temp.Length - 1
+                    For d As Integer = 0 To D_MAX이익율상한_temp.Length - 1
+
+                        이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
+                        X_계산기준봉비율 = X_계산기준봉비율_temp(b)
+                        Y_장대양봉기준비율 = Y_장대양봉기준비율_temp(c)
+                        D_MAX이익율상한 = D_MAX이익율상한_temp(d)
+
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
+
+                        SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}", 이동평균선_기준일자_temp(a), X_계산기준봉비율_temp(b), Y_장대양봉기준비율_temp(c), D_MAX이익율상한)
 
 
-                    이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
-                    X_계산기준봉비율 = X_계산기준봉비율_temp(b)
-                    Y_장대양봉기준비율 = Y_장대양봉기준비율_temp(c)
-                    'D신호_유지_IndexCount = D신호_유지_IndexCount_temp(d)
-                    'D신호_유지_비율 = D신호_유지_비율_temp(e)
-
-                    Dim cntstr As String
-                    If cnt < 10 Then
-                        cntstr = "00" & cnt.ToString()
-                    ElseIf cnt >= 10 And cnt < 100 Then
-                        cntstr = "0" & cnt.ToString()
-                    Else
-                        cntstr = cnt.ToString()
-                    End If
-
-                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}", 이동평균선_기준일자_temp(a), X_계산기준봉비율_temp(b), Y_장대양봉기준비율_temp(c))
+                        Console.WriteLine(SoonMesuSimulation_조건)
+                        Add_Log("", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                        cnt += 1
+                    Next
 
 
-                    Console.WriteLine(SoonMesuSimulation_조건)
-                    Add_Log("", SoonMesuSimulation_조건)
-                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                    cnt += 1
                 Next
             Next
 
