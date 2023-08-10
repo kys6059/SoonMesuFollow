@@ -616,24 +616,31 @@ Module Algorithm_SoonMeSu
 
                 If s.A15_현재상태 = 1 Then
 
-                    Dim ret As String = 살아있는신호확인하기_통합(s)
+                    Dim 일분옵션데이터_CurrentIndex As Integer
+                    If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+                        일분옵션데이터_CurrentIndex = currentIndex_1MIn
+                    Else
+                        일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+                    End If
+
+                    Dim ret As String = 살아있는신호확인하기_통합(s, 일분옵션데이터_CurrentIndex)
 
                     If ret = "" And s.A14_현재가격 > 0 Then
 
                         Select Case s.A03_신호ID
 
                             Case "C"
-                                ret = 살아있는신호확인하기_C(s)
+                                ret = 살아있는신호확인하기_C(s, 일분옵션데이터_CurrentIndex)
                             Case "C1"
-                                ret = 살아있는신호확인하기_C(s)
+                                ret = 살아있는신호확인하기_C(s, 일분옵션데이터_CurrentIndex)
                             Case "D"
-                                ret = 살아있는신호확인하기_D(s)
+                                ret = 살아있는신호확인하기_D(s, 일분옵션데이터_CurrentIndex)
                             Case "B"
-                                ret = 살아있는신호확인하기_E(s)
+                                ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
                             Case "E"
-                                ret = 살아있는신호확인하기_E(s)
+                                ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
                             Case "F"
-                                ret = 살아있는신호확인하기_F(s)
+                                ret = 살아있는신호확인하기_F(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -684,16 +691,10 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
-    Private Function 살아있는신호확인하기_통합(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_통합(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
 
         Dim 매도사유 As String = ""
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
         If s.A14_현재가격 > 0 Then
@@ -760,15 +761,9 @@ Module Algorithm_SoonMeSu
 
 
 
-    Private Function 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_D(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
         Dim 매도사유 As String = ""
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         If s.A15_현재상태 = 1 Then
 
@@ -819,19 +814,13 @@ Module Algorithm_SoonMeSu
             'End If
         End If
 
-            Return 매도사유
+        Return 매도사유
 
     End Function
 
-    Private Function 살아있는신호확인하기_F(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_F(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
         Dim 매도사유 As String = ""
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         If s.A15_현재상태 = 1 Then
             'F알고리즘 특화
@@ -853,15 +842,9 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Private Function 살아있는신호확인하기_E(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_E(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
         Dim 매도사유 As String = ""
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         If s.A15_현재상태 = 1 Then
 
@@ -925,7 +908,7 @@ Module Algorithm_SoonMeSu
     End Function
 
     'C 9시 10분 이전 발생하는 신호에서 사용함
-    Private Function 살아있는신호확인하기_C(ByRef s As 순매수신호_탬플릿) As String
+    Private Function 살아있는신호확인하기_C(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
         Dim 매도사유 As String = ""
 
@@ -987,34 +970,6 @@ Module Algorithm_SoonMeSu
         End If
         Return ret
 
-    End Function
-
-    Private Function 현재신호계산하기_Old() As Integer
-
-        Dim ret As Integer = 0
-
-        If SoonMesuShinhoList IsNot Nothing Then
-            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
-                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
-                If s.A15_현재상태 = 1 Then
-                    If s.A03_신호ID = "A" Or s.A03_신호ID = "B" Or s.A03_신호ID = "E" Or s.A03_신호ID = "C1" Then
-                        If s.A08_콜풋 = 0 Then ret = 1        '상승베팅
-                        If s.A08_콜풋 = 1 Then ret = -1
-                    End If
-                End If
-            Next
-            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
-                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
-                If s.A15_현재상태 = 1 Then
-                    If s.A03_신호ID = "C" Or s.A03_신호ID = "D" Then    'A,B보다 D를 우선시 한다
-                        If s.A08_콜풋 = 0 Then ret = 2
-                        If s.A08_콜풋 = 1 Then ret = -2
-                    End If
-
-                End If
-            Next
-        End If
-        Return ret
     End Function
 
     Private Function 현재신호계산하기() As Integer
