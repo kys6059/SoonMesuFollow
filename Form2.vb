@@ -659,7 +659,7 @@ Public Class Form2
             SoonMesuSimulationTotalShinhoList.Clear()
         End If
 
-        자동반복계산로직(0, False)
+        자동반복계산로직(0, True)
         Add_Log("Form2 자동 반복 계산로직 완료", "")
         당일반복중_flag = False
     End Sub
@@ -1011,7 +1011,7 @@ Public Class Form2
                 익절차 = "11"
             Case 2
                 켈리지수비율 = "0.33"
-                중간청산목표이익 = "0.5"
+                중간청산목표이익 = "0.4"
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
@@ -1020,8 +1020,8 @@ Public Class Form2
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 3
-                켈리지수비율 = "0.25"
-                중간청산목표이익 = "0.40"
+                켈리지수비율 = "0.27"
+                중간청산목표이익 = "0.35"
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_C.Checked = False
                 chk_Algorithm_D.Checked = True
@@ -1030,16 +1030,16 @@ Public Class Form2
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 6
-                켈리지수비율 = "0.25"
+                켈리지수비율 = "0.27"
                 중간청산목표이익 = "0.35"
                 'chk_모의투자연결.Checked = True
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_C.Checked = False
-                chk_Algorithm_D.Checked = True
+                chk_Algorithm_D.Checked = False
                 chk_Algorithm_E.Checked = False
                 chk_Algorithm_F.Checked = True
                 옵션가기준손절매 = "-0.22"
-                익절차 = "09"
+                익절차 = "11"
 
         End Select
 
