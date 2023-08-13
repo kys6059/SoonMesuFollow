@@ -177,6 +177,7 @@ Partial Class Form2
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel13 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
+        Me.chk_Algorithm_G = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_E = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_C = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_D = New System.Windows.Forms.CheckBox()
@@ -1557,7 +1558,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.6.3_230811"
+        Me.txt_programversion.Text = "1.6.4_230813"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -2132,6 +2133,7 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_F, 0, 5)
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_G, 1, 0)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_E, 0, 4)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_C, 0, 2)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_D, 0, 3)
@@ -2161,9 +2163,24 @@ Partial Class Form2
         Me.chk_Algorithm_F.Location = New System.Drawing.Point(3, 158)
         Me.chk_Algorithm_F.Name = "chk_Algorithm_F"
         Me.chk_Algorithm_F.Size = New System.Drawing.Size(150, 29)
-        Me.chk_Algorithm_F.TabIndex = 8
+        Me.chk_Algorithm_F.TabIndex = 9
         Me.chk_Algorithm_F.Text = "Algorithm_F"
         Me.chk_Algorithm_F.UseVisualStyleBackColor = False
+        '
+        'chk_Algorithm_G
+        '
+        Me.chk_Algorithm_G.AutoSize = True
+        Me.chk_Algorithm_G.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_G.Checked = True
+        Me.chk_Algorithm_G.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_G.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_G.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_G.Location = New System.Drawing.Point(159, 3)
+        Me.chk_Algorithm_G.Name = "chk_Algorithm_G"
+        Me.chk_Algorithm_G.Size = New System.Drawing.Size(151, 25)
+        Me.chk_Algorithm_G.TabIndex = 8
+        Me.chk_Algorithm_G.Text = "Algorithm_G"
+        Me.chk_Algorithm_G.UseVisualStyleBackColor = False
         '
         'chk_Algorithm_E
         '
@@ -2470,6 +2487,7 @@ Partial Class Form2
     Friend WithEvents txt_F2_최종방향 As RichTextBox
     Friend WithEvents chk_Algorithm_C As CheckBox
     Friend WithEvents chk_Algorithm_E As CheckBox
-    Friend WithEvents chk_Algorithm_F As CheckBox
+    Friend WithEvents chk_Algorithm_G As CheckBox
     Friend WithEvents Button1 As Button
+    Friend WithEvents chk_Algorithm_F As CheckBox
 End Class

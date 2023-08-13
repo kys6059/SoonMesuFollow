@@ -109,18 +109,59 @@ Module Algorithm_SoonMeSu
     Public E_신호발생기준기울기 As Single = 15.0
     Public E_신호해제기준기울기 As Single = 2.0
 
+
+    'F 알고리즘
+    Public F_PIP_포인트수 As Integer = 7
+    Public F_PoinIndexList(1) As List(Of Integer)   '포인트의 리스트
+
+    Public F_PIP_최소카운트 As Integer = 22   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
+    Public F_PIP_최대카운트 As Integer = 100    'PIP 계산하는 최종 길이          --------------------------------------- 변수
+    Public F_기본계곡최소깊이 As Single = 1.2  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
+    Public F_현재점의최소높이 As Single = 1.05  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
+    Public F_현재점의최대높이 As Single = 1.3  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
+    Public F_손절배율 As Single = 0.9          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
+    Public F_좌우골짜기깊이상한 As Single = 1.2  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
+    Public F_좌우골짜기깊이하한 As Single = 0.95  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
+
+    Public F_최저점근접기간Index As Integer = 50  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
+    Public F_최저점대비높은비율 As Single = 1.23  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
+    Public F_첫번째시작시간 As Integer = 100000
+    Public F_첫번째종료시간 As Integer = 114000
+    Public F_두번째시작시간 As Integer = 140000
+    Public F_두번째종료시간 As Integer = 151000
+
+    'G 알고리즘 - 연속 음봉 후 양봉 출현
+    Public G_첫번째시작시간 As Integer = 950   '시작시간
+    Public G_첫번째종료시간 As Integer = 1110   '종료시간
+    Public G_최대유지기간Index As Integer = 40    '20분이 지나면 무조건 매도  - 순매수 인덱스가 기준이라서 2배가 된다
+    Public G_연속음봉갯수 As Integer = 7        '사실은 6개의 음봉과 직전 양봉이 발생하면 ... 총 7개
+    Public G_하락비율 As Single = 0.7           '7틱전 시가의 70% 즉, 30% 이상 하락
+    Public G_양봉막대크기 As Single = 1.04      '직전 틱의 양봉 크기
+
+
     Public Sub CalcAlgorithmAll()
 
-        모든살아있는신호확인하기()
 
-        If Form2.chk_Algorithm_A.Checked = True Then CalcAlgorithm_A()
-        If Form2.chk_Algorithm_B.Checked = True Then CalcAlgorithm_B()
-        If Form2.chk_Algorithm_C.Checked = True Then CalcAlgorithm_C()
-        If Form2.chk_Algorithm_D.Checked = True Then CalcAlgorithm_D()
-        If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E()
 
-        If Form2.chk_Algorithm_F.Checked = True Then CalcAlgorithm_F()
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
 
+        If 일분옵션데이터_CurrentIndex >= 0 Then
+
+            모든살아있는신호확인하기(일분옵션데이터_CurrentIndex)
+
+            'If Form2.chk_Algorithm_A.Checked = True Then CalcAlgorithm_A()
+            If Form2.chk_Algorithm_B.Checked = True Then CalcAlgorithm_B()
+            If Form2.chk_Algorithm_C.Checked = True Then CalcAlgorithm_C()
+            If Form2.chk_Algorithm_D.Checked = True Then CalcAlgorithm_D(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E()
+            If Form2.chk_Algorithm_F.Checked = True Then CalcAlgorithm_F(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
+        End If
 
     End Sub
 
@@ -365,15 +406,7 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Public Sub CalcAlgorithm_D() '이동평균선 알고리즘
-
-
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
+    Public Sub CalcAlgorithm_D(ByVal 일분옵션데이터_CurrentIndex As Integer) '이동평균선 알고리즘
 
         If 일분옵션데이터_CurrentIndex < 이동평균선_기준일자 Then Return
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < 1020 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > 1445 Then Return
@@ -606,7 +639,7 @@ Module Algorithm_SoonMeSu
         Return str
     End Function
 
-    Private Sub 모든살아있는신호확인하기()
+    Private Sub 모든살아있는신호확인하기(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         If SoonMesuShinhoList IsNot Nothing Then
 
@@ -615,13 +648,6 @@ Module Algorithm_SoonMeSu
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
 
                 If s.A15_현재상태 = 1 Then
-
-                    Dim 일분옵션데이터_CurrentIndex As Integer
-                    If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-                        일분옵션데이터_CurrentIndex = currentIndex_1MIn
-                    Else
-                        일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-                    End If
 
                     Dim ret As String = 살아있는신호확인하기_통합(s, 일분옵션데이터_CurrentIndex)
 
@@ -641,6 +667,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
                             Case "F"
                                 ret = 살아있는신호확인하기_F(s, 일분옵션데이터_CurrentIndex)
+                            Case "G"
+                                ret = 살아있는신호확인하기_G(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -1302,26 +1330,8 @@ Module Algorithm_SoonMeSu
 
 
     ' F알고리즘 시작
-    Public F_PIP_포인트수 As Integer = 7
-    Public F_PoinIndexList(1) As List(Of Integer)   '포인트의 리스트
 
-    Public F_PIP_최소카운트 As Integer = 22   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
-    Public F_PIP_최대카운트 As Integer = 100    'PIP 계산하는 최종 길이          --------------------------------------- 변수
-    Public F_기본계곡최소깊이 As Single = 1.2  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
-    Public F_현재점의최소높이 As Single = 1.05  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
-    Public F_현재점의최대높이 As Single = 1.3  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
-    Public F_손절배율 As Single = 0.9          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
-    Public F_좌우골짜기깊이상한 As Single = 1.2  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
-    Public F_좌우골짜기깊이하한 As Single = 0.95  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
-
-    Public F_최저점근접기간Index As Integer = 50  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
-    Public F_최저점대비높은비율 As Single = 1.23  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
-    Public F_첫번째시작시간 As Integer = 100000
-    Public F_첫번째종료시간 As Integer = 114000
-    Public F_두번째시작시간 As Integer = 140000
-    Public F_두번째종료시간 As Integer = 151000
-
-    Public Sub CalcAlgorithm_F() '역헤드엔숄더발생 
+    Public Sub CalcAlgorithm_F(ByVal 일분옵션데이터_CurrentIndex As Integer) '역헤드엔숄더발생 
 
         ReDim F_PoinIndexList(1)
 
@@ -1333,7 +1343,7 @@ Module Algorithm_SoonMeSu
             'Add_Log("test", curTime.ToString())
             For callput As Integer = 0 To 1
 
-                Dim 손절기준점 As Single = CalcPIPData_F(callput)
+                Dim 손절기준점 As Single = CalcPIPData_F(callput, 일분옵션데이터_CurrentIndex)
                 If 손절기준점 > 0 Then
 
                     If is동일신호가현재살아있나("F", callput) = False Then
@@ -1353,14 +1363,7 @@ Module Algorithm_SoonMeSu
     End Sub
 
 
-    Public Function CalcPIPData_F(ByVal callput As Integer) As Single         '대표선 계산
-
-        Dim 일분옵션데이터_CurrentIndex As Integer  '---------------------------------------------------- 새로운 알고리즘일 때 이부분을 꼭 넣어야 함. 안그러면 당일반복에는 안나오고 한칸씩 옮길 때는 신호가 뜨는 현상 발생
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
+    Public Function CalcPIPData_F(ByVal callput As Integer, ByVal 일분옵션데이터_CurrentIndex As Integer) As Single         '대표선 계산
 
         If 일분옵션데이터_CurrentIndex > F_PIP_최소카운트 Then
 
@@ -1511,6 +1514,74 @@ Module Algorithm_SoonMeSu
 
         Dim s As Double = (y2 - y1) / (x2 - x1)
         Return Math.Abs(s * x3 - y3 + y1 - s * x1) / Math.Sqrt(s * s + 1)
+    End Function
+
+
+    'G 알고리즘 시작
+
+
+    Public Sub CalcAlgorithm_G(ByVal 일분옵션데이터_CurrentIndex As Integer) '음봉연속 발생
+
+
+        Dim curTime As Integer = Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex))
+
+        If (curTime >= G_첫번째시작시간 And curTime <= G_첫번째종료시간) And 일분옵션데이터_CurrentIndex - G_연속음봉갯수 > 0 Then
+            For callput As Integer = 0 To 1
+
+                Dim flag1 As Boolean = False
+                Dim flag2 As Boolean = True
+
+                Dim 양봉크기 As Single = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) / 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 0)
+                If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 0) < 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) And 양봉크기 > G_양봉막대크기 Then  '직전이 양봉이고
+                    flag1 = True
+                End If
+
+                For i As Integer = 2 To G_연속음봉갯수
+                    If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - i, 0) < 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - i, 3) Then
+                        flag2 = False
+                        Exit For
+                    End If
+                Next
+
+                If flag1 = True And flag2 = True Then
+                    Dim gap As Single = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) / 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - G_연속음봉갯수, 0)
+                    If is동일신호가현재살아있나("G", callput) = False And gap < G_하락비율 Then
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("G", callput)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+                End If
+
+            Next
+        End If
+
+
+    End Sub
+
+    Private Function 살아있는신호확인하기_G(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then             'G알고리즘 특화
+
+
+            'G알고리즘 특화 - Index limit  추가
+            Dim 경과Index As Integer = currentIndex_순매수 - s.A01_발생Index
+            If 경과Index > G_최대유지기간Index And s.A03_신호ID = "G" Then
+
+                매도사유 = "indexlimit"
+
+                If isRealFlag = False Then
+                    s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                End If
+            End If
+
+
+        End If
+
+        Return 매도사유
+
     End Function
 
 

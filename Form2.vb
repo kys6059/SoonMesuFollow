@@ -996,7 +996,7 @@ Public Class Form2
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
-                chk_Algorithm_F.Checked = True
+
                 옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 1
@@ -1006,7 +1006,7 @@ Public Class Form2
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
-                chk_Algorithm_F.Checked = True
+
                 옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 2
@@ -1016,7 +1016,7 @@ Public Class Form2
                 chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
-                chk_Algorithm_F.Checked = True
+
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 3
@@ -1026,7 +1026,7 @@ Public Class Form2
                 chk_Algorithm_C.Checked = False
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = False
-                chk_Algorithm_F.Checked = True
+
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 6
@@ -1037,7 +1037,7 @@ Public Class Form2
                 chk_Algorithm_C.Checked = False
                 chk_Algorithm_D.Checked = False
                 chk_Algorithm_E.Checked = False
-                chk_Algorithm_F.Checked = True
+
                 옵션가기준손절매 = "-0.22"
                 익절차 = "11"
 
@@ -1484,7 +1484,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = False
-        chk_Algorithm_F.Checked = True
+        chk_Algorithm_G.Checked = True
 
         For a As Integer = 0 To C1_StartTime_temp.Length - 1
             For b As Integer = 0 To C1_EndTime_temp.Length - 1
@@ -1553,7 +1553,7 @@ Public Class Form2
 
         chk_Algorithm_B.Checked = True
         chk_Algorithm_C.Checked = False
-        chk_Algorithm_F.Checked = False
+        chk_Algorithm_G.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = False
 
@@ -1680,7 +1680,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = True
         chk_Algorithm_E.Checked = False
-        chk_Algorithm_F.Checked = False
+        chk_Algorithm_G.Checked = False
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -1751,7 +1751,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = True
-        chk_Algorithm_F.Checked = False
+        chk_Algorithm_G.Checked = False
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
