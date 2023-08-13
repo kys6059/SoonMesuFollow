@@ -124,7 +124,7 @@ Module Algorithm_SoonMeSu
     Public F_좌우골짜기깊이하한 As Single = 0.95  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
 
     Public F_최저점근접기간Index As Integer = 50  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
-    Public F_최저점대비높은비율 As Single = 1.23  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
+    Public F_최저점대비높은비율 As Single = 1.18  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
     Public F_첫번째시작시간 As Integer = 100000
     Public F_첫번째종료시간 As Integer = 114000
     Public F_두번째시작시간 As Integer = 140000
@@ -864,6 +864,8 @@ Module Algorithm_SoonMeSu
                 End If
 
             End If
+
+            'G알고리즘 특화 - Index limit  추가하니 더 안좋아져서 삭제함
         End If
 
         Return 매도사유
@@ -1412,6 +1414,9 @@ Module Algorithm_SoonMeSu
         If 일분옵션데이터(callput).price(list(4), 3) < 일분옵션데이터(callput).price(list(5), 3) * F_기본계곡최소깊이 Then ret = False
         If 일분옵션데이터(callput).price(list(6), 3) < 일분옵션데이터(callput).price(list(5), 3) * F_현재점의최소높이 Then ret = False
         If 일분옵션데이터(callput).price(list(6), 3) > 일분옵션데이터(callput).price(list(5), 3) * F_현재점의최대높이 Then ret = False
+
+        'If 일분옵션데이터(callput).price(list(1), 3) > 일분옵션데이터(callput).price(list(5), 3) Then ret = False  '고점 2개 중 뒤의 점이 더 높아야 한다  -- 큰 의미 없음 승률이 비슷
+        'If 일분옵션데이터(callput).price(list(2), 3) > 일분옵션데이터(callput).price(list(4), 3) Then ret = False  '저점 2개 중 뒤의 점이 더 높아야 한다  -- 더 안좋음
 
         Return ret
 
