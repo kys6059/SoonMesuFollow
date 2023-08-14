@@ -544,7 +544,7 @@ Module Module_common
 
         ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
 
-            txt월물 = "W1"
+            txt월물 = "W1THU"
             txtweekly = "W"
             sCase = "14일미만"
 
@@ -559,14 +559,14 @@ Module Module_common
                 End If
             Next
 
-            txt월물 = "W" & (목요일count + 1).ToString()
+            txt월물 = "W" & (목요일count + 1).ToString() & "THU"
             txtweekly = "W"
 
             sCase = "14~28일미만"
 
         Else '28일 초과는 무조건 3주차 
 
-            txt월물 = "W3"
+            txt월물 = "W3THU"
             txtweekly = "W"
             sCase = "28일이상"
 
