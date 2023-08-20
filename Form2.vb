@@ -1020,7 +1020,7 @@ Public Class Form2
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 3
-                켈리지수비율 = "0.27"
+                켈리지수비율 = "0.22"
                 중간청산목표이익 = "0.35"
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_C.Checked = False
