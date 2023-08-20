@@ -1396,14 +1396,14 @@ Public Class Form2
 
         'fullTest_A()
         'fullTest_B()
-        'fullTest_D()
+        fullTest_D()
 
         'fullTest_C()
 
         'fullTest_C1()
 
         'fullTest_E()
-        fullTest_F()
+        'fullTest_F()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1671,7 +1671,9 @@ Public Class Form2
         Dim 이동평균선_기준일자_temp() As Integer = {50}               'A
         Dim X_계산기준봉비율_temp() As Single = {0.59}
         Dim Y_장대양봉기준비율_temp() As Single = {0.6}
-        Dim D_MAX이익율상한_temp() As Single = {0.4, 1.0}
+        Dim D_MAX이익율상한_temp() As Single = {0.33}
+        Dim D_반대편음봉_양봉대비비율_temp() As Single = {0.01, 0.1, 0.2, 0.3, 0.4}
+
 
         'Dim D신호_유지_IndexCount_temp() As Integer = {6, 10, 20, 30, 40}
         'Dim D신호_유지_비율_temp() As Single = {1.0, 0.9, 1.1, 1.2}
@@ -1681,6 +1683,7 @@ Public Class Form2
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = True
         chk_Algorithm_E.Checked = False
+        chk_Algorithm_F.Checked = False
         chk_Algorithm_G.Checked = False
 
 
@@ -1696,35 +1699,36 @@ Public Class Form2
             For b As Integer = 0 To X_계산기준봉비율_temp.Length - 1
                 For c As Integer = 0 To Y_장대양봉기준비율_temp.Length - 1
                     For d As Integer = 0 To D_MAX이익율상한_temp.Length - 1
+                        For e As Integer = 0 To D_반대편음봉_양봉대비비율_temp.Length - 1
 
-                        이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
-                        X_계산기준봉비율 = X_계산기준봉비율_temp(b)
-                        Y_장대양봉기준비율 = Y_장대양봉기준비율_temp(c)
-                        D_MAX이익율상한 = D_MAX이익율상한_temp(d)
+                            이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
+                            X_계산기준봉비율 = X_계산기준봉비율_temp(b)
+                            Y_장대양봉기준비율 = Y_장대양봉기준비율_temp(c)
+                            D_MAX이익율상한 = D_MAX이익율상한_temp(d)
+                            D_반대편음봉_양봉대비비율 = D_반대편음봉_양봉대비비율_temp(e)
 
-                        Dim cntstr As String
-                        If cnt < 10 Then
-                            cntstr = "00" & cnt.ToString()
-                        ElseIf cnt >= 10 And cnt < 100 Then
-                            cntstr = "0" & cnt.ToString()
-                        Else
-                            cntstr = cnt.ToString()
-                        End If
+                            Dim cntstr As String
+                            If cnt < 10 Then
+                                cntstr = "00" & cnt.ToString()
+                            ElseIf cnt >= 10 And cnt < 100 Then
+                                cntstr = "0" & cnt.ToString()
+                            Else
+                                cntstr = cnt.ToString()
+                            End If
 
-                        SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}", 이동평균선_기준일자_temp(a), X_계산기준봉비율_temp(b), Y_장대양봉기준비율_temp(c), D_MAX이익율상한)
+                            SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", 이동평균선_기준일자_temp(a), X_계산기준봉비율_temp(b), Y_장대양봉기준비율_temp(c), D_MAX이익율상한, D_반대편음봉_양봉대비비율)
 
 
-                        Console.WriteLine(SoonMesuSimulation_조건)
-                        Add_Log("", SoonMesuSimulation_조건)
-                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                        cnt += 1
+                            Console.WriteLine(SoonMesuSimulation_조건)
+                            Add_Log("", SoonMesuSimulation_조건)
+                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            cnt += 1
+
+                        Next
                     Next
-
-
                 Next
             Next
-
         Next
 
 
@@ -1825,19 +1829,23 @@ Public Class Form2
 
     Private Sub fullTest_F()
 
-        Dim F_PIP_최소카운트_temp() As Integer = {22}   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
-        Dim F_PIP_최대카운트_temp() As Integer = {100}    'PIP 계산하는 최종 길이          --------------------------------------- 변수
+
+        '20230820 최종 B230820_T007
+        'CNT_000_A_22_B_75_C_1.2_D_1.05_E_1.3_F_0.9_G_1.2_H_0.95_I_50_J_1.18
+
+        Dim F_PIP_최소카운트_temp() As Integer = {22, 20}   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
+        Dim F_PIP_최대카운트_temp() As Integer = {75}    'PIP 계산하는 최종 길이          --------------------------------------- 변수
         Dim F_기본계곡최소깊이_temp() As Single = {1.2}  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
         Dim F_현재점의최소높이_temp() As Single = {1.05}  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
-        Dim F_현재점의최대높이_temp() As Single = {1.3, 1.2}  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
+        Dim F_현재점의최대높이_temp() As Single = {1.3, 1.35, 1.4}  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
 
 
-        Dim F_손절배율_temp() As Single = {0.9, 0.95}          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
-        Dim F_좌우골짜기깊이상한_temp() As Single = {1.2, 1.25}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
-        Dim F_좌우골짜기깊이하한_temp() As Single = {0.95, 0.9}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
+        Dim F_손절배율_temp() As Single = {0.9}          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
+        Dim F_좌우골짜기깊이상한_temp() As Single = {1.2}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
+        Dim F_좌우골짜기깊이하한_temp() As Single = {0.95}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
 
-        Dim F_최저점근접기간Index_temp() As Integer = {50, 70}  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
-        Dim F_최저점대비높은비율_temp() As Single = {1.23, 1.18}  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
+        Dim F_최저점근접기간Index_temp() As Integer = {50}  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
+        Dim F_최저점대비높은비율_temp() As Single = {1.18, 1.23, 1.3}  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
 
 
         chk_Algorithm_A.Checked = False

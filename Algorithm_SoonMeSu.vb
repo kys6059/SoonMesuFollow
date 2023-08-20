@@ -97,6 +97,7 @@ Module Algorithm_SoonMeSu
     Public 이평선하향돌파익절기준 As Single = 0.1   '이평선위에서 아래로 하향돌파 시 익절 기준으로 적어도 이익이 이 기준 이상일 때 매도함
     Public D_MAX이익율 As Single = 0.0              '상한치를 찍고 내려와서 이평선을 하향 돌파하면 매도하는 현재값
     Public D_MAX이익율상한 As Single = 0.33         '상한치를 찍고 내려와서 이평선을 하향 돌파하면 매도하는 기준 2023.08.09 추가함
+    Public D_반대편음봉_양봉대비비율 As Single = 0.3   '한쪽만 올라가는 이상패턴을 걸러내기 위해 반대쪽도 비슷한 비율로 떨어지는지 확인하기 위한 변수임
 
     '20230725 추가
     'Public D신호_유지_IndexCount As Integer = 16
@@ -111,15 +112,16 @@ Module Algorithm_SoonMeSu
 
 
     'F 알고리즘
+    'CNT_000_A_22_B_75_C_1.2_D_1.05_E_1.3_F_0.9_G_1.2_H_0.95_I_50_J_1.18
     Public F_PIP_포인트수 As Integer = 7
     Public F_PoinIndexList(1) As List(Of Integer)   '포인트의 리스트
 
     Public F_PIP_최소카운트 As Integer = 22   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
-    Public F_PIP_최대카운트 As Integer = 100    'PIP 계산하는 최종 길이          --------------------------------------- 변수
+    Public F_PIP_최대카운트 As Integer = 75    'PIP 계산하는 최종 길이          --------------------------------------- 변수
     Public F_기본계곡최소깊이 As Single = 1.2  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
     Public F_현재점의최소높이 As Single = 1.05  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
     Public F_현재점의최대높이 As Single = 1.3  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
-    Public F_손절배율 As Single = 0.9          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
+    Public F_손절배율 As Single = 0.9         'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
     Public F_좌우골짜기깊이상한 As Single = 1.2  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
     Public F_좌우골짜기깊이하한 As Single = 0.95  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
 
@@ -434,6 +436,7 @@ Module Algorithm_SoonMeSu
             End Select
             If flag = True Then                'D신호 발생
 
+
                 Dim str As String = String.Format("D 신호 발생 콜풋 : {0}, 인덱스 : {1}", i, Index)
                 Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("D", i)
                 SoonMesuShinhoList.Add(shinho)
@@ -490,6 +493,8 @@ Module Algorithm_SoonMeSu
         Return False
     End Function
 
+
+
     Private Function CALC_IS_장대양봉(ByVal callput As Integer, ByVal index As Integer) As Integer
 
         Dim 기준캔들수 As Integer = Math.Round(이동평균선_기준일자 * X_계산기준봉비율)
@@ -504,16 +509,25 @@ Module Algorithm_SoonMeSu
         Dim 기준캔들내최대크기 As Single = max - min          '최대-최소값을 구한다
 
         Dim 현재분봉크기 As Single = 일분옵션데이터(callput).price(index, 3) - 일분옵션데이터(callput).price(index, 0)  '종가 - 시가 : 이러면 양봉인지 확인됨
-        Dim 이차분봉크기 As Single = 일분옵션데이터(callput).price(index, 3) - 일분옵션데이터(callput).price(index - 1, 0)  '한틱전의 값과 더해서 양봉이 길어진다면  ------------------ 너무 많이 뜨고 결과가 안좋아 일단 폐기 20230404
+
+        Dim 현재분봉크기_비율 As Single = 일분옵션데이터(callput).price(index, 3) / 일분옵션데이터(callput).price(index, 0) - 1
 
         If 기준캔들내최대크기 * Y_장대양봉기준비율 < 현재분봉크기 Then
-            Return 1 '현재분봉이 기준보다 크면 장대양봉이라고 판단함
-            'ElseIf 기준캔들내최대크기 * Y_장대양봉기준비율 < 이차분봉크기 Then
-            '   Return 2  '2개의 캔들이 더해져서 장대양봉인걸 알려준다
+
+
+            '반대쪽도 충분한 장대음봉인지 확인해본다 20230820 추가
+            Dim callput_revese As Integer = 0
+            If callput = 0 Then callput_revese = 1
+
+            Dim 반대편현재분봉크기 As Single = 일분옵션데이터(callput_revese).price(index, 0) / 일분옵션데이터(callput_revese).price(index, 3) - 1  '시가 - 종가 : 이러면 음봉인지 확인됨
+
+            If 현재분봉크기_비율 * D_반대편음봉_양봉대비비율 < 반대편현재분봉크기 Then
+                Return 1 '반대편 분봉이 충분히 크면 인정
+            End If
 
         End If
 
-        Return 0
+            Return 0
     End Function
 
 
