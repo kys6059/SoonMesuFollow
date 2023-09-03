@@ -106,10 +106,13 @@ Partial Class Form2
         Me.label_timerCounter = New System.Windows.Forms.Label()
         Me.btn_TimerStart = New System.Windows.Forms.Button()
         Me.TableLayoutPanel9 = New System.Windows.Forms.TableLayoutPanel()
+        Me.rdo_목요일 = New System.Windows.Forms.RadioButton()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.txt_week_정규 = New System.Windows.Forms.RichTextBox()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txt_월물 = New System.Windows.Forms.RichTextBox()
+        Me.rdo_월요일 = New System.Windows.Forms.RadioButton()
         Me.TableLayoutPanel8 = New System.Windows.Forms.TableLayoutPanel()
         Me.cmb_selectedJongmokIndex_1 = New System.Windows.Forms.ComboBox()
         Me.lbl_1 = New System.Windows.Forms.Label()
@@ -1184,34 +1187,65 @@ Partial Class Form2
         '
         'TableLayoutPanel9
         '
+        Me.TableLayoutPanel9.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.TableLayoutPanel9.ColumnCount = 4
         Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TableLayoutPanel9.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel9.Controls.Add(Me.rdo_목요일, 3, 1)
+        Me.TableLayoutPanel9.Controls.Add(Me.Label5, 0, 1)
         Me.TableLayoutPanel9.Controls.Add(Me.txt_week_정규, 3, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.Label28, 2, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.Label25, 0, 0)
         Me.TableLayoutPanel9.Controls.Add(Me.txt_월물, 1, 0)
+        Me.TableLayoutPanel9.Controls.Add(Me.rdo_월요일, 2, 1)
         Me.TableLayoutPanel9.Location = New System.Drawing.Point(9, 154)
         Me.TableLayoutPanel9.Name = "TableLayoutPanel9"
-        Me.TableLayoutPanel9.RowCount = 1
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36.0!))
-        Me.TableLayoutPanel9.Size = New System.Drawing.Size(617, 36)
+        Me.TableLayoutPanel9.RowCount = 2
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel9.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel9.Size = New System.Drawing.Size(617, 74)
         Me.TableLayoutPanel9.TabIndex = 27
+        '
+        'rdo_목요일
+        '
+        Me.rdo_목요일.AutoSize = True
+        Me.rdo_목요일.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdo_목요일.Location = New System.Drawing.Point(466, 40)
+        Me.rdo_목요일.Name = "rdo_목요일"
+        Me.rdo_목요일.Size = New System.Drawing.Size(147, 30)
+        Me.rdo_목요일.TabIndex = 7
+        Me.rdo_목요일.TabStop = True
+        Me.rdo_목요일.Text = "목요일"
+        Me.rdo_목요일.UseVisualStyleBackColor = True
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.TableLayoutPanel9.SetColumnSpan(Me.Label5, 2)
+        Me.Label5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label5.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.Label5.Location = New System.Drawing.Point(2, 38)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(1)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(305, 34)
+        Me.Label5.TabIndex = 5
+        Me.Label5.Text = "월/목선택"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'txt_week_정규
         '
         Me.txt_week_정규.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_week_정규.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.txt_week_정규.ForeColor = System.Drawing.SystemColors.MenuHighlight
-        Me.txt_week_정규.Location = New System.Drawing.Point(465, 3)
+        Me.txt_week_정규.Location = New System.Drawing.Point(466, 4)
         Me.txt_week_정규.Multiline = False
         Me.txt_week_정규.Name = "txt_week_정규"
         Me.txt_week_정규.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.txt_week_정규.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txt_week_정규.Size = New System.Drawing.Size(149, 30)
+        Me.txt_week_정규.Size = New System.Drawing.Size(147, 29)
         Me.txt_week_정규.TabIndex = 4
         Me.txt_week_정규.Text = ""
         '
@@ -1220,10 +1254,10 @@ Partial Class Form2
         Me.Label28.AutoSize = True
         Me.Label28.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label28.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label28.Location = New System.Drawing.Point(309, 1)
+        Me.Label28.Location = New System.Drawing.Point(310, 2)
         Me.Label28.Margin = New System.Windows.Forms.Padding(1)
         Me.Label28.Name = "Label28"
-        Me.Label28.Size = New System.Drawing.Size(152, 34)
+        Me.Label28.Size = New System.Drawing.Size(151, 33)
         Me.Label28.TabIndex = 2
         Me.Label28.Text = "Week/정규"
         Me.Label28.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1233,10 +1267,10 @@ Partial Class Form2
         Me.Label25.AutoSize = True
         Me.Label25.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label25.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.Label25.Location = New System.Drawing.Point(1, 1)
+        Me.Label25.Location = New System.Drawing.Point(2, 2)
         Me.Label25.Margin = New System.Windows.Forms.Padding(1)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(152, 34)
+        Me.Label25.Size = New System.Drawing.Size(151, 33)
         Me.Label25.TabIndex = 0
         Me.Label25.Text = "월물"
         Me.Label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1246,13 +1280,25 @@ Partial Class Form2
         Me.txt_월물.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_월물.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.txt_월물.ForeColor = System.Drawing.SystemColors.MenuHighlight
-        Me.txt_월물.Location = New System.Drawing.Point(157, 3)
+        Me.txt_월물.Location = New System.Drawing.Point(158, 4)
         Me.txt_월물.Name = "txt_월물"
         Me.txt_월물.RightToLeft = System.Windows.Forms.RightToLeft.Yes
         Me.txt_월물.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None
-        Me.txt_월물.Size = New System.Drawing.Size(148, 30)
+        Me.txt_월물.Size = New System.Drawing.Size(147, 29)
         Me.txt_월물.TabIndex = 3
         Me.txt_월물.Text = ""
+        '
+        'rdo_월요일
+        '
+        Me.rdo_월요일.AutoSize = True
+        Me.rdo_월요일.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdo_월요일.Location = New System.Drawing.Point(312, 40)
+        Me.rdo_월요일.Name = "rdo_월요일"
+        Me.rdo_월요일.Size = New System.Drawing.Size(147, 30)
+        Me.rdo_월요일.TabIndex = 6
+        Me.rdo_월요일.TabStop = True
+        Me.rdo_월요일.Text = "월요일"
+        Me.rdo_월요일.UseVisualStyleBackColor = True
         '
         'TableLayoutPanel8
         '
@@ -1265,7 +1311,7 @@ Partial Class Form2
         Me.TableLayoutPanel8.Controls.Add(Me.lbl_1, 0, 0)
         Me.TableLayoutPanel8.Controls.Add(Me.Label20, 2, 0)
         Me.TableLayoutPanel8.Controls.Add(Me.cmb_selectedJongmokIndex_0, 1, 0)
-        Me.TableLayoutPanel8.Location = New System.Drawing.Point(10, 193)
+        Me.TableLayoutPanel8.Location = New System.Drawing.Point(8, 231)
         Me.TableLayoutPanel8.Name = "TableLayoutPanel8"
         Me.TableLayoutPanel8.RowCount = 1
         Me.TableLayoutPanel8.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -1328,7 +1374,7 @@ Partial Class Form2
         Me.grid1.AllowUserToResizeRows = False
         Me.grid1.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable
         Me.grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grid1.Location = New System.Drawing.Point(10, 233)
+        Me.grid1.Location = New System.Drawing.Point(10, 271)
         Me.grid1.Margin = New System.Windows.Forms.Padding(1)
         Me.grid1.Name = "grid1"
         Me.grid1.ReadOnly = True
@@ -1338,7 +1384,7 @@ Partial Class Form2
         Me.grid1.ShowCellToolTips = False
         Me.grid1.ShowEditingIcon = False
         Me.grid1.ShowRowErrors = False
-        Me.grid1.Size = New System.Drawing.Size(630, 400)
+        Me.grid1.Size = New System.Drawing.Size(630, 362)
         Me.grid1.TabIndex = 29
         '
         'TableLayoutPanel10
@@ -1558,7 +1604,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.6.4_230813"
+        Me.txt_programversion.Text = "1.6.5_230903"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -2271,7 +2317,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(2556, 1321)
+        Me.ClientSize = New System.Drawing.Size(2556, 1338)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TableLayoutPanel13)
         Me.Controls.Add(Me.lbl_ReceiveCounter)
@@ -2490,4 +2536,7 @@ Partial Class Form2
     Friend WithEvents chk_Algorithm_G As CheckBox
     Friend WithEvents Button1 As Button
     Friend WithEvents chk_Algorithm_F As CheckBox
+    Friend WithEvents rdo_목요일 As RadioButton
+    Friend WithEvents Label5 As Label
+    Friend WithEvents rdo_월요일 As RadioButton
 End Class

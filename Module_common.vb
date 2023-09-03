@@ -526,59 +526,6 @@ Module Module_common
         FindIndexFormTime = (((si - 9) * (60 / Interval)) + (bun / Interval)) - 1
     End Function
 
-    Public Sub 월물_위클리옵션판단(ByVal 남은날짜 As Integer)
-
-        Dim txt월물 As String = sMonth
-        Dim txtweekly As String = "G"
-
-        Dim today As Date = Now()
-        Dim strThisMonth As String = Format(today, "yyMM")
-        Dim sCase As String
-
-
-        If 남은날짜 < 7 Then  '옵션월물을 적용한다
-
-            txt월물 = "20" & sMonth
-            txtweekly = "G"
-            sCase = "7일미만"
-
-        ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
-
-            txt월물 = "W1THU"
-            txtweekly = "W"
-            sCase = "14일미만"
-
-        ElseIf 남은날짜 >= 14 And 남은날짜 < 28 Then
-
-            Dim 목요일count As Integer = 0
-
-            For i As Integer = 1 To today.Day - 1
-                Dim tempdate As Date = New Date(today.Year, today.Month, i)
-                If Weekday(tempdate) = 5 Then
-                    목요일count = 목요일count + 1
-                End If
-            Next
-
-            txt월물 = "W" & (목요일count + 1).ToString() & "THU"
-            txtweekly = "W"
-
-            sCase = "14~28일미만"
-
-        Else '28일 초과는 무조건 3주차 
-
-            txt월물 = "W3THU"
-            txtweekly = "W"
-            sCase = "28일이상"
-
-        End If
-
-        Form2.txt_월물.Text = txt월물
-        Form2.txt_week_정규.Text = txtweekly
-        Dim str As String = String.Format("월물 = {0}, Week/정규 = {1}, 남은날짜 = {2}({3}), CASE = {4}", txt월물, txtweekly, 남은날짜, 남은날짜 Mod 7, sCase)
-        'Add_Log("설정", str)
-
-    End Sub
-
     'DB로부터 읽은 Data로부터 OptionList를 만들어낸다
     '이 때 Data 안에는 2개 밖에 없을거기 때문에 Option List도 2개가 된다 0번 - 콜, 1번 풋
     Public Sub MakeOptinList()

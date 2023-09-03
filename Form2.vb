@@ -609,13 +609,15 @@ Public Class Form2
         Dim strdt As String = Format(dt, "yyMM01")
         txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
-
         Dim lDate As Long = Val(strToday)
         Dim 월물 As Long = getsMonth(lDate)
         sMonth = 월물
-        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
 
-        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+        월목라디오선택()  '월목중 하나 선택
+
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+        월목에따른텍스트입력하기(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+
         손절매수준설정(남은날짜)
         currentIndex = -1
 
@@ -630,6 +632,114 @@ Public Class Form2
         End If
 
     End Sub
+
+    Private Sub 월목라디오선택()
+
+        Dim today As Date = Now()
+
+        If Weekday(today) >= 3 And Weekday(today) <= 5 Then  '화수목이면 목요일, 나머지는 월요일로 선택함
+            rdo_목요일.Checked = True
+        Else
+            rdo_월요일.Checked = True
+        End If
+
+    End Sub
+
+    Private Sub 월목에따른텍스트입력하기(ByVal 남은날짜 As Integer)
+
+        Dim txt월물 As String = sMonth
+        Dim txtweekly As String = "G"
+
+        Dim today As Date = Now()
+        Dim strThisMonth As String = Format(today, "yyMM")
+        Dim sCase As String = ""
+
+        If rdo_목요일.Checked = True Then
+
+            If 남은날짜 < 7 Then  '옵션월물을 적용한다
+
+                txt월물 = "20" & sMonth
+                txtweekly = "G"
+                sCase = "7일미만"
+
+            ElseIf 남은날짜 >= 7 And 남은날짜 < 14 Then  '1주차
+
+                txt월물 = "W1THU"
+                txtweekly = "W"
+                sCase = "14일미만"
+
+            ElseIf 남은날짜 >= 14 And 남은날짜 < 28 Then
+
+                Dim 목요일count As Integer = 0
+
+                For i As Integer = 1 To today.Day - 1
+                    Dim tempdate As Date = New Date(today.Year, today.Month, i)
+                    If Weekday(tempdate) = 5 Then
+                        목요일count = 목요일count + 1
+                    End If
+                Next
+
+                txt월물 = "W" & (목요일count + 1).ToString() & "THU"
+                txtweekly = "W"
+
+                sCase = "14~28일미만"
+
+            Else '28일 초과는 무조건 3주차 
+
+                txt월물 = "W3THU"
+                txtweekly = "W"
+                sCase = "28일이상"
+
+            End If
+        ElseIf rdo_월요일.Checked = True Then
+
+            txt월물 = 몇월몇번째월요일지찾기()
+            txtweekly = "W"
+        End If
+
+        txt_월물.Text = txt월물
+        txt_week_정규.Text = txtweekly
+        Dim str As String = String.Format("월물 = {0}, Week/정규 = {1}, 남은날짜 = {2}({3}), CASE = {4}", txt월물, txtweekly, 남은날짜, 남은날짜 Mod 7, sCase)
+        'Add_Log("설정", str)
+
+    End Sub
+
+    Private Function 몇월몇번째월요일지찾기() As String
+
+        Dim txt월물 As String = ""
+
+        Dim today As Date = Now()
+
+        Dim targetDate As Date
+
+        For i As Integer = 0 To 6   ' 월요일을 찾아낸다
+            targetDate = today.AddDays(i)
+            If Weekday(targetDate) = 2 Then
+                Exit For
+            End If
+        Next
+
+        '몇번째주인지 찾는다
+        Dim iYear As Integer = targetDate.Year
+        Dim iMonth As Integer = targetDate.Month
+        Dim iDate As Integer = targetDate.Day
+
+        Dim 월요일카운트 As Integer = 0
+        For i As Integer = 1 To iDate
+
+            Dim tempdate As Date = New Date(iYear, iMonth, i)
+            If Weekday(tempdate) = 2 Then
+                월요일카운트 = 월요일카운트 + 1
+            End If
+        Next
+
+        txt월물 = "W" & 월요일카운트.ToString() & "MON"
+
+
+
+        Return txt월물
+
+    End Function
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
         chk_실거래실행.Checked = False
@@ -990,7 +1100,7 @@ Public Class Form2
 
         Select Case 남은날짜
             Case 0
-                중간청산목표이익 = "0.57"
+                중간청산목표이익 = "0.56"
                 켈리지수비율 = "0.33"
                 chk_Algorithm_B.Checked = True
                 chk_Algorithm_C.Checked = True
@@ -1020,25 +1130,25 @@ Public Class Form2
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
             Case 3
-                켈리지수비율 = "0.22"
-                중간청산목표이익 = "0.35"
+                켈리지수비율 = "0.17"
+                중간청산목표이익 = "0.45"
                 chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = False
+                chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
-                chk_Algorithm_E.Checked = False
+                chk_Algorithm_E.Checked = True
 
-                옵션가기준손절매 = "-0.24"
+                옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 6
-                켈리지수비율 = "0.27"
-                중간청산목표이익 = "0.35"
+                켈리지수비율 = "0.17"
+                중간청산목표이익 = "0.45"
                 'chk_모의투자연결.Checked = True
                 chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = False
-                chk_Algorithm_D.Checked = False
-                chk_Algorithm_E.Checked = False
+                chk_Algorithm_C.Checked = True
+                chk_Algorithm_D.Checked = True
+                chk_Algorithm_E.Checked = True
 
-                옵션가기준손절매 = "-0.22"
+                옵션가기준손절매 = "-0.28"
                 익절차 = "11"
 
         End Select
@@ -1953,7 +2063,7 @@ Public Class Form2
         sMonth = 월물
         Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
 
-        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+        월목에따른텍스트입력하기(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
         손절매수준설정(남은날짜)
     End Sub
 
@@ -1967,5 +2077,26 @@ Public Class Form2
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         '매매신호처리함수()
+    End Sub
+
+    Private Sub rdo_목요일_CheckedChanged(sender As Object, e As EventArgs) Handles rdo_목요일.CheckedChanged
+
+        Dim strToday As String = Format(Today, "yyMMdd")
+        Dim lDate As Long = Val(strToday)
+        Dim 월물 As Long = getsMonth(lDate)
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+        월목에따른텍스트입력하기(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+
+    End Sub
+
+    Private Sub rdo_월요일_CheckedChanged(sender As Object, e As EventArgs) Handles rdo_월요일.CheckedChanged
+
+        Dim strToday As String = Format(Today, "yyMMdd")
+        Dim lDate As Long = Val(strToday)
+        Dim 월물 As Long = getsMonth(lDate)
+
+        Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
+        월목에따른텍스트입력하기(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+
     End Sub
 End Class

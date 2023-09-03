@@ -744,9 +744,9 @@ Public Class Form1
         sMonth = 월물
         Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
 
-        월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
+        '월물_위클리옵션판단(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
 
-        손절매수준설정(남은날짜)
+        '손절매수준설정(남은날짜)
 
         txt_실험조건.Text = "A" + strToday
 
