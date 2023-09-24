@@ -1506,14 +1506,14 @@ Public Class Form2
 
         'fullTest_A()
         'fullTest_B()
-        fullTest_D()
+        'fullTest_D()
 
         'fullTest_C()
 
         'fullTest_C1()
 
         'fullTest_E()
-        'fullTest_F()
+        fullTest_F()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1943,19 +1943,21 @@ Public Class Form2
         '20230820 최종 B230820_T007
         'CNT_000_A_22_B_75_C_1.2_D_1.05_E_1.3_F_0.9_G_1.2_H_0.95_I_50_J_1.18
 
-        Dim F_PIP_최소카운트_temp() As Integer = {22, 20}   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
+        Dim F_PIP_최소카운트_temp() As Integer = {22}   '18  - 선이 6개가 각 3개로 구성됨  --------------------------------------- 변수
         Dim F_PIP_최대카운트_temp() As Integer = {75}    'PIP 계산하는 최종 길이          --------------------------------------- 변수
-        Dim F_기본계곡최소깊이_temp() As Single = {1.2}  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
-        Dim F_현재점의최소높이_temp() As Single = {1.05}  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
-        Dim F_현재점의최대높이_temp() As Single = {1.3, 1.35, 1.4}  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
+        Dim F_기본계곡최소깊이_temp() As Single = {1.27}  '헤드앤숄더에서 높은점과 낮은점의 기본 높이 차  ------------------------- 변수  ------------ 이걸 줄이면서 3일이나 6일 어찌되는지 봐야 함
+        Dim F_현재점의최소높이_temp() As Single = {1.06}  '헤드앤숄더에서 6번째점에서 7번째점의 최소 높이 차  --------------------- 변수
+        Dim F_현재점의최대높이_temp() As Single = {1.3}  '헤드앤숄더에서 6번째점에서 7번째점의 최대 높이 차  --------------------- 변수
 
 
-        Dim F_손절배율_temp() As Single = {0.9}          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
-        Dim F_좌우골짜기깊이상한_temp() As Single = {1.2}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
-        Dim F_좌우골짜기깊이하한_temp() As Single = {0.95}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
+        Dim F_손절배율_temp() As Single = {0.95}          'option_son 나는걸 방지하기 위해 최저점을 하향 돌파할 때 손절한다 ----- 변수
+        Dim F_좌우골짜기깊이상한_temp() As Single = {1.25}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 상한 --------------------------- 변수
+        Dim F_좌골짜기깊이하한_temp() As Single = {0.92}  '중앙골짜기 대비 좌우 골짜기의 깊이 차 하한 --------------------------- 변수
 
         Dim F_최저점근접기간Index_temp() As Integer = {50}  '몇가지를 보니 최저점에 가까울 때 트리플바닥으로 상승하는 경우가 많음. 이를 위해 최저점 근처인지를 확인하는데 PIP 시작점으로부터 이전 index count 변수 
-        Dim F_최저점대비높은비율_temp() As Single = {1.18, 1.23, 1.3}  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
+        Dim F_최저점대비높은비율_temp() As Single = {1.1}  '최근 최저점 대비 PIP의 최저점이 높은 허용 정도
+
+        Dim F_우골짜기깊이하한_temp() As Single = {0.95}
 
 
         chk_Algorithm_A.Checked = False
@@ -1982,38 +1984,42 @@ Public Class Form2
                         For e As Integer = 0 To F_현재점의최대높이_temp.Length - 1
                             For f As Integer = 0 To F_손절배율_temp.Length - 1
                                 For g As Integer = 0 To F_좌우골짜기깊이상한_temp.Length - 1
-                                    For h As Integer = 0 To F_좌우골짜기깊이하한_temp.Length - 1
+                                    For h As Integer = 0 To F_좌골짜기깊이하한_temp.Length - 1
                                         For i As Integer = 0 To F_최저점근접기간Index_temp.Length - 1
                                             For j As Integer = 0 To F_최저점대비높은비율_temp.Length - 1
+                                                For k As Integer = 0 To F_우골짜기깊이하한_temp.Length - 1
+                                                    F_PIP_최소카운트 = F_PIP_최소카운트_temp(a)
+                                                    F_PIP_최대카운트 = F_PIP_최대카운트_temp(b)
+                                                    F_기본계곡최소깊이 = F_기본계곡최소깊이_temp(c)
+                                                    F_현재점의최소높이 = F_현재점의최소높이_temp(d)
+                                                    F_현재점의최대높이 = F_현재점의최대높이_temp(e)
+                                                    F_손절배율 = F_손절배율_temp(f)
+                                                    F_좌우골짜기깊이상한 = F_좌우골짜기깊이상한_temp(g)
+                                                    F_좌골짜기깊이하한 = F_좌골짜기깊이하한_temp(h)
+                                                    F_최저점근접기간Index = F_최저점근접기간Index_temp(i)
+                                                    F_최저점대비높은비율 = F_최저점대비높은비율_temp(j)
+                                                    F_우골짜기깊이하한 = F_우골짜기깊이하한_temp(k)
 
-                                                F_PIP_최소카운트 = F_PIP_최소카운트_temp(a)
-                                                F_PIP_최대카운트 = F_PIP_최대카운트_temp(b)
-                                                F_기본계곡최소깊이 = F_기본계곡최소깊이_temp(c)
-                                                F_현재점의최소높이 = F_현재점의최소높이_temp(d)
-                                                F_현재점의최대높이 = F_현재점의최대높이_temp(e)
-                                                F_손절배율 = F_손절배율_temp(f)
-                                                F_좌우골짜기깊이상한 = F_좌우골짜기깊이상한_temp(g)
-                                                F_좌우골짜기깊이하한 = F_좌우골짜기깊이하한_temp(h)
-                                                F_최저점근접기간Index = F_최저점근접기간Index_temp(i)
-                                                F_최저점대비높은비율 = F_최저점대비높은비율_temp(j)
+                                                    Dim cntstr As String
+                                                    If cnt < 10 Then
+                                                        cntstr = "00" & cnt.ToString()
+                                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                                        cntstr = "0" & cnt.ToString()
+                                                    Else
+                                                        cntstr = cnt.ToString()
+                                                    End If
 
-                                                Dim cntstr As String
-                                                If cnt < 10 Then
-                                                    cntstr = "00" & cnt.ToString()
-                                                ElseIf cnt >= 10 And cnt < 100 Then
-                                                    cntstr = "0" & cnt.ToString()
-                                                Else
-                                                    cntstr = cnt.ToString()
-                                                End If
+                                                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", F_PIP_최소카운트, F_PIP_최대카운트, F_기본계곡최소깊이, F_현재점의최소높이, F_현재점의최대높이)
+                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_F_{0}_G_{1}_H_{2}_I_{3}_J_{4}_K_{5}", F_손절배율, F_좌우골짜기깊이상한, F_좌골짜기깊이하한, F_최저점근접기간Index, F_최저점대비높은비율, F_우골짜기깊이하한)
 
-                                                SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", F_PIP_최소카운트, F_PIP_최대카운트, F_기본계곡최소깊이, F_현재점의최소높이, F_현재점의최대높이)
-                                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_F_{0}_G_{1}_H_{2}_I_{3}_J_{4}", F_손절배율, F_좌우골짜기깊이상한, F_좌우골짜기깊이하한, F_최저점근접기간Index, F_최저점대비높은비율)
+                                                    Console.WriteLine(SoonMesuSimulation_조건)
+                                                    Add_Log("", SoonMesuSimulation_조건)
+                                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                    cnt += 1
+                                                Next
 
-                                                Console.WriteLine(SoonMesuSimulation_조건)
-                                                Add_Log("", SoonMesuSimulation_조건)
-                                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                                                cnt += 1
+
 
                                             Next
                                         Next
