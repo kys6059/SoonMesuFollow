@@ -1509,14 +1509,14 @@ Public Class Form2
 
         'fullTest_A()
         'fullTest_B()
-        'fullTest_D()
+        fullTest_D()
 
         'fullTest_C()
 
         'fullTest_C1()
 
         'fullTest_E()
-        fullTest_F()
+        'fullTest_F()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -1782,10 +1782,10 @@ Public Class Form2
 
     Private Sub fullTest_D()
         Dim 이동평균선_기준일자_temp() As Integer = {50}               'A
-        Dim X_계산기준봉비율_temp() As Single = {0.59}
-        Dim Y_장대양봉기준비율_temp() As Single = {0.6}
+        Dim X_계산기준봉비율_temp() As Single = {0.59, 0.62}
+        Dim Y_장대양봉기준비율_temp() As Single = {0.56, 0.6, 0.64}
         Dim D_MAX이익율상한_temp() As Single = {0.33}
-        Dim D_반대편음봉_양봉대비비율_temp() As Single = {0.01, 0.1, 0.2, 0.3, 0.4}
+        Dim D_반대편음봉_양봉대비비율_temp() As Single = {0.2, 0.25, 0.3, 0.4, 0.35, 0.45}
 
 
         'Dim D신호_유지_IndexCount_temp() As Integer = {6, 10, 20, 30, 40}
