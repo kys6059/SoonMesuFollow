@@ -1102,55 +1102,47 @@ Public Class Form2
             Case 0
                 중간청산목표이익 = "0.5"
                 켈리지수비율 = "0.30"
-                chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
-                txt_F2_매수_기준가.Text = "1.0"
+
                 옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 1
-                켈리지수비율 = "0.1"
+                켈리지수비율 = "0.05"
                 중간청산목표이익 = "0.4"
-                chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = True
-                chk_Algorithm_D.Checked = True
-                chk_Algorithm_E.Checked = True
-                txt_F2_매수_기준가.Text = "1.0"
+                chk_Algorithm_D.Checked = False
+                chk_Algorithm_E.Checked = False
+
                 옵션가기준손절매 = "-0.27"
                 익절차 = "11"
+                chk_실거래실행.Checked = False
             Case 2
-                켈리지수비율 = "0.23"
+                켈리지수비율 = "0.05"
                 중간청산목표이익 = "0.4"
-                chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = True
-                chk_Algorithm_D.Checked = True
-                chk_Algorithm_E.Checked = True
+                chk_Algorithm_D.Checked = False
+                chk_Algorithm_E.Checked = False
 
                 옵션가기준손절매 = "-0.24"
                 익절차 = "11"
+                chk_실거래실행.Checked = False
             Case 3
                 켈리지수비율 = "0.15"
                 중간청산목표이익 = "0.45"
-                chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = True
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
+                chk_Algorithm_G.Checked = False
 
-                txt_F2_매수_기준가.Text = "1.1"
+
                 옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 6
-                켈리지수비율 = "0.01"
+                켈리지수비율 = "0.05"
                 중간청산목표이익 = "0.40"
-                chk_Algorithm_B.Checked = True
-                chk_Algorithm_C.Checked = True
-                chk_Algorithm_D.Checked = True
-                chk_Algorithm_E.Checked = True
+                chk_Algorithm_D.Checked = False
+                chk_Algorithm_E.Checked = False
 
                 chk_실거래실행.Checked = False
 
-                txt_F2_매수_기준가.Text = "1.1"
                 옵션가기준손절매 = "-0.28"
                 익절차 = "11"
 
