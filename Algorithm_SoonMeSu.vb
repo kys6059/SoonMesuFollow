@@ -1393,6 +1393,42 @@ Module Algorithm_SoonMeSu
     End Sub
 
 
+    ''' <summary>
+    ''' M 알고리즘용
+    ''' </summary>
+
+    Public Sub CalcMACD이동평균Data()   '이동평균선을 계산하여 일분데이터에 추가한다
+
+        For callput As Integer = 0 To 1
+
+            For i As Integer = 0 To MA_Interval.Length - 1
+
+                Dim 기준일자 As Integer = MA_Interval(i)
+
+
+
+                For j As Integer = 기준일자 - 1 To currentIndex_1MIn
+
+                    If currentIndex_1MIn < 기준일자 Then Continue For
+
+                    If isRealFlag = False Then
+
+                        If 일분옵션데이터(callput).MA(i, j) <= 0 Then
+                            일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j)      '빈것들만 계산하여 속도를 빠르게 한다
+                        End If
+
+                    Else
+                        일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
+                    End If
+
+
+                Next
+            Next
+        Next
+
+    End Sub
+
+
     ' F알고리즘 시작
 
     Public Sub CalcAlgorithm_F(ByVal 일분옵션데이터_CurrentIndex As Integer) '역헤드엔숄더발생 
@@ -1654,5 +1690,62 @@ Module Algorithm_SoonMeSu
 
     End Function
 
+    ' MovingAverage : Call, put, 종합주가지수 3가지를 다 하나의 배열에 저장한다
+    '0: 단기 (12일)
+    '1: 장기 (26일)
+    '2: 추세이평선(50일)
+    '3: 팔때 단기 19일
+    '4: 팔 때 장기 39일
+
+    '계산치 : Call, put, 종합주가지수 3가지를 다 하나의 배열에 저장한다
+    '0: MACD선 
+    '1: 시그널선 (MACD의 9일)
+    '2: Oscillator
+    '3: 팔때 MACD
+    '4: 팔때 MACD 시그널
+    '5: 팔때 MACD Oscillator
+
+
+
+    Public MV_종합주가(4, 999) As Integer   '종합주가지수는 CurrentIndex 기준이 달라서 MV와  따로 계산해야 한다
+
+
+    Public CA_종합주가(5, 999) As Integer
+
+
+
+
+
+    Private Function CalcMaxInterval() As Integer  '
+        Dim ret As Integer = 0
+        For i = 0 To MA_Interval.Length - 1
+            If ret < MA_Interval(i) Then ret = MA_Interval(i)
+        Next
+        Return ret
+    End Function
+
+
+
+    Public Sub CalcAlgorithm_M1(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1
+
+        max_interval = CalcMaxInterval() '전역변수 max_interval에 값을 넣어 놓는다
+
+        If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
+
+        '이평선은 전체 함수에서 그린다
+
+        '이평선은 전체함수에서 draw한다
+
+        '계산치 계산하는 함수
+        '계산이 끝나면 draw한다  - 별도의 그래프를 하나 더 그려야 할 듯
+
+
+        '시작시간, 종료시간 선택
+
+
+
+
+
+    End Sub
 
 End Module

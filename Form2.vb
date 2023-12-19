@@ -65,6 +65,7 @@ Public Class Form2
             'CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
             Calc이동평균Data() '일분옵션데이터의 값을 루프를 돌면서 이동평균을 계산해서 다시 입력한다
+            CalcMACD이동평균Data() 'MACD관련 이동평균선을 루프를 돌면서 계산해서 입력한다
 
             CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
@@ -858,6 +859,17 @@ Public Class Form2
             Chart1.Series(str).Color = Color.Black
             Chart1.Series(str).BorderWidth = 1
 
+            'MACD 이평선 정의
+            For j As Integer = 0 To MA_Interval.Length - 1
+                str = "MACD_MA_" + i.ToString() + "_" + j.ToString()
+                Chart1.Series.Add(str)
+                Chart1.Series(str).ChartArea = ChartAreaStr
+                Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart1.Series(str).Color = Color.Black
+                Chart1.Series(str).BorderWidth = 1
+            Next
+
+
             ''Lebel 설정
             Chart1.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
             '축 선 속성 설정
@@ -895,6 +907,11 @@ Public Class Form2
                 Dim maxValue As Single = Single.MinValue
                 Dim minValue As Single = Single.MaxValue
 
+                Dim MACD_MA(MA_Interval.Length - 1) As String
+                For j = 0 To MA_Interval.Length - 1
+                    MACD_MA(j) = "MACD_MA_" + callput.ToString() + "_" + j.ToString()
+                Next
+
                 For i = 0 To currentIndex_1MIn
                     ' main Series 입력
                     If 일분옵션데이터(callput).price(i, 1) > 0 Then
@@ -922,6 +939,14 @@ Public Class Form2
 
                         If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
                         If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
+
+                        'MACD이평 그리기
+                        For j As Integer = 0 To MA_Interval.Length - 1
+                            If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+                        Next
+
+
+
                     End If
                 Next
                 Chart1.ChartAreas(callput).AxisY.Minimum = minValue

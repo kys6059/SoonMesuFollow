@@ -27,14 +27,33 @@ Module Module_For1Min
         Dim price(,) As Single '시간index, 시고저종
         Dim 거래량() As Long ' 100개
         Dim 이동평균선() As Single '콜풋
+        Dim MA(,) As Single 'MACD 관련 이동평균선 4가지, 480분
+        Dim CA(,) As Single 'MACD 관련 계산치들     
 
         Public Sub Initialize()
             ReDim ctime(480) '
             ReDim price(480, 3)  '콜풋, 시간, 시고저종
             ReDim 거래량(480) '1분단위는 약 396개임
             ReDim 이동평균선(480)
+            ReDim MA(4, 480)
+            ReDim CA(5, 480)
         End Sub
     End Structure
+
+    ' MovingAverage : Call, put, 종합주가지수 3가지를 다 하나의 배열에 저장한다
+    '0: 단기 (12일)
+    '1: 장기 (26일)
+    '2: 추세이평선(50일)
+    '3: 팔때 단기 19일
+    '4: 팔 때 장기 39일
+
+    ' 계산치 : Call, put, 종합주가지수 3가지를 다 하나의 배열에 저장한다
+    '0: MACD선 
+    '1: 시그널선 (MACD의 9일)
+    '2: Oscillator
+    '3: 팔때 MACD
+    '4: 팔때 MACD 시그널
+    '5: 팔때 MACD Oscillator
 
     Structure PIP탬플릿
         Dim PointCount As Integer
@@ -47,6 +66,11 @@ Module Module_For1Min
         Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관
 
     End Structure
+
+    '이하 MACD 계산용
+    Public MA_Interval() As Integer = {12, 26, 50, 19, 39}  '이평선의 날짜들을 미리 지정한다
+    Public max_interval As Integer
+
 
     '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
     Public 일분옵션데이터() As 일분데이터템플릿
