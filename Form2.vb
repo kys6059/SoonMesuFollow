@@ -65,7 +65,10 @@ Public Class Form2
             'CalcColorData()        '최대최소 계산
             CalcPIPData()          '대표선 계산
             Calc이동평균Data() '일분옵션데이터의 값을 루프를 돌면서 이동평균을 계산해서 다시 입력한다
-            CalcMACD이동평균Data() 'MACD관련 이동평균선을 루프를 돌면서 계산해서 입력한다
+            If chk_Algorithm_M.Checked = True Then
+                CalcMACD이동평균Data() 'MACD관련 이동평균선을 루프를 돌면서 계산해서 입력한다  
+                CalcMACD계산치Data()   'MACD값, 신호선 등을 그린다
+            End If
 
             CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
@@ -955,7 +958,9 @@ Public Class Form2
 
                         'MACD이평 그리기
                         For j As Integer = 0 To 1 'MA_Interval.Length - 1
-                            If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+                            If chk_Algorithm_M.Checked = True Then  '''''''''''' 알고리즘이 동작할 때만 그린다
+                                If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+                            End If
                         Next
 
 

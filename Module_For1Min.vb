@@ -28,7 +28,8 @@ Module Module_For1Min
         Dim 거래량() As Long ' 100개
         Dim 이동평균선() As Single '콜풋
         Dim MA(,) As Single 'MACD 관련 이동평균선 4가지, 480분
-        Dim CA(,) As Single 'MACD 관련 계산치들     
+        Dim CA_기본(,) As Single 'MACD 관련 계산치들     
+        Dim CA_팔때(,) As Single 'MACD 관련 계산치들     
 
         Public Sub Initialize()
             ReDim ctime(480) '
@@ -36,7 +37,8 @@ Module Module_For1Min
             ReDim 거래량(480) '1분단위는 약 396개임
             ReDim 이동평균선(480)
             ReDim MA(4, 480)
-            ReDim CA(5, 480)
+            ReDim CA_기본(3, 480)
+            ReDim CA_팔때(3, 480)
         End Sub
     End Structure
 
@@ -51,9 +53,10 @@ Module Module_For1Min
     '0: MACD선 
     '1: 시그널선 (MACD의 9일)
     '2: Oscillator
-    '3: 팔때 MACD
-    '4: 팔때 MACD 시그널
-    '5: 팔때 MACD Oscillator
+
+    '0: 팔때 MACD
+    '1: 팔때 MACD 시그널
+    '2: 팔때 MACD Oscillator
 
     Structure PIP탬플릿
         Dim PointCount As Integer
@@ -562,6 +565,28 @@ Module Module_For1Min
 
             If 일분옵션데이터(callput).price(index - i, 3) > 0 Then
                 sumValue = sumValue + 일분옵션데이터(callput).price(index - i, 3)
+                cnt += 1
+            End If
+
+        Next
+
+        Dim 이동평균값 As Single = sumValue / cnt
+        Return 이동평균값
+
+    End Function
+
+    Public Function MACD_신호선_이동평균선값계산(ByVal 이동평균선기준일자 As Integer, ByVal callput As Integer, ByVal index As Integer, ByVal is기본 As Boolean) As Single
+
+        Dim sumValue As Single = 0
+        Dim cnt As Integer = 0
+
+        For i As Integer = 0 To 이동평균선기준일자 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
+
+            If is기본 = True Then
+                sumValue = sumValue + 일분옵션데이터(callput).CA_기본(0, index - i)
+                cnt += 1
+            Else
+                sumValue = sumValue + 일분옵션데이터(callput).CA_팔때(0, index - i)
                 cnt += 1
             End If
 

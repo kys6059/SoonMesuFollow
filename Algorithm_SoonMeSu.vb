@@ -1405,8 +1405,6 @@ Module Algorithm_SoonMeSu
 
                 Dim 기준일자 As Integer = MA_Interval(i)
 
-
-
                 For j As Integer = 기준일자 - 1 To currentIndex_1MIn
 
                     If currentIndex_1MIn < 기준일자 Then Continue For
@@ -1425,6 +1423,66 @@ Module Algorithm_SoonMeSu
                 Next
             Next
         Next
+
+    End Sub
+
+    Public Sub CalcMACD계산치Data()   'MACD 이동평균선을 이용하셔 MACD 값 등을 계산한다
+
+
+        Dim 기본장기_26 As Integer = MA_Interval(1)
+        Dim 팔때장기_39 As Integer = MA_Interval(4)
+
+
+        For callput As Integer = 0 To 1
+
+
+            'MACD선 12일선 - 26일선
+
+            For j As Integer = 0 To currentIndex_1MIn
+
+                If 일분옵션데이터(callput).MA(1, j) > 0 And j >= 기본장기_26 Then
+                    일분옵션데이터(callput).CA_기본(0, j) = 일분옵션데이터(callput).MA(0, j) - 일분옵션데이터(callput).MA(1, j)  '12일선 - 26일선
+
+                End If
+
+
+                If 일분옵션데이터(callput).MA(4, j) > 0 And j >= 팔때장기_39 Then
+                    일분옵션데이터(callput).CA_팔때(0, j) = 일분옵션데이터(callput).MA(3, j) - 일분옵션데이터(callput).MA(4, j)  '19일선 - 39일선
+                End If
+            Next
+
+
+            '시그널선 : CA_기본이나 CA_팔때 값의 9일이동평균선
+
+            For j As Integer = 0 To currentIndex_1MIn
+
+                If j >= 기본장기_26 + 9 Then   '9일치 이동평균선이기 때문에 CA_기본이 9개가 쌓일 때부터 계산한다
+                    일분옵션데이터(callput).CA_기본(1, j) = MACD_신호선_이동평균선값계산(9, callput, j, True)
+                End If
+
+
+                If j >= 팔때장기_39 + 9 Then   '9일치 이동평균선이기 때문에 CA_기본이 9개가 쌓일 때부터 계산한다
+                    일분옵션데이터(callput).CA_팔때(1, j) = MACD_신호선_이동평균선값계산(9, callput, j, False)
+                End If
+            Next
+
+            '오실레이터선 : MACD - Signal선
+
+            For j As Integer = 0 To currentIndex_1MIn
+
+                If j >= 기본장기_26 + 9 Then   '9일치 이동평균선이기 때문에 CA_기본이 9개가 쌓일 때부터 계산한다
+                    일분옵션데이터(callput).CA_기본(2, j) = 일분옵션데이터(callput).CA_기본(0, j) - 일분옵션데이터(callput).CA_기본(1, j)
+                End If
+
+
+                If j >= 팔때장기_39 + 9 Then   '9일치 이동평균선이기 때문에 CA_기본이 9개가 쌓일 때부터 계산한다
+                    일분옵션데이터(callput).CA_팔때(2, j) = 일분옵션데이터(callput).CA_팔때(0, j) - 일분옵션데이터(callput).CA_팔때(1, j)
+                End If
+            Next
+
+
+        Next
+
 
     End Sub
 
