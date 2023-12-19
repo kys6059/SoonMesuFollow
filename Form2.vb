@@ -865,8 +865,21 @@ Public Class Form2
                 Chart1.Series.Add(str)
                 Chart1.Series(str).ChartArea = ChartAreaStr
                 Chart1.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                Chart1.Series(str).Color = Color.Black
                 Chart1.Series(str).BorderWidth = 1
+
+                If j = 0 Then
+                    Chart1.Series(str).Color = Color.Red
+                ElseIf j = 1 Then
+                    Chart1.Series(str).Color = Color.DarkOrange
+                ElseIf j = 2 Then
+                    Chart1.Series(str).Color = Color.YellowGreen
+                ElseIf j = 3 Then
+                    Chart1.Series(str).Color = Color.Green
+                ElseIf j = 4 Then
+                    Chart1.Series(str).Color = Color.Blue
+                End If
+
+
             Next
 
 
@@ -941,7 +954,7 @@ Public Class Form2
                         If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
 
                         'MACD이평 그리기
-                        For j As Integer = 0 To MA_Interval.Length - 1
+                        For j As Integer = 0 To 1 'MA_Interval.Length - 1
                             If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
                         Next
 
