@@ -864,7 +864,7 @@ Public Class Form2
             Chart2.Series(str).ChartArea = ChartAreaStr
             Chart2.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
             Chart2.Series(str).BorderWidth = 1
-            Chart2.Series(str).Color = Color.Black
+            Chart2.Series(str).Color = Color.Yellow
 
 
             'MACD 기준선, 신호선 추가
@@ -877,6 +877,7 @@ Public Class Form2
 
                 If j = 0 Then
                     Chart2.Series(str).Color = Color.Red
+                    Chart2.Series(str).BorderWidth = 2
                 ElseIf j = 1 Then
                     Chart2.Series(str).Color = Color.Black
                 End If

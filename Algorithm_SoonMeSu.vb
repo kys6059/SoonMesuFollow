@@ -1431,6 +1431,7 @@ Module Algorithm_SoonMeSu
 
         Dim 기본장기_26 As Integer = MA_Interval(1)
         Dim 팔때장기_39 As Integer = MA_Interval(4)
+        Dim 추세이평선_50 As Integer = MA_Interval(2)
 
 
         For callput As Integer = 0 To 1
@@ -1480,7 +1481,43 @@ Module Algorithm_SoonMeSu
                 End If
             Next
 
+            'MACD_Result 계산
+            '0: 단순히 MACD값이 0보다 크다 / 작다   - 콜_풋 / 시간대별
+            '1: MACD > 시그널 
+            '2: 장기이평선 위/아래
+            '3: 팔때 MACD > 시그널
 
+            For j As Integer = 0 To currentIndex_1MIn
+
+                If 일분옵션데이터(callput).MA(1, j) > 0 And j >= 추세이평선_50 Then
+
+
+                    If 일분옵션데이터(callput).CA_기본(0, j) > 0 Then  '0: 단순히 MACD값이 0보다 크다 / 작다   - 콜_풋 / 시간대별
+                        일분옵션데이터(callput).MACD_Result(0, j) = 1
+                    ElseIf 일분옵션데이터(callput).CA_기본(0, j) < 0 Then
+                        일분옵션데이터(callput).MACD_Result(0, j) = -1
+                    End If
+
+                    If 일분옵션데이터(callput).CA_기본(0, j) > 일분옵션데이터(callput).CA_기본(1, j) Then '1: MACD > 시그널 
+                        일분옵션데이터(callput).MACD_Result(1, j) = 1
+                    ElseIf 일분옵션데이터(callput).CA_기본(0, j) < 일분옵션데이터(callput).CA_기본(1, j) Then
+                        일분옵션데이터(callput).MACD_Result(1, j) = -1
+                    End If
+
+                    If 일분옵션데이터(callput).price(j, 3) > 일분옵션데이터(callput).MA(2, j) Then '2: 장기이평선 위/아래
+                        일분옵션데이터(callput).MACD_Result(2, j) = 1
+                    ElseIf 일분옵션데이터(callput).price(j, 3) < 일분옵션데이터(callput).MA(2, j) Then
+                        일분옵션데이터(callput).MACD_Result(2, j) = -1
+                    End If
+
+                    If 일분옵션데이터(callput).CA_팔때(0, j) > 일분옵션데이터(callput).CA_팔때(1, j) Then '3: 팔때 MACD > 시그널
+                        일분옵션데이터(callput).MACD_Result(3, j) = 1
+                    ElseIf 일분옵션데이터(callput).CA_팔때(0, j) < 일분옵션데이터(callput).CA_팔때(1, j) Then
+                        일분옵션데이터(callput).MACD_Result(3, j) = -1
+                    End If
+
+                End If
+            Next
         Next
 
 

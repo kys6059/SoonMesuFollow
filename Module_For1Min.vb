@@ -29,7 +29,8 @@ Module Module_For1Min
         Dim 이동평균선() As Single '콜풋
         Dim MA(,) As Single 'MACD 관련 이동평균선 4가지, 480분
         Dim CA_기본(,) As Single 'MACD 관련 계산치들     
-        Dim CA_팔때(,) As Single 'MACD 관련 계산치들     
+        Dim CA_팔때(,) As Single 'MACD 관련 계산치들
+        Dim MACD_Result(,) As Integer
 
         Public Sub Initialize()
             ReDim ctime(480) '
@@ -39,6 +40,7 @@ Module Module_For1Min
             ReDim MA(4, 480)
             ReDim CA_기본(3, 480)
             ReDim CA_팔때(3, 480)
+            ReDim MACD_Result(3, 480)
         End Sub
     End Structure
 
@@ -57,6 +59,14 @@ Module Module_For1Min
     '0: 팔때 MACD
     '1: 팔때 MACD 시그널
     '2: 팔때 MACD Oscillator
+
+    'MACD_Result
+    '0: 단순히 MACD값이 0보다 크다 / 작다   - 콜_풋 / 시간대별
+    '1: MACD > 시그널 
+    '2: 장기이평선 위/아래
+    '3: 팔때 MACD > 시그널
+
+
 
     Structure PIP탬플릿
         Dim PointCount As Integer
