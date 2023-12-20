@@ -1,6 +1,7 @@
 ﻿Option Explicit On
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports Google.Api
+Imports Newtonsoft.Json
 
 Public Class Form2
 
@@ -269,6 +270,14 @@ Public Class Form2
 
         Init_Option_1min_Graph()
         Draw_Option_1min_Graph()
+
+        If chk_Algorithm_M.Checked = True Then
+            Init_MACD_Graph()
+            Draw_MACD_Graph()
+
+        End If
+
+
 
     End Sub
 
@@ -834,6 +843,119 @@ Public Class Form2
 
     End Sub
 
+
+    Private Sub Init_MACD_Graph() 'MACD 신호선그래프임. 이평선은 옵션그래프에 있음
+
+        'Chart2.Visible = False
+        Dim str, ChartAreaStr As String
+
+        Chart2.Series.Clear()
+        Chart2.ChartAreas.Clear()
+        Chart2.Legends.Clear()
+        Chart2.Annotations.Clear()
+
+        For i As Integer = 0 To 1 '콜풋
+
+            ChartAreaStr = "MACD_CHART_" + i.ToString()
+            Chart2.ChartAreas.Add(ChartAreaStr)
+
+            str = "basic_series_" + i.ToString()  '중간에 0으로 채우는 시리즈
+            Chart2.Series.Add(str)
+            Chart2.Series(str).ChartArea = ChartAreaStr
+            Chart2.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Chart2.Series(str).BorderWidth = 1
+            Chart2.Series(str).Color = Color.Black
+
+
+            'MACD 기준선, 신호선 추가
+            For j As Integer = 0 To 1
+                str = "MACD_CA_" + i.ToString() + "_" + j.ToString()
+                Chart2.Series.Add(str)
+                Chart2.Series(str).ChartArea = ChartAreaStr
+                Chart2.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart2.Series(str).BorderWidth = 1
+
+                If j = 0 Then
+                    Chart2.Series(str).Color = Color.Red
+                ElseIf j = 1 Then
+                    Chart2.Series(str).Color = Color.Black
+                End If
+            Next
+
+            'Lebel 설정
+            Chart2.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+
+            '축 선 속성 설정
+            Chart2.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart2.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
+            Chart2.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart2.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+            'Chart2.ChartAreas(i).AxisY.Interval = 0.2
+
+        Next
+
+    End Sub
+
+    Private Sub Draw_MACD_Graph()
+
+        Dim i, callput, retindex As Integer '
+
+        If currentIndex_1MIn >= 0 Then
+
+            For i = 0 To Chart2.Series.Count - 1
+                Chart2.Series(i).Points.Clear()
+            Next
+
+            For callput = 0 To 1
+
+                Dim BasicSeries As String = "basic_series_" + callput.ToString()
+
+                Dim maxValue As Single = Single.MinValue
+                Dim minValue As Single = Single.MaxValue
+
+                Dim MACD_CA_기본(1) As String
+
+                For j = 0 To 1
+                    MACD_CA_기본(j) = "MACD_CA_" + callput.ToString() + "_" + j.ToString()
+                Next
+
+                For i = 0 To currentIndex_1MIn
+
+
+                    ' main Series 입력
+                    If 일분옵션데이터(callput).price(i, 1) > 0 Then
+                        retindex = Chart2.Series(BasicSeries).Points.AddXY(i, 0) ' 위의 그래프와 X축을 통일하기 위해 0값을 모든 X값에 먼저 넣는다
+
+                        'X축 시간
+                        Chart2.Series(BasicSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+
+                        'CA 0,1번 그리기
+                        Chart2.Series(MACD_CA_기본(0)).Points.AddXY(retindex, 일분옵션데이터(callput).CA_기본(0, i))
+                        Chart2.Series(MACD_CA_기본(1)).Points.AddXY(retindex, 일분옵션데이터(callput).CA_기본(1, i))
+
+                        If maxValue < 일분옵션데이터(callput).CA_기본(0, i) + 0.01 Then maxValue = 일분옵션데이터(callput).CA_기본(0, i) + 0.01
+                        If minValue > 일분옵션데이터(callput).CA_기본(0, i) - 0.01 Then minValue = 일분옵션데이터(callput).CA_기본(0, i) - 0.01
+                        If maxValue < 일분옵션데이터(callput).CA_기본(1, i) + 0.01 Then maxValue = 일분옵션데이터(callput).CA_기본(1, i) + 0.01
+                        If minValue > 일분옵션데이터(callput).CA_기본(1, i) - 0.01 Then minValue = 일분옵션데이터(callput).CA_기본(1, i) - 0.01
+
+                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}{7}MACD:{8}{9}신호선:{10}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i), vbCrLf, Math.Round(일분옵션데이터(callput).CA_기본(0, i), 3), vbCrLf, Math.Round(일분옵션데이터(callput).CA_기본(1, i), 3))
+                        Chart2.Series(BasicSeries).Points(retindex).ToolTip = str
+                        Chart2.Series(MACD_CA_기본(0)).Points(retindex).ToolTip = str
+                        Chart2.Series(MACD_CA_기본(1)).Points(retindex).ToolTip = str
+
+                    End If
+                Next
+                Chart2.ChartAreas(callput).AxisY.Minimum = minValue
+                Chart2.ChartAreas(callput).AxisY.Maximum = maxValue
+
+            Next
+        End If
+
+        Chart2.Visible = True
+
+    End Sub
+
+
     Private Sub Init_Option_1min_Graph()
 
         Chart1.Visible = False
@@ -843,6 +965,7 @@ Public Class Form2
         Chart1.ChartAreas.Clear()
         Chart1.Legends.Clear()
         Chart1.Annotations.Clear()
+
 
         For i As Integer = 0 To 1
 
@@ -881,8 +1004,6 @@ Public Class Form2
                 ElseIf j = 4 Then
                     Chart1.Series(str).Color = Color.Blue
                 End If
-
-
             Next
 
 
@@ -905,6 +1026,7 @@ Public Class Form2
             Chart1.Series(str).BorderWidth = 2
             Chart1.Series(str).Color = Color.MediumVioletRed
         Next
+
     End Sub
 
     Private Sub Draw_Option_1min_Graph()
