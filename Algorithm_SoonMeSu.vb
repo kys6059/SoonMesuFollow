@@ -169,6 +169,8 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E()
             If Form2.chk_Algorithm_F.Checked = True Then CalcAlgorithm_F(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
+
         End If
 
     End Sub
@@ -1800,46 +1802,36 @@ Module Algorithm_SoonMeSu
     '4: 팔때 MACD 시그널
     '5: 팔때 MACD Oscillator
 
+    'MACD_Result
+    '0: 단순히 MACD값이 0보다 크다 / 작다   - 콜_풋 / 시간대별
+    '1: MACD > 시그널 
+    '2: 장기이평선 위/아래
+    '3: 팔때 MACD > 시그널
 
+    Public Sub CalcAlgorithm_M(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
 
-    Public MV_종합주가(4, 999) As Integer   '종합주가지수는 CurrentIndex 기준이 달라서 MV와  따로 계산해야 한다
-
-
-    Public CA_종합주가(5, 999) As Integer
-
-
-
-
-
-    Private Function CalcMaxInterval() As Integer  '
-        Dim ret As Integer = 0
-        For i = 0 To MA_Interval.Length - 1
-            If ret < MA_Interval(i) Then ret = MA_Interval(i)
-        Next
-        Return ret
-    End Function
-
-
-
-    Public Sub CalcAlgorithm_M1(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1
-
-        max_interval = CalcMaxInterval() '전역변수 max_interval에 값을 넣어 놓는다
+        max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        '이평선은 전체 함수에서 그린다
+        'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < 1020 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > 1445 Then Return
 
-        '이평선은 전체함수에서 draw한다
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 
-        '계산치 계산하는 함수
-        '계산이 끝나면 draw한다  - 별도의 그래프를 하나 더 그려야 할 듯
+        For i As Integer = 0 To 1
+            If is동일신호가현재살아있나("M", i) Then Continue For
 
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
 
-        '시작시간, 종료시간 선택
+            If 일분옵션데이터(i).MACD_Result(0, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(0, Index) > 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생하는 거 
 
+                Dim str As String = String.Format("M 신호 발생 콜풋 : {0}, 인덱스 : {1}", i, Index)
+                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("M", i)
+                SoonMesuShinhoList.Add(shinho)
 
+            End If
 
-
+        Next
 
     End Sub
 
