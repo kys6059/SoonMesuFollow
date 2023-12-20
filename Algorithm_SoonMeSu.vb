@@ -691,6 +691,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_F(s, 일분옵션데이터_CurrentIndex)
                             Case "G"
                                 ret = 살아있는신호확인하기_G(s, 일분옵션데이터_CurrentIndex)
+                            Case "M"
+                                ret = 살아있는신호확인하기_M(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -1834,5 +1836,47 @@ Module Algorithm_SoonMeSu
         Next
 
     End Sub
+
+
+    Private Function 살아있는신호확인하기_M(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+
+            'G알고리즘 특화 - Index limit  추가
+            'Dim 경과Index As Integer = currentIndex_순매수 - s.A01_발생Index
+            'If 경과Index > G_최대유지기간Index And s.A03_신호ID = "M" Then
+
+            '매도사유 = "indexlimit"
+
+            'If isRealFlag = False Then
+            's.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+            's.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            's.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+            'End If
+            'End If
+
+            'MACD 값이 0 밑으로 떨어지면 매도
+            Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+            Dim callput = s.A08_콜풋
+
+            If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then
+
+                매도사유 = "MACD_below_0"
+                If isRealFlag = False Then
+                    s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+                End If
+
+            End If
+
+        End If
+
+        Return 매도사유
+
+    End Function
 
 End Module
