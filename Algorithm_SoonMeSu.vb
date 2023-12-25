@@ -170,6 +170,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_F.Checked = True Then CalcAlgorithm_F(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_N.Checked = True Then CalcAlgorithm_N(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -535,7 +536,7 @@ Module Algorithm_SoonMeSu
 
         End If
 
-            Return 0
+        Return 0
     End Function
 
 
@@ -693,6 +694,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_G(s, 일분옵션데이터_CurrentIndex)
                             Case "M"
                                 ret = 살아있는신호확인하기_M(s, 일분옵션데이터_CurrentIndex)
+                            Case "N"
+                                ret = 살아있는신호확인하기_N(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -1810,13 +1813,19 @@ Module Algorithm_SoonMeSu
     '2: 장기이평선 위/아래
     '3: 팔때 MACD > 시그널
 
+
+
+    Public 기울기최저기준 As Single = 0.006  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public 기울기최고기준 As Single = 0.013  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public M_마감시간 As Integer = 1215
+
     Public Sub CalcAlgorithm_M(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
 
         max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < 1020 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > 1445 Then Return
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > M_마감시간 Then Return
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 
@@ -1825,11 +1834,28 @@ Module Algorithm_SoonMeSu
 
             If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
 
-            If 일분옵션데이터(i).MACD_Result(0, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(0, Index) > 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생하는 거 
 
-                Dim str As String = String.Format("M 신호 발생 콜풋 : {0}, 인덱스 : {1}", i, Index)
-                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("M", i)
-                SoonMesuShinhoList.Add(shinho)
+            'If 일분옵션데이터(i).MACD_Result(0, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(0, Index) > 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생하는 거 
+            If 일분옵션데이터(i).MACD_Result(0, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(0, Index) > 0 And 일분옵션데이터((i + 1) Mod 2).MACD_Result(0, Index) < 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생할 때 반대쪽은 이미 0보다 작아야 함
+
+                '기울기 계산
+                Dim 기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index) - 일분옵션데이터(i).CA_기본(0, Index - 1), 4)
+
+                If 기울기 > 기울기최저기준 And 기울기 < 기울기최고기준 Then
+
+                    If 일분옵션데이터(i).MACD_Result(2, Index) > 0 Then  ' 장기 이동평균선 위에 있을 때만 신호
+
+                        Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                        Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
+                        'Add_Log("M신호:", log_str)
+
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("M", i)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+                End If
 
             End If
 
@@ -1838,25 +1864,13 @@ Module Algorithm_SoonMeSu
     End Sub
 
 
+
+
     Private Function 살아있는신호확인하기_M(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
 
         Dim 매도사유 As String = ""
 
         If s.A15_현재상태 = 1 Then
-
-
-            'G알고리즘 특화 - Index limit  추가
-            'Dim 경과Index As Integer = currentIndex_순매수 - s.A01_발생Index
-            'If 경과Index > G_최대유지기간Index And s.A03_신호ID = "M" Then
-
-            '매도사유 = "indexlimit"
-
-            'If isRealFlag = False Then
-            's.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
-            's.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-            's.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
-            'End If
-            'End If
 
             'MACD 값이 0 밑으로 떨어지면 매도
             Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
@@ -1864,12 +1878,105 @@ Module Algorithm_SoonMeSu
 
             If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then
 
-                매도사유 = "MACD_below_0"
+                매도사유 = "M_below_0"
                 If isRealFlag = False Then
                     s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+
                 End If
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+
+            End If
+
+        End If
+
+        Return 매도사유
+
+    End Function
+
+
+    Public N_기울기최저기준 As Single = 0.004  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최고기준 As Single = 0.007  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_마감시간 As Integer = 1230
+
+
+    Public Sub CalcAlgorithm_N(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
+
+        max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
+
+        If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
+
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Then Return
+
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+
+        For i As Integer = 0 To 1
+            If is동일신호가현재살아있나("N", i) Then Continue For
+
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
+
+
+            'If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 And 일분옵션데이터((i + 1) Mod 2).MACD_Result(1, Index) < 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생할 때 반대쪽은 이미 0보다 작아야 함
+            If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 Then
+
+                '기울기 계산
+                Dim 기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index) - 일분옵션데이터(i).CA_기본(0, Index - 1), 4)
+
+                If 기울기 > N_기울기최저기준 And 기울기 < N_기울기최고기준 Then
+
+                    If 일분옵션데이터(i).MACD_Result(2, Index) > 0 Then  ' 장기 이동평균선 위에 있을 때만 신호
+
+
+                        '장기이평의 기울기도 같이 확인하는 케이스 테스트  -- 상승 추세일때
+                        'If 일분옵션데이터(i).MA(2, Index - 1) <= 일분옵션데이터(i).MA(2, Index) Then
+
+
+                        Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                            Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
+                        'Add_Log("N신호:", log_str)
+
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N", i)
+
+                        SoonMesuShinhoList.Add(shinho)
+
+
+                        'End If
+
+
+
+                    End If
+
+                End If
+
+                End If
+
+
+        Next
+
+    End Sub
+
+
+
+    Private Function 살아있는신호확인하기_N(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+            'MACD 값이 신호선 밑으로 떨어지면 매도
+            Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+            Dim callput = s.A08_콜풋
+
+            If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 Then
+
+                매도사유 = "N_below_1"
+                If isRealFlag = False Then
+                    s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+
+                End If
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
 
             End If
 
