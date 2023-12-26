@@ -1282,7 +1282,7 @@ Public Class Form2
                 '옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 1
-                켈리지수비율 = "0.05"
+                켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.4"
                 'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False
@@ -1291,7 +1291,7 @@ Public Class Form2
                 익절차 = "11"
                 chk_실거래실행.Checked = False
             Case 2
-                켈리지수비율 = "0.05"
+                켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.4"
                 'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False
@@ -1301,14 +1301,14 @@ Public Class Form2
                 chk_실거래실행.Checked = False
             Case 3
                 켈리지수비율 = "0.30"
-                중간청산목표이익 = "0.45"
+                중간청산목표이익 = "0.5"
                 chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
 
                 '옵션가기준손절매 = "-0.30"
                 익절차 = "11"
             Case 6
-                켈리지수비율 = "0.05"
+                켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.40"
                 'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False

@@ -592,9 +592,18 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex >= 0 Then
 
-            If shinho.A03_신호ID = "D" Then
-                shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
-                shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+            If shinho.A03_신호ID = "D" Or shinho.A03_신호ID = "M" Or shinho.A03_신호ID = "N" Then
+
+                Dim buyingPrice As Single
+                If 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 0 Then
+                    buyingPrice = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
+                Else
+                    buyingPrice = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex - 1, 3)
+                End If
+
+                shinho.A10_신호발생가격 = buyingPrice
+                shinho.A14_현재가격 = buyingPrice
+
             Else
                 shinho.A10_신호발생가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                 shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
@@ -700,6 +709,11 @@ Module Algorithm_SoonMeSu
                         End Select
                     End If
 
+                    '마지막 신호가 아니라면 continue  시킨다
+                    If i <> SoonMesuShinhoList.Count - 1 And ret = "" Then
+                        ret = "continue"
+                    End If
+
 
                     If ret <> "" Then
                         죽은신호처리하기(s, ret)
@@ -762,6 +776,8 @@ Module Algorithm_SoonMeSu
         If (s.A08_콜풋 = 0 And 최종신호 < 0) Or (s.A08_콜풋 = 1 And 최종신호 > 0) Then
             매도사유 = "reverse"
         End If
+
+
 
 
         '옵션가격 기준 손절매, 익절
@@ -1831,6 +1847,7 @@ Module Algorithm_SoonMeSu
 
         For i As Integer = 0 To 1
             If is동일신호가현재살아있나("M", i) Then Continue For
+            If is동일신호가현재살아있나("N", i) Then Continue For
 
             If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
 
@@ -1898,6 +1915,7 @@ Module Algorithm_SoonMeSu
     Public N_기울기최저기준 As Single = 0.004  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public N_기울기최고기준 As Single = 0.007  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public N_마감시간 As Integer = 1230
+    Public N_시작시간 As Integer = 1000
 
 
     Public Sub CalcAlgorithm_N(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
@@ -1906,12 +1924,13 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Then Return
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 
         For i As Integer = 0 To 1
             If is동일신호가현재살아있나("N", i) Then Continue For
+            If is동일신호가현재살아있나("M", i) Then Continue For
 
             If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
 
@@ -1932,7 +1951,7 @@ Module Algorithm_SoonMeSu
 
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
-                            Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
+                        Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
                         'Add_Log("N신호:", log_str)
 
 
@@ -1949,7 +1968,7 @@ Module Algorithm_SoonMeSu
 
                 End If
 
-                End If
+            End If
 
 
         Next
