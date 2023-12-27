@@ -840,7 +840,7 @@ Partial Class Form2
         Me.txt_F2_매수시작시간.Name = "txt_F2_매수시작시간"
         Me.txt_F2_매수시작시간.Size = New System.Drawing.Size(76, 29)
         Me.txt_F2_매수시작시간.TabIndex = 13
-        Me.txt_F2_매수시작시간.Text = "102000"
+        Me.txt_F2_매수시작시간.Text = "104000"
         '
         'txt_F2_최초매매시작시간
         '
@@ -861,7 +861,7 @@ Partial Class Form2
         Me.Label15.Name = "Label15"
         Me.Label15.Size = New System.Drawing.Size(160, 33)
         Me.Label15.TabIndex = 11
-        Me.Label15.Text = "2차매매_시작시간"
+        Me.Label15.Text = "E알고리즘_시작시간"
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label14
@@ -907,7 +907,7 @@ Partial Class Form2
         Me.txt_F2_매수마감시간.Name = "txt_F2_매수마감시간"
         Me.txt_F2_매수마감시간.Size = New System.Drawing.Size(76, 29)
         Me.txt_F2_매수마감시간.TabIndex = 7
-        Me.txt_F2_매수마감시간.Text = "111000"
+        Me.txt_F2_매수마감시간.Text = "150000"
         '
         'txt_F2_익절차
         '
@@ -929,7 +929,7 @@ Partial Class Form2
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(160, 33)
         Me.Label11.TabIndex = 4
-        Me.Label11.Text = "2차매매_마감시간"
+        Me.Label11.Text = "E알고리즘_마감시간"
         Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label12
@@ -2295,8 +2295,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_D.AutoSize = True
         Me.chk_Algorithm_D.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_D.Checked = True
-        Me.chk_Algorithm_D.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_D.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_D.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_D.Location = New System.Drawing.Point(3, 105)

@@ -1276,7 +1276,6 @@ Public Class Form2
             Case 0
                 중간청산목표이익 = "0.5"
                 켈리지수비율 = "0.30"
-                chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
 
                 '옵션가기준손절매 = "-0.30"
@@ -1284,7 +1283,6 @@ Public Class Form2
             Case 1
                 켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.4"
-                'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False
 
                 '옵션가기준손절매 = "-0.27"
@@ -1293,7 +1291,6 @@ Public Class Form2
             Case 2
                 켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.4"
-                'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False
 
                 '옵션가기준손절매 = "-0.24"
@@ -1302,7 +1299,6 @@ Public Class Form2
             Case 3
                 켈리지수비율 = "0.30"
                 중간청산목표이익 = "0.5"
-                chk_Algorithm_D.Checked = True
                 chk_Algorithm_E.Checked = True
 
                 '옵션가기준손절매 = "-0.30"
@@ -1310,7 +1306,6 @@ Public Class Form2
             Case 6
                 켈리지수비율 = "0.01"
                 중간청산목표이익 = "0.40"
-                'chk_Algorithm_D.Checked = False
                 'chk_Algorithm_E.Checked = False
 
                 chk_실거래실행.Checked = False
@@ -1669,7 +1664,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -1680,7 +1675,7 @@ Public Class Form2
 
         'fullTest_C1()
 
-        'fullTest_E()
+        fullTest_E()
         'fullTest_F()
 
         당일반복중_flag = False
@@ -2142,24 +2137,21 @@ Public Class Form2
             Next
         Next
 
-
-
-
     End Sub
+
+    '231207 9월이후 데이터로 시험한 결과
+    'CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1
+
 
     Private Sub fullTest_E()
         Dim 최대포인트수() As String = {"4"}               'A
-        Dim E_신호발생기준기울기_temp() As Single = {15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0}    'B
+        Dim E_신호발생기준기울기_temp() As Single = {8.0, 7.0, 9.0}    'B
         Dim E_신호해제기준기울기_temp() As Single = {2.0}    'C
         Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"102000"}           'E
-        Dim 매수마감시간() As String = {"111000"}           'F
-        Dim 신호최소유지시간() As Integer = {6}             'G
-
-
-        '3일과 6일 남은날을 집중 분석하기 위해 임시로 손절매가격과 중간청산 비율을 조절함
-        txt_F2_옵션가기준손절매.Text = "-0.24"
-        txt_F2_중간청산비율.Text = "0.35"
+        Dim 매수시작시간() As String = {"110000", "105000", "104000"}           'E
+        Dim 매수마감시간() As String = {"150000"}           'F
+        Dim 신호최소유지시간() As Integer = {4}             'G
+        Dim E_DataSource_temp() As Integer = {1}  '외국인 + 기관, 1:외국인, 2: 기관  --------- 기관은 켈리지수가 항상 -로 나와서 완전히 제외함
 
 
         chk_Algorithm_A.Checked = False
@@ -2168,6 +2160,9 @@ Public Class Form2
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = True
         chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -2184,43 +2179,40 @@ Public Class Form2
                         For ee As Integer = 0 To 매수시작시간.Length - 1
                             For f As Integer = 0 To 매수마감시간.Length - 1
                                 For g As Integer = 0 To 신호최소유지시간.Length - 1
+                                    For h As Integer = 0 To E_DataSource_temp.Length - 1
+
+                                        txt_F2_최대포인트수.Text = 최대포인트수(a)
+                                        E_신호발생기준기울기 = E_신호발생기준기울기_temp(b)
+                                        E_신호해제기준기울기 = E_신호해제기준기울기_temp(c)
+                                        txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(d)
+                                        txt_F2_매수시작시간.Text = 매수시작시간(ee)
+                                        txt_F2_매수마감시간.Text = 매수마감시간(f)
+                                        신호최소유지시간index = 신호최소유지시간(g)
+                                        E_DataSource = E_DataSource_temp(h)
+
+                                        txt_F2_최대포인트수.Refresh()
+                                        txt_F2_PIP_CALC_MAX_INDEX.Refresh()
+                                        txt_F2_매수시작시간.Refresh()
+                                        txt_F2_매수마감시간.Refresh()
 
 
-                                    txt_F2_최대포인트수.Text = 최대포인트수(a)
-                                    E_신호발생기준기울기 = E_신호발생기준기울기_temp(b)
-                                    E_신호해제기준기울기 = E_신호해제기준기울기_temp(c)
-                                    txt_F2_PIP_CALC_MAX_INDEX.Text = PIP_CALC_MAX_INDEX(d)
-                                    txt_F2_매수시작시간.Text = 매수시작시간(ee)
-                                    txt_F2_매수마감시간.Text = 매수마감시간(f)
-                                    신호최소유지시간index = 신호최소유지시간(g)
+                                        Dim cntstr As String
+                                        If cnt < 10 Then
+                                            cntstr = "00" & cnt.ToString()
+                                        ElseIf cnt >= 10 And cnt < 100 Then
+                                            cntstr = "0" & cnt.ToString()
+                                        Else
+                                            cntstr = cnt.ToString()
+                                        End If
 
+                                        SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}", 최대포인트수(a), E_신호발생기준기울기_temp(b), E_신호해제기준기울기_temp(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g), E_DataSource_temp(h))
 
+                                        Add_Log("", SoonMesuSimulation_조건)
+                                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
-                                    txt_F2_최대포인트수.Refresh()
-                                    txt_F2_PIP_CALC_MAX_INDEX.Refresh()
-                                    txt_F2_매수시작시간.Refresh()
-                                    txt_F2_매수마감시간.Refresh()
-
-
-                                    Dim cntstr As String
-                                    If cnt < 10 Then
-                                        cntstr = "00" & cnt.ToString()
-                                    ElseIf cnt >= 10 And cnt < 100 Then
-                                        cntstr = "0" & cnt.ToString()
-                                    Else
-                                        cntstr = cnt.ToString()
-                                    End If
-
-                                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
-                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", 최대포인트수(a), E_신호발생기준기울기_temp(b), E_신호해제기준기울기_temp(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g))
-                                    'SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}_N_{3}", 손절차(k), 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
-
-                                    Console.WriteLine(SoonMesuSimulation_조건)
-                                    Add_Log("", SoonMesuSimulation_조건)
-                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-
-                                    cnt += 1
-
+                                        cnt += 1
+                                    Next
 
                                 Next
 

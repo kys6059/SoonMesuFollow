@@ -109,8 +109,11 @@ Module Algorithm_SoonMeSu
     'D 알고리즘용 끝
 
     'E 알고리즘
-    Public E_신호발생기준기울기 As Single = 15.0
+    '12월 27일 시험, 9월 이후 데이터로만 테스트 결과 0,3일 CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1  켈리지수 49. 6배 이상
+    Public E_신호발생기준기울기 As Single = 9.0
     Public E_신호해제기준기울기 As Single = 2.0
+    Public E_DataSource As Integer = 1 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
+    Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
 
 
     'F 알고리즘
@@ -232,10 +235,10 @@ Module Algorithm_SoonMeSu
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
-            Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기
+            Dim 현재순매수기울기 As Single = PIP_Point_Lists(E_DataSource).마지막선기울기
             Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
 
-            'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(1).마지막점과그앞점간INDEXCOUNT
+            'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(E_DataSource).마지막점과그앞점간INDEXCOUNT
 
             If 현재순매수기울기_절대치 > E_신호발생기준기울기 Then
 
