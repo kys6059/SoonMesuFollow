@@ -92,7 +92,7 @@ Module Algorithm_SoonMeSu
     'D 알고리즘용 시작
     'CNT_009_A_50_B_0.59_C_0.6_D_0.33_E_0.4  ------------ B231115_T001 테스트  결과
 
-    Public 이동평균선_기준일자 As Integer = 50       '이동평균선 갯수 기준
+    Public 이동평균선_기준일자 As Integer = 65       '이동평균선 갯수 기준
     Public X_계산기준봉비율 As Single = 0.59         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함     230725 조건 재설정함 켈리지수 54. 승률 67%
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
@@ -110,7 +110,7 @@ Module Algorithm_SoonMeSu
 
     'E 알고리즘
     '12월 27일 시험, 9월 이후 데이터로만 테스트 결과 0,3일 CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1  켈리지수 49. 6배 이상
-    Public E_신호발생기준기울기 As Single = 9.0
+    Public E_신호발생기준기울기 As Single = 7.0
     Public E_신호해제기준기울기 As Single = 2.0
     Public E_DataSource As Integer = 1 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
     Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
@@ -277,6 +277,7 @@ Module Algorithm_SoonMeSu
                         SoonMesuShinhoList.Add(shinho)
                     End If
                 End If
+
             End If
         End If
 
@@ -1112,6 +1113,7 @@ Module Algorithm_SoonMeSu
 
         Dim 현재신호 As Integer = 현재신호계산하기()   '신호리스트로부터 현재신호를 계산해낸다 - D를 우선으로 한다
 
+        'Add_Log("일반", "현재신호 = " + 현재신호.ToString())
 
         Form2.lbl_F2_매매신호.Text = 현재신호.ToString()
         If 현재신호 > 0 Then

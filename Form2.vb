@@ -1229,30 +1229,36 @@ Public Class Form2
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
         label_timerCounter.Text = timerCount.ToString()
+        If EBESTisConntected = True Then
+        End If
 
         Select Case timerCount
             Case 0
-                If EBESTisConntected = True Then
-                    XAQuery_전체종목조회함수()
-                End If
-            Case 1
-                If EBESTisConntected = True Then
-                    XAQuery_EBEST_순매수현황조회함수() ' +  Received면 콜 분봉 조회
-                End If
-            Case 2
-                If EBESTisConntected = True Then 계좌조회()
-            Case 3
-                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
-            Case 4
-                If EBESTisConntected = True Then XAQuery_EBEST_분봉데이터호출함수_1분(1)
-
-            Case 5
-                If EBESTisConntected = True Then 계좌조회()
-                If EBESTisConntected = True Then 선물옵션_잔고평가_이동평균조회()
-
-            Case 7
-                If EBESTisConntected = True Then F2_Clac_DisplayAllGrid()
+                XAQuery_전체종목조회함수()
+                F2_Clac_DisplayAllGrid()
                 매매신호처리함수()
+            Case 1
+                XAQuery_EBEST_순매수현황조회함수() ' 
+                XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
+            Case 2
+                계좌조회()
+                선물옵션_잔고평가_이동평균조회()
+            Case 3
+                XAQuery_EBEST_분봉데이터호출함수_1분(1)
+            Case 4
+                계좌조회()
+                선물옵션_잔고평가_이동평균조회()
+                F2_Clac_DisplayAllGrid()
+                매매신호처리함수()
+            Case 5
+                XAQuery_EBEST_순매수현황조회함수() ' 
+                XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
+            Case 6
+                계좌조회()
+                선물옵션_잔고평가_이동평균조회()
+            Case 7
+                XAQuery_EBEST_분봉데이터호출함수_1분(1)
+
             Case Else
 
         End Select
@@ -1274,7 +1280,7 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.5"
-                켈리지수비율 = "0.30"
+                켈리지수비율 = "0.10"
                 chk_Algorithm_E.Checked = True
 
                 '옵션가기준손절매 = "-0.30"
@@ -1296,7 +1302,7 @@ Public Class Form2
                 익절차 = "11"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.30"
+                켈리지수비율 = "0.10"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
 
@@ -2138,20 +2144,20 @@ Public Class Form2
 
     End Sub
 
-    '231207 9월이후 데이터로 시험한 결과
-    'CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1
+    '231228 9월이후 데이터로 시험한 결과
 
+    'CNT_004_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65
 
     Private Sub fullTest_E()
         Dim 최대포인트수() As String = {"4"}               'A
-        Dim E_신호발생기준기울기_temp() As Single = {8.0, 7.0, 9.0, 10.0}    'B
+        Dim E_신호발생기준기울기_temp() As Single = {6.0, 7.0, 8.0}    'B
         Dim E_신호해제기준기울기_temp() As Single = {2.0}    'C
         Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"110000", "105000", "104000"}           'E
+        Dim 매수시작시간() As String = {"104500", "105000", "110000"}           'E
         Dim 매수마감시간() As String = {"150000"}           'F
         Dim 신호최소유지시간() As Integer = {4}             'G
         Dim E_DataSource_temp() As Integer = {1}  '외국인 + 기관, 1:외국인, 2: 기관  --------- 기관은 켈리지수가 항상 -로 나와서 완전히 제외함
-        Dim 장기이평선_temp() As Integer = {50, 55, 60, 65}
+        Dim 장기이평선_temp() As Integer = {65}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -2159,8 +2165,8 @@ Public Class Form2
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = True
         chk_Algorithm_G.Checked = False
-        chk_Algorithm_M.Checked = False
-        chk_Algorithm_N.Checked = False
+        chk_Algorithm_M.Checked = True
+        chk_Algorithm_N.Checked = True
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then

@@ -861,7 +861,7 @@ Module realtime_ebest
         currentIndex_순매수 = timeIndex_순매수 - 1
         Console.WriteLine("순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
 
-        XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
+
 
     End Sub
 

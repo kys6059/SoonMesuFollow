@@ -81,7 +81,7 @@ Module Module_For1Min
     End Structure
 
     '이하 MACD 계산용
-    Public MA_Interval() As Integer = {12, 26, 50, 19, 39}  '이평선의 날짜들을 미리 지정한다
+    Public MA_Interval() As Integer = {12, 26, 65, 19, 39}  '이평선의 날짜들을 미리 지정한다
     Public max_interval As Integer
 
 
