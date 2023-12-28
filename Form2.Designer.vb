@@ -1611,7 +1611,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(130, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.8.0_231219"
+        Me.txt_programversion.Text = "1.8.1_231228"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -2362,7 +2362,7 @@ Partial Class Form2
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(1642, 1053)
+        Me.ClientSize = New System.Drawing.Size(2843, 1053)
         Me.Controls.Add(Me.Chart2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TableLayoutPanel13)

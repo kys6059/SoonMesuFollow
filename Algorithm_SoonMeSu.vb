@@ -233,6 +233,13 @@ Module Algorithm_SoonMeSu
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
         Dim timeoutTime As Integer = Val(Form2.txt_F2_TimeoutTime.Text)
 
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
             Dim 현재순매수기울기 As Single = PIP_Point_Lists(E_DataSource).마지막선기울기
@@ -249,7 +256,9 @@ Module Algorithm_SoonMeSu
                     If is동일신호가있나("E", 0) = True Then Return
                     If is동일신호가현재살아있나("B", 0) = True Then Return 'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
-                    If is동일신호가현재살아있나("E", 0) = False Then
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
+
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
                         Dim str As String = String.Format("E 신호 발생 콜풋 : {0} 방향", 0)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("E", 0)
                         SoonMesuShinhoList.Add(shinho)
@@ -260,7 +269,9 @@ Module Algorithm_SoonMeSu
                     If is동일신호가있나("E", 1) = True Then Return
                     If is동일신호가현재살아있나("B", 1) = True Then Return   'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
-                    If is동일신호가현재살아있나("E", 1) = False Then
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
+
+                    If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
                         Dim str As String = String.Format("E 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("E", 1)
                         SoonMesuShinhoList.Add(shinho)
