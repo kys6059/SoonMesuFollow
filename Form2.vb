@@ -1243,6 +1243,8 @@ Public Class Form2
             Case 2
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
+                F2_Clac_DisplayAllGrid()
+                매매신호처리함수()
             Case 3
                 XAQuery_EBEST_분봉데이터호출함수_1분(1)
             Case 4
@@ -1256,6 +1258,8 @@ Public Class Form2
             Case 6
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
+                F2_Clac_DisplayAllGrid()
+                매매신호처리함수()
             Case 7
                 XAQuery_EBEST_분봉데이터호출함수_1분(1)
 
