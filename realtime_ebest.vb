@@ -1,5 +1,7 @@
 ﻿Option Explicit On
 
+Imports System.Reflection
+Imports System.Windows.Forms.DataVisualization.Charting
 Imports XA_DATASETLib
 Imports XA_SESSIONLib
 
@@ -629,9 +631,53 @@ Module realtime_ebest
 
             SetSelectedIndex_For_순매수()  '순매수용으로 변경함
 
+
+            '만약 현재 cyclecount에 시가가 0으로 되어 있는게 있으면 전체 종목 수신할때 채워넣는다 --- 이건 1초에 2건까지 가능. 나머지는 3초에 한건만 가능 . 
+            If optionList.Count > 0 Then
+
+                일분옵션데이터채워넣기()
+
+            End If
+
             Console.WriteLine("옵션 종목 Count =  " & optionList.Count.ToString())
 
         End If
+
+    End Sub
+
+    Private Sub 일분옵션데이터채워넣기()
+
+        If currentIndex_1MIn <= 0 Or 일분옵션데이터(0).HangSaGa = Nothing Then Return
+        For callput As Integer = 0 To 1
+
+            If 일분옵션데이터(callput).price(currentIndex_1MIn, 0) = 0 Then  '만약 마지막 시가가 비어있으면 
+
+                Add_Log("일반", "채워넣기 진입 - Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+
+                '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
+                Dim index1 As Integer
+                index1 = 행사가로부터인덱스찾기(콜선택된행사가(callput))
+                Dim it As ListTemplate = optionList(index1)
+
+                If it.HangSaGa = 일분옵션데이터(callput).HangSaGa Then
+
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 0) = it.price(callput, 3)   'it은 하루를 나타내는 데이터라서 마지막 데이터로 다 채워넣는다
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 1) = it.price(callput, 3)
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 2) = it.price(callput, 3)
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
+
+                    Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+
+                Else
+                    Add_Log("--오류--", "채워넣기 실패 - 행사가 오류 Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                End If
+
+
+
+            End If
+
+        Next
+
 
     End Sub
 

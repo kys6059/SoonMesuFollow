@@ -1226,7 +1226,7 @@ Public Class Form2
 
     Private Sub btn_TimerStart_Click(sender As Object, e As EventArgs) Handles btn_TimerStart.Click
         If btn_TimerStart.Text = "START" Then
-            Timer1.Interval = 1000
+            Timer1.Interval = 1501
             Timer1.Enabled = True
             btn_TimerStart.Text = "STOP"
             timerCount = 0
@@ -1239,28 +1239,38 @@ Public Class Form2
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
 
+        Timer1.Interval = 1001
+
         label_timerCounter.Text = timerCount.ToString()
         If EBESTisConntected = True Then
         End If
 
+        XAQuery_전체종목조회함수()   '이건 1초에 2건까지 가능. 나머지는 3초에 한건만 가능 . 만약 현재 cyclecount에 시가가 0으로 되어 있는게 있으면 전체 종목 수신할때 채워넣는다
+
         Select Case timerCount
+
             Case 0
-                XAQuery_전체종목조회함수()
                 XAQuery_EBEST_순매수현황조회함수()
                 XAQuery_EBEST_분봉데이터호출함수_1분(0)
-                F2_Clac_DisplayAllGrid()
-                매매신호처리함수()
             Case 1
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
+            Case 2
+
+
+            Case 3
+                XAQuery_EBEST_순매수현황조회함수()
                 XAQuery_EBEST_분봉데이터호출함수_1분(1)
-                F2_Clac_DisplayAllGrid()
-                매매신호처리함수()
-
-
-            Case Else
+            Case 4
+                계좌조회()
+                선물옵션_잔고평가_이동평균조회()
+            Case 5
 
         End Select
+
+        F2_Clac_DisplayAllGrid()    '계산도 1초마다 수행
+        매매신호처리함수()
+
 
         timerCount = timerCount + 1
         If timerCount >= timerMaxInterval Then timerCount = 0
@@ -1410,7 +1420,7 @@ Public Class Form2
         grid1.RowCount = TotalCount
 
         For i As Integer = 0 To 6
-            grid1.Columns(i).Width = 68
+            grid1.Columns(i).Width = 67
             grid1.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
             grid1.Columns(i).SortMode = DataGridViewColumnSortMode.NotSortable
         Next
@@ -2341,7 +2351,6 @@ Public Class Form2
 
     Public Sub Timer_Change()
         If btn_TimerStart.Text = "START" Then
-            Timer1.Interval = 1000
             Timer1.Enabled = True
             btn_TimerStart.Text = "STOP"
             timerCount = 0
@@ -2384,6 +2393,14 @@ Public Class Form2
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         '매매신호처리함수()
+
+
+        일분옵션데이터(0).price(currentIndex_1MIn, 0) = 0
+        일분옵션데이터(0).price(currentIndex_1MIn, 1) = 0
+        일분옵션데이터(0).price(currentIndex_1MIn, 2) = 0
+        일분옵션데이터(0).price(currentIndex_1MIn, 3) = 0
+
+
     End Sub
 
     Private Sub rdo_목요일_CheckedChanged(sender As Object, e As EventArgs) Handles rdo_목요일.CheckedChanged
