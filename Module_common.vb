@@ -119,7 +119,7 @@ Module Module_common
         LowerLimt = Val(Form1.txt_LowerLimit.Text)
         timeIndex = 0
         timerCount = 0 '16초마다 돌아가는 타이머 주기
-        timerMaxInterval = 8 '이크면 0으로 바꿈
+        timerMaxInterval = 2 '이크면 0으로 바꿈
         currentIndex = -1
         timeIndex = -1
 

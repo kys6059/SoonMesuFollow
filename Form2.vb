@@ -286,7 +286,7 @@ Public Class Form2
 
     Private Sub F2_InitGraph()
 
-        F2_Chart_순매수.Visible = False
+        If EBESTisConntected = False Then F2_Chart_순매수.Visible = False
         Dim str, ChartAreaStr As String
 
         F2_Chart_순매수.Series.Clear()
@@ -757,6 +757,14 @@ Public Class Form2
     End Function
 
     Private Sub btn_당일반복_Click(sender As Object, e As EventArgs) Handles btn_당일반복.Click
+
+        Dim timestatus As Boolean
+
+        If Timer1.Enabled = True Then
+            timestatus = True
+            Timer1.Stop()
+        End If
+
         chk_실거래실행.Checked = False
         당일반복중_flag = True
         chk_F2_화면끄기.Checked = True
@@ -771,6 +779,9 @@ Public Class Form2
         Add_Log("일반", "Form2_당일 자동반복 완료")
 
         당일반복중_flag = False
+        If timestatus = True Then
+            Timer1.Start()
+        End If
 
     End Sub
 
@@ -966,7 +977,7 @@ Public Class Form2
 
     Private Sub Init_Option_1min_Graph()
 
-        Chart1.Visible = False
+        If EBESTisConntected = False Then Chart1.Visible = False
         Dim str, ChartAreaStr As String
 
         Chart1.Series.Clear()
@@ -1235,33 +1246,17 @@ Public Class Form2
         Select Case timerCount
             Case 0
                 XAQuery_전체종목조회함수()
+                XAQuery_EBEST_순매수현황조회함수()
+                XAQuery_EBEST_분봉데이터호출함수_1분(0)
                 F2_Clac_DisplayAllGrid()
                 매매신호처리함수()
             Case 1
-                XAQuery_EBEST_순매수현황조회함수() ' 
-                XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
-            Case 2
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
-                F2_Clac_DisplayAllGrid()
-                매매신호처리함수()
-            Case 3
                 XAQuery_EBEST_분봉데이터호출함수_1분(1)
-            Case 4
-                계좌조회()
-                선물옵션_잔고평가_이동평균조회()
                 F2_Clac_DisplayAllGrid()
                 매매신호처리함수()
-            Case 5
-                XAQuery_EBEST_순매수현황조회함수() ' 
-                XAQuery_EBEST_분봉데이터호출함수_1분(0)                 '콜 그래프 Data 호출
-            Case 6
-                계좌조회()
-                선물옵션_잔고평가_이동평균조회()
-                F2_Clac_DisplayAllGrid()
-                매매신호처리함수()
-            Case 7
-                XAQuery_EBEST_분봉데이터호출함수_1분(1)
+
 
             Case Else
 

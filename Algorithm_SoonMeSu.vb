@@ -255,8 +255,9 @@ Module Algorithm_SoonMeSu
                 If 현재순매수기울기 > 0 Then  '  콜 방향
 
 
-                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다
+                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
                     If is동일신호가있나("E", 0) = True Then Return
+
                     If is동일신호가현재살아있나("B", 0) = True Then Return 'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
@@ -270,6 +271,8 @@ Module Algorithm_SoonMeSu
                 Else ' 풋 방향
 
                     If is동일신호가있나("E", 1) = True Then Return
+
+
                     If is동일신호가현재살아있나("B", 1) = True Then Return   'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
