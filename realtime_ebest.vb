@@ -666,6 +666,9 @@ Module realtime_ebest
                     일분옵션데이터(callput).price(currentIndex_1MIn, 2) = it.price(callput, 3)
                     일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
 
+                    Dim 이전시간 As Integer = Val(일분옵션데이터(callput).ctime(currentIndex_1MIn - 1)) + 1  '시간을 안 넣으니 시간이 0으로 들어가서 신호 확인 시 하한치가 없으면 늦은시간에도 발생하는 문제점 발생하여 추가
+                    일분옵션데이터(callput).ctime(currentIndex_1MIn) = 이전시간.ToString()
+
                     'Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
 
                 Else
