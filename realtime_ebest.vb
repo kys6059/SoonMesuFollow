@@ -650,9 +650,9 @@ Module realtime_ebest
         If currentIndex_1MIn <= 0 Or 일분옵션데이터(0).HangSaGa = Nothing Then Return
         For callput As Integer = 0 To 1
 
-            If 일분옵션데이터(callput).price(currentIndex_1MIn, 0) = 0 Then  '만약 마지막 시가가 비어있으면 
+            If 일분옵션데이터(callput).price(currentIndex_1MIn, 0) <= 0 Then  '만약 마지막 시가가 비어있으면 시고저종 4개를 다 채운다
 
-                Add_Log("일반", "채워넣기 진입 - Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                'Add_Log("일반", "채워넣기 진입 - Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
 
                 '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
                 Dim index1 As Integer
@@ -666,13 +666,29 @@ Module realtime_ebest
                     일분옵션데이터(callput).price(currentIndex_1MIn, 2) = it.price(callput, 3)
                     일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
 
-                    Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                    'Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
 
                 Else
-                    Add_Log("--오류--", "채워넣기 실패 - 행사가 오류 Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                    'Add_Log("--오류--", "채워넣기 실패 - 행사가 오류 Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
                 End If
 
+            Else ' 만약 0보다 큰 값이라면 마지막 종가만 업데이트 한다
 
+                '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
+                Dim index1 As Integer
+                index1 = 행사가로부터인덱스찾기(콜선택된행사가(callput))
+                Dim it As ListTemplate = optionList(index1)
+
+                If it.HangSaGa = 일분옵션데이터(callput).HangSaGa Then
+
+
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
+
+                    '                    Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+
+                Else
+                    'Add_Log("--오류--", "채워넣기 실패 - 행사가 오류 Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                End If
 
             End If
 
@@ -770,6 +786,7 @@ Module realtime_ebest
 
             'Add_Log("일반", "나머지는 ___________" & 나머지.ToString() & ", Count = " & Count.ToString() & ", 콜풋은 " & callput.ToString())
             If optionList IsNot Nothing Then
+                If optionList.Count <= 0 Then Return
                 Dim it As ListTemplate = optionList(selectedJongmokIndex(callput))
 
                 일분옵션데이터(callput).Code = it.Code(callput)

@@ -1863,7 +1863,9 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > M_마감시간 Then Return
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 121500 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
+
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > M_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 
@@ -1946,7 +1948,9 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
+
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 

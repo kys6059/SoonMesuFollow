@@ -1078,31 +1078,35 @@ Public Class Form2
                         Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
 
                         'X축 시간
-                        Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+                        If 일분옵션데이터(callput).ctime(i) IsNot Nothing Then
+                            Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
-                        If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
-                            Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
-                            Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
-                        ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
-                            Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
-                            Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                            If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
+                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                            ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
+                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                            End If
+
+                            '이동평균선 그리기
+                            If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
+
+                            Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
+                            Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+
+                            If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                            If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
+
+                            'MACD이평 그리기
+                            For j As Integer = 0 To 1 'MA_Interval.Length - 1
+
+                                If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+
+                            Next
+
                         End If
 
-                        '이동평균선 그리기
-                        If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
-
-                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
-                        Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
-
-                        If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                        If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
-
-                        'MACD이평 그리기
-                        For j As Integer = 0 To 1 'MA_Interval.Length - 1
-
-                            If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
-
-                        Next
 
 
 
