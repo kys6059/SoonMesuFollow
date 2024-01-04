@@ -1256,6 +1256,7 @@ Public Class Form2
             Case 0
                 XAQuery_EBEST_순매수현황조회함수()
                 XAQuery_EBEST_분봉데이터호출함수_1분(0)
+                매매신호처리함수()
             Case 1
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
@@ -1265,15 +1266,17 @@ Public Class Form2
             Case 3
                 XAQuery_EBEST_순매수현황조회함수()
                 XAQuery_EBEST_분봉데이터호출함수_1분(1)
+                매매신호처리함수()
             Case 4
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
+
             Case 5
 
         End Select
 
         F2_Clac_DisplayAllGrid()    '계산도 1초마다 수행
-        매매신호처리함수()
+
 
 
         timerCount = timerCount + 1

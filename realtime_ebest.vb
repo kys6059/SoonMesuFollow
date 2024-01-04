@@ -661,13 +661,16 @@ Module realtime_ebest
 
                 If it.HangSaGa = 일분옵션데이터(callput).HangSaGa Then
 
-                    일분옵션데이터(callput).price(currentIndex_1MIn, 0) = it.price(callput, 3)   'it은 하루를 나타내는 데이터라서 마지막 데이터로 다 채워넣는다
-                    일분옵션데이터(callput).price(currentIndex_1MIn, 1) = it.price(callput, 3)
-                    일분옵션데이터(callput).price(currentIndex_1MIn, 2) = it.price(callput, 3)
-                    일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
+
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 0) = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3)
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 1) = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3)
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 2) = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3)
+                    일분옵션데이터(callput).price(currentIndex_1MIn, 3) = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3)
 
                     Dim 이전시간 As Integer = Val(일분옵션데이터(callput).ctime(currentIndex_1MIn - 1)) + 1  '시간을 안 넣으니 시간이 0으로 들어가서 신호 확인 시 하한치가 없으면 늦은시간에도 발생하는 문제점 발생하여 추가
                     일분옵션데이터(callput).ctime(currentIndex_1MIn) = 이전시간.ToString()
+
+
 
                     'Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
 
@@ -677,17 +680,19 @@ Module realtime_ebest
 
             Else ' 만약 0보다 큰 값이라면 마지막 종가만 업데이트 한다
 
-                '여기다가 행사가로부터 인덱스 뽑는 로직 추가함
                 Dim index1 As Integer
                 index1 = 행사가로부터인덱스찾기(콜선택된행사가(callput))
                 Dim it As ListTemplate = optionList(index1)
 
                 If it.HangSaGa = 일분옵션데이터(callput).HangSaGa Then
 
+                    Dim 배율 As Single = 일분옵션데이터(callput).price(currentIndex_1MIn, 3) / it.price(callput, 3)
 
-                    일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
+                    If 배율 > 0.9 And 배율 < 1.1 Then
+                        일분옵션데이터(callput).price(currentIndex_1MIn, 3) = it.price(callput, 3)
+                    End If
 
-                    '                    Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
+                    'Add_Log("일반", "채워넣기 성공- Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
 
                 Else
                     'Add_Log("--오류--", "채워넣기 실패 - 행사가 오류 Callput : " + callput.ToString() + " 인덱스 = " + currentIndex_1MIn.ToString())
