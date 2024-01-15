@@ -2013,18 +2013,26 @@ Module Algorithm_SoonMeSu
             Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
             Dim callput = s.A08_콜풋
 
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            'If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+
+
+            If 일분옵션데이터(callput).MACD_Result(3, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(3, Index) < 0 Then   ' 팔때 신호로 할 때 가장 결과가 좋았음 이걸로 함 20240115
+
+                    Dim 발생조건상태 As Boolean = False
+                    If 일분옵션데이터(callput).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(callput).MACD_Result(1, Index) > 0 Then 발생조건상태 = True
+
+                    If 발생조건상태 = False Then 매도사유 = "N_below_1"
+
+
+                End If
+            'End If
+
             If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then  '0보다 작아지면 바로 매도하기 추가 실험
                 매도사유 = "N_below_0"
             End If
 
-            If 일분옵션데이터(callput).MACD_Result(3, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(3, Index) < 0 Then   ' 팔때 신호로 할 때 가장 결과가 좋았음 이걸로 함 20240115
-
-                'If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 Then
-                'If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 And 일분옵션데이터(callput).MACD_Result(0, Index) <= 0 Then  '0이하일 때는 바로 정리, 0보다 크면 정리하지 않는 것 실험
-
-                매도사유 = "N_below_1"
-
-            End If
 
         End If
 
