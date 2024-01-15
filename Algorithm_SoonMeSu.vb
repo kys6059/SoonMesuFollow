@@ -2013,18 +2013,28 @@ Module Algorithm_SoonMeSu
             Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
             Dim callput = s.A08_콜풋
 
-            If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 Then
+            If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then  '0보다 작아지면 바로 매도하기 추가 실험
+                매도사유 = "N_below_0"
+            End If
+
+            If 일분옵션데이터(callput).MACD_Result(3, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(3, Index) < 0 Then   ' 팔때 신호로 할 때 가장 결과가 좋았음 이걸로 함 20240115
+
+                'If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 Then
+                'If 일분옵션데이터(callput).MACD_Result(1, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(1, Index) < 0 And 일분옵션데이터(callput).MACD_Result(0, Index) <= 0 Then  '0이하일 때는 바로 정리, 0보다 크면 정리하지 않는 것 실험
 
                 매도사유 = "N_below_1"
-                If isRealFlag = False Then
-                    s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
-
-                End If
-                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
 
             End If
 
+        End If
+
+        If 매도사유 <> "" Then
+            If isRealFlag = False Then
+                s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+
+            End If
+            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
         End If
 
         Return 매도사유

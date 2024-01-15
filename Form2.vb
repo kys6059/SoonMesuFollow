@@ -1296,7 +1296,7 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.5"
-                켈리지수비율 = "0.10"
+                켈리지수비율 = "0.20"
                 chk_Algorithm_E.Checked = True
 
                 '옵션가기준손절매 = "-0.30"
@@ -1318,7 +1318,7 @@ Public Class Form2
                 익절차 = "11"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.10"
+                켈리지수비율 = "0.20"
                 중간청산목표이익 = "0.5"
                 chk_Algorithm_E.Checked = True
 
