@@ -110,10 +110,12 @@ Module Algorithm_SoonMeSu
 
     'E 알고리즘
     '12월 27일 시험, 9월 이후 데이터로만 테스트 결과 0,3일 CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1  켈리지수 49. 6배 이상
+    '24년 1월 26일 --- CNT_001_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65_J_2.5
     Public E_신호발생기준기울기 As Single = 7.0
     Public E_신호해제기준기울기 As Single = 2.0
     Public E_DataSource As Integer = 1 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
     Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
+    Public E_기관반대순매수_허용크기비율 As Single = 2.5
 
 
     'F 알고리즘
@@ -224,9 +226,6 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
-
-
-
     Public Sub CalcAlgorithm_E()  '외국인만의 순매를 기준으로 매수하는 알고리즘으로 변경 - 기관순매수가 0~0.05일 때 최고가 되어 기관순매수는 무시함
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
@@ -251,6 +250,23 @@ Module Algorithm_SoonMeSu
             'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(E_DataSource).마지막점과그앞점간INDEXCOUNT
 
             If 현재순매수기울기_절대치 > E_신호발생기준기울기 Then
+
+
+                '기관도 같은 방향이거나 크게 반대방향이 아닌지 확인하는 코드
+                Dim 기관순매수기울기 As Single = PIP_Point_Lists(2).마지막선기울기
+                Dim 기관순매수기울기_절대치 As Single = Math.Abs(기관순매수기울기)
+
+                If 현재순매수기울기 * 기관순매수기울기 < 0 Then  '외국인과 기관의 순매수 방향이 다르면
+
+                    Dim 기관반대순매수_허용기울기 As Single = E_신호발생기준기울기 * E_기관반대순매수_허용크기비율
+                    If 기관순매수기울기_절대치 > 기관반대순매수_허용기울기 Then
+                        Return
+                    End If
+
+
+                End If
+
+
 
                 If 현재순매수기울기 > 0 Then  '  콜 방향
 
