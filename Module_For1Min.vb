@@ -31,6 +31,7 @@ Module Module_For1Min
         Dim CA_기본(,) As Single 'MACD 관련 계산치들     
         Dim CA_팔때(,) As Single 'MACD 관련 계산치들
         Dim MACD_Result(,) As Integer
+        Dim RSI() As Single
 
         Public Sub Initialize()
             ReDim ctime(480) '
@@ -41,6 +42,7 @@ Module Module_For1Min
             ReDim CA_기본(3, 480)
             ReDim CA_팔때(3, 480)
             ReDim MACD_Result(3, 480)
+            ReDim RSI(480)
         End Sub
     End Structure
 
@@ -105,9 +107,16 @@ Module Module_For1Min
 
 
 
-
-
     Public 시작전_개별기울기 As Integer = 15  '시작전 외국인/기관 각각의 기울기 기준 - 2개가 같은 방향일때를 확인하기 위함
+
+
+
+    'RSI 관련 변수
+    Public RSI_기준일 As Integer = 23
+    Public RSI_과열기준 As Single = 0.8
+    Public RSI_침체기준 As Single = 0.2
+    Public RSI_익절기준 As Single = 0.75  '이정도 수익 이상일때만 RSI로 익절을 한다
+
 
     Public Sub InitDataStructure_1Min()
 

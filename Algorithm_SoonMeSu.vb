@@ -839,6 +839,18 @@ Module Algorithm_SoonMeSu
         If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
         If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
 
+
+        'RSI에 의한 익절 확인
+        If s.A21_환산이익율 > RSI_익절기준 Then  'RSI 익절기준을 넘었고
+
+            If 일분옵션데이터(s.A08_콜풋).RSI(일분옵션데이터_CurrentIndex) > RSI_과열기준 Then
+
+                매도사유 = "RSI_IK"
+
+            End If
+        End If
+
+
         '타임아웃
         If Val(순매수리스트(currentIndex_순매수).sTime) >= Val(s.A62_TimeoutTime) Then
             매도사유 = "timeout"
@@ -2036,13 +2048,13 @@ Module Algorithm_SoonMeSu
 
             If 일분옵션데이터(callput).MACD_Result(3, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(3, Index) < 0 Then   ' 팔때 신호로 할 때 가장 결과가 좋았음 이걸로 함 20240115
 
-                    Dim 발생조건상태 As Boolean = False
-                    If 일분옵션데이터(callput).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(callput).MACD_Result(1, Index) > 0 Then 발생조건상태 = True
+                Dim 발생조건상태 As Boolean = False
+                If 일분옵션데이터(callput).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(callput).MACD_Result(1, Index) > 0 Then 발생조건상태 = True
 
-                    If 발생조건상태 = False Then 매도사유 = "N_below_1"
+                If 발생조건상태 = False Then 매도사유 = "N_below_1"
 
 
-                End If
+            End If
             'End If
 
             If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then  '0보다 작아지면 바로 매도하기 추가 실험
@@ -2062,6 +2074,66 @@ Module Algorithm_SoonMeSu
         End If
 
         Return 매도사유
+
+    End Function
+
+
+
+
+    Public Sub CalcRSIData()   'RSI를 계산해서 익절할 때 사용한다
+
+        For callput As Integer = 0 To 1
+
+
+
+            For j As Integer = RSI_기준일 To currentIndex_1MIn
+
+                If isRealFlag = False Then
+
+                    If 일분옵션데이터(callput).RSI(j) <= 0 Then
+                        일분옵션데이터(callput).RSI(j) = RSI값계산(callput, j)      '빈것들만 계산하여 속도를 빠르게 한다
+                    End If
+
+                Else
+                    일분옵션데이터(callput).RSI(j) = RSI값계산(callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
+                End If
+
+
+            Next
+        Next
+
+    End Sub
+
+    Private Function RSI값계산(ByVal callput As Integer, ByVal index As Integer) As Single
+
+
+        Dim AU As Single = 0
+        Dim AD As Single = 0
+        Dim RSI As Single = -1
+
+        For i As Integer = 0 To RSI_기준일 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
+
+            If 일분옵션데이터(callput).price(index - i, 3) > 0 Then
+
+                If 일분옵션데이터(callput).price(index - i, 0) <= 일분옵션데이터(callput).price(index - i, 3) Then   '종가가 큰 양봉이면
+
+                    AU = AU + Math.Abs(일분옵션데이터(callput).price(index - i, 3) - 일분옵션데이터(callput).price(index - i, 0))
+
+                Else
+
+                    AD = AD + Math.Abs(일분옵션데이터(callput).price(index - i, 3) - 일분옵션데이터(callput).price(index - i, 0))
+                End If
+
+
+            End If
+
+        Next
+
+        If AU > 0 Then
+            RSI = AU / (AU + AD)
+        End If
+
+        Return RSI
 
     End Function
 

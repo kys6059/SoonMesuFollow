@@ -70,6 +70,8 @@ Public Class Form2
             CalcMACD이동평균Data() 'MACD관련 이동평균선을 루프를 돌면서 계산해서 입력한다  
             CalcMACD계산치Data()   'MACD값, 신호선 등을 그린다
 
+            CalcRSIData() 'RSI 값을 계산한다
+
             CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
             If chk_F2_화면끄기.Checked = False Then
@@ -1696,8 +1698,9 @@ Public Class Form2
 
         'fullTest_C1()
 
-        fullTest_E()
+        'fullTest_E()
         'fullTest_F()
+        RSI_Test()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2360,6 +2363,63 @@ Public Class Form2
 
 
 
+    End Sub
+
+    '    Public RSI_기준일 As Integer = 14
+    '   Public RSI_과열기준 As Single = 0.8
+    '   Public RSI_익절기준 As Single = 0.5  '이정도 수익 이상일때만 RSI로 익절을 한다
+
+    Private Sub RSI_Test()
+
+        Dim RSI_기준일_temp() As String = {23, 25, 26}                  'A
+        Dim RSI_과열기준_temp() As Single = {0.78, 0.8, 0.82}                      'B
+        Dim RSI_익절기준_temp() As Single = {0.6, 0.75, 0.9, 1.0}         'C
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = True
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = True
+        chk_Algorithm_N.Checked = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To RSI_기준일_temp.Length - 1
+            For b As Integer = 0 To RSI_과열기준_temp.Length - 1
+                For c As Integer = 0 To RSI_익절기준_temp.Length - 1
+
+                    RSI_기준일 = RSI_기준일_temp(a)
+                    RSI_과열기준 = RSI_과열기준_temp(b)
+                    RSI_익절기준 = RSI_익절기준_temp(c)
+
+                    Dim cntstr As String
+                    If cnt < 10 Then
+                        cntstr = "00" & cnt.ToString()
+                    ElseIf cnt >= 10 And cnt < 100 Then
+                        cntstr = "0" & cnt.ToString()
+                    Else
+                        cntstr = cnt.ToString()
+                    End If
+
+                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}", RSI_기준일, RSI_과열기준, RSI_익절기준)
+
+                    Add_Log("", SoonMesuSimulation_조건)
+                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                    cnt += 1
+                Next
+
+            Next
+        Next
     End Sub
 
 
