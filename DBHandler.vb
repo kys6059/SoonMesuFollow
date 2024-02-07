@@ -1,4 +1,6 @@
 ﻿Option Explicit On
+Imports System.Reflection
+Imports System.Web.ModelBinding
 Imports Google.Cloud.BigQuery.V2
 
 Module DBHandler
@@ -595,7 +597,7 @@ Module DBHandler
             MsgBox(ex.Message)
         End Try
 
-        DBDateList_1min = datelist.ToArray()
+        DBDateList_1Min = datelist.ToArray()
         Return dateCount
 
     End Function
@@ -604,8 +606,35 @@ Module DBHandler
     Public Function GetDataFromDBHandler_1Min(ByVal iDate As Integer) As Integer
         Dim cnt As Integer = 0
         Dim callput_1 As Integer = -1
+        Dim prevIndex As Integer = -1
+        Dim indexCount As Integer = 0
+        Dim lineCount As Integer = 0
+        Dim prevCtime As Integer = 0
 
         Dim iList = DBTotalRawDataList_1min.Item(iDate)
+
+        For Each row In iList
+            Dim index As Integer = Val(row("index"))
+            Dim ctime As Integer = Val(row("ctime"))
+
+            If index > prevIndex Then
+                indexCount = indexCount + 1
+                prevIndex = index
+            End If
+
+            If ctime > prevCtime Then
+                lineCount = lineCount + 1
+                prevCtime = ctime
+            End If
+
+        Next
+
+        ReDim DB일간데이터리스트(indexCount - 1, 1)
+        For i As Integer = 0 To indexCount - 1
+            For j As Integer = 0 To 1
+                DB일간데이터리스트(i, j).Initialize()
+            Next
+        Next
 
         For Each row In iList
 
@@ -637,8 +666,9 @@ Module DBHandler
                 If callput <> callput_1 Then   ' 콜이 쭉 들오오고 나서, 풋이 들어올 때 Data(0), Data(1) 번에 각각 시간을 미리 입력한다
                     callput_1 = callput
                     '시간입력
-                    SetTimeDataForDataForDBData_1Min(일분옵션데이터, callput)
-                    일분옵션데이터(callput).HangSaGa = hangsaga
+                    'SetTimeDataForDataForDBData_1Min(일분옵션데이터, callput)   '이게 왜 있는지 모르겠음 밑에 for문 속에 ctime 넣는 일반적인 방법으로 추가함 20240207
+                    DB일간데이터리스트(index, callput).HangSaGa = hangsaga
+
                 End If
 
                 Dim iIndex As Integer = FindIndexFormTime_1Min(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
@@ -647,11 +677,12 @@ Module DBHandler
                     currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
                     timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
 
-                    일분옵션데이터(callput).price(iIndex, 0) = si
-                    일분옵션데이터(callput).price(iIndex, 1) = go
-                    일분옵션데이터(callput).price(iIndex, 2) = jue
-                    일분옵션데이터(callput).price(iIndex, 3) = jong
-                    일분옵션데이터(callput).거래량(iIndex) = volume
+                    DB일간데이터리스트(index, callput).price(iIndex, 0) = si
+                    DB일간데이터리스트(index, callput).price(iIndex, 1) = go
+                    DB일간데이터리스트(index, callput).price(iIndex, 2) = jue
+                    DB일간데이터리스트(index, callput).price(iIndex, 3) = jong
+                    DB일간데이터리스트(index, callput).거래량(iIndex) = volume
+                    DB일간데이터리스트(index, callput).ctime(iIndex) = ctime
 
                     cnt += 1
                 End If
@@ -661,9 +692,42 @@ Module DBHandler
 
         Next
 
-        Return callput_1 + 1
+        '맨먼저 0번 인덱스를 일분옵션데이터에 채워넣는다
+        일분옵션데이터채워넣기(0, lineCount)
+
+
+        Return indexCount
 
     End Function
+
+    Private Sub 일분옵션데이터채워넣기(ByVal 인덱스 As Integer, ByVal lineCount As Integer)
+
+
+        ReDim 일분옵션데이터(1)
+        For i As Integer = 0 To 1
+            일분옵션데이터(i).Initialize()
+        Next
+
+        For i As Integer = 0 To lineCount - 1
+            For callput As Integer = 0 To 1
+
+                일분옵션데이터(callput).HangSaGa = DB일간데이터리스트(인덱스, callput).HangSaGa
+
+                일분옵션데이터(callput).price(i, 0) = DB일간데이터리스트(인덱스, callput).price(i, 0)
+                일분옵션데이터(callput).price(i, 1) = DB일간데이터리스트(인덱스, callput).price(i, 1)
+                일분옵션데이터(callput).price(i, 2) = DB일간데이터리스트(인덱스, callput).price(i, 2)
+                일분옵션데이터(callput).price(i, 3) = DB일간데이터리스트(인덱스, callput).price(i, 3)
+                일분옵션데이터(callput).거래량(i) = DB일간데이터리스트(인덱스, callput).거래량(i)
+                일분옵션데이터(callput).ctime(i) = DB일간데이터리스트(인덱스, callput).ctime(i)
+
+
+
+            Next
+        Next
+
+
+
+    End Sub
 
     '1분데이터를 위해 별도로 함수를 만든다
     Public Sub SetTimeDataForDataForDBData_1Min(ByRef tempData() As 일분데이터템플릿, ByVal jongmokIndex As Integer)

@@ -89,6 +89,9 @@ Module Module_For1Min
 
     '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
     Public 일분옵션데이터() As 일분데이터템플릿
+
+    Public DB일간데이터리스트(,) As 일분데이터템플릿   '2개이상의 index를 처리하기 위해 추가함 20240207
+
     Public 순매수리스트() As 순매수탬플릿
     Public 순매수리스트카운트 As Integer '순매수리스트 카운트
     Public PIP_Point_Lists() As PIP탬플릿

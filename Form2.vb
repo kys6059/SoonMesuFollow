@@ -624,7 +624,8 @@ Public Class Form2
 
         strdt = "230903"
 
-        txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
+        'txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
+        txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + "240201"
 
         Dim lDate As Long = Val(strToday)
         Dim 월물 As Long = getsMonth(lDate)
