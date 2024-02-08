@@ -544,11 +544,11 @@ Module Module_For1Min
 
     'DB로부터 읽은 Data로부터 OptionList를 만들어낸다
     '이 때 Data 안에는 2개 밖에 없을거기 때문에 Option List도 2개가 된다 0번 - 콜, 1번 풋
-    Public Sub MakeOptinList_For_1Minute()
+    Public Sub MakeOptinList_For_1Minute(ByVal indexCount As Integer)
 
         optionList.Clear()
 
-        For i As Integer = 0 To TotalCount - 1
+        For i As Integer = 0 To indexCount - 1
 
             If currentIndex_1MIn > 0 Then
 
@@ -558,22 +558,23 @@ Module Module_For1Min
                 Dim max As Single = Single.MinValue
                 Dim min As Single = Single.MaxValue
 
-                For j As Integer = 0 To currentIndex_1MIn - 1
-                    If 일분옵션데이터(i).price(j, 1) > max Then max = 일분옵션데이터(i).price(j, 1)
-                    If 일분옵션데이터(i).price(j, 2) < min Then min = 일분옵션데이터(i).price(j, 2)
-                Next
+                For callput As Integer = 0 To 1
+                    For j As Integer = 0 To currentIndex_1MIn - 1
 
-                it.HangSaGa = 일분옵션데이터(i).HangSaGa '행사가
-                it.price(i, 0) = 일분옵션데이터(i).price(0, 0)
-                it.price(i, 1) = max
-                it.price(i, 2) = min
-                it.price(i, 3) = 일분옵션데이터(i).price(currentIndex, 3)
+                        If DB일간데이터리스트(i, callput).price(j, 1) > max Then max = DB일간데이터리스트(i, callput).price(j, 1)
+                        If DB일간데이터리스트(i, callput).price(j, 2) < min Then min = DB일간데이터리스트(i, callput).price(j, 2)
+                    Next
+                    it.HangSaGa = DB일간데이터리스트(i, callput).HangSaGa
+                    it.price(callput, 0) = DB일간데이터리스트(i, callput).price(0, 0)
+                    it.price(callput, 1) = max
+                    it.price(callput, 2) = min
+                    it.price(callput, 3) = DB일간데이터리스트(i, callput).price(currentIndex_1MIn, 3)
+                Next
 
                 optionList.Add(it)
 
             End If
-
-            selectedJongmokIndex(i) = i
+            selectedJongmokIndex(i) = 0
         Next
 
     End Sub

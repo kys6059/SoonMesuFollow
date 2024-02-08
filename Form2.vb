@@ -515,12 +515,12 @@ Public Class Form2
         TargetDate = DBDateList_1Min(F2_TargetDateIndex)
         sMonth = getsMonth(TargetDate).ToString() 'DB에서 읽은 날짜로부터 월물을 찾아낸다
 
-        Dim TotalCount1 As Integer = GetDataFromDBHandler_1Min(TargetDate)
+        Dim indexCount As Integer = GetDataFromDBHandler_1Min(TargetDate)
         순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
 
-        If TotalCount1 > 0 And 순매수리스트카운트 > 0 Then
-            MakeOptinList_For_1Minute()
-
+        If indexCount > 0 And 순매수리스트카운트 > 0 Then
+            MakeOptinList_For_1Minute(indexCount)
+            TotalCount = indexCount
             '나중에 여기에 조건들 집어넣기 
 
             F2_Clac_DisplayAllGrid()
@@ -624,8 +624,7 @@ Public Class Form2
 
         strdt = "230903"
 
-        'txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
-        txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + "240201"
+        txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
         Dim lDate As Long = Val(strToday)
         Dim 월물 As Long = getsMonth(lDate)
