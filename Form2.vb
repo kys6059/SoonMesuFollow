@@ -84,8 +84,7 @@ Public Class Form2
 
                     chk_F2_AutoSave.Checked = False
 
-                    Dim random As New Random
-                    Timer_AutoSave111.Interval = random.Next(1000, 50000)
+                    Timer_AutoSave111.Interval = 10000
                     Timer_AutoSave111.Enabled = True
 
                 End If
@@ -1354,30 +1353,62 @@ Public Class Form2
     Private Sub cmb_selectedJongmokIndex_0_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_0.SelectedIndexChanged
         Dim selectedIndex = cmb_selectedJongmokIndex_0.SelectedIndex
 
-        If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
 
-            selectedJongmokIndex(0) = selectedIndex - 1
-            '여기다가 행사가 추출하는 로직 추가함
-            콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
-            chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
-            F2_Clac_DisplayAllGrid()
-            Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+        If isRealFlag = True Then
+            If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
+
+                selectedJongmokIndex(0) = selectedIndex - 1
+                '여기다가 행사가 추출하는 로직 추가함
+                콜선택된행사가(0) = 인덱스로부터행사가찾기(selectedJongmokIndex(0))
+                chk_ChangeTargetIndex.Checked = False 'Clac_DisplayAllGrid에서 또 자동으로 selected를 계산하는 걸 방지하기 위해 false로 바꾼다
+                F2_Clac_DisplayAllGrid()
+                Add_Log("일반", "cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+            End If
+
+        Else  'DB 데이터를 읽어왔을 때는 간단히 처리한다
+            If selectedIndex > 0 And selectedJongmokIndex(0) <> selectedIndex - 1 Then
+
+                selectedJongmokIndex(0) = selectedIndex - 1
+
+                DB에서일분옵션데이터채워넣기(selectedJongmokIndex(0), timeIndex_1Min, 0)
+
+                F2_Clac_DisplayAllGrid()
+                Add_Log("일반", "DB데이터 cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+            End If
         End If
+
     End Sub
 
     Private Sub cmb_selectedJongmokIndex_1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_selectedJongmokIndex_1.SelectedIndexChanged
+
         Dim selectedIndex = cmb_selectedJongmokIndex_1.SelectedIndex
 
-        If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
+        If isRealFlag = True Then
+            If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
 
-            selectedJongmokIndex(1) = selectedIndex - 1
-            '여기다가 행사가 추출하는 로직 추가함
+                selectedJongmokIndex(1) = selectedIndex - 1
+                '여기다가 행사가 추출하는 로직 추가함
 
-            콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
-            chk_ChangeTargetIndex.Checked = False
-            F2_Clac_DisplayAllGrid()
-            Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
+                콜선택된행사가(1) = 인덱스로부터행사가찾기(selectedJongmokIndex(1))
+                chk_ChangeTargetIndex.Checked = False
+                F2_Clac_DisplayAllGrid()
+                Add_Log("일반", "cmb_selectedJongmokIndex_1_SelectedIndexChanged  호출됨")
+            End If
+
+        Else
+
+            If selectedIndex > 0 And selectedJongmokIndex(1) <> selectedIndex - 1 Then
+
+                selectedJongmokIndex(1) = selectedIndex - 1
+
+                DB에서일분옵션데이터채워넣기(selectedJongmokIndex(1), timeIndex_1Min, 1)
+
+                F2_Clac_DisplayAllGrid()
+                Add_Log("일반", "DB데이터 cmb_selectedJongmokIndex_0_SelectedIndexChanged  호출됨")
+            End If
+
         End If
+
     End Sub
 
     Private Sub RedrawAll()
@@ -2443,7 +2474,7 @@ Public Class Form2
 
     Private Sub Timer_AutoSave111_Tick(sender As Object, e As EventArgs) Handles Timer_AutoSave111.Tick
         AutoSave()
-        Timer_AutoSave111.Enabled = False
+
     End Sub
 
     Private Sub 일일조건설정(ByVal strToday As String)

@@ -82,6 +82,10 @@ Module Module_For1Min
 
     End Structure
 
+    'DB에 저장하기 위해 호출할 때 쓰는 인덱스
+    Public 호출할인덱스번호 As Integer = 0
+    Public 모든인덱스수신됨Counter As Integer = 0  'TotlaCount * 2배가 되면 다 받은 것임
+
     '이하 MACD 계산용
     Public MA_Interval() As Integer = {12, 26, 65, 19, 39}  '이평선의 날짜들을 미리 지정한다
     Public max_interval As Integer
@@ -574,8 +578,10 @@ Module Module_For1Min
                 optionList.Add(it)
 
             End If
-            selectedJongmokIndex(i) = 0
         Next
+
+        selectedJongmokIndex(0) = 0
+        selectedJongmokIndex(1) = 0
 
     End Sub
 

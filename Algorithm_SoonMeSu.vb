@@ -1455,11 +1455,7 @@ Module Algorithm_SoonMeSu
         For callput As Integer = 0 To 1
             For j As Integer = 이동평균선_기준일자 - 1 To currentIndex_1MIn
 
-                If isRealFlag = False Then
-                    If 일분옵션데이터(callput).이동평균선(j) <= 0 Then 일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j)   '빈것들만 계산하여 속도를 빠르게 한다
-                Else
-                    일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
-                End If
+                일분옵션데이터(callput).이동평균선(j) = 이동평균선값계산(이동평균선_기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
             Next
         Next
 
@@ -1482,15 +1478,7 @@ Module Algorithm_SoonMeSu
 
                     If currentIndex_1MIn < 기준일자 Then Continue For
 
-                    If isRealFlag = False Then
-
-                        If 일분옵션데이터(callput).MA(i, j) <= 0 Then
-                            일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j)      '빈것들만 계산하여 속도를 빠르게 한다
-                        End If
-
-                    Else
-                        일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
-                    End If
+                    일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
 
 
                 Next
@@ -2088,15 +2076,9 @@ Module Algorithm_SoonMeSu
 
             For j As Integer = RSI_기준일 To currentIndex_1MIn
 
-                If isRealFlag = False Then
 
-                    If 일분옵션데이터(callput).RSI(j) <= 0 Then
-                        일분옵션데이터(callput).RSI(j) = RSI값계산(callput, j)      '빈것들만 계산하여 속도를 빠르게 한다
-                    End If
+                일분옵션데이터(callput).RSI(j) = RSI값계산(callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
 
-                Else
-                    일분옵션데이터(callput).RSI(j) = RSI값계산(callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
-                End If
 
 
             Next

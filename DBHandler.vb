@@ -52,7 +52,7 @@ Module DBHandler
                 cnt = Val(row("cnt"))
                 Dim str As String = iDate.ToString() & " 해당 날짜 Data Count = " & cnt.ToString() + "개가 이미 등록되어 있습니다"
                 Console.WriteLine(str)
-                Add_Log("일반", str)
+                'Add_Log("일반", str)
             Next
 
         Catch ex As Exception
@@ -396,9 +396,11 @@ Module DBHandler
 
     End Function
 
-    Public Sub AutoSave()
-
+    Public Sub AutoSave_old()
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 153000 Then
+
+        ElseIf Val(순매수리스트(currentIndex_순매수).sTime) >= 153300 Then
+
 
             '타이머를 끈다
             Form2.Timer1.Enabled = False
@@ -416,18 +418,12 @@ Module DBHandler
             If tempTargetDate > 0 Then rowCount = GetRowCount(tempTargetDate, Form2.txt_F2_TableName.Text)
 
             If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
-                Insert순매수이력데이터(tempTargetDate)
-                InsertTargetDateData_1분(tempTargetDate)
+                'Insert순매수이력데이터(tempTargetDate)
+                'InsertTargetDateData_1분(tempTargetDate)
 
 
 
-                'XAQuery_EBEST_분봉데이터호출함수(0)
-                'Threading.Thread.Sleep(4000)
-                'XAQuery_EBEST_분봉데이터호출함수(1)
-                '5분 데이터 수집하는 기능인데 불필요한 거 같아 더이상 수집하지 않음 2023.08.04
-                '이 결과는 분봉데이터 수신하는 realtime_ebest 모듈에서 DB에 저장하는 함수를 호출하여 저장한다
 
-                '2023.08.02 ~ 03 데이터다 저장되지 않은 문제가 발생했으나 04일에는 정상 입력이 됨 - 문제 확인 필요
 
             Else
                 Add_Log("일반", tempTargetDate.ToString() & " 날에는 이미 순매수데이터가 등록되어 있습니다")
@@ -436,8 +432,58 @@ Module DBHandler
 
     End Sub
 
+    Public Sub AutoSave()
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 153100 And 모든인덱스수신됨Counter = 0 And Form2.chk_자동저장모드.Checked = False Then   '1530분이 넘으면 전체 호출하는 작업을 시작하고
+
+            Form2.chk_자동저장모드.Checked = True
+            ReDim DB일간데이터리스트(TotalCount - 1, 1)
+            For i As Integer = 0 To TotalCount - 1
+                For j As Integer = 0 To 1
+                    DB일간데이터리스트(i, j).Initialize()
+                Next
+            Next
+
+        End If
+
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 153400 And 모든인덱스수신됨Counter >= TotalCount * 2 + 2 And Form2.chk_자동저장모드.Checked = True Then  '33분이 되면 저장하고 끝낸다
+
+            Form2.Timer_AutoSave111.Enabled = False
+
+            '타이머를 끈다
+            Form2.Timer1.Enabled = False
+            Form2.btn_TimerStart.Text = "START"
+            Form2.label_timerCounter.Text = "---"
+
+            Dim tempTargetDate As Integer = TargetDate
+
+            If tempTargetDate > 20000000 Then
+                tempTargetDate = tempTargetDate Mod 20000000
+            End If
+
+            Dim rowCount As Integer
+
+            If tempTargetDate > 0 Then rowCount = GetRowCount(tempTargetDate, Form2.txt_F2_TableName.Text)
+
+            If rowCount = 0 Then '오늘 날짜에 등록된게 없으면 입력한다
+
+                Insert순매수이력데이터(tempTargetDate)
+                InsertTargetDateData_1분(tempTargetDate)
+
+                Add_Log("끝", "저장 플로우 호출됨")
+
+            Else
+
+                Add_Log("일반", tempTargetDate.ToString() & " 날 1분데이터 카운트 = " + rowCount.ToString() + " --- 이미 등록")
+
+            End If
+        End If
+
+    End Sub
+
     '일일 1분 데이터를 빅쿼리에 저장한다 20220821 추가
-    Public Function InsertTargetDateData_1분(ByVal iDate As Integer) As Integer
+    Public Function InsertTargetDateData_1분_old(ByVal iDate As Integer) As Integer
 
         Dim retCount As Integer = 0
         Dim i, callput As Integer
@@ -501,6 +547,80 @@ Module DBHandler
         Return retCount
     End Function
 
+
+    '전체를 저장하는 방식으로 바꾸기 20240210
+    Public Function InsertTargetDateData_1분(ByVal iDate As Integer) As Integer
+
+        Dim retCount As Integer = 0
+        Dim callput As Integer
+        Dim iFlag As Integer
+        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
+        Dim 영보다큰갯수 As Integer = 0
+        Dim dateaset_id = "option5"
+        Dim table_id = "option_one_minute"   '1분데이터가 저장되는 테이블 이름
+
+        iDate = iDate Mod 20000000
+
+        For 종목인덱스 As Integer = 0 To TotalCount - 1   '
+
+            For callput = 0 To 1
+                For j = 0 To 479
+                    If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then
+                        영보다큰갯수 += 1
+                    End If
+                Next
+            Next
+        Next
+
+        Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
+
+        For 종목인덱스 As Integer = 0 To TotalCount - 1
+
+            For callput = 0 To 1
+
+                Dim hangsaga As Integer = Val(DB일간데이터리스트(종목인덱스, callput).HangSaGa)
+
+                For j = 0 To 479
+
+                    If callput = 0 Then
+                        iFlag = 1
+                    Else
+                        iFlag = 6
+                    End If
+
+                    If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
+
+                        rows(retCount) = New BigQueryInsertRow
+                        rows(retCount).Add("cdate", iDate)
+                        rows(retCount).Add("index", 종목인덱스)
+                        rows(retCount).Add("hangsaga", hangsaga)
+                        rows(retCount).Add("iFlag", iFlag)
+                        rows(retCount).Add("ctime", DB일간데이터리스트(종목인덱스, callput).ctime(j))
+                        rows(retCount).Add("interval", 1)
+                        rows(retCount).Add("si", DB일간데이터리스트(종목인덱스, callput).price(j, 0))
+                        rows(retCount).Add("go", DB일간데이터리스트(종목인덱스, callput).price(j, 1))
+                        rows(retCount).Add("jue", DB일간데이터리스트(종목인덱스, callput).price(j, 2))
+                        rows(retCount).Add("jong", DB일간데이터리스트(종목인덱스, callput).price(j, 3))
+                        rows(retCount).Add("volume", DB일간데이터리스트(종목인덱스, callput).거래량(j))
+
+                        retCount += 1
+                    End If
+                Next
+            Next
+        Next
+
+
+
+        client.InsertRows(dateaset_id, table_id, rows)
+
+        Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+        Console.WriteLine(str)
+        Add_Log("일반", str)
+
+        Return retCount
+    End Function
+
+
     '순매수이력데이터를 저장한다 - 장종료 후 809건이었음 20220821 추가
     Public Sub Insert순매수이력데이터(ByVal iDate As Integer)
 
@@ -537,7 +657,7 @@ Module DBHandler
         Dim client As BigQueryClient
         Dim job As BigQueryJob
         tableName = MakeTableName(tableNameStr)
-        Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate, iFlag, `index`, ctime  "
+        Dim query As String = "select distinct * from " + tableName + " " + dateLimitText + " order by cdate, iFlag, `index`, ctime  "
         Dim cnt As Integer = 0
         Dim dateCount As Integer = 0
 
@@ -692,37 +812,39 @@ Module DBHandler
 
         Next
 
-        '맨먼저 0번 인덱스를 일분옵션데이터에 채워넣는다
-        일분옵션데이터채워넣기(0, lineCount)
-
-
-        Return indexCount
-
-    End Function
-
-    Private Sub 일분옵션데이터채워넣기(ByVal 인덱스 As Integer, ByVal lineCount As Integer)
-
 
         ReDim 일분옵션데이터(1)
         For i As Integer = 0 To 1
             일분옵션데이터(i).Initialize()
         Next
 
+        '맨먼저 0번 인덱스를 일분옵션데이터에 채워넣는다
+        DB에서일분옵션데이터채워넣기(0, lineCount, 0)  '0번인덱스에 콜을 채워넣기
+        DB에서일분옵션데이터채워넣기(0, lineCount, 1)  '0번 인덱스에 풋을 채워넣기
+
+        Return indexCount
+
+    End Function
+
+    Public Sub DB에서일분옵션데이터채워넣기(ByVal 인덱스 As Integer, ByVal lineCount As Integer, ByVal callput As Integer)
+
+
+
         For i As Integer = 0 To lineCount - 1
-            For callput As Integer = 0 To 1
 
-                일분옵션데이터(callput).HangSaGa = DB일간데이터리스트(인덱스, callput).HangSaGa
 
+            If DB일간데이터리스트(인덱스, callput).HangSaGa IsNot Nothing Then 일분옵션데이터(callput).HangSaGa = DB일간데이터리스트(인덱스, callput).HangSaGa
+
+            If DB일간데이터리스트(인덱스, callput).ctime(i) IsNot Nothing Then
                 일분옵션데이터(callput).price(i, 0) = DB일간데이터리스트(인덱스, callput).price(i, 0)
                 일분옵션데이터(callput).price(i, 1) = DB일간데이터리스트(인덱스, callput).price(i, 1)
                 일분옵션데이터(callput).price(i, 2) = DB일간데이터리스트(인덱스, callput).price(i, 2)
                 일분옵션데이터(callput).price(i, 3) = DB일간데이터리스트(인덱스, callput).price(i, 3)
                 일분옵션데이터(callput).거래량(i) = DB일간데이터리스트(인덱스, callput).거래량(i)
                 일분옵션데이터(callput).ctime(i) = DB일간데이터리스트(인덱스, callput).ctime(i)
+            End If
 
 
-
-            Next
         Next
 
 
@@ -755,7 +877,7 @@ Module DBHandler
         Dim client As BigQueryClient
         Dim job As BigQueryJob
         tableName = MakeTableName(tableNameStr)
-        Dim query As String = "select * from " + tableName + " " + dateLimitText + " order by cdate,  ctime  "
+        Dim query As String = "select distinct * from " + tableName + " " + dateLimitText + " order by cdate,  ctime  "
         Dim cnt As Integer = 0
         Dim dateCount As Integer = 0
 

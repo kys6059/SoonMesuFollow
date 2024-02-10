@@ -287,7 +287,7 @@ Module Module_common
 
         For i As Integer = 0 To optionList.Count - 1
             Dim it As ListTemplate = optionList(i)
-            If it.HangSaGa = hangsaga Then
+            If it.HangSaGa = hangsaga Or Left(it.HangSaGa, 3) = hangsaga Then
                 Return i
             End If
         Next
