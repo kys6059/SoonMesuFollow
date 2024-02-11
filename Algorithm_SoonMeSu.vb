@@ -866,7 +866,7 @@ Module Algorithm_SoonMeSu
         Dim 현재이평선 As Single = 일분옵션데이터(s.A08_콜풋).이동평균선(일분옵션데이터_CurrentIndex)
         If s.A17_중간매도Flag = 1 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 현재이평선 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < 현재이평선 Then
             매도사유 = "below50"
-            s.A14_현재가격 = 현재이평선 - 0.01
+            s.A14_현재가격 = Math.Round(현재이평선 - 0.01, 2)
             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
             s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
         End If
@@ -1565,11 +1565,23 @@ Module Algorithm_SoonMeSu
                         일분옵션데이터(callput).MACD_Result(1, j) = -1
                     End If
 
-                    If 일분옵션데이터(callput).price(j, 3) > 일분옵션데이터(callput).MA(2, j) Then '2: 장기이평선 위/아래
-                        일분옵션데이터(callput).MACD_Result(2, j) = 1
-                    ElseIf 일분옵션데이터(callput).price(j, 3) < 일분옵션데이터(callput).MA(2, j) Then
-                        일분옵션데이터(callput).MACD_Result(2, j) = -1
+
+                    If isRealFlag = True And 당일반복중_flag = False Then
+                        If 일분옵션데이터(callput).price(j, 3) > 일분옵션데이터(callput).MA(2, j) Then '2: 장기이평선 위/아래
+                            일분옵션데이터(callput).MACD_Result(2, j) = 1
+                        ElseIf 일분옵션데이터(callput).price(j, 3) < 일분옵션데이터(callput).MA(2, j) Then
+                            일분옵션데이터(callput).MACD_Result(2, j) = -1
+                        End If
+                    Else    ' 분석중일때는 고가만이라도 넘으면 넘은걸로 간주함
+                        If 일분옵션데이터(callput).price(j, 1) > 일분옵션데이터(callput).MA(2, j) Then '2: 장기이평선 위/아래
+                            일분옵션데이터(callput).MACD_Result(2, j) = 1
+                        ElseIf 일분옵션데이터(callput).price(j, 3) < 일분옵션데이터(callput).MA(2, j) Then
+                            일분옵션데이터(callput).MACD_Result(2, j) = -1
+                        End If
                     End If
+
+
+
 
                     If 일분옵션데이터(callput).CA_팔때(0, j) > 일분옵션데이터(callput).CA_팔때(1, j) Then '3: 팔때 MACD > 시그널
                         일분옵션데이터(callput).MACD_Result(3, j) = 1

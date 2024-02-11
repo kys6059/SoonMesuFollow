@@ -471,6 +471,8 @@ Module DBHandler
                 Insert순매수이력데이터(tempTargetDate)
                 InsertTargetDateData_1분(tempTargetDate)
 
+                InsertRealShinhoList()
+
                 Add_Log("끝", "저장 플로우 호출됨")
 
             Else
@@ -480,6 +482,23 @@ Module DBHandler
             End If
         End If
 
+    End Sub
+
+    Public Sub InsertRealShinhoList()
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+        For j = 0 To SoonMesuShinhoList.Count - 1
+            SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+        Next
+
+
+        InsertSoonMeSuShinhoResult("real")
     End Sub
 
     '일일 1분 데이터를 빅쿼리에 저장한다 20220821 추가
@@ -796,7 +815,7 @@ Module DBHandler
                 If iIndex >= 0 Then
                     currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
                     timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
-
+                    DB일간데이터리스트(index, callput).HangSaGa = hangsaga
                     DB일간데이터리스트(index, callput).price(iIndex, 0) = si
                     DB일간데이터리스트(index, callput).price(iIndex, 1) = go
                     DB일간데이터리스트(index, callput).price(iIndex, 2) = jue
@@ -979,10 +998,18 @@ Module DBHandler
     End Function
 
     '시뮬레이션이나 실시간으로 발생한 신호의 결과를 빅쿼리에 저장한다
-    Public Sub InsertSoonMeSuShinhoResult()
+    Public Sub InsertSoonMeSuShinhoResult(ByVal table성격 As String)
         Dim client As BigQueryClient = BigQueryClient.Create(projectID)
         Dim dateaset_id = "option5"
-        Dim table_id = "Option_SoonMeSuShinhoResultTable"
+
+
+        Dim table_id = ""
+        If table성격 = "statistics" Then
+            table_id = "Option_SoonMeSuShinhoResultTable"
+        ElseIf table성격 = "real" Then
+            table_id = "real_Option_SoonMeSuShinhoResultTable"
+        End If
+
 
         Dim totalCount1 As Integer = SoonMesuSimulationTotalShinhoList.Count - 1
 

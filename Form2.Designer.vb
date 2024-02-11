@@ -23,15 +23,15 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea28 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend28 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series28 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea29 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend29 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series29 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea30 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend30 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series30 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_자동저장모드 = New System.Windows.Forms.CheckBox()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
@@ -194,6 +194,7 @@ Partial Class Form2
         Me.chk_Algorithm_A = New System.Windows.Forms.CheckBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Chart2 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.btn_신호를저장 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -361,16 +362,16 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea28.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea28)
-        Legend28.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend28)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(652, 205)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series28.ChartArea = "ChartArea1"
-        Series28.Legend = "Legend1"
-        Series28.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series28)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
         Me.F2_Chart_순매수.Size = New System.Drawing.Size(1283, 635)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
@@ -1057,16 +1058,16 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea29.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea29)
-        Legend29.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend29)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
         Me.Chart1.Location = New System.Drawing.Point(1961, 15)
         Me.Chart1.Name = "Chart1"
-        Series29.ChartArea = "ChartArea1"
-        Series29.Legend = "Legend1"
-        Series29.Name = "Series1"
-        Me.Chart1.Series.Add(Series29)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
         Me.Chart1.Size = New System.Drawing.Size(1321, 582)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
@@ -2357,19 +2358,28 @@ Partial Class Form2
         '
         'Chart2
         '
-        ChartArea30.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea30)
-        Legend30.Name = "Legend1"
-        Me.Chart2.Legends.Add(Legend30)
+        ChartArea3.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.Chart2.Legends.Add(Legend3)
         Me.Chart2.Location = New System.Drawing.Point(1961, 603)
         Me.Chart2.Name = "Chart2"
-        Series30.ChartArea = "ChartArea1"
-        Series30.Legend = "Legend1"
-        Series30.Name = "Series1"
-        Me.Chart2.Series.Add(Series30)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.Chart2.Series.Add(Series3)
         Me.Chart2.Size = New System.Drawing.Size(1321, 237)
         Me.Chart2.TabIndex = 40
         Me.Chart2.Text = "Chart2"
+        '
+        'btn_신호를저장
+        '
+        Me.btn_신호를저장.Location = New System.Drawing.Point(805, 1201)
+        Me.btn_신호를저장.Name = "btn_신호를저장"
+        Me.btn_신호를저장.Size = New System.Drawing.Size(145, 45)
+        Me.btn_신호를저장.TabIndex = 41
+        Me.btn_신호를저장.Text = "신호를 저장"
+        Me.btn_신호를저장.UseVisualStyleBackColor = True
         '
         'Form2
         '
@@ -2378,6 +2388,7 @@ Partial Class Form2
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
         Me.ClientSize = New System.Drawing.Size(2982, 1282)
+        Me.Controls.Add(Me.btn_신호를저장)
         Me.Controls.Add(Me.Chart2)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.TableLayoutPanel13)
@@ -2605,4 +2616,5 @@ Partial Class Form2
     Friend WithEvents Chart2 As DataVisualization.Charting.Chart
     Friend WithEvents chk_Algorithm_N As CheckBox
     Friend WithEvents chk_자동저장모드 As CheckBox
+    Friend WithEvents btn_신호를저장 As Button
 End Class

@@ -37,7 +37,7 @@ Public Class Form2
             isRealFlag = False   'DB에서 읽어서 분석하면 false를 한다
             F2_TargetDateIndex = 0 'DB_날짜 인덱스임 (전역변수)
 
-            F2_날짜변경처리함수()
+            F2_날짜변경처리함수() '여기서 날짜별로 인덱스집합을 처리한다
 
         Else
             MsgBox("DB에 데이터가 없습니다")
@@ -487,6 +487,23 @@ Public Class Form2
             If value <> currentIndex_순매수 Then
                 currentIndex_순매수 = value
                 currentIndex_1MIn = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+
+                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                    Dim 콜종목 As Integer = 적합한종목찾기(0)
+                    Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(0) = 콜종목
+                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                    End If
+                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(1) = 풋종목
+                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                    End If
+
+                End If
+
                 F2_Clac_DisplayAllGrid()
             End If
         End If
@@ -518,9 +535,10 @@ Public Class Form2
         순매수리스트카운트 = Get순매수데이터(TargetDate) '전역변수 순매수리스트에 하루치 Data를 입력한다
 
         If indexCount > 0 And 순매수리스트카운트 > 0 Then
+
+
             MakeOptinList_For_1Minute(indexCount)
             TotalCount = indexCount
-            '나중에 여기에 조건들 집어넣기 
 
             F2_Clac_DisplayAllGrid()
 
@@ -670,6 +688,8 @@ Public Class Form2
         Dim strThisMonth As String = Format(today, "yyMM")
         Dim sCase As String = ""
 
+
+        '202402 ---------- G
         If rdo_목요일.Checked = True Then
 
             If 남은날짜 < 7 Then  '옵션월물을 적용한다
@@ -770,9 +790,27 @@ Public Class Form2
         당일반복중_flag = True
         chk_F2_화면끄기.Checked = True
         For i As Integer = 0 To 순매수리스트카운트 - 1
+
             currentIndex_순매수 = i
 
+            If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                Dim 콜종목 As Integer = 적합한종목찾기(0)
+                Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                    selectedJongmokIndex(0) = 콜종목
+                    DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                End If
+                If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                    selectedJongmokIndex(1) = 풋종목
+                    DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                End If
+
+            End If
+
             F2_Clac_DisplayAllGrid()
+            'Add_Log("일반", "currentIndex_순매수 = " + currentIndex_순매수.ToString() + ", 현재콜인덱스 = " + selectedJongmokIndex(0).ToString() + "  현재 풋 인덱스 = " + selectedJongmokIndex(1).ToString())
         Next
         chk_F2_화면끄기.Checked = False
         F2_Clac_DisplayAllGrid()
@@ -832,6 +870,23 @@ Public Class Form2
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
                     chk_F2_화면끄기.Checked = False
                 End If
+
+                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                    Dim 콜종목 As Integer = 적합한종목찾기(0)
+                    Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(0) = 콜종목
+                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                    End If
+                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(1) = 풋종목
+                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                    End If
+
+                End If
+
                 F2_Clac_DisplayAllGrid()
 
             Next
@@ -849,9 +904,8 @@ Public Class Form2
         '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
         If SoonMesuSimulationTotalShinhoList.Count > 0 Then
 
-            'Add_Log(cnt.ToString() + "차 자동계산완료", " : " + " Total 신호건수 = " + SimulationTotalShinhoList.Count.ToString())
-            InsertSoonMeSuShinhoResult()
 
+            InsertSoonMeSuShinhoResult("statistics")
             SoonMesuSimulationTotalShinhoList.Clear()
 
         End If
@@ -2488,13 +2542,8 @@ Public Class Form2
         손절매수준설정(남은날짜)
     End Sub
 
-    Private Sub HSc_F2_시간조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_시간조절.Scroll
 
-    End Sub
 
-    Private Sub HSc_F2_날짜조절_Scroll(sender As Object, e As ScrollEventArgs) Handles HSc_F2_날짜조절.Scroll
-
-    End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
         '매매신호처리함수()
@@ -2527,5 +2576,9 @@ Public Class Form2
         Dim 남은날짜 As Integer = getRemainDate(월물.ToString(), lDate)
         월목에따른텍스트입력하기(남은날짜) 'txt_월물과 txt_weekly_정규 텍스트박스에 값을 입력한다
 
+    End Sub
+
+    Private Sub btn_신호를저장_Click(sender As Object, e As EventArgs) Handles btn_신호를저장.Click
+        InsertRealShinhoList()
     End Sub
 End Class

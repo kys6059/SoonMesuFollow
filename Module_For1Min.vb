@@ -546,6 +546,51 @@ Module Module_For1Min
 
     End Sub
 
+    Public Function 적합한종목찾기(ByVal callput As Integer) As Integer 'DB에서 가져온 데이터에서 중 여러인덱스에서 해당하는 종목 찾기
+
+        Dim ret As Integer = -1
+
+        Dim 일분옵션데이터_CurrentIndex As Integer
+
+        일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+
+
+        If SoonMesuShinhoList IsNot Nothing Then   '신호가 떠있는 상태라면 신호가 떠있는 걸 최우선으로 적용한다
+
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 And callput = s.A08_콜풋 Then
+                    Dim 신호발생인덱스 As Integer = 행사가로부터인덱스찾기(s.A09_행사가)
+                    Return 신호발생인덱스   '
+                End If
+
+            Next
+
+        End If
+
+
+        '신호가 떠있지 않다면 targetPrice와 비교하여 제일 가까운것을 회신한다
+        Dim Targetprice As Single = Val(Form2.txt_F2_매수_기준가.Text)
+        Dim minGap As Single = 1100.0
+
+        For i As Integer = 0 To TotalCount - 1
+
+            If 일분옵션데이터_CurrentIndex < 0 Then Return ret
+
+            Dim price As Single = DB일간데이터리스트(i, callput).price(일분옵션데이터_CurrentIndex, 3)
+
+            Dim gap As Single = Math.Abs(Targetprice - price)
+            If gap < minGap And price >= 0.2 Then '0.2보다 높은 종목만 선택함
+                ret = i
+                minGap = gap
+            End If
+        Next
+
+        Return ret
+
+    End Function
+
     'DB로부터 읽은 Data로부터 OptionList를 만들어낸다
     '이 때 Data 안에는 2개 밖에 없을거기 때문에 Option List도 2개가 된다 0번 - 콜, 1번 풋
     Public Sub MakeOptinList_For_1Minute(ByVal indexCount As Integer)
