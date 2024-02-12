@@ -111,11 +111,15 @@ Module Algorithm_SoonMeSu
     'E 알고리즘
     '12월 27일 시험, 9월 이후 데이터로만 테스트 결과 0,3일 CNT_008_A_4_B_9_C_2_D_120_E_104000_F_150000_G_4_H_1  켈리지수 49. 6배 이상
     '24년 1월 26일 --- CNT_001_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65_J_2.5
-    Public E_신호발생기준기울기 As Single = 7.0
+    Public E_신호발생기준기울기 As Single = 6.0
     Public E_신호해제기준기울기 As Single = 2.0
     Public E_DataSource As Integer = 1 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
     Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
     Public E_기관반대순매수_허용크기비율 As Single = 2.5
+    Public E2_tick_count_기준 As Integer = 30
+
+    '20240212 E알고리즘 시험 결과 B240212_E202     E2_CNT_001_A_6_B_2_C_105000_D_150000_E_4_F_2.5_G_30 20승 11패 켈리지수 47.94  ------------- E2가 더 좋아서 E를 버리고 이걸 사용함
+    'B240212_T011 'E2_CNT_001_A_6_B_2_C_105000_D_150000_E_4_F_2.5_G_30  -- 종합
 
 
     'F 알고리즘
@@ -143,18 +147,8 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
-    'G 알고리즘 - 연속 음봉 후 양봉 출현
-    Public G_첫번째시작시간 As Integer = 950   '시작시간
-    Public G_첫번째종료시간 As Integer = 1110   '종료시간
-    Public G_최대유지기간Index As Integer = 40    '20분이 지나면 무조건 매도  - 순매수 인덱스가 기준이라서 2배가 된다
-    Public G_연속음봉갯수 As Integer = 7        '사실은 6개의 음봉과 직전 양봉이 발생하면 ... 총 7개
-    Public G_하락비율 As Single = 0.7           '7틱전 시가의 70% 즉, 30% 이상 하락
-    Public G_양봉막대크기 As Single = 1.04      '직전 틱의 양봉 크기
-
 
     Public Sub CalcAlgorithmAll()
-
-
 
         Dim 일분옵션데이터_CurrentIndex As Integer
         If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
@@ -176,6 +170,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_N.Checked = True Then CalcAlgorithm_N(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_E2.Checked = True Then CalcAlgorithm_E2()
 
         End If
 
@@ -230,7 +225,7 @@ Module Algorithm_SoonMeSu
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-        Dim timeoutTime As Integer = Val(Form2.txt_F2_TimeoutTime.Text)
+
 
         Dim 일분옵션데이터_CurrentIndex As Integer
         If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
@@ -296,6 +291,85 @@ Module Algorithm_SoonMeSu
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
                         Dim str As String = String.Format("E 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("E", 1)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+                End If
+
+            End If
+        End If
+
+
+    End Sub
+
+    '15분(30틱) 기준 순매수 기울기를 기준으로 매매하는 알고리즘 20240212
+
+    '20240212 E알고리즘 시험 결과 B240212_E202     E2_CNT_001_A_6_B_2_C_105000_D_150000_E_4_F_2.5_G_30 20승 11패 켈리지수 47.94
+
+    Public Sub CalcAlgorithm_E2()
+
+        Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
+        Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
+
+
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim 현재순매수기울기 As Single = 틱당기울기계산(E_DataSource, E2_tick_count_기준)
+            Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
+
+            'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(E_DataSource).마지막점과그앞점간INDEXCOUNT
+
+            If 현재순매수기울기_절대치 > E_신호발생기준기울기 Then
+
+
+                '기관도 같은 방향이거나 크게 반대방향이 아닌지 확인하는 코드
+                Dim 기관순매수기울기 As Single = 틱당기울기계산(2, E2_tick_count_기준)
+                Dim 기관순매수기울기_절대치 As Single = Math.Abs(기관순매수기울기)
+
+                If 현재순매수기울기 * 기관순매수기울기 < 0 Then  '외국인과 기관의 순매수 방향이 다르면
+
+                    Dim 기관반대순매수_허용기울기 As Single = E_신호발생기준기울기 * E_기관반대순매수_허용크기비율
+                    If 기관순매수기울기_절대치 > 기관반대순매수_허용기울기 Then
+                        Return
+                    End If
+
+
+                End If
+
+
+
+                If 현재순매수기울기 > 0 Then  '  콜 방향
+
+
+                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
+                    If is동일신호가있나("E2", 0) = True Then Return
+                    If is동일신호가현재살아있나("B", 0) = True Then Return 'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
+
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
+                        Dim str As String = String.Format("E___2 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("E2", 0)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+
+                Else ' 풋 방향
+
+                    If is동일신호가있나("E2", 1) = True Then Return
+                    If is동일신호가현재살아있나("B", 1) = True Then Return   'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
+
+                    If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
+                        Dim str As String = String.Format("E___2 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("E2", 1)
                         SoonMesuShinhoList.Add(shinho)
                     End If
                 End If
@@ -742,6 +816,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_M(s, 일분옵션데이터_CurrentIndex)
                             Case "N"
                                 ret = 살아있는신호확인하기_N(s, 일분옵션데이터_CurrentIndex)
+                            Case "E2"
+                                ret = 살아있는신호확인하기_E2(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -1035,6 +1111,50 @@ Module Algorithm_SoonMeSu
             End If
 
         End If
+
+        Return 매도사유
+    End Function
+
+
+    Private Function 살아있는신호확인하기_E2(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+
+            Dim 현재순매수기울기 As Single = 틱당기울기계산(E_DataSource, E2_tick_count_기준)
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+                If s.A08_콜풋 = 0 Then
+
+
+                    If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_E2"
+                    End If
+
+                Else
+
+                    If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_E2"
+                    End If
+
+                End If
+            End If
+
+        End If
+
+
+
+
 
         Return 매도사유
     End Function
@@ -1478,7 +1598,7 @@ Module Algorithm_SoonMeSu
 
                     If currentIndex_1MIn < 기준일자 Then Continue For
 
-                    일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j) '0 값이 들어오는 경우가 많아서 real 에서는 전부 다 계산한다
+                    일분옵션데이터(callput).MA(i, j) = 이동평균선값계산(기준일자, callput, j)
 
 
                 Next
@@ -1792,6 +1912,16 @@ Module Algorithm_SoonMeSu
 
 
     'G 알고리즘 시작
+    'G 알고리즘 변경 - RSI로 변경함
+
+    'G 알고리즘 - 연속 음봉 후 양봉 출현
+    Public G_첫번째시작시간 As Integer = 1430   '시작시간
+    Public G_첫번째종료시간 As Integer = 1500   '종료시간
+    Public G_최대유지기간Index As Integer = 60    '20분이 지나면 무조건 매도  - 순매수 인덱스가 기준이라서 2배가 된다
+    Public G_RSI최저기준 As Single = 0.25           'RSI가 해당 기준 이하이면
+    Public G_양봉막대크기 As Single = 1.06      '직전 틱의 양봉 크기
+
+    '202402 test 결과 :  B240211_T002 --------- C_TEST_CNT_019_A_1430_B_1500_C_60_D_0.25_E_1.06     5승2패로 아직 데이터가 작음
 
 
     Public Sub CalcAlgorithm_G(ByVal 일분옵션데이터_CurrentIndex As Integer) '음봉연속 발생
@@ -1799,35 +1929,32 @@ Module Algorithm_SoonMeSu
 
         Dim curTime As Integer = Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex))
 
-        If (curTime >= G_첫번째시작시간 And curTime <= G_첫번째종료시간) And 일분옵션데이터_CurrentIndex - G_연속음봉갯수 > 0 Then
+        If (curTime >= G_첫번째시작시간 And curTime <= G_첫번째종료시간) Then
+
             For callput As Integer = 0 To 1
 
-                Dim flag1 As Boolean = False
-                Dim flag2 As Boolean = True
+                If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) < 0.2 Then Continue For
 
                 Dim 양봉크기 As Single = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) / 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 0)
-                If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 0) < 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) And 양봉크기 > G_양봉막대크기 Then  '직전이 양봉이고
-                    flag1 = True
-                End If
+                If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 0) < 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) And 양봉크기 > G_양봉막대크기 Then  '직전이 양봉이고 양봉의 크기 비율이 일정 기준 이상이면 
 
-                For i As Integer = 2 To G_연속음봉갯수
-                    If 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - i, 0) < 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - i, 3) Then
-                        flag2 = False
-                        Exit For
-                    End If
-                Next
+                    '여기다 이동평균선 위에서만 매수하는 거 추가
 
-                If flag1 = True And flag2 = True Then
-                    Dim gap As Single = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3) / 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - G_연속음봉갯수, 0)
-                    If is동일신호가현재살아있나("G", callput) = False And gap < G_하락비율 Then
-                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("G", callput)
-                        SoonMesuShinhoList.Add(shinho)
+                    '여기다 RSI 기준 추가
+                    If 일분옵션데이터(callput).RSI(일분옵션데이터_CurrentIndex - 1) <= G_RSI최저기준 Then
+
+                        If is동일신호가현재살아있나("G", callput) = False Then
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("G", callput)
+                            SoonMesuShinhoList.Add(shinho)
+                        End If
+
                     End If
+
                 End If
 
             Next
-        End If
 
+        End If
 
     End Sub
 
@@ -1880,10 +2007,12 @@ Module Algorithm_SoonMeSu
     '3: 팔때 MACD > 시그널
 
 
-
-    Public 기울기최저기준 As Single = 0.006  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    '20240211 테스트 결과 'C_TEST_CNT_020_A_0.005_B_58_C_0.013_D_1215
+    Public 기울기최저기준 As Single = 0.005  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public 기울기최고기준 As Single = 0.013  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public M_마감시간 As Integer = 1215
+
+
 
     Public Sub CalcAlgorithm_M(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
 
@@ -1891,7 +2020,7 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 121500 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
+        'If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 121500 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
 
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > M_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
@@ -1964,20 +2093,28 @@ Module Algorithm_SoonMeSu
     End Function
 
 
-    Public N_기울기최저기준 As Single = 0.004  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최저기준 As Single = 0.005  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public N_기울기최고기준 As Single = 0.007  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
+
     Public N_마감시간 As Integer = 1230
     Public N_시작시간 As Integer = 1000
 
 
-    Public Sub CalcAlgorithm_N(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 1  - 단순히 MACD값이 0보다 클  때 사고 0보다 작을때 판다
+    '20240211 테스트 결과 C_TEST_CNT_012_A_0.005_B_58_C_0.007_D_1230
+
+    Public Sub CalcAlgorithm_N(ByVal 일분옵션데이터_CurrentIndex As Integer) 'MACD 활용 2  - 상향돌파
 
         max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
+        'If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
+        'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
+
+
+
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
+
 
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1

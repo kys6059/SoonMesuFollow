@@ -183,6 +183,7 @@ Partial Class Form2
         Me.lbl_ReceiveCounter = New System.Windows.Forms.Label()
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel13 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_Algorithm_E2 = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_N = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_M = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
@@ -845,7 +846,7 @@ Partial Class Form2
         Me.txt_F2_옵션가기준손절매.Name = "txt_F2_옵션가기준손절매"
         Me.txt_F2_옵션가기준손절매.Size = New System.Drawing.Size(90, 30)
         Me.txt_F2_옵션가기준손절매.TabIndex = 14
-        Me.txt_F2_옵션가기준손절매.Text = "-0.26"
+        Me.txt_F2_옵션가기준손절매.Text = "-0.25"
         '
         'txt_F2_매수시작시간
         '
@@ -1626,7 +1627,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(151, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.9.2_240115"
+        Me.txt_programversion.Text = "1.10.1_240212"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -2201,6 +2202,7 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnCount = 2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_E2, 1, 3)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_N, 1, 2)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_M, 1, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_F, 0, 5)
@@ -2222,6 +2224,21 @@ Partial Class Form2
         Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel13.Size = New System.Drawing.Size(313, 190)
         Me.TableLayoutPanel13.TabIndex = 38
+        '
+        'chk_Algorithm_E2
+        '
+        Me.chk_Algorithm_E2.AutoSize = True
+        Me.chk_Algorithm_E2.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_E2.Checked = True
+        Me.chk_Algorithm_E2.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_E2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_E2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_E2.Location = New System.Drawing.Point(159, 96)
+        Me.chk_Algorithm_E2.Name = "chk_Algorithm_E2"
+        Me.chk_Algorithm_E2.Size = New System.Drawing.Size(151, 25)
+        Me.chk_Algorithm_E2.TabIndex = 12
+        Me.chk_Algorithm_E2.Text = "Algorithm_E2"
+        Me.chk_Algorithm_E2.UseVisualStyleBackColor = False
         '
         'chk_Algorithm_N
         '
@@ -2270,6 +2287,8 @@ Partial Class Form2
         '
         Me.chk_Algorithm_G.AutoSize = True
         Me.chk_Algorithm_G.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_G.Checked = True
+        Me.chk_Algorithm_G.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_G.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_G.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_G.Location = New System.Drawing.Point(159, 3)
@@ -2283,8 +2302,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_E.AutoSize = True
         Me.chk_Algorithm_E.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_E.Checked = True
-        Me.chk_Algorithm_E.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_E.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_E.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_E.Location = New System.Drawing.Point(3, 127)
@@ -2617,4 +2634,5 @@ Partial Class Form2
     Friend WithEvents chk_Algorithm_N As CheckBox
     Friend WithEvents chk_자동저장모드 As CheckBox
     Friend WithEvents btn_신호를저장 As Button
+    Friend WithEvents chk_Algorithm_E2 As CheckBox
 End Class

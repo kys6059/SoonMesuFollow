@@ -16,6 +16,7 @@ Module Module_For1Min
         Dim 외국인_연기금_순매수 As Long
         Dim 외국인_기관_순매수 As Long
         Dim 코스피지수 As Single
+        Dim 코스피지수_이동평균선 As Single
     End Structure
 
 
@@ -87,7 +88,7 @@ Module Module_For1Min
     Public 모든인덱스수신됨Counter As Integer = 0  'TotlaCount * 2배가 되면 다 받은 것임
 
     '이하 MACD 계산용
-    Public MA_Interval() As Integer = {12, 26, 65, 19, 39}  '이평선의 날짜들을 미리 지정한다
+    Public MA_Interval() As Integer = {12, 26, 58, 19, 39}  '이평선의 날짜들을 미리 지정한다
     Public max_interval As Integer
 
 
@@ -668,6 +669,76 @@ Module Module_For1Min
 
         Dim 이동평균값 As Single = sumValue / cnt
         Return 이동평균값
+
+    End Function
+
+    Public Sub Calc코스피지수이동평균Data()   '이동평균선을 계산하여 일분데이터에 추가한다
+
+        Dim 코스피지수_이평선기준일자 As Integer = 이동평균선_기준일자 * 2
+
+        If currentIndex_순매수 < 코스피지수_이평선기준일자 Then Return         ' 현재 index가 이동평균계산기준일자보다 작으면 패스한다
+
+
+        For j As Integer = 코스피지수_이평선기준일자 - 1 To currentIndex_순매수
+
+            순매수리스트(j).코스피지수_이동평균선 = 코스피지수이동평균선값계산(코스피지수_이평선기준일자, j)
+
+        Next
+
+
+
+    End Sub
+
+    Public Function 코스피지수이동평균선값계산(ByVal 이동평균선기준일자 As Integer, ByVal index As Integer) As Single
+
+        Dim sumValue As Single = 0
+        Dim cnt As Integer = 0
+
+        For i As Integer = 0 To 이동평균선기준일자 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
+
+            If 순매수리스트(index - i).코스피지수 > 0 Then
+                sumValue = sumValue + 순매수리스트(index - i).코스피지수
+                cnt += 1
+            End If
+
+        Next
+
+        Dim 이동평균값 As Single = sumValue / cnt
+        Return 이동평균값
+
+    End Function
+
+    Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer) As Single
+
+
+        Dim current, prev As Single
+        Dim cnt As Integer = 0
+
+
+
+        Dim tempIndex As Integer = currentIndex_순매수 - tick_count
+
+        If tempIndex < 0 Or tempIndex >= 순매수리스트카운트 Then Return 0
+
+        If source = 1 Then
+
+            current = 순매수리스트(currentIndex_순매수).외국인순매수
+            prev = 순매수리스트(tempIndex).외국인순매수
+
+        ElseIf source = 2 Then
+
+            current = 순매수리스트(currentIndex_순매수).기관순매수
+            prev = 순매수리스트(tempIndex).기관순매수
+
+        ElseIf source = 0 Then
+
+            current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
+            prev = 순매수리스트(tempIndex).외국인_기관_순매수
+
+        End If
+
+        Dim ret As Single = (current - prev) / tick_count
+        Return ret
 
     End Function
 
