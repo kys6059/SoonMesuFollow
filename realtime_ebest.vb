@@ -996,7 +996,7 @@ Module realtime_ebest
 
         순매수리스트카운트 = XAQuery_EBEST_순매수현황조회.GetBlockCount("t1621OutBlock1")
 
-        ReDim 순매수리스트(순매수리스트카운트 - 1)
+        'ReDim 순매수리스트(순매수리스트카운트 - 1)
         Dim 기관순매수적용비율 As Single = Val(Form2.txt_F2_기관순매수적용비율.Text)
 
         Dim 첫번째시간 As Integer = Val(XAQuery_EBEST_순매수현황조회.GetFieldData("t1621OutBlock1", "time", 0))

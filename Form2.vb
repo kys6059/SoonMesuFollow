@@ -143,17 +143,19 @@ Public Class Form2
                 ElseIf i = 1 Then
                     주체 = " (외국인)"
                     금액 = 순매수리스트(currentIndex_순매수).외국인순매수
-                Else
+                ElseIf i = 2 Then
+
                     주체 = " (기관)"
                     금액 = 순매수리스트(currentIndex_순매수).기관순매수
+                Else
+                    주체 = " (외국인선물)"
+                    금액 = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
                 End If
                 grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
                 grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
                 grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
                 If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
                 If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
-
-
 
                 Dim 시작전기울기 = Calc_직선기울기계산(0)
                 grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(틱당기울기계산(i, E2_tick_count_기준), 1)
@@ -314,9 +316,9 @@ Public Class Form2
         F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
 
-        For i As Integer = 0 To 2 '0 - 외+기
+        For i As Integer = 0 To 3 '0 - 0: 외국인+기관, 1: 외국인, 2: 기관, 3: 외국인선물
 
-            If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
+            If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Then
                 str = "For_Kig_" + i.ToString()
                 F2_Chart_순매수.Series.Add(str)
                 F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
@@ -326,8 +328,10 @@ Public Class Form2
                     F2_Chart_순매수.Series(str).Color = Color.Gray
                 ElseIf i = 1 Then
                     F2_Chart_순매수.Series(str).Color = Color.Blue
-                Else
+                ElseIf i = 2 Then
                     F2_Chart_순매수.Series(str).Color = Color.Green
+                ElseIf i = 3 Then
+                    F2_Chart_순매수.Series(str).Color = Color.Red
                 End If
 
                 'str = "PIP_" + i.ToString()
@@ -348,10 +352,10 @@ Public Class Form2
 
                 If i = 0 Then
                     F2_Chart_순매수.Series(str).Color = Color.DarkRed
-                ElseIf i = 1 Then
+                ElseIf i = 1 Or i = 2 Then
                     F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
-                Else
-                    F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
+                ElseIf i = 3 Then
+                    F2_Chart_순매수.Series(str).Color = Color.DarkBlue
                 End If
 
             End If
@@ -393,11 +397,11 @@ Public Class Form2
                 End If
             Next
 
-            For j As Integer = 0 To 2
+            For j As Integer = 0 To 3
                 Dim For_Kig_Series As String = "For_Kig_" + j.ToString()
                 For i As Integer = 0 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
 
-                    If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
+                    If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
                         Dim target순매수 As Long = Get순매수(i, j)
                         retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
                         Dim str As String = String.Format("시간:{0}{1}구분:{2}{3}순매수:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, j, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
@@ -415,7 +419,7 @@ Public Class Form2
 
                 'For i As Integer = 0 To 2
                 'Dim PIP_Series As String = "PIP_" + i.ToString()
-                'If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
+                'If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) or i = 3 Then
                 ''PIP 시리즈를 표시한다
                 'If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
                 'For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
@@ -430,10 +434,10 @@ Public Class Form2
 
                 'Next
 
-                For i As Integer = 0 To 2
+                For i As Integer = 0 To 3
 
                     Dim 기울기시리즈 As String = "slope_" + i.ToString()
-                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Then
+                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Then
                         If currentIndex_순매수 - E2_tick_count_기준 >= 0 Then
 
                             If i = 1 Then
@@ -450,6 +454,10 @@ Public Class Form2
 
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).기관순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
+                            ElseIf i = 3 Then
+
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인_선물_순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
 
                             End If
 
@@ -464,8 +472,8 @@ Public Class Form2
                     Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                     Dim Str As String
 
-                    For j As Integer = 0 To 2  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
-                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Then
+                    For j As Integer = 0 To 3  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
+                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
                             '신호를 그리든데 각각의 순매수라인에 그린다
                             Str = "Shinho_" + i.ToString() + j.ToString()
                             F2_Chart_순매수.Series.Add(Str)

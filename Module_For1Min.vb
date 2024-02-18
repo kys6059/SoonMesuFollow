@@ -137,7 +137,7 @@ Module Module_For1Min
         Next
 
         'ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
-        ReDim PIP_Point_Lists(2) '0 - 외국인 + 기관, 1 - 외국인, 2 - 기관
+        ReDim PIP_Point_Lists(3) '0 - 외국인 + 기관, 1 - 외국인, 2 - 기관
 
         TargetDate = 0
         currentIndex_1MIn = -1
@@ -237,7 +237,7 @@ Module Module_For1Min
             End If
         End If
 
-        For i As Integer = 0 To 2 '0 - 외국인+기관, 1 - 외국인, 2 - 기관
+        For i As Integer = 0 To 3 '0 - 외국인+기관, 1 - 외국인, 2 - 기관
             If currentIndex_순매수 >= 4 Then
 
                 Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount, i)
@@ -320,6 +320,8 @@ Module Module_For1Min
             ret = 순매수리스트(index).외국인순매수
         ElseIf dataSource = 2 Then
             ret = 순매수리스트(index).기관순매수
+        ElseIf dataSource = 3 Then
+            ret = 순매수리스트(index).외국인_선물_순매수
         End If
         Return ret
     End Function

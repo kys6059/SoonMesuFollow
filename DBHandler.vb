@@ -501,70 +501,6 @@ Module DBHandler
         InsertSoonMeSuShinhoResult("real")
     End Sub
 
-    '일일 1분 데이터를 빅쿼리에 저장한다 20220821 추가
-    Public Function InsertTargetDateData_1분_old(ByVal iDate As Integer) As Integer
-
-        Dim retCount As Integer = 0
-        Dim i, callput As Integer
-        Dim iFlag As Integer
-        Dim client As BigQueryClient = BigQueryClient.Create(projectID)
-        Dim 영보다큰갯수 As Integer = 0
-        Dim dateaset_id = "option5"
-        Dim table_id = "option_one_minute"   '1분데이터가 저장되는 테이블 이름
-
-        iDate = iDate Mod 20000000
-
-        For callput = 0 To 1
-            For j = 0 To 479
-                If 일분옵션데이터(callput).price(j, 0) > 0 Then
-                    영보다큰갯수 += 1
-                End If
-            Next
-        Next
-
-        Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
-
-        For callput = 0 To 1
-
-            Dim hangsaga As Integer = Val(일분옵션데이터(callput).HangSaGa)
-
-            For j = 0 To 479
-
-                If callput = 0 Then
-                    iFlag = 1
-                Else
-                    iFlag = 6
-                End If
-
-                If 일분옵션데이터(callput).price(j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
-
-                    rows(retCount) = New BigQueryInsertRow
-                    rows(retCount).Add("cdate", iDate)
-                    rows(retCount).Add("index", 0)
-                    rows(retCount).Add("hangsaga", hangsaga)
-                    rows(retCount).Add("iFlag", iFlag)
-                    rows(retCount).Add("ctime", 일분옵션데이터(i).ctime(j))
-                    rows(retCount).Add("interval", 1)
-                    rows(retCount).Add("si", 일분옵션데이터(callput).price(j, 0))
-                    rows(retCount).Add("go", 일분옵션데이터(callput).price(j, 1))
-                    rows(retCount).Add("jue", 일분옵션데이터(callput).price(j, 2))
-                    rows(retCount).Add("jong", 일분옵션데이터(callput).price(j, 3))
-                    rows(retCount).Add("volume", 일분옵션데이터(callput).거래량(j))
-
-                    retCount += 1
-                End If
-            Next
-        Next
-
-
-        client.InsertRows(dateaset_id, table_id, rows)
-
-        Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
-        Console.WriteLine(str)
-        Add_Log("일반", str)
-
-        Return retCount
-    End Function
 
 
     '전체를 저장하는 방식으로 바꾸기 20240210
@@ -660,6 +596,7 @@ Module DBHandler
             rows(j).Add("foramount", 순매수리스트(j).외국인순매수)
             rows(j).Add("kigamount", 순매수리스트(j).연기금순매수)
             rows(j).Add("kospiIndex", 순매수리스트(j).코스피지수)
+            rows(j).Add("for_future_amount", 순매수리스트(j).외국인_선물_순매수)
         Next
 
         client.InsertRows(dateaset_id, table_id, rows)
@@ -971,11 +908,12 @@ Module DBHandler
             '값을 읽어온다
             Dim tempDate As Integer = Val(row("cdate"))
             Dim ctime As Integer = Val(row("ctime"))
-            Dim 개인순매수 As Single = Val(row("indamount"))
-            Dim 기관순매수 As Single = Val(row("sysamount"))
-            Dim 외국인순매수 As Single = Val(row("foramount"))
-            Dim 연기금순매수 As Single = Val(row("kigamount"))
+            Dim 개인순매수 As Long = Val(row("indamount"))
+            Dim 기관순매수 As Long = Val(row("sysamount"))
+            Dim 외국인순매수 As Long = Val(row("foramount"))
+            Dim 연기금순매수 As Long = Val(row("kigamount"))
             Dim 코스피지수 As Single = Val(row("kospiindex"))
+            Dim 외국인선물순매수 As Long = Val(row("for_future_amount"))
 
             순매수리스트(iIndex).sDate = tempDate
             순매수리스트(iIndex).sTime = ctime
@@ -984,6 +922,8 @@ Module DBHandler
             순매수리스트(iIndex).외국인순매수 = 외국인순매수
             순매수리스트(iIndex).연기금순매수 = 연기금순매수
             순매수리스트(iIndex).코스피지수 = 코스피지수
+            순매수리스트(iIndex).외국인_선물_순매수 = 외국인선물순매수
+
 
             순매수리스트(iIndex).외국인_연기금_순매수 = 외국인순매수 + Math.Round(연기금순매수 * 기관순매수적용비율)
             순매수리스트(iIndex).외국인_기관_순매수 = 외국인순매수 + Math.Round(기관순매수 * 기관순매수적용비율)
