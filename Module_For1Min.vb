@@ -17,6 +17,7 @@ Module Module_For1Min
         Dim 외국인_기관_순매수 As Long
         Dim 코스피지수 As Single
         Dim 코스피지수_이동평균선 As Single
+        Dim 외국인_선물_순매수 As Long
     End Structure
 
 

@@ -1365,7 +1365,7 @@ Public Class Form2
                 계좌조회()
                 선물옵션_잔고평가_이동평균조회()
             Case 2
-
+                XAQuery_EBEST_외국인선물_순매수현황조회함수()
 
             Case 3
                 XAQuery_EBEST_순매수현황조회함수()
@@ -1376,6 +1376,7 @@ Public Class Form2
                 선물옵션_잔고평가_이동평균조회()
 
             Case 5
+                XAQuery_EBEST_외국인선물_순매수현황조회함수()
 
         End Select
 

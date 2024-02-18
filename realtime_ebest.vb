@@ -66,6 +66,7 @@ Module realtime_ebest
     Dim XAQuery_전체종목조회 As XAQuery = New XAQuery
     Dim XAQuery_EBEST_분봉데이터호출 As XAQuery = New XAQuery
     Dim XAQuery_EBEST_순매수현황조회 As XAQuery = New XAQuery
+    Dim XAQuery_EBEST_외국인선물_순매수현황조회 As XAQuery = New XAQuery
 
     Public Const g_strServerAddress As String = "hts.etrade.co.kr"
     Public 거래비밀번호 As String = "3487"
@@ -108,6 +109,7 @@ Module realtime_ebest
         AddHandler XAQuery_전체종목조회.ReceiveData, AddressOf XAQuery_전체종목조회_ReceiveData
         AddHandler XAQuery_EBEST_분봉데이터호출.ReceiveData, AddressOf XAQuery_EBEST_분봉데이터호출_ReceiveData
         AddHandler XAQuery_EBEST_순매수현황조회.ReceiveData, AddressOf XAQuery_EBEST_순매수현황조회_ReceiveData
+        AddHandler XAQuery_EBEST_외국인선물_순매수현황조회.ReceiveData, AddressOf XAQuery_EBEST_외국인선물_순매수현황조회_ReceiveData
     End Sub
 
 
@@ -900,6 +902,81 @@ Module realtime_ebest
 
     End Sub
 
+    Public Sub XAQuery_EBEST_외국인선물_순매수현황조회함수()
+        If XAQuery_EBEST_외국인선물_순매수현황조회 Is Nothing Then XAQuery_EBEST_외국인선물_순매수현황조회 = New XAQuery
+        XAQuery_EBEST_외국인선물_순매수현황조회.ResFileName = "c:\ebest\xingApi\res\t1664.res"
+
+        XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "mgubun", 0, "3")  '선물 3
+        XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "vagubun", 0, "2")   '1:수량, 2:금액
+        XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "bdgubun", 0, "1")   '0:당일, 1:전일
+        XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "cnt", 0, "999")               '갯수 : 30초마다 하나씩 들어와서 하루에 최대 810건 정도 들어 있음 999건으로 조회하면 다 들어옴
+
+
+        Dim nSuccess As Integer = XAQuery_EBEST_외국인선물_순매수현황조회.Request(False)
+        If nSuccess < 0 Then Add_Log("일반", "XAQuery_EBEST_외국인선물_순매수현황조회() 함수호출 시 오류: " & nSuccess.ToString())
+    End Sub
+
+
+    Private Sub XAQuery_EBEST_외국인선물_순매수현황조회_ReceiveData(ByVal szTrCode As String)
+
+        Dim insertCount As Integer = 0
+        Dim 외국인선물카운트 = XAQuery_EBEST_외국인선물_순매수현황조회.GetBlockCount("t1664OutBlock1")
+
+
+
+        For i As Integer = 0 To 외국인선물카운트 - 1
+
+            Dim 외 As Long
+            Dim 시간 As Long
+
+            시간 = Val(XAQuery_EBEST_외국인선물_순매수현황조회.GetFieldData("t1664OutBlock1", "dt", i))  '시간
+
+            외 = Val(XAQuery_EBEST_외국인선물_순매수현황조회.GetFieldData("t1664OutBlock1", "tjj17", i))   '외국인
+
+            Dim index As Integer = 시간으로_순매수인덱스찾기(시간)
+
+            If index >= 0 Then
+
+                순매수리스트(index).외국인_선물_순매수 = 외
+
+                insertCount += 1
+
+            End If
+
+        Next
+
+
+
+
+        Console.WriteLine("선물 순매리스리스트 수신 : " & insertCount.ToString() & "건")
+
+
+    End Sub
+
+    Private Function 시간으로_순매수인덱스찾기(ByVal 시간 As Long) As Integer
+
+        Dim ret As Integer = -1
+
+        If 순매수리스트 Is Nothing Then
+            Add_Log("에러", "순매수리스트 Is Nothing")
+            Return -1
+        End If
+
+        For i As Integer = 0 To 순매수리스트.Length - 1
+
+            If 순매수리스트(i).sTime = 시간 Then
+                ret = i
+                Return ret
+            End If
+
+        Next
+
+
+        Return -1
+    End Function
+
+
+
     Public Sub XAQuery_EBEST_순매수현황조회함수()
         If XAQuery_EBEST_순매수현황조회 Is Nothing Then XAQuery_EBEST_순매수현황조회 = New XAQuery
         XAQuery_EBEST_순매수현황조회.ResFileName = "c:\ebest\xingApi\res\t1621.res"
@@ -912,6 +989,8 @@ Module realtime_ebest
         Dim nSuccess As Integer = XAQuery_EBEST_순매수현황조회.Request(False)
         If nSuccess < 0 Then Add_Log("일반", "XAQuery_EBEST_순매수현황조회() 함수호출 시 오류: " & nSuccess.ToString())
     End Sub
+
+
 
     Private Sub XAQuery_EBEST_순매수현황조회_ReceiveData(ByVal szTrCode As String)
 
