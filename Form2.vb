@@ -611,6 +611,11 @@ Public Class Form2
             MakeOptinList_For_1Minute(indexCount)
             TotalCount = indexCount
 
+            selectedJongmokIndex(0) = 적합한종목찾기(0)
+            selectedJongmokIndex(1) = 적합한종목찾기(1)
+            DB에서일분옵션데이터채워넣기(selectedJongmokIndex(0), timeIndex_1Min, 0)
+            DB에서일분옵션데이터채워넣기(selectedJongmokIndex(1), timeIndex_1Min, 1)
+
             F2_Clac_DisplayAllGrid()
 
         End If
@@ -1201,38 +1206,42 @@ Public Class Form2
                 For i = 0 To currentIndex_1MIn
                     ' main Series 입력
                     If 일분옵션데이터(callput).price(i, 1) > 0 Then
-                        retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+
 
                         'X축 시간
                         If 일분옵션데이터(callput).ctime(i) IsNot Nothing Then
-                            Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
-                            If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
-                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
-                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
-                            ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
-                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
-                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                            If 일분옵션데이터(callput).ctime(i) > 900 Then
+                                retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+                                Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+
+                                If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                                ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                                End If
+
+                                '이동평균선 그리기
+                                If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
+
+                                Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
+                                Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+
+                                If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                                If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
+
+                                'MACD이평 그리기
+                                For j As Integer = 0 To 1 'MA_Interval.Length - 1
+
+                                    If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+
+                                Next
                             End If
-
-                            '이동평균선 그리기
-                            If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
-
-                            Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
-                            Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
-
-                            If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                            If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
-
-                            'MACD이평 그리기
-                            For j As Integer = 0 To 1 'MA_Interval.Length - 1
-
-                                If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
-
-                            Next
 
                         End If
 
@@ -2822,4 +2831,6 @@ Public Class Form2
     Private Sub btn_신호를저장_Click(sender As Object, e As EventArgs) Handles btn_신호를저장.Click
         InsertRealShinhoList()
     End Sub
+
+
 End Class
