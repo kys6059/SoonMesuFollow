@@ -1080,7 +1080,7 @@ Public Class Form2
                         retindex = Chart2.Series(BasicSeries).Points.AddXY(i, 0) ' 위의 그래프와 X축을 통일하기 위해 0값을 모든 X값에 먼저 넣는다
 
                         'X축 시간
-                        Chart2.Series(BasicSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+                        Chart2.Series(BasicSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
                         'CA 0,1번 그리기
                         Chart2.Series(MACD_CA_기본(0)).Points.AddXY(retindex, 일분옵션데이터(callput).CA_기본(0, i))
@@ -1216,7 +1216,7 @@ Public Class Form2
                                 Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
                                 Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
                                 Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
-                                Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+                                Chart1.Series(CandlestrickSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
                                 If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
                                     Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
