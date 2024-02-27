@@ -743,9 +743,6 @@ Module Module_For1Min
 
             current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
             prev = 순매수리스트(tempIndex).외국인_기관_순매수
-        ElseIf source = 3 Then
-            current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
-            prev = 순매수리스트(tempIndex).외국인_선물_순매수
 
         End If
 
