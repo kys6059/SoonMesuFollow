@@ -373,7 +373,7 @@ Partial Class Form2
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
         Me.F2_Chart_순매수.Series.Add(Series1)
-        Me.F2_Chart_순매수.Size = New System.Drawing.Size(971, 782)
+        Me.F2_Chart_순매수.Size = New System.Drawing.Size(971, 748)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
         '
@@ -692,12 +692,12 @@ Partial Class Form2
         Me.grid_shinho.AllowUserToDeleteRows = False
         Me.grid_shinho.BackgroundColor = System.Drawing.SystemColors.Control
         Me.grid_shinho.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-        Me.grid_shinho.Location = New System.Drawing.Point(558, 1023)
+        Me.grid_shinho.Location = New System.Drawing.Point(558, 989)
         Me.grid_shinho.Name = "grid_shinho"
         Me.grid_shinho.ReadOnly = True
         Me.grid_shinho.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.grid_shinho.RowTemplate.Height = 23
-        Me.grid_shinho.Size = New System.Drawing.Size(1705, 150)
+        Me.grid_shinho.Size = New System.Drawing.Size(1705, 184)
         Me.grid_shinho.TabIndex = 8
         '
         'TableLayoutPanel4
