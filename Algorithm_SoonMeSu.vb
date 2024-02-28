@@ -147,6 +147,8 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
+    Public 중간매도후목표이익율 As Single = 0.1
+
 
     Public Sub CalcAlgorithmAll()
 
@@ -895,7 +897,7 @@ Module Algorithm_SoonMeSu
 
         '옵션가격 기준 손절매, 익절
         Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-        If s.A17_중간매도Flag = 1 Then 옵션가손절매기준 = 0   ' 중간매도가 되면 손절매 기준으로 0으로 강제로 바꿔서 수익을 좋게 만든다
+        If s.A17_중간매도Flag = 1 Then 옵션가손절매기준 = 중간매도후목표이익율   ' 중간매도가 되면 손절매 기준으로 0으로 강제로 바꿔서 수익을 좋게 만든다
 
         Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
         If s.A21_환산이익율 < 옵션가손절매기준 Then
