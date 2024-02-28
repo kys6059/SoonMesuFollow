@@ -206,6 +206,9 @@ Module Module_For1Min
     End Function
 
     Public Function 순매수시간으로1MIN인덱스찾기(ByVal 순매수시간 As Integer) As Integer
+
+
+
         Dim ret As Integer = -1
 
         Dim 시분 As Integer = 순매수시간 / 100
@@ -558,6 +561,9 @@ Module Module_For1Min
 
         일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
 
+        If 일분옵션데이터_CurrentIndex < 0 And Val(순매수리스트(currentIndex_순매수).sTime) >= 153400 Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        End If
 
         If SoonMesuShinhoList IsNot Nothing Then   '신호가 떠있는 상태라면 신호가 떠있는 걸 최우선으로 적용한다
 
@@ -737,10 +743,11 @@ Module Module_For1Min
 
             current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
             prev = 순매수리스트(tempIndex).외국인_기관_순매수
+
         ElseIf source = 3 Then
+
             current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
             prev = 순매수리스트(tempIndex).외국인_선물_순매수
-
         End If
 
         Dim ret As Single = (current - prev) / tick_count

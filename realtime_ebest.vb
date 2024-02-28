@@ -763,21 +763,28 @@ Module realtime_ebest
         If optionList Is Nothing Then Return
         If optionList.Count <= 0 Then Return
 
-        If Form2.chk_자동저장모드.Checked = True Then
+        If Form2.chk_자동저장모드.Checked = True Then  '이건 3시30분 지나서 저장하기 위해서 받는 부분
 
 
             ' 여기다가 전체 저장 or 일부저장 나눠서 넣기
             DB일간데이터리스트(현재인덱스, callput).Code = 종목코드
             DB일간데이터리스트(현재인덱스, callput).HangSaGa = 행사가
 
+            Dim startPoint As Integer = 0
+
             For i As Integer = 0 To Count - 1
 
-                DB일간데이터리스트(현재인덱스, callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-                DB일간데이터리스트(현재인덱스, callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-                DB일간데이터리스트(현재인덱스, callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-                DB일간데이터리스트(현재인덱스, callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-                DB일간데이터리스트(현재인덱스, callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-                DB일간데이터리스트(현재인덱스, callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)) > 900 Then
+                    DB일간데이터리스트(현재인덱스, callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+                    DB일간데이터리스트(현재인덱스, callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+
+                    startPoint += 1
+                End If
+
 
             Next
 
@@ -794,15 +801,30 @@ Module realtime_ebest
             일분옵션데이터(callput).HangSaGa = it.HangSaGa
 
             Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", 0))
+
+            Dim startPoint As Integer = 0
+
+            For i As Integer = 0 To Count - 1
+                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)) > 900 Then
+                    일분옵션데이터(callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
+                    일분옵션데이터(callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
+                    일분옵션데이터(callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
+                    일분옵션데이터(callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
+                    일분옵션데이터(callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
+                    일분옵션데이터(callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+                    startPoint += 1
+                End If
+            Next
+
             'EBEST는 장 시작전에도 1개가 들어와서 이렇게 1개만 들어올 때 장 전인지를 거래량으로 판단한다
             If Count <= 1 Then
                 If 거래량AtFirst > 0 Then
-                    timeIndex_1Min = Count   'Time의 Count
+                    timeIndex_1Min = startPoint   'Time의 Count
                 Else
                     timeIndex_1Min = 0
                 End If
             Else
-                timeIndex_1Min = Count   'Time의 Count
+                timeIndex_1Min = startPoint   'Time의 Count
             End If
             currentIndex_1MIn = timeIndex_1Min - 1
 
@@ -810,15 +832,6 @@ Module realtime_ebest
             If currentIndex_1MIn >= 0 And callput = 1 Then
                 ReceiveCount += 1
             End If
-
-            For i As Integer = 0 To Count - 1
-                일분옵션데이터(callput).ctime(i) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-                일분옵션데이터(callput).price(i, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-                일분옵션데이터(callput).price(i, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-                일분옵션데이터(callput).price(i, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-                일분옵션데이터(callput).price(i, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-                일분옵션데이터(callput).거래량(i) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
-            Next
 
 
 

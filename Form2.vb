@@ -121,16 +121,14 @@ Public Class Form2
                 grid_3.Columns(i).Width = 70
             Next
 
-
-
             grid_3.Columns(0).HeaderText = " 주체"
             grid_3.Columns(1).HeaderText = "포인트수"
             grid_3.Columns(2).HeaderText = "금액"
             grid_3.Columns(3).HeaderText = "기울기"
             grid_3.Columns(4).HeaderText = "신호_점수"
-            grid_3.Columns(5).HeaderText = ""
-            grid_3.Columns(3).Width = 100
-            grid_3.Columns(0).Width = 100
+            grid_3.Columns(5).HeaderText = "포인트 리스트"
+            grid_3.Columns(3).Width = 140
+            grid_3.Columns(5).Width = 140
 
 
             '데이터 입력하기
@@ -155,17 +153,12 @@ Public Class Form2
                 End If
                 grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
                 grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
-
-                If i = 3 And 금액 = 0 Then Continue For  '외국인 선물 순매수가 0이 간헐적으로 나오는 문제를 해결하기 위함
-
                 grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
                 If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
                 If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
 
+                Dim 시작전기울기 = Calc_직선기울기계산(0)
                 grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(틱당기울기계산(i, E2_tick_count_기준), 1)
-
-
-
                 grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
 
                 Dim str As String = ""
@@ -410,14 +403,10 @@ Public Class Form2
 
                     If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
                         Dim target순매수 As Long = Get순매수(i, j)
-
-                        If i = currentIndex_순매수 And j = 3 And target순매수 = 0 Then Continue For
-
                         retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
                         Dim str As String = String.Format("시간:{0}{1}구분:{2}{3}순매수:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, j, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
                         F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
                     End If
-
 
                 Next
             Next
@@ -467,19 +456,13 @@ Public Class Form2
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
                             ElseIf i = 3 Then
 
-                                If 순매수리스트(currentIndex_순매수).외국인_선물_순매수 = 0 Then Continue For
-
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인_선물_순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
-
-
-
 
                             End If
 
                         End If
                     End If
-
                 Next
             End If
 
@@ -610,6 +593,11 @@ Public Class Form2
 
             MakeOptinList_For_1Minute(indexCount)
             TotalCount = indexCount
+
+            selectedJongmokIndex(0) = 적합한종목찾기(0)
+            selectedJongmokIndex(1) = 적합한종목찾기(1)
+            DB에서일분옵션데이터채워넣기(selectedJongmokIndex(0), timeIndex_1Min, 0)
+            DB에서일분옵션데이터채워넣기(selectedJongmokIndex(1), timeIndex_1Min, 1)
 
             F2_Clac_DisplayAllGrid()
 
@@ -931,8 +919,8 @@ Public Class Form2
                 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
             End If
 
-            'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
-            If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
+            If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
+            'If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
 
 
 
@@ -1075,7 +1063,7 @@ Public Class Form2
                         retindex = Chart2.Series(BasicSeries).Points.AddXY(i, 0) ' 위의 그래프와 X축을 통일하기 위해 0값을 모든 X값에 먼저 넣는다
 
                         'X축 시간
-                        Chart2.Series(BasicSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+                        Chart2.Series(BasicSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
                         'CA 0,1번 그리기
                         Chart2.Series(MACD_CA_기본(0)).Points.AddXY(retindex, 일분옵션데이터(callput).CA_기본(0, i))
@@ -1201,38 +1189,42 @@ Public Class Form2
                 For i = 0 To currentIndex_1MIn
                     ' main Series 입력
                     If 일분옵션데이터(callput).price(i, 1) > 0 Then
-                        retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
-                        Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+
 
                         'X축 시간
                         If 일분옵션데이터(callput).ctime(i) IsNot Nothing Then
-                            Chart1.Series(CandlestrickSeries).Points(i).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
 
-                            If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
-                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
-                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
-                            ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
-                                Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
-                                Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                            If 일분옵션데이터(callput).ctime(i) > 900 Then
+                                retindex = Chart1.Series(CandlestrickSeries).Points.AddXY(i, 일분옵션데이터(callput).price(i, 1)) '고가를 처음 넣는다
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(1) = 일분옵션데이터(callput).price(i, 2) '저가
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(2) = 일분옵션데이터(callput).price(i, 0) '시가
+                                Chart1.Series(CandlestrickSeries).Points(retindex).YValues(3) = 일분옵션데이터(callput).price(i, 3) '종가
+                                Chart1.Series(CandlestrickSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))
+
+                                If 일분옵션데이터(callput).price(i, 0) < 일분옵션데이터(callput).price(i, 3) Then '시가보다 종가가 크면 
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Red
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Red
+                                ElseIf 일분옵션데이터(callput).price(i, 0) > 일분옵션데이터(callput).price(i, 3) Then
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).Color = Color.Blue
+                                    Chart1.Series(CandlestrickSeries).Points(retindex).BorderColor = Color.Blue
+                                End If
+
+                                '이동평균선 그리기
+                                If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
+
+                                Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
+                                Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
+
+                                If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
+                                If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
+
+                                'MACD이평 그리기
+                                For j As Integer = 0 To 1 'MA_Interval.Length - 1
+
+                                    If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
+
+                                Next
                             End If
-
-                            '이동평균선 그리기
-                            If 일분옵션데이터(callput).이동평균선(i) > 0 Then Chart1.Series(이동평균시리즈).Points.AddXY(retindex, 일분옵션데이터(callput).이동평균선(i))
-
-                            Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, 일분옵션데이터(callput).이동평균선(i))
-                            Chart1.Series(CandlestrickSeries).Points(retindex).ToolTip = str
-
-                            If maxValue < 일분옵션데이터(callput).price(i, 1) + 0.1 Then maxValue = 일분옵션데이터(callput).price(i, 1) + 0.1 '계산해놓은 big, small로 보니 마지막 CurrentIndex의 값이 반영이 안되어 여기서 일일이 계산해서 처리하도록 변경 20220607
-                            If minValue > 일분옵션데이터(callput).price(i, 2) - 0.1 Then minValue = 일분옵션데이터(callput).price(i, 2) - 0.1
-
-                            'MACD이평 그리기
-                            For j As Integer = 0 To 1 'MA_Interval.Length - 1
-
-                                If 일분옵션데이터(callput).MA(j, i) > 0 Then Chart1.Series(MACD_MA(j)).Points.AddXY(retindex, 일분옵션데이터(callput).MA(j, i))
-
-                            Next
 
                         End If
 
@@ -1426,7 +1418,7 @@ Public Class Form2
         Select Case 남은날짜
             Case 0
                 중간청산목표이익 = "0.5"
-                켈리지수비율 = "0.21"
+                켈리지수비율 = "0.20"
 
 
                 '옵션가기준손절매 = "-0.30"
@@ -1449,7 +1441,7 @@ Public Class Form2
                 chk_실거래실행.Checked = False
 
             Case 3
-                켈리지수비율 = "0.21"
+                켈리지수비율 = "0.20"
                 중간청산목표이익 = "0.5"
 
                 '옵션가기준손절매 = "-0.30"
@@ -2007,10 +1999,10 @@ Public Class Form2
     Private Sub 매도조건테스트()
 
         '0일 3일
-        Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.25", "-0.23", "-0.21", "-0.19", "-0.17", "-0.15"} 'M
-        Dim 중간청산이익목표() As String = {"0.50", "0.40", "0.33", "0.25"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.1, -0.1, 0.2, 0, 0.3, -0.2}
+        Dim 익절차() As String = {"11", "10", "09"} 'L
+        Dim 옵션기준손절매() As String = {"-0.30", "-0.28", "-0.26", "-0.24", "-0.22"} 'M
+        Dim 중간청산이익목표() As String = {"0.50", "0.45", "0.40", "0.35"} 'N
+
         '1,2,6일
         'Dim 익절차() As String = {"11", "10"} 'L
         'Dim 옵션기준손절매() As String = {"-0.20", "-0.18", "-0.16", "-0.14", "-0.22", "-0.12"} 'M
@@ -2028,35 +2020,35 @@ Public Class Form2
         For l As Integer = 0 To 익절차.Length - 1
             For m As Integer = 0 To 옵션기준손절매.Length - 1
                 For n As Integer = 0 To 중간청산이익목표.Length - 1
-                    For o As Integer = 0 To 중간매도후목표이익율_temp.Length - 1
-                        txt_F2_익절차.Text = 익절차(l)
-                        txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
-                        txt_F2_중간청산비율.Text = 중간청산이익목표(n)
-                        중간매도후목표이익율 = 중간매도후목표이익율_temp(o)
 
-                        txt_F2_익절차.Refresh()
-                        txt_F2_옵션가기준손절매.Refresh()
-                        txt_F2_중간청산비율.Refresh()
 
-                        Dim cntstr As String
-                        If cnt < 10 Then
-                            cntstr = "00" & cnt.ToString()
-                        ElseIf cnt >= 10 And cnt < 100 Then
-                            cntstr = "0" & cnt.ToString()
-                        Else
-                            cntstr = cnt.ToString()
-                        End If
+                    txt_F2_익절차.Text = 익절차(l)
+                    txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
+                    txt_F2_중간청산비율.Text = 중간청산이익목표(n)
 
-                        SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
+                    txt_F2_익절차.Refresh()
+                    txt_F2_옵션가기준손절매.Refresh()
+                    txt_F2_중간청산비율.Refresh()
 
-                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}_O_{3}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율)
+                    Dim cntstr As String
+                    If cnt < 10 Then
+                        cntstr = "00" & cnt.ToString()
+                    ElseIf cnt >= 10 And cnt < 100 Then
+                        cntstr = "0" & cnt.ToString()
+                    Else
+                        cntstr = cnt.ToString()
+                    End If
 
-                        Console.WriteLine(SoonMesuSimulation_조건)
-                        Add_Log("", SoonMesuSimulation_조건)
-                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                    SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
 
-                        cnt += 1
-                    Next
+                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
+
+                    Console.WriteLine(SoonMesuSimulation_조건)
+                    Add_Log("", SoonMesuSimulation_조건)
+                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                    cnt += 1
+
                 Next
             Next
         Next
@@ -2822,4 +2814,6 @@ Public Class Form2
     Private Sub btn_신호를저장_Click(sender As Object, e As EventArgs) Handles btn_신호를저장.Click
         InsertRealShinhoList()
     End Sub
+
+
 End Class

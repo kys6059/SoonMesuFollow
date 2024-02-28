@@ -358,7 +358,7 @@ Module DBHandler
             Dim jong As Single = Val(row("jong"))
             Dim volume As Integer = Val(row("volume"))
 
-            If ctime <= 1535 And ctime > 0 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함 'EBEST 데이터에는 ctime이 null인게 섞여 있어 0보다 큰거 확인 로직 추가
+            If ctime <= 1535 And ctime > 900 Then  '과거 DB Data가 79번인덱스에 0이 들어오는 경우가 있어서 이걸 제외하기 위해 이 로직 추가함 'EBEST 데이터에는 ctime이 null인게 섞여 있어 0보다 큰거 확인 로직 추가
 
                 Dim callput As Integer
                 If iFlag = 1 Then
