@@ -23,15 +23,15 @@ Partial Class Form2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
-        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_자동저장모드 = New System.Windows.Forms.CheckBox()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
@@ -237,7 +237,7 @@ Partial Class Form2
         Me.TableLayoutPanel1.Controls.Add(Me.Label2, 1, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.HSc_F2_시간조절, 0, 1)
         Me.TableLayoutPanel1.Controls.Add(Me.btn_F2_SelectDB, 2, 2)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(1105, 15)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(993, 12)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 3
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
@@ -363,17 +363,17 @@ Partial Class Form2
         '
         'F2_Chart_순매수
         '
-        ChartArea4.Name = "ChartArea1"
-        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea4)
-        Legend4.Name = "Legend1"
-        Me.F2_Chart_순매수.Legends.Add(Legend4)
+        ChartArea1.Name = "ChartArea1"
+        Me.F2_Chart_순매수.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.F2_Chart_순매수.Legends.Add(Legend1)
         Me.F2_Chart_순매수.Location = New System.Drawing.Point(560, 235)
         Me.F2_Chart_순매수.Name = "F2_Chart_순매수"
-        Series4.ChartArea = "ChartArea1"
-        Series4.Legend = "Legend1"
-        Series4.Name = "Series1"
-        Me.F2_Chart_순매수.Series.Add(Series4)
-        Me.F2_Chart_순매수.Size = New System.Drawing.Size(971, 748)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.F2_Chart_순매수.Series.Add(Series1)
+        Me.F2_Chart_순매수.Size = New System.Drawing.Size(981, 748)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
         '
@@ -683,7 +683,7 @@ Partial Class Form2
         Me.grid_3.ReadOnly = True
         Me.grid_3.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.grid_3.RowTemplate.Height = 23
-        Me.grid_3.Size = New System.Drawing.Size(536, 145)
+        Me.grid_3.Size = New System.Drawing.Size(432, 145)
         Me.grid_3.TabIndex = 7
         '
         'grid_shinho
@@ -722,7 +722,7 @@ Partial Class Form2
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
         Me.TableLayoutPanel4.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
-        Me.TableLayoutPanel4.Size = New System.Drawing.Size(536, 43)
+        Me.TableLayoutPanel4.Size = New System.Drawing.Size(432, 43)
         Me.TableLayoutPanel4.TabIndex = 9
         '
         'chk_F2_DATA_0
@@ -733,7 +733,7 @@ Partial Class Form2
         Me.chk_F2_DATA_0.ForeColor = System.Drawing.Color.Gray
         Me.chk_F2_DATA_0.Location = New System.Drawing.Point(5, 5)
         Me.chk_F2_DATA_0.Name = "chk_F2_DATA_0"
-        Me.chk_F2_DATA_0.Size = New System.Drawing.Size(98, 33)
+        Me.chk_F2_DATA_0.Size = New System.Drawing.Size(78, 33)
         Me.chk_F2_DATA_0.TabIndex = 36
         Me.chk_F2_DATA_0.Text = "합계"
         Me.chk_F2_DATA_0.UseVisualStyleBackColor = True
@@ -746,9 +746,9 @@ Partial Class Form2
         Me.chk_F2_DATA_2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_F2_DATA_2.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.chk_F2_DATA_2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
-        Me.chk_F2_DATA_2.Location = New System.Drawing.Point(217, 5)
+        Me.chk_F2_DATA_2.Location = New System.Drawing.Point(177, 5)
         Me.chk_F2_DATA_2.Name = "chk_F2_DATA_2"
-        Me.chk_F2_DATA_2.Size = New System.Drawing.Size(98, 33)
+        Me.chk_F2_DATA_2.Size = New System.Drawing.Size(78, 33)
         Me.chk_F2_DATA_2.TabIndex = 35
         Me.chk_F2_DATA_2.Text = "기관"
         Me.chk_F2_DATA_2.UseVisualStyleBackColor = True
@@ -761,9 +761,9 @@ Partial Class Form2
         Me.chk_F2_DATA_1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_F2_DATA_1.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.chk_F2_DATA_1.ForeColor = System.Drawing.Color.Blue
-        Me.chk_F2_DATA_1.Location = New System.Drawing.Point(111, 5)
+        Me.chk_F2_DATA_1.Location = New System.Drawing.Point(91, 5)
         Me.chk_F2_DATA_1.Name = "chk_F2_DATA_1"
-        Me.chk_F2_DATA_1.Size = New System.Drawing.Size(98, 33)
+        Me.chk_F2_DATA_1.Size = New System.Drawing.Size(78, 33)
         Me.chk_F2_DATA_1.TabIndex = 34
         Me.chk_F2_DATA_1.Text = "외국인"
         Me.chk_F2_DATA_1.UseVisualStyleBackColor = True
@@ -774,10 +774,10 @@ Partial Class Form2
         Me.lbl_F2_매매신호.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.lbl_F2_매매신호.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_매매신호.Font = New System.Drawing.Font("굴림", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.lbl_F2_매매신호.Location = New System.Drawing.Point(323, 5)
+        Me.lbl_F2_매매신호.Location = New System.Drawing.Point(263, 5)
         Me.lbl_F2_매매신호.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_매매신호.Name = "lbl_F2_매매신호"
-        Me.lbl_F2_매매신호.Size = New System.Drawing.Size(98, 33)
+        Me.lbl_F2_매매신호.Size = New System.Drawing.Size(78, 33)
         Me.lbl_F2_매매신호.TabIndex = 10
         Me.lbl_F2_매매신호.Text = "0"
         Me.lbl_F2_매매신호.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -786,9 +786,9 @@ Partial Class Form2
         '
         Me.txt_F2_최종방향.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txt_F2_최종방향.Font = New System.Drawing.Font("굴림", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me.txt_F2_최종방향.Location = New System.Drawing.Point(429, 5)
+        Me.txt_F2_최종방향.Location = New System.Drawing.Point(349, 5)
         Me.txt_F2_최종방향.Name = "txt_F2_최종방향"
-        Me.txt_F2_최종방향.Size = New System.Drawing.Size(102, 33)
+        Me.txt_F2_최종방향.Size = New System.Drawing.Size(78, 33)
         Me.txt_F2_최종방향.TabIndex = 9
         Me.txt_F2_최종방향.Text = "-"
         '
@@ -996,7 +996,7 @@ Partial Class Form2
         Me.TableLayoutPanel6.Controls.Add(Me.btn_당일반복, 0, 1)
         Me.TableLayoutPanel6.Controls.Add(Me.lbl_ReceiveCounter, 1, 0)
         Me.TableLayoutPanel6.Controls.Add(Me.txt_F2_실험조건, 2, 0)
-        Me.TableLayoutPanel6.Location = New System.Drawing.Point(1106, 143)
+        Me.TableLayoutPanel6.Location = New System.Drawing.Point(994, 140)
         Me.TableLayoutPanel6.Name = "TableLayoutPanel6"
         Me.TableLayoutPanel6.RowCount = 2
         Me.TableLayoutPanel6.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 43.75703!))
@@ -1072,17 +1072,17 @@ Partial Class Form2
         '
         'Chart1
         '
-        ChartArea5.Name = "ChartArea1"
-        Me.Chart1.ChartAreas.Add(ChartArea5)
-        Legend5.Name = "Legend1"
-        Me.Chart1.Legends.Add(Legend5)
-        Me.Chart1.Location = New System.Drawing.Point(1537, 235)
+        ChartArea2.Name = "ChartArea1"
+        Me.Chart1.ChartAreas.Add(ChartArea2)
+        Legend2.Name = "Legend1"
+        Me.Chart1.Legends.Add(Legend2)
+        Me.Chart1.Location = New System.Drawing.Point(1553, 12)
         Me.Chart1.Name = "Chart1"
-        Series5.ChartArea = "ChartArea1"
-        Series5.Legend = "Legend1"
-        Series5.Name = "Series1"
-        Me.Chart1.Series.Add(Series5)
-        Me.Chart1.Size = New System.Drawing.Size(1042, 464)
+        Series2.ChartArea = "ChartArea1"
+        Series2.Legend = "Legend1"
+        Series2.Name = "Series1"
+        Me.Chart1.Series.Add(Series2)
+        Me.Chart1.Size = New System.Drawing.Size(1026, 687)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
         '
@@ -2376,17 +2376,17 @@ Partial Class Form2
         '
         'Chart2
         '
-        ChartArea6.Name = "ChartArea1"
-        Me.Chart2.ChartAreas.Add(ChartArea6)
-        Legend6.Name = "Legend1"
-        Me.Chart2.Legends.Add(Legend6)
-        Me.Chart2.Location = New System.Drawing.Point(1537, 705)
+        ChartArea3.Name = "ChartArea1"
+        Me.Chart2.ChartAreas.Add(ChartArea3)
+        Legend3.Name = "Legend1"
+        Me.Chart2.Legends.Add(Legend3)
+        Me.Chart2.Location = New System.Drawing.Point(1553, 705)
         Me.Chart2.Name = "Chart2"
-        Series6.ChartArea = "ChartArea1"
-        Series6.Legend = "Legend1"
-        Series6.Name = "Series1"
-        Me.Chart2.Series.Add(Series6)
-        Me.Chart2.Size = New System.Drawing.Size(1042, 278)
+        Series3.ChartArea = "ChartArea1"
+        Series3.Legend = "Legend1"
+        Series3.Name = "Series1"
+        Me.Chart2.Series.Add(Series3)
+        Me.Chart2.Size = New System.Drawing.Size(1026, 278)
         Me.Chart2.TabIndex = 40
         Me.Chart2.Text = "Chart2"
         '

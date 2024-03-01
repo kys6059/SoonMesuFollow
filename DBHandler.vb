@@ -785,7 +785,7 @@ Module DBHandler
     Public Sub DB에서일분옵션데이터채워넣기(ByVal 인덱스 As Integer, ByVal lineCount As Integer, ByVal callput As Integer)
 
 
-
+        If 인덱스 < 0 Then Return
         For i As Integer = 0 To lineCount - 1
 
 
