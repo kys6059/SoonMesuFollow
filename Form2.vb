@@ -157,17 +157,20 @@ Public Class Form2
                 If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
                 If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
 
-                Dim 시작전기울기 = Calc_직선기울기계산(0)
+                '                Dim 시작전기울기 = Calc_직선기울기계산(0)
+
                 grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(틱당기울기계산(i, E2_tick_count_기준), 1)
+
+
+
                 grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
 
-                Dim str As String = ""
-                For j = 0 To PIP_Point_Lists(i).PointCount - 1
-                    str = str & PIP_Point_Lists(i).PoinIndexList(j) & ", "
-
-                Next
-                grid_3.Rows(i).Cells(5).Value = str
-                grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+                'Dim str As String = ""
+                'For j = 0 To PIP_Point_Lists(i).PointCount - 1
+                'Str = str & PIP_Point_Lists(i).PoinIndexList(j) & ", "
+                'Next
+                'grid_3.Rows(i).Cells(5).Value = str
+                'grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
                 grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
 
             Next
@@ -403,6 +406,9 @@ Public Class Form2
 
                     If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
                         Dim target순매수 As Long = Get순매수(i, j)
+
+                        If j = 3 And target순매수 = 0 And i = currentIndex_순매수 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
+
                         retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
                         Dim str As String = String.Format("시간:{0}{1}구분:{2}{3}순매수:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, j, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
                         F2_Chart_순매수.Series(For_Kig_Series).Points(retIndex).ToolTip = str
@@ -455,6 +461,9 @@ Public Class Form2
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).기관순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
                             ElseIf i = 3 Then
+
+
+                                If i = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
 
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인_선물_순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)

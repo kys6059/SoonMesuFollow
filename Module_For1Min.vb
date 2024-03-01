@@ -748,9 +748,16 @@ Module Module_For1Min
 
             current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
             prev = 순매수리스트(tempIndex).외국인_선물_순매수
+
+            If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 Then
+                current = 순매수리스트(currentIndex_순매수 - 1).외국인_선물_순매수
+                prev = 순매수리스트(tempIndex - 1).외국인_선물_순매수
+            End If
+
         End If
 
-        Dim ret As Single = (current - prev) / tick_count
+            Dim ret As Single = (current - prev) / tick_count
+
         Return ret
 
     End Function
