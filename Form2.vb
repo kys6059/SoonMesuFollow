@@ -54,8 +54,8 @@ Public Class Form2
         DrawGraph()
         txt_F2_최종방향.Text = 이전순매수방향
 
-        lbl_F2_콜중간청산갯수.Text = 콜중간청산개수.ToString()
-        lbl_F2_풋중간청산갯수.Text = 풋중간청산개수.ToString()
+        lbl_F2_콜중간청산갯수.Text = 콜중간청산가능개수.ToString()
+        lbl_F2_풋중간청산갯수.Text = 풋중간청산가능개수.ToString()
     End Sub
 
     Private Sub F2_Clac_DisplayAllGrid()
@@ -893,6 +893,7 @@ Public Class Form2
     End Sub
 
     Private Sub btn_F2_동일조건반복_Click(sender As Object, e As EventArgs) Handles btn_F2_동일조건반복.Click
+
         chk_실거래실행.Checked = False
         당일반복중_flag = True
 
@@ -905,6 +906,7 @@ Public Class Form2
         자동반복계산로직(0, True)
         Add_Log("Form2 자동 반복 계산로직 완료", "")
         당일반복중_flag = False
+
     End Sub
 
     Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal 일일조건설정flag As Boolean)
@@ -928,8 +930,8 @@ Public Class Form2
                 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
             End If
 
-            If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
-            'If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
+            'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
+            If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
 
 
 
@@ -1418,65 +1420,33 @@ Public Class Form2
 
         남은날짜 = 남은날짜 Mod 7
         Dim isWeekly As Boolean = False
-        Dim 중간청산목표이익 As String = txt_F2_중간청산비율.Text
+
         Dim 켈리지수비율 As String = txt_F2_켈리지수비율.Text
-        Dim 옵션가기준손절매 As String = txt_F2_옵션가기준손절매.Text
-        Dim 익절차 As String = txt_F2_익절차.Text
+
+
         If txt_week_정규.Text = "W" Then isWeekly = True
 
         Select Case 남은날짜
             Case 0
-                중간청산목표이익 = "0.5"
-                켈리지수비율 = "0.20"
-
-
-                '옵션가기준손절매 = "-0.30"
-                익절차 = "11"
-
+                켈리지수비율 = "0.21"
             Case 1
                 켈리지수비율 = "0.01"
-                중간청산목표이익 = "0.4"
-
-                '옵션가기준손절매 = "-0.27"
-                익절차 = "11"
                 chk_실거래실행.Checked = False
-
             Case 2
                 켈리지수비율 = "0.01"
-                중간청산목표이익 = "0.4"
-
-                '옵션가기준손절매 = "-0.24"
-                익절차 = "11"
                 chk_실거래실행.Checked = False
-
             Case 3
-                켈리지수비율 = "0.20"
-                중간청산목표이익 = "0.5"
-
-                '옵션가기준손절매 = "-0.30"
-                익절차 = "11"
-
+                켈리지수비율 = "0.21"
             Case 6
                 켈리지수비율 = "0.01"
-                중간청산목표이익 = "0.40"
-
                 chk_실거래실행.Checked = False
-
-                '옵션가기준손절매 = "-0.28"
-                익절차 = "11"
 
         End Select
 
-        txt_F2_중간청산비율.Text = 중간청산목표이익
+
         txt_F2_켈리지수비율.Text = 켈리지수비율
-        txt_F2_옵션가기준손절매.Text = 옵션가기준손절매
-        txt_F2_익절차.Text = 익절차
 
-        txt_F2_중간청산비율.Refresh()
         txt_F2_켈리지수비율.Refresh()
-        txt_F2_옵션가기준손절매.Refresh()
-        txt_F2_익절차.Refresh()
-
 
     End Sub
 
@@ -2008,9 +1978,10 @@ Public Class Form2
     Private Sub 매도조건테스트()
 
         '0일 3일
-        Dim 익절차() As String = {"11", "10", "09"} 'L
-        Dim 옵션기준손절매() As String = {"-0.30", "-0.28", "-0.26", "-0.24", "-0.22"} 'M
-        Dim 중간청산이익목표() As String = {"0.50", "0.45", "0.40", "0.35"} 'N
+        Dim 익절차() As String = {"11"} 'L
+        Dim 옵션기준손절매() As String = {"-0.23"} 'M
+        Dim 중간청산이익목표() As String = {"0.34", "0.37", "0.40"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.19, 0.22, 0.25, 0.28, 0.32}
 
         '1,2,6일
         'Dim 익절차() As String = {"11", "10"} 'L
@@ -2029,35 +2000,40 @@ Public Class Form2
         For l As Integer = 0 To 익절차.Length - 1
             For m As Integer = 0 To 옵션기준손절매.Length - 1
                 For n As Integer = 0 To 중간청산이익목표.Length - 1
+                    For o As Integer = 0 To 중간매도후목표이익율_temp.Length - 1
+
+                        txt_F2_익절차.Text = 익절차(l)
+                        txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
+
+                        첫번째중간매도이익율 = 중간청산이익목표(n)
+                        두번째중간매도이익율 = 첫번째중간매도이익율 + 0.3
+                        세번째중간매도이익율 = 두번째중간매도이익율 + 0.3
+
+                        중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
 
 
-                    txt_F2_익절차.Text = 익절차(l)
-                    txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
-                    txt_F2_중간청산비율.Text = 중간청산이익목표(n)
+                        txt_F2_익절차.Refresh()
+                        txt_F2_옵션가기준손절매.Refresh()
 
-                    txt_F2_익절차.Refresh()
-                    txt_F2_옵션가기준손절매.Refresh()
-                    txt_F2_중간청산비율.Refresh()
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
 
-                    Dim cntstr As String
-                    If cnt < 10 Then
-                        cntstr = "00" & cnt.ToString()
-                    ElseIf cnt >= 10 And cnt < 100 Then
-                        cntstr = "0" & cnt.ToString()
-                    Else
-                        cntstr = cnt.ToString()
-                    End If
+                        SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
 
-                    SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
+                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o))
 
-                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_K_{0}_L_{1}_M_{2}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n))
+                        Console.WriteLine(SoonMesuSimulation_조건)
+                        Add_Log("", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
-                    Console.WriteLine(SoonMesuSimulation_조건)
-                    Add_Log("", SoonMesuSimulation_조건)
-                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-
-                    cnt += 1
-
+                        cnt += 1
+                    Next
                 Next
             Next
         Next

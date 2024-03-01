@@ -147,7 +147,12 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
-    Public 중간매도후목표이익율 As Single = 0.1
+    Public 첫번째중간매도이익율 As Single = 0.34
+    Public 두번째중간매도이익율 As Single = 0.64
+    Public 세번째중간매도이익율 As Single = 0.94
+
+    Public 중간매도후이익율차이 As Single = 0.25
+
 
 
     Public Sub CalcAlgorithmAll()
@@ -198,7 +203,7 @@ Module Algorithm_SoonMeSu
 
                     If ret = "상승" Then ' 중립에서 상승으로 전환 
 
-                        반대방향신호죽이는함수("A", 1, "change")                                 '이전 신호확인해서 죽이기
+                        '반대방향신호죽이는함수("A", 1, "change")                                 '이전 신호확인해서 죽이기
 
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A", 0)               '신규 신호 입력하기
                         SoonMesuShinhoList.Add(shinho)
@@ -207,7 +212,7 @@ Module Algorithm_SoonMeSu
 
                     ElseIf ret = "하락" Then '중립에서 하락으로 전환
 
-                        반대방향신호죽이는함수("A", 0, "change")                                   '이전 신호확인해서 죽이기
+                        '반대방향신호죽이는함수("A", 0, "change")                                   '이전 신호확인해서 죽이기
 
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("A", 1)             '신규 신호 입력하기
                         SoonMesuShinhoList.Add(shinho)
@@ -730,44 +735,6 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Private Sub 반대방향신호죽이는함수(ByVal 신호ID As String, ByVal callput As Integer, ByVal 매도사유 As String)
-
-        If SoonMesuShinhoList IsNot Nothing Then
-
-            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
-
-                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
-                If s.A03_신호ID = 신호ID And s.A08_콜풋 = callput And s.A15_현재상태 = 1 Then  '죽어야하는 신호이고 현재상태가 살아있는 상태라면
-
-                    s.A05_신호해제순매수 = Get순매수(currentIndex_순매수, 0)
-                    s.A07_신호해제종합주가지수 = 순매수리스트(currentIndex_순매수).코스피지수
-                    s.A15_현재상태 = 0
-
-                    s.A18_매도시간 = 순매수리스트(currentIndex_순매수).sTime
-                    s.A19_매도Index = currentIndex_순매수
-                    s.A20_매도사유 = 매도사유
-
-                    Dim 일분옵션데이터_CurrentIndex As Integer = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-                    If 일분옵션데이터_CurrentIndex >= 0 Then s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                    s.A22_신호해제가격 = s.A14_현재가격
-
-                    If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                        Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                        s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
-                    End If
-
-                    If callput = 0 Then s.A55_메모 = Math.Round(s.A07_신호해제종합주가지수 - s.A06_신호발생종합주가지수, 2)
-                    If callput = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - s.A07_신호해제종합주가지수, 2)
-
-                    SoonMesuShinhoList(i) = s
-
-                    '이전순매수방향 = "중립"   '이렇게 해 놓으면 기존에 떳다가 해제된 신호 방향으로 다시 신호가 발생된다
-                End If
-            Next
-        End If
-    End Sub
 
     Public Function 현재살아있는신호의종목리턴하는함수(ByVal callput As Integer) As String
 
@@ -856,22 +823,41 @@ Module Algorithm_SoonMeSu
             s.A20_매도사유 = 매도사유
             s.A22_신호해제가격 = s.A14_현재가격
 
-            If s.A17_중간매도Flag = 1 Then '중간청산을 했으면 환산이익율을 조정한다
-                Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                s.A21_환산이익율 = Math.Round((s.A21_환산이익율 + 중간청산목표이익율) / 2, 3)
+            Dim 나머지, 첫번째, 두번째, 세번째, 최종 As Single
+
+            If s.A17_중간매도Flag = 0 Then
+
+                최종 = s.A21_환산이익율 * 1.0
+
+            ElseIf s.A17_중간매도Flag = 1 Then
+
+                나머지 = s.A21_환산이익율 * 0.7
+                첫번째 = 첫번째중간매도이익율 * 0.3
+                최종 = 나머지 + 첫번째
+
+            ElseIf s.A17_중간매도Flag = 2 Then
+
+                나머지 = s.A21_환산이익율 * 0.4
+                첫번째 = 첫번째중간매도이익율 * 0.3
+                두번째 = 두번째중간매도이익율 * 0.3
+                최종 = 나머지 + 첫번째 + 두번째
+
+            ElseIf s.A17_중간매도Flag = 3 Then
+
+                나머지 = s.A21_환산이익율 * 0.2
+                첫번째 = 첫번째중간매도이익율 * 0.3
+                두번째 = 두번째중간매도이익율 * 0.3
+                세번째 = 세번째중간매도이익율 * 0.2
+                최종 = 나머지 + 첫번째 + 두번째 + 세번째
+
             End If
+
+
+            s.A21_환산이익율 = Math.Round(최종, 3)
 
             If EBESTisConntected = True Then Add_Log("신호", String.Format("해제신호 발생 AT {0}, 사유 = {1}", s.A18_매도시간, 매도사유))
 
-        Else  '살아 있으면 중간청산 체크하기
-            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
-                s.A17_중간매도Flag = 1
-            End If
-
         End If
-
 
     End Sub
 
@@ -893,11 +879,15 @@ Module Algorithm_SoonMeSu
         End If
 
 
-
-
         '옵션가격 기준 손절매, 익절
         Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-        If s.A17_중간매도Flag = 1 Then 옵션가손절매기준 = 중간매도후목표이익율   ' 중간매도가 되면 손절매 기준으로 0으로 강제로 바꿔서 수익을 좋게 만든다
+        If s.A17_중간매도Flag = 1 Then
+            옵션가손절매기준 = 첫번째중간매도이익율 - 중간매도후이익율차이   ' 중간매도가 되면 손절매 기준을 올려서 수익을 좋게 만든다
+        ElseIf s.A17_중간매도Flag = 2 Then
+            옵션가손절매기준 = 두번째중간매도이익율 - 중간매도후이익율차이
+        ElseIf s.A17_중간매도Flag = 3 Then
+            옵션가손절매기준 = 세번째중간매도이익율 - 중간매도후이익율차이
+        End If
 
         Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
         If s.A21_환산이익율 < 옵션가손절매기준 Then
@@ -942,23 +932,27 @@ Module Algorithm_SoonMeSu
 
         '중간청산 후 50일선 하향돌파 시 청산
         Dim 현재이평선 As Single = 일분옵션데이터(s.A08_콜풋).이동평균선(일분옵션데이터_CurrentIndex)
-        If s.A17_중간매도Flag = 1 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 현재이평선 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < 현재이평선 Then
+        If s.A17_중간매도Flag > 0 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 현재이평선 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < 현재이평선 Then
             매도사유 = "below50"
             s.A14_현재가격 = Math.Round(현재이평선 - 0.01, 2)
             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
             s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
         End If
 
-        If 매도사유 = "" Then  '살아 있으면 중간청산 체크하기
 
-            Dim 중간청산목표이익율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-            If 중간청산할지설정FLAG = True And s.A21_환산이익율 > 중간청산목표이익율 And s.A17_중간매도Flag = False Then
+        Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+        If 중간청산할지설정FLAG = True Then
+
+            If s.A17_중간매도Flag = 0 And s.A21_환산이익율 > 첫번째중간매도이익율 Then
                 s.A17_중간매도Flag = 1
+            ElseIf s.A17_중간매도Flag = 1 And s.A21_환산이익율 > 두번째중간매도이익율 Then
+                s.A17_중간매도Flag = 2
+            ElseIf s.A17_중간매도Flag = 2 And s.A21_환산이익율 > 세번째중간매도이익율 Then
+                s.A17_중간매도Flag = 3
 
             End If
-        End If
 
+        End If
 
         '아래는 그냥 정보를 업데이트하는 코드들
         If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
@@ -1206,7 +1200,7 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Public Function is중간청산Flag(ByVal callput As Integer) As Boolean
+    Public Function is중간청산Flag(ByVal callput As Integer) As Integer
 
         Dim ret As Boolean = False
         If SoonMesuShinhoList IsNot Nothing Then
@@ -1215,10 +1209,7 @@ Module Algorithm_SoonMeSu
 
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A08_콜풋 = callput And s.A15_현재상태 = 1 Then   '방향이 같고 현재 살아있는 상태라면
-                    If s.A17_중간매도Flag = 1 Then
-                        ret = True
-                    End If
-
+                    ret = s.A17_중간매도Flag
                 End If
             Next
         End If
@@ -1375,7 +1366,10 @@ Module Algorithm_SoonMeSu
 
                             If Mid(it.A01_종복번호, 1, 1) = "2" Then  '콜 매수의 경우
 
-                                If is중간청산Flag(0) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                                Dim 중간청산상태값 As Integer = is중간청산Flag(0)
+
+                                If 중간청산상태값 > 0 Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1보다 같거나 크다면 이면
+
                                     Dim 종목번호 As String = it.A01_종복번호
 
                                     Dim callput As String = Mid(it.A01_종복번호, 1, 1)
@@ -1387,17 +1381,37 @@ Module Algorithm_SoonMeSu
                                     If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
                                     매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
 
+
+                                    '3회에 걸쳐 중간청산을 한다
+                                    '1회 = 0.37% 조건, 0.17% 손절가 변경, 30%, 
+                                    '2회 = 0.67% 조건, 0.40% 손절가 변경, 60%
+                                    '3회 = 0.97% 조건, 0.60% 손절가 변경, 80%
+                                    '나머지는 마지막
+
+                                    If 중간청산상태값 = 1 Then
+                                        콜중간청산가능개수 = Math.Round(콜최대구매개수 * 0.3, 0)
+
+                                    ElseIf 중간청산상태값 = 2 Then
+                                        콜중간청산가능개수 = Math.Round(콜최대구매개수 * 0.6, 0)
+                                    ElseIf 중간청산상태값 = 3 Then
+                                        콜중간청산가능개수 = Math.Round(콜최대구매개수 * 0.8, 0)
+                                    Else
+                                        Add_Log("오류", "콜 중간청산상태값 오류")
+                                    End If
+
                                     Dim count As Integer = 0
-                                    count = Math.Min(잔고와청산가능, 콜중간청산개수 - 콜현재환매개수)
+                                    count = Math.Min(잔고와청산가능, 콜중간청산가능개수 - 콜현재환매개수)
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매도(종목번호, it.A10_현재가, count, "콜__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        한종목매도(종목번호, it.A10_현재가, count, "콜__중간청산" + 중간청산상태값.ToString() + "번째", "03")  '호가유형 지정가 00, 시장가 03
                                     End If
                                 End If
 
                             Else '풋일 때  -- 오른다를 산 상태
 
-                                If is중간청산Flag(1) = True Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
+                                Dim 중간청산상태값 As Integer = is중간청산Flag(1)
+
+                                If 중간청산상태값 > 0 Then '해당하는 방향의 신호가 있고 그 신호의 중단매도 Flag가 1이면
                                     Dim 종목번호 As String = it.A01_종복번호
                                     Dim callput As String = Mid(it.A01_종복번호, 1, 1)
                                     Dim 잔고와청산가능 As Integer = Math.Min(it.A03_잔고수량, it.A04_청산가능수량)
@@ -1408,11 +1422,27 @@ Module Algorithm_SoonMeSu
                                     If price < 0.8 Then 계산count = Math.Max(CInt(-250 * price + 250), 계산count)
                                     매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
 
+                                    '3회에 걸쳐 중간청산을 한다
+                                    '1회 = 0.37% 조건, 0.17% 손절가 변경, 30%, 
+                                    '2회 = 0.67% 조건, 0.40% 손절가 변경, 60%
+                                    '3회 = 0.97% 조건, 0.60% 손절가 변경, 80%
+                                    '나머지는 마지막
+
+                                    If 중간청산상태값 = 1 Then
+                                        풋중간청산가능개수 = Math.Round(풋최대구매개수 * 0.3, 0)
+                                    ElseIf 중간청산상태값 = 2 Then
+                                        풋중간청산가능개수 = Math.Round(풋최대구매개수 * 0.6, 0)
+                                    ElseIf 중간청산상태값 = 3 Then
+                                        풋중간청산가능개수 = Math.Round(풋최대구매개수 * 0.8, 0)
+                                    Else
+                                        Add_Log("오류", "풋 중간청산상태값 오류")
+                                    End If
+
                                     Dim count As Integer = 0
-                                    count = Math.Min(잔고와청산가능, 풋중간청산개수 - 풋현재환매개수)  '중간청산개수는 최대구매개수와 동일하게 증가, 초기화하기 때문에 이걸 기준으로 환매개수를 빼서 중간청산개수까지만 매수한다
+                                    count = Math.Min(잔고와청산가능, 풋중간청산가능개수 - 풋현재환매개수)  '중간청산개수는 최대구매개수와 동일하게 증가, 초기화하기 때문에 이걸 기준으로 환매개수를 빼서 중간청산개수까지만 매수한다
                                     count = Math.Min(count, 매매1회최대수량)
                                     If count > 0 Then
-                                        한종목매도(종목번호, it.A10_현재가, count, "풋__중간청산", "03")  '호가유형 지정가 00, 시장가 03
+                                        한종목매도(종목번호, it.A10_현재가, count, "풋__중간청산 " + 중간청산상태값.ToString() + "번째", "03")  '호가유형 지정가 00, 시장가 03
                                     End If
                                 End If
                             End If

@@ -85,8 +85,9 @@ Module realtime_ebest
     Public 풋최대구매개수 As Integer = 0
     Public 콜현재환매개수 As Integer = 0
     Public 풋현재환매개수 As Integer = 0
-    Public 콜중간청산개수 As Integer = 0
-    Public 풋중간청산개수 As Integer = 0
+
+    Public 콜중간청산가능개수 As Integer = 0
+    Public 풋중간청산가능개수 As Integer = 0
 
     Public 최종투자금액 As Long = 0
     Public 콜현재까지매수금액 As Long = 0
@@ -247,8 +248,8 @@ Module realtime_ebest
             콜현재환매개수 = 0
             풋최대구매개수 = 0
             풋현재환매개수 = 0
-            콜중간청산개수 = 0
-            풋중간청산개수 = 0
+            콜중간청산가능개수 = 0
+            풋중간청산가능개수 = 0
             콜현재까지매수금액 = 0
             풋현재까지매수금액 = 0
         Else
@@ -275,9 +276,6 @@ Module realtime_ebest
                 '최대구매개수 계산   --- 팔 때 반대로 매수를 더 많이 하는 걸 방지하기 위해 추가함 20220623
                 Dim callput As String = Mid(it.A01_종복번호, 1, 1)
 
-                Dim 중간청산비율 As Single = Val(Form2.txt_F2_중간청산비율.Text)
-                If 중간청산비율 <= 0 Then 중간청산비율 = 0.5
-
                 If callput = "2" And it.A02_구분 = "매수" Then
 
                     Dim 현재종목번호 As String = Right(it.A01_종복번호, 3)
@@ -286,8 +284,6 @@ Module realtime_ebest
                         If 콜최대구매개수 < it.A03_잔고수량 Then
                             Add_Log("신규매수", String.Format("콜최대구매개수 증가 {0} to {1} ", 콜최대구매개수, it.A03_잔고수량))
                             콜최대구매개수 = it.A03_잔고수량
-
-                            콜중간청산개수 = Math.Round(콜최대구매개수 / 2, 0)
 
                         ElseIf 콜최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                             Dim temp As Integer = 콜최대구매개수 - it.A03_잔고수량
@@ -307,8 +303,6 @@ Module realtime_ebest
                         If 풋최대구매개수 < it.A03_잔고수량 Then
                             Add_Log("신규매수", String.Format("풋최대구매개수 증가 {0} to {1}", 풋최대구매개수, it.A03_잔고수량))
                             풋최대구매개수 = it.A03_잔고수량
-                            풋중간청산개수 = Math.Round(풋최대구매개수 / 2, 0)
-
 
                         ElseIf 풋최대구매개수 > it.A03_잔고수량 Then '------------------------------------------------------환매갯수 변경
                             Dim temp As Integer = 풋최대구매개수 - it.A03_잔고수량
@@ -325,13 +319,13 @@ Module realtime_ebest
             If 콜잔고있음 = False Then
                 콜최대구매개수 = 0
                 콜현재환매개수 = 0
-                콜중간청산개수 = 0
+                콜중간청산가능개수 = 0
                 콜현재까지매수금액 = 0
             End If
             If 풋잔고있음 = False Then
                 풋최대구매개수 = 0
                 풋현재환매개수 = 0
-                풋중간청산개수 = 0
+                풋중간청산가능개수 = 0
                 풋현재까지매수금액 = 0
             End If
         End If
