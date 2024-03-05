@@ -718,47 +718,52 @@ Module Module_For1Min
     End Function
 
     Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer) As Single
+        Dim ret As Single = 0
+        Try
+            Dim current, prev As Single
+            Dim cnt As Integer = 0
 
 
-        Dim current, prev As Single
-        Dim cnt As Integer = 0
 
+            Dim tempIndex As Integer = currentIndex_순매수 - tick_count
 
+            If tempIndex < 0 Or tempIndex >= 순매수리스트카운트 Then Return 0
 
-        Dim tempIndex As Integer = currentIndex_순매수 - tick_count
+            If source = 1 Then
 
-        If tempIndex < 0 Or tempIndex >= 순매수리스트카운트 Then Return 0
+                current = 순매수리스트(currentIndex_순매수).외국인순매수
+                prev = 순매수리스트(tempIndex).외국인순매수
 
-        If source = 1 Then
+            ElseIf source = 2 Then
 
-            current = 순매수리스트(currentIndex_순매수).외국인순매수
-            prev = 순매수리스트(tempIndex).외국인순매수
+                current = 순매수리스트(currentIndex_순매수).기관순매수
+                prev = 순매수리스트(tempIndex).기관순매수
 
-        ElseIf source = 2 Then
+            ElseIf source = 0 Then
 
-            current = 순매수리스트(currentIndex_순매수).기관순매수
-            prev = 순매수리스트(tempIndex).기관순매수
+                current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
+                prev = 순매수리스트(tempIndex).외국인_기관_순매수
 
-        ElseIf source = 0 Then
+            ElseIf source = 3 Then
 
-            current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
-            prev = 순매수리스트(tempIndex).외국인_기관_순매수
+                current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
+                prev = 순매수리스트(tempIndex).외국인_선물_순매수
 
-        ElseIf source = 3 Then
+                If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 And currentIndex_순매수 > 0 Then
+                    current = 순매수리스트(currentIndex_순매수 - 1).외국인_선물_순매수
+                    tick_count -= 1
+                End If
 
-            current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
-            prev = 순매수리스트(tempIndex).외국인_선물_순매수
-
-            If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 Then
-                current = 순매수리스트(currentIndex_순매수 - 1).외국인_선물_순매수
-                prev = 순매수리스트(tempIndex - 1).외국인_선물_순매수
             End If
 
-        End If
+            ret = (current - prev) / tick_count
 
-            Dim ret As Single = (current - prev) / tick_count
+        Catch ex As Exception
+            Add_Log("Exception", "틱당기울기계산")
+        End Try
 
         Return ret
+
 
     End Function
 
