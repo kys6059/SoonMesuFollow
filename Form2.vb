@@ -2764,13 +2764,10 @@ Public Class Form2
 
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
-        '매매신호처리함수()
+        매매신호처리함수()
 
 
-        일분옵션데이터(0).price(currentIndex_1MIn, 0) = 0
-        일분옵션데이터(0).price(currentIndex_1MIn, 1) = 0
-        일분옵션데이터(0).price(currentIndex_1MIn, 2) = 0
-        일분옵션데이터(0).price(currentIndex_1MIn, 3) = 0
+
 
 
     End Sub

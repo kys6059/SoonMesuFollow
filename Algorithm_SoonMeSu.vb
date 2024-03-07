@@ -888,6 +888,7 @@ Module Algorithm_SoonMeSu
         ElseIf s.A17_중간매도Flag = 3 Then
             옵션가손절매기준 = 세번째중간매도이익율 - 중간매도후이익율차이
         End If
+        Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()
 
         Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
         If s.A21_환산이익율 < 옵션가손절매기준 Then
@@ -1202,7 +1203,7 @@ Module Algorithm_SoonMeSu
 
     Public Function is중간청산Flag(ByVal callput As Integer) As Integer
 
-        Dim ret As Boolean = False
+        Dim ret As Integer = 0
         If SoonMesuShinhoList IsNot Nothing Then
 
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
@@ -1275,11 +1276,12 @@ Module Algorithm_SoonMeSu
 
         Dim is처분중 As Boolean = False
 
+
+
         'If EBESTisConntected = True Then     '---------------- 테스트할 때 쓰기 위해서 다 삭제한 버전
         If EBESTisConntected = True And 당일반복중_flag = False And ReceiveCount > 3 Then     '---------------- 당일반복 돌릴 때 문제 없도록 잘 해야 함, 시작하자마자 팔리거나 사는 걸 방지하기 위해 수신횟수를 추가함
 
             Dim 매매1회최대수량 As Integer = Val(Form2.txt_F2_1회최대매매수량.Text)
-
             '현재잔고를 검사해서 방향과 다르면 처분하기 - 이건 시간에 관계없이 한다  
             If List잔고 IsNot Nothing Then
                 For i As Integer = 0 To List잔고.Count - 1
@@ -1383,9 +1385,9 @@ Module Algorithm_SoonMeSu
 
 
                                     '3회에 걸쳐 중간청산을 한다
-                                    '1회 = 0.37% 조건, 0.17% 손절가 변경, 30%, 
-                                    '2회 = 0.67% 조건, 0.40% 손절가 변경, 60%
-                                    '3회 = 0.97% 조건, 0.60% 손절가 변경, 80%
+                                    '1회 = 0.34% 조건, 0.17% 손절가 변경, 30%, 
+                                    '2회 = 0.64% 조건, 0.40% 손절가 변경, 60%
+                                    '3회 = 0.94% 조건, 0.60% 손절가 변경, 80%
                                     '나머지는 마지막
 
                                     If 중간청산상태값 = 1 Then
@@ -1423,9 +1425,9 @@ Module Algorithm_SoonMeSu
                                     매매1회최대수량 = Math.Max(매매1회최대수량, 계산count)
 
                                     '3회에 걸쳐 중간청산을 한다
-                                    '1회 = 0.37% 조건, 0.17% 손절가 변경, 30%, 
-                                    '2회 = 0.67% 조건, 0.40% 손절가 변경, 60%
-                                    '3회 = 0.97% 조건, 0.60% 손절가 변경, 80%
+                                    '1회 = 0.34% 조건, 0.17% 손절가 변경, 30%, 
+                                    '2회 = 0.64% 조건, 0.40% 손절가 변경, 60%
+                                    '3회 = 0.94% 조건, 0.60% 손절가 변경, 80%
                                     '나머지는 마지막
 
                                     If 중간청산상태값 = 1 Then

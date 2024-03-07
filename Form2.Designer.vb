@@ -2406,7 +2406,7 @@ Partial Class Form2
         Me.AutoScroll = True
         Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(2556, 1430)
+        Me.ClientSize = New System.Drawing.Size(2556, 1413)
         Me.Controls.Add(Me.btn_신호를저장)
         Me.Controls.Add(Me.Chart2)
         Me.Controls.Add(Me.Button1)
