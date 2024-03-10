@@ -891,6 +891,8 @@ Module realtime_ebest
             이번에선택된인덱스 = selectedJongmokIndex(capplut)
         End If
 
+        If optionList Is Nothing Then Return
+
         If optionList.Count > 0 And 이번에선택된인덱스 >= 0 Then
             Dim it As ListTemplate = optionList(이번에선택된인덱스)
             Dim code As String = it.Code(capplut)

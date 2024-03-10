@@ -888,7 +888,7 @@ Module Algorithm_SoonMeSu
         ElseIf s.A17_중간매도Flag = 3 Then
             옵션가손절매기준 = 세번째중간매도이익율 - 중간매도후이익율차이
         End If
-        Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()
+        'Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()  -- 이거 지워야 함
 
         Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
         If s.A21_환산이익율 < 옵션가손절매기준 Then
