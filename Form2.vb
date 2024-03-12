@@ -107,7 +107,7 @@ Public Class Form2
 
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
-        grid_3.ColumnCount = 6
+        grid_3.ColumnCount = 5
         grid_3.RowCount = PIP_Point_Lists.Length
 
 
@@ -122,13 +122,14 @@ Public Class Form2
             Next
 
             grid_3.Columns(0).HeaderText = " 주체"
-            grid_3.Columns(1).HeaderText = "포인트수"
+            grid_3.Columns(1).HeaderText = "-"
             grid_3.Columns(2).HeaderText = "금액"
             grid_3.Columns(3).HeaderText = "기울기"
-            grid_3.Columns(4).HeaderText = "신호_점수"
-            grid_3.Columns(5).HeaderText = "포인트 리스트"
-            grid_3.Columns(3).Width = 140
-            grid_3.Columns(5).Width = 140
+            grid_3.Columns(4).HeaderText = "매도기준"
+            grid_3.Columns(0).Width = 120
+            grid_3.Columns(3).Width = 100
+            grid_3.Columns(4).Width = 100
+
 
 
             '데이터 입력하기
@@ -152,26 +153,35 @@ Public Class Form2
                     금액 = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
                 End If
                 grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
-                grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
+                'grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
                 grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
                 If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
                 If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
 
                 '                Dim 시작전기울기 = Calc_직선기울기계산(0)
+                Dim 매수기준기울기 As Single = Math.Round(틱당기울기계산(i, O_tick_count_기준), 1)
 
-                grid_3.Rows(i).Cells(3).Value = "(E) " & Math.Round(틱당기울기계산(i, E2_tick_count_기준), 1)
+                grid_3.Rows(i).Cells(3).Value = 매수기준기울기
+
+                If i = 1 And 매수기준기울기 > O_외국인현물발생기준기울기 Then
+                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
+                ElseIf i = 1 And 매수기준기울기 < (O_외국인현물발생기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
+                End If
+
+                If i = 3 And 매수기준기울기 > O_선물발생기준기울기 Then
+                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
+                ElseIf i = 3 And 매수기준기울기 < (O_선물발생기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
+                End If
+
+
+                Dim 매도기준기울기 As Single = Math.Round(틱당기울기계산(i, O_해제tick_count_기준), 1)
+                grid_3.Rows(i).Cells(4).Value = 매도기준기울기
 
 
 
-                grid_3.Rows(i).Cells(4).Value = PIP_Point_Lists(1).마지막신호_점수 + PIP_Point_Lists(2).마지막신호_점수
-
-                'Dim str As String = ""
-                'For j = 0 To PIP_Point_Lists(i).PointCount - 1
-                'Str = str & PIP_Point_Lists(i).PoinIndexList(j) & ", "
-                'Next
-                'grid_3.Rows(i).Cells(5).Value = str
-                'grid_3.Rows(i).Cells(5).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
-                grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+                'grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
 
             Next
 

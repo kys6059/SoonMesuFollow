@@ -2230,7 +2230,9 @@ Module Algorithm_SoonMeSu
                         Dim 현물기울기 As Integer = 틱당기울기계산(1, O_tick_count_기준)
                         Dim 동일방향 As Integer = 선물기울기 * 현물기울기
                         Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+
                         'If 동일방향 <= 0 Then Continue For
+
                         If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
                         If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
 
@@ -2335,7 +2337,10 @@ Module Algorithm_SoonMeSu
                         Dim 현물기울기 As Integer = 틱당기울기계산(1, O_tick_count_기준)
                         Dim 동일방향 As Integer = 선물기울기 * 현물기울기
                         Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
-                        'If 동일방향 <= 0 Then Continue For
+
+
+                        If 동일방향 <= 0 Then Continue For
+
                         If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
                         If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
 
