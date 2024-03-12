@@ -387,7 +387,7 @@ Partial Class Form2
         Series1.Legend = "Legend1"
         Series1.Name = "Series1"
         Me.F2_Chart_순매수.Series.Add(Series1)
-        Me.F2_Chart_순매수.Size = New System.Drawing.Size(981, 725)
+        Me.F2_Chart_순매수.Size = New System.Drawing.Size(1088, 725)
         Me.F2_Chart_순매수.TabIndex = 2
         Me.F2_Chart_순매수.Text = "Chart1"
         '
@@ -1097,7 +1097,7 @@ Partial Class Form2
         Series2.Legend = "Legend1"
         Series2.Name = "Series1"
         Me.Chart1.Series.Add(Series2)
-        Me.Chart1.Size = New System.Drawing.Size(1059, 716)
+        Me.Chart1.Size = New System.Drawing.Size(1088, 716)
         Me.Chart1.TabIndex = 20
         Me.Chart1.Text = "Chart1"
         '
