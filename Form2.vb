@@ -179,6 +179,18 @@ Public Class Form2
                 Dim 매도기준기울기 As Single = Math.Round(틱당기울기계산(i, O_해제tick_count_기준), 1)
                 grid_3.Rows(i).Cells(4).Value = 매도기준기울기
 
+                If i = 1 And 매도기준기울기 > O_외국인현물해제기준기울기 Then
+                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
+                ElseIf i = 1 And 매도기준기울기 < (O_외국인현물해제기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
+                End If
+
+                If i = 3 And 매도기준기울기 > O_선물해제기준기울기 Then
+                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
+                ElseIf i = 3 And 매도기준기울기 < (O_선물해제기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
+                End If
+
 
 
                 'grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
