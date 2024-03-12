@@ -178,6 +178,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_N.Checked = True Then CalcAlgorithm_N(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_E2.Checked = True Then CalcAlgorithm_E2()
+            If Form2.chk_Algorithm_O.Checked = True Then CalcAlgorithm_O()
 
         End If
 
@@ -386,6 +387,89 @@ Module Algorithm_SoonMeSu
 
 
     End Sub
+
+    '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
+
+    Public O_선물발생기준기울기 As Single = 16.0
+    Public O_외국인현물발생기준기울기 As Single = 5.0
+
+    Public O_선물해제기준기울기 As Single = 2.0
+    Public O_외국인현물해제기준기울기 As Single = 2.0
+
+    Public O_tick_count_기준 As Integer = 40
+    Public O_해제tick_count_기준 As Integer = 25
+
+
+    Public O_시작시간 As Integer = 100000
+    Public O_마감시간 As Integer = 150000
+
+
+    Public Sub CalcAlgorithm_O()
+
+        Dim startTime As Integer = O_시작시간
+        Dim endTime As Integer = O_마감시간
+
+
+        Dim 일분옵션데이터_CurrentIndex As Integer
+        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
+            일분옵션데이터_CurrentIndex = currentIndex_1MIn
+        Else
+            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
+        End If
+
+        'If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '일단 전부다 함
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
+            Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
+
+
+            Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
+            Dim 외국인현물순매수기울기_절대치 As Single = Math.Abs(외국인현물순매수기울기)
+
+
+            If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
+
+
+            If 선물순매수기울기_절대치 > O_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+
+
+                If 선물순매수기울기 > 0 Then  '  콜 방향
+
+
+                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
+                    If is동일신호가있나("O", 0) = True Then Return
+
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
+
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+
+
+                Else ' 풋 방향
+
+                        If is동일신호가있나("O", 1) = True Then Return
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
+
+                    If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+
+                End If
+
+                End If
+        End If
+
+
+    End Sub
+
 
     Public Sub CalcAlgorithm_B() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403
 
@@ -787,7 +871,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_N(s, 일분옵션데이터_CurrentIndex)
                             Case "E2"
                                 ret = 살아있는신호확인하기_E2(s, 일분옵션데이터_CurrentIndex)
-
+                            Case "O"
+                                ret = 살아있는신호확인하기_O(s, 일분옵션데이터_CurrentIndex)
                         End Select
                     End If
 
@@ -1142,6 +1227,70 @@ Module Algorithm_SoonMeSu
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
                         매도사유 = "weak_E2"
+                    End If
+
+                End If
+            End If
+
+        End If
+
+
+
+
+
+        Return 매도사유
+    End Function
+
+    Private Function 살아있는신호확인하기_O(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+
+            Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, O_해제tick_count_기준)
+            Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, O_해제tick_count_기준)
+
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+                If s.A08_콜풋 = 0 Then
+
+                    '선물이 낮아지면
+
+                    If O_선물해제기준기울기 > 선물현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_1"
+                    End If
+
+                    '현물이 낮아지면
+                    If O_외국인현물해제기준기울기 > 외국인현물현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_2"
+                    End If
+
+
+                Else
+
+                    '선물이 낮아지면
+                    If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_1"
+                    End If
+
+                    '현물이 낮아지면
+                    If (O_외국인현물해제기준기울기 * -1) < 외국인현물현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_2"
                     End If
 
                 End If
@@ -2044,7 +2193,7 @@ Module Algorithm_SoonMeSu
     '20240211 테스트 결과 'C_TEST_CNT_020_A_0.005_B_58_C_0.013_D_1215
     Public 기울기최저기준 As Single = 0.005  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public 기울기최고기준 As Single = 0.013  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
-    Public M_마감시간 As Integer = 1215
+    Public M_마감시간 As Integer = 1500
 
 
 
@@ -2076,6 +2225,14 @@ Module Algorithm_SoonMeSu
                 If 기울기 > 기울기최저기준 And 기울기 < 기울기최고기준 Then
 
                     If 일분옵션데이터(i).MACD_Result(2, Index) > 0 Then  ' 장기 이동평균선 위에 있을 때만 신호
+
+                        Dim 선물기울기 As Integer = 틱당기울기계산(3, O_tick_count_기준)
+                        Dim 현물기울기 As Integer = 틱당기울기계산(1, O_tick_count_기준)
+                        Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+                        Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+                        'If 동일방향 <= 0 Then Continue For
+                        If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
+                        If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                         Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
@@ -2127,11 +2284,13 @@ Module Algorithm_SoonMeSu
     End Function
 
 
-    Public N_기울기최저기준 As Single = 0.005  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
-    Public N_기울기최고기준 As Single = 0.007  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최대 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최저기준 As Single = 0.003  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최고기준 As Single = 0.015  '240312 확인해 보니 007로 하니 한달동안 한번도 안사져서 0.009로 변경함
 
     Public N_마감시간 As Integer = 1230
     Public N_시작시간 As Integer = 1000
+
+    Public M_선물기울기_기준 As Integer = 13
 
 
     '20240211 테스트 결과 C_TEST_CNT_012_A_0.005_B_58_C_0.007_D_1230
@@ -2146,7 +2305,7 @@ Module Algorithm_SoonMeSu
         'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
 
-
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
 
@@ -2170,9 +2329,15 @@ Module Algorithm_SoonMeSu
 
                     If 일분옵션데이터(i).MACD_Result(2, Index) > 0 Then  ' 장기 이동평균선 위에 있을 때만 신호
 
+                        '여기 선물케이스 정리해서 넣을 것
 
-                        '장기이평의 기울기도 같이 확인하는 케이스 테스트  -- 상승 추세일때
-                        'If 일분옵션데이터(i).MA(2, Index - 1) <= 일분옵션데이터(i).MA(2, Index) Then
+                        Dim 선물기울기 As Integer = 틱당기울기계산(3, O_tick_count_기준)
+                        Dim 현물기울기 As Integer = 틱당기울기계산(1, O_tick_count_기준)
+                        Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+                        Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+                        'If 동일방향 <= 0 Then Continue For
+                        If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
+                        If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < M_선물기울기_기준) Then Continue For
 
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7

@@ -89,7 +89,7 @@ Module Module_For1Min
     Public 모든인덱스수신됨Counter As Integer = 0  'TotlaCount * 2배가 되면 다 받은 것임
 
     '이하 MACD 계산용
-    Public MA_Interval() As Integer = {12, 26, 58, 19, 39}  '이평선의 날짜들을 미리 지정한다
+    Public MA_Interval() As Integer = {12, 26, 60, 19, 39}  '이평선의 날짜들을 미리 지정한다
     Public max_interval As Integer
 
 
