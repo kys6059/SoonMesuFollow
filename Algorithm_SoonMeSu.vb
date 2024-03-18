@@ -147,11 +147,10 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
-    Public 첫번째중간매도이익율 As Single = 0.34
-    Public 두번째중간매도이익율 As Single = 0.64
-    Public 세번째중간매도이익율 As Single = 0.94
-
-    Public 중간매도후이익율차이 As Single = 0.25
+    Public 첫번째중간매도이익율 As Single = 0.3
+    Public 두번째중간매도이익율 As Single = 0.61
+    Public 세번째중간매도이익율 As Single = 0.92
+    Public 중간매도후이익율차이 As Single = 0.28
 
 
 

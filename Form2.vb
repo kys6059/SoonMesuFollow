@@ -1842,12 +1842,12 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
-        fullTest_N()
+        'fullTest_N()
 
         'fullTest_C()
 
@@ -2018,10 +2018,10 @@ Public Class Form2
     Private Sub 매도조건테스트()
 
         '0일 3일
-        Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.23"} 'M
-        Dim 중간청산이익목표() As String = {"0.34", "0.37", "0.40"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.19, 0.22, 0.25, 0.28, 0.32}
+        Dim 익절차() As String = {"11", "09", "07", "05", "13"} 'L
+        Dim 옵션기준손절매() As String = {"-0.23", "-0.20", "-0.26", "-0.28"} 'M
+        Dim 중간청산이익목표() As String = {"0.34", "0.38", "0.30"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.21, 0.25, 0.28}
 
         '1,2,6일
         'Dim 익절차() As String = {"11", "10"} 'L
