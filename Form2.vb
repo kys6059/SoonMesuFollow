@@ -1842,12 +1842,13 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
         'fullTest_N()
+        fullTest_N1()
 
         'fullTest_C()
 
@@ -2013,6 +2014,93 @@ Public Class Form2
 
     End Sub
 
+
+
+    'Public N1_기울기최저기준 As Single = 0.001  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+
+
+    'Public N1_마감시간 As Integer = 1230
+    'Public N1_시작시간 As Integer = 1000
+
+    'Public N1_최저MACD선값기준 As Single = -0.2
+
+    'Public N1_tick_count_기준_선물 = 10
+    'Public N1_선물기울기_기준 As Single = 10
+
+    Private Sub fullTest_N1()
+        '231225 이걸로 확정함
+        Dim N1_최저MACD선값기준_temp() As Single = {-0.2, -0.25, -0.3, -0.4, -0.17, -0.14, -0.11, -0.08}
+        Dim N1_tick_count_기준_선물_temp() As Integer = {10, 20, 30, 40}
+        Dim N1_선물기울기_기준_temp() As Single = {1, 5, 10, 15, 20, 25}
+        Dim N1_마감시간_temp() As Integer = {1500}
+        Dim N1_시작시간_temp() As Integer = {920}
+
+
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_N1.Checked = True
+
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To N1_최저MACD선값기준_temp.Length - 1
+            For b As Integer = 0 To N1_tick_count_기준_선물_temp.Length - 1
+                For c As Integer = 0 To N1_선물기울기_기준_temp.Length - 1
+                    For d As Integer = 0 To N1_마감시간_temp.Length - 1
+                        For e As Integer = 0 To N1_시작시간_temp.Length - 1
+
+
+                            Dim cntstr As String
+                            If cnt < 10 Then
+                                cntstr = "00" & cnt.ToString()
+                            ElseIf cnt >= 10 And cnt < 100 Then
+                                cntstr = "0" & cnt.ToString()
+                            Else
+                                cntstr = cnt.ToString()
+                            End If
+
+
+                            N1_최저MACD선값기준_선물우선 = N1_최저MACD선값기준_temp(a)
+                            N1_tick_count_기준_선물 = N1_tick_count_기준_선물_temp(b)
+                            N1_선물기울기_기준_선물우선 = N1_선물기울기_기준_temp(c)
+                            N1_마감시간 = N1_마감시간_temp(d)
+                            N1_시작시간 = N1_시작시간_temp(e)
+
+
+                            SoonMesuSimulation_조건 = String.Format("N1_TEST_CNT_{0}", cntstr)
+                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", N1_선물기울기_기준_선물우선, N1_tick_count_기준_선물, N1_선물기울기_기준_선물우선, N1_마감시간_temp(d), N1_시작시간_temp(e))
+
+                            Console.WriteLine(SoonMesuSimulation_조건)
+                            Add_Log("", SoonMesuSimulation_조건)
+                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            cnt += 1
+                        Next
+                    Next
+                Next
+            Next
+        Next
+
+
+
+
+
+
+    End Sub
 
 
     Private Sub 매도조건테스트()

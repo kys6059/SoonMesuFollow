@@ -153,6 +153,33 @@ Module Algorithm_SoonMeSu
     Public 중간매도후이익율차이 As Single = 0.28
 
 
+    'N알고리즘 용
+    Public N_기울기최저기준 As Single = 0.003  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최고기준 As Single = 0.015  '240312 확인해 보니 007로 하니 한달동안 한번도 안사져서 0.009로 변경함
+
+    Public N_마감시간 As Integer = 1230
+    Public N_시작시간 As Integer = 1000
+
+    Public M_선물기울기_기준 As Integer = 13
+
+
+
+
+    'N1 알고리즘용 
+    'case 1 N1_TEST_CNT_149_A_-0.11_B_10_C_25_D_1500_E_920
+
+    Public N1_기울기최저기준 As Single = 0.001  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N1_마감시간 As Integer = 1500
+    Public N1_시작시간 As Integer = 920
+    Public N1_tick_count_기준_선물 = 10
+
+    Public N1_최저MACD선값기준_선물우선 As Single = -0.11
+    Public N1_선물기울기_기준_선물우선 As Single = 25
+
+    Public N1_최저MACD선값기준_MACD우선 As Single = -0.3
+    Public N1_선물기울기_기준_MACD우선 As Single = 5
+
+
 
     Public Sub CalcAlgorithmAll()
 
@@ -176,6 +203,8 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_N.Checked = True Then CalcAlgorithm_N(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_N1.Checked = True Then CalcAlgorithm_N1(일분옵션데이터_CurrentIndex)
+
             If Form2.chk_Algorithm_E2.Checked = True Then CalcAlgorithm_E2()
             If Form2.chk_Algorithm_O.Checked = True Then CalcAlgorithm_O()
 
@@ -868,6 +897,10 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_M(s, 일분옵션데이터_CurrentIndex)
                             Case "N"
                                 ret = 살아있는신호확인하기_N(s, 일분옵션데이터_CurrentIndex)
+                            Case "N1"
+                                ret = 살아있는신호확인하기_N1(s, 일분옵션데이터_CurrentIndex)
+                            Case "N2"
+                                ret = 살아있는신호확인하기_N1(s, 일분옵션데이터_CurrentIndex)
                             Case "E2"
                                 ret = 살아있는신호확인하기_E2(s, 일분옵션데이터_CurrentIndex)
                             Case "O"
@@ -2285,13 +2318,7 @@ Module Algorithm_SoonMeSu
     End Function
 
 
-    Public N_기울기최저기준 As Single = 0.003  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
-    Public N_기울기최고기준 As Single = 0.015  '240312 확인해 보니 007로 하니 한달동안 한번도 안사져서 0.009로 변경함
 
-    Public N_마감시간 As Integer = 1230
-    Public N_시작시간 As Integer = 1000
-
-    Public M_선물기울기_기준 As Integer = 13
 
 
     '20240211 테스트 결과 C_TEST_CNT_012_A_0.005_B_58_C_0.007_D_1230
@@ -2369,6 +2396,109 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
+    'MACD선의 - 값이 매우 큰 상태에서  기울기가 반전되거나 신호선을 뚫고 올라갈 때 - 테스트 일시 20240320
+
+    ' 계산치 : Call, put, 종합주가지수 3가지를 다 하나의 배열에 저장한다
+    '0: MACD선 
+    '1: 시그널선 (MACD의 9일)
+    '2: Oscillator
+
+    'N1_TEST_CNT_149_A_-0.11_B_10_C_25_D_1500_E_920
+
+    Public Sub CalcAlgorithm_N1(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+        max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
+
+        'If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다   --- 이건 거의 (-) 영역에서 일어나는 일이라 이건 제외한다
+
+
+        'If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N1_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N1_시작시간 Then Return
+
+
+
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+
+        For i As Integer = 0 To 1
+
+            If is동일신호가현재살아있나("N1", i) Then Continue For
+            If is동일신호가현재살아있나("N2", i) Then Continue For
+
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
+
+
+            If N1_최저MACD선값기준_선물우선 > 일분옵션데이터(i).CA_기본(0, Index - 1) Then
+
+
+                '기울기 계산
+                Dim 직전기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index) - 일분옵션데이터(i).CA_기본(0, Index - 1), 4)
+                Dim 그전기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index - 1) - 일분옵션데이터(i).CA_기본(0, Index - 2), 4)
+
+                If 직전기울기 > N1_기울기최저기준 And 그전기울기 < 0 Then  '그전기울기는 음수였는데 양수로 돌아서면
+
+                    Dim 선물기울기 As Integer = 틱당기울기계산(3, N1_tick_count_기준_선물)
+                    Dim 현물기울기 As Integer = 틱당기울기계산(1, N1_tick_count_기준_선물)
+                    Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+                    Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+
+
+                    'If 동일방향 <= 0 Then Continue For
+
+                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선) Then
+
+                        Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                        Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)
+                        Add_Log("N1신호:", log_str)
+
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N1", i)
+
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+
+
+
+                End If
+
+            End If
+
+            If N1_최저MACD선값기준_MACD우선 > 일분옵션데이터(i).CA_기본(0, Index - 1) Then
+
+
+                '기울기 계산
+                Dim 직전기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index) - 일분옵션데이터(i).CA_기본(0, Index - 1), 4)
+                Dim 그전기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index - 1) - 일분옵션데이터(i).CA_기본(0, Index - 2), 4)
+
+                If 직전기울기 > N1_기울기최저기준 And 그전기울기 < 0 Then  '그전기울기는 음수였는데 양수로 돌아서면
+
+                    Dim 선물기울기 As Integer = 틱당기울기계산(3, N1_tick_count_기준_선물)
+                    Dim 현물기울기 As Integer = 틱당기울기계산(1, N1_tick_count_기준_선물)
+                    Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+                    Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+
+
+                    'If 동일방향 <= 0 Then Continue For
+                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선) Then
+
+                        Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                        Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)
+                        'Add_Log("N1신호:", log_str)
+
+
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N2", i)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+                End If
+
+            End If
+        Next
+
+    End Sub
+
 
 
     Private Function 살아있는신호확인하기_N(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
@@ -2401,6 +2531,50 @@ Module Algorithm_SoonMeSu
                 매도사유 = "N_below_0"
             End If
 
+
+        End If
+
+        If 매도사유 <> "" Then
+            If isRealFlag = False Then
+                s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+
+            End If
+            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+        End If
+
+        Return 매도사유
+
+    End Function
+
+    '기울기가 반전되거나
+    '외국인 선물이 반대방향으로 바뀌면 매도
+
+    Private Function 살아있는신호확인하기_N1(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+            'MACD 값이 신호선 밑으로 떨어지면 매도
+            Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+            Dim callput = s.A08_콜풋
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < 일분옵션데이터_CurrentIndex Then Return ""  '신호최소유지index가 넘지 않았으면 그냥 유지한다
+
+            '기울기 계산
+            Dim 직전기울기 As Single = Math.Round(일분옵션데이터(callput).CA_기본(0, Index) - 일분옵션데이터(callput).CA_기본(0, Index - 1), 4)
+
+            If callput = 0 And 직전기울기 < 0 Then 매도사유 = "NX_rev_0"
+            If callput = 1 And 직전기울기 < 0 Then 매도사유 = "NX_rev_1"
+
+            '선물의 방향이 바뀜
+            Dim 선물기울기 As Integer = 틱당기울기계산(3, N1_tick_count_기준_선물)
+            Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+
+            'If callput = 0 And 선물기울기 < 0 Then 매도사유 = "N1_fut_0"
+            'If callput = 1 And 선물기울기 > 0 Then 매도사유 = "N1_fut_1"
 
         End If
 
