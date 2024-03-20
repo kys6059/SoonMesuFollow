@@ -2444,11 +2444,11 @@ Module Algorithm_SoonMeSu
 
                     'If 동일방향 <= 0 Then Continue For
 
-                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선) Then
+                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선 And 동일방향 > 0) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선 And 동일방향 > 0) Then
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                         Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)
-                        Add_Log("N1신호:", log_str)
+                        'Add_Log("N1신호:", log_str)
 
 
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N1", i)
@@ -2480,7 +2480,7 @@ Module Algorithm_SoonMeSu
 
 
                     'If 동일방향 <= 0 Then Continue For
-                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선) Then
+                    If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선 And 동일방향 > 0) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_MACD우선 And 동일방향 > 0) Then
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                         Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)

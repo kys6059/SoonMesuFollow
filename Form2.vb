@@ -229,8 +229,8 @@ Public Class Form2
             grid_shinho.Columns(8).HeaderText = "콜풋"
             grid_shinho.Columns(9).HeaderText = "행사가"
             grid_shinho.Columns(10).HeaderText = "발생가격"
-            grid_shinho.Columns(11).HeaderText = "F손절가"
-            grid_shinho.Columns(12).HeaderText = "종목코드"
+            grid_shinho.Columns(11).HeaderText = "-"
+            grid_shinho.Columns(12).HeaderText = "-"
             grid_shinho.Columns(13).HeaderText = "체결상태"
             grid_shinho.Columns(14).HeaderText = "현재가격"
             grid_shinho.Columns(15).HeaderText = "현재상태"
@@ -243,7 +243,8 @@ Public Class Form2
             grid_shinho.Columns(22).HeaderText = "지수차이"
             grid_shinho.Columns(23).HeaderText = "기타"
 
-            'grid_shinho.Columns(0).Width = 50
+            grid_shinho.Columns(11).Width = 20
+            grid_shinho.Columns(12).Width = 20
 
             '데이터 입력하기
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
