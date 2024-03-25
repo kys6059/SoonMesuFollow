@@ -1,6 +1,8 @@
 ﻿Option Explicit On
 Imports System.Drawing.Text
 Imports System.Net.Security
+Imports System.Math
+
 
 Module Module_For1Min
 
@@ -766,5 +768,67 @@ Module Module_For1Min
 
 
     End Function
+
+    '    Public Function LinearRegression(ByVal X() As Double, ByVal Y() As Double, ByVal N As Integer) As Double
+
+    '        ' Linear Regression On Array of Numbers
+    '        '  Linear Regression, Y. vs. X  (X is considered the indepent variable)
+    '        '  Assume X and Y are arrays from 1 to N
+    '        Dim SX, SY, SX2, SXY, SY2, NUM, DEN, R, a, b As Double
+
+
+    '        SX = 0
+    '        SY = 0
+    '        For I = 1 To N
+    '            SX = SX + X(I)
+    '            SX2 = SX2 + X(I) ^ 2
+    '            SY = SY + Y(I)
+    '            SY2 = SY2 + Y(I) ^ 2
+    '            SXY = SXY + X(I) * Y(I)
+    '        Next I
+    '        NUM = N * SXY - SX * SY
+    '        DEN = (N * SX2 - SX ^ 2) * (N * SY2 - SY ^ 2)
+    '        R = NUM / Sqrt(DEN)   ' Correlation Coefficient
+    '        b = R * StdY / StdX
+    '        a = My - B * MX
+    '        StdErr0 = StdY * Sqr(1 - R ^ 2)  ' Simple Standard Error (large N)
+    '        StdErr = Sqr((SY2 - SY ^ 2 / N - B * (SXY - SX * SY / N)) / (N - 2)) '
+    '        Corrected Std Error
+    '' Then equation is
+    '        Y = a + b * X
+
+    '    End Function
+
+    Public Function Correl(ByVal X() As Double, ByVal Y() As Double, ByVal Num As Integer) As Double
+
+        Dim muX As Double, muY As Double
+        Dim Sxx As Double, Sxy As Double, Syy As Double
+        Dim sumX As Double, sumY As Double
+        Dim sumX2 As Double, sumXY As Double, sumY2 As Double
+
+        sumX = 0
+        sumY = 0
+        sumX2 = 0
+        sumY2 = 0
+        sumXY = 0
+
+        For L As Integer = 1 To Num
+            sumX += X(L)
+            sumY += Y(L)
+            sumX2 += X(L) * X(L)
+            sumY2 += Y(L) * Y(L)
+            sumXY += X(L) * Y(L)
+        Next L
+
+        muX = sumX / Num
+        muY = sumY / Num
+        Sxx = sumX2 - Num * muX * muX
+        Syy = sumY2 - Num * muY * muY
+        Sxy = sumXY - Num * muX * muY
+
+        Return Sxy / Sqrt(Sxx * Syy)
+    End Function ' Correl
+
+
 
 End Module
