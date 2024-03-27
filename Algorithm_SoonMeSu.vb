@@ -419,7 +419,7 @@ Module Algorithm_SoonMeSu
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
     Public O_선물발생기준기울기 As Single = 16.0
-    Public O_외국인현물발생기준기울기 As Single = 5.0
+    Public O_외국인현물발생기준기울기 As Single = 3.0
 
     Public O_선물해제기준기울기 As Single = 2.0
     Public O_외국인현물해제기준기울기 As Single = 2.0
@@ -430,6 +430,10 @@ Module Algorithm_SoonMeSu
 
     Public O_시작시간 As Integer = 100000
     Public O_마감시간 As Integer = 150000
+
+    Public 선물상관계수최저 As Double = 0.5
+    Public 외국인현물상관계수최저 As Double = 0.7
+    Public 상관계수계산인덱스길이 As Integer = 80
 
 
     Public Sub CalcAlgorithm_O()
@@ -472,31 +476,56 @@ Module Algorithm_SoonMeSu
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
-                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                        SoonMesuShinhoList.Add(shinho)
+
+                        If Get상관계수상태() Then
+                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                            SoonMesuShinhoList.Add(shinho)
+                        End If
+
                     End If
 
 
                 Else ' 풋 방향
 
-                        If is동일신호가있나("O", 1) = True Then Return
+                    If is동일신호가있나("O", 1) = True Then Return
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
 
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
-                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
-                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
-                        SoonMesuShinhoList.Add(shinho)
+
+                        If Get상관계수상태() Then
+                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
+                            SoonMesuShinhoList.Add(shinho)
+                        End If
+
                     End If
 
                 End If
 
-                End If
+            End If
         End If
 
 
     End Sub
+
+    Private Function Get상관계수상태() As Boolean
+
+        Dim ret As Boolean = False
+
+        Dim 상관계수(4) As Double
+        '0-외국인기관합, 1-외국인, 2-기관, 3-선물, 4-개인
+        Dim startPoint As Integer = Math.Max(0, currentIndex_순매수 - 상관계수계산인덱스길이)
+        For t As Integer = 0 To 4
+            상관계수(t) = Correl(t, startPoint, currentIndex_순매수 - 1)
+        Next
+
+        If 상관계수(1) > 외국인현물상관계수최저 And 상관계수(3) > 선물상관계수최저 Then ret = True
+
+        Return ret
+    End Function
+
 
 
     Public Sub CalcAlgorithm_B() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403

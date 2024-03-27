@@ -327,6 +327,8 @@ Module Module_For1Min
             ret = 순매수리스트(index).기관순매수
         ElseIf dataSource = 3 Then
             ret = 순매수리스트(index).외국인_선물_순매수
+        ElseIf dataSource = 4 Then
+            ret = 순매수리스트(index).개인순매수
         End If
         Return ret
     End Function
@@ -799,7 +801,7 @@ Module Module_For1Min
 
     '    End Function
 
-    Public Function Correl(ByVal X() As Double, ByVal Y() As Double, ByVal Num As Integer) As Double
+    Public Function Correl_origin(ByVal X() As Double, ByVal Y() As Double, ByVal Num As Integer) As Double
 
         Dim muX As Double, muY As Double
         Dim Sxx As Double, Sxy As Double, Syy As Double
@@ -827,6 +829,52 @@ Module Module_For1Min
         Sxy = sumXY - Num * muX * muY
 
         Return Sxy / Sqrt(Sxx * Syy)
+    End Function ' Correl
+
+    Public Function Correl(ByVal DataSource As Integer, ByVal start As Integer, ByVal endPoint As Integer) As Double
+
+        Dim sumX As Double, sumY As Double
+        Dim sumX2 As Double, sumXY As Double, sumY2 As Double
+
+        Dim num As Integer = endPoint - start + 1
+
+        sumX = 0
+        sumY = 0
+        sumX2 = 0
+        sumY2 = 0
+        sumXY = 0
+
+        For L As Integer = start To endPoint
+
+            Dim xvalue As Single = Get순매수(L, DataSource)
+            Dim yValue As Single = 순매수리스트(L).코스피지수
+
+            sumX += xvalue
+            sumY += yValue
+            sumX2 += xvalue * xvalue
+            sumY2 += yValue * yValue
+            sumXY += xvalue * yValue
+            'Console.WriteLine(L.ToString() + " X: " + xvalue.ToString() + ", Y:" + yValue.ToString())
+        Next L
+
+
+        Dim stdX As Double = Math.Sqrt(sumX2 / num - sumX * sumX / num / num)
+        Dim stdY As Double = Math.Sqrt(sumY2 / num - sumY * sumY / num / num)
+        Dim covariance As Double = (sumXY / num - sumX * sumY / num / num)
+
+        Dim ret As Double = covariance / stdX / stdY
+        Return ret
+
+
+
+        'muX = sumX / num
+        'muY = sumY / num
+        'Sxx = sumX2 - num * muX * muX
+        'Syy = sumY2 - num * muY * muY
+        'Sxy = sumXY - num * muX * muY
+
+        'Dim ret As Double = Sxy / Sqrt(Sxx * Syy)
+        'Return ret
     End Function ' Correl
 
 

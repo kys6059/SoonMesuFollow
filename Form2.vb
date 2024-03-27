@@ -1849,7 +1849,7 @@ Public Class Form2
         'fullTest_B()
         'fullTest_M()
         'fullTest_N()
-        fullTest_N1()
+        'fullTest_N1()
 
         'fullTest_C()
 
@@ -1862,7 +1862,7 @@ Public Class Form2
 
         'RSI_Test()
 
-        'fullTest_O()
+        fullTest_O()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2799,31 +2799,41 @@ Public Class Form2
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
-    'Public O_선물발생기준기울기 As Single = 10.0
-    'Public O_외국인현물발생기준기울기 As Single = 6.0
+    'Public O_선물발생기준기울기 As Single = 16.0
+    'Public O_외국인현물발생기준기울기 As Single = 5.0
 
     'Public O_선물해제기준기울기 As Single = 2.0
     'Public O_외국인현물해제기준기울기 As Single = 2.0
 
-    'Public O_tick_count_기준 As Integer = 30
+    'Public O_tick_count_기준 As Integer = 40
+    'Public O_해제tick_count_기준 As Integer = 25
 
-    'Public O_시작시간 As Integer = 915
-    'Public O_마감시간 As Integer = 1500
+
+    'Public O_시작시간 As Integer = 100000
+    'Public O_마감시간 As Integer = 150000
+
+    'Public 선물상관계수최저 As Double = 0.3
+    'Public 외국인현물상관계수최저 As Double = 0.3
+    'Public 상관계수계산인덱스길이 As Integer = 60
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16, 14} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {4, 5} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {14, 12} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {3, 5} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {2.0, 5.0, 7.0}    'A
-        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0, 1.0}    'B
+        Dim O_선물해제기준기울기_temp() As Single = {2.0}    'A
+        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
         Dim O_마감시간_temp() As String = {"150000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {34, 40} ', 36, 40}
-        Dim O_해제tick_count_기준_temp() As Integer = {36, 25}
+        Dim O_tick_count_기준_temp() As Integer = {40} ', 36, 40}
+        Dim O_해제tick_count_기준_temp() As Integer = {25}
+
+        Dim 선물상관계수최저_temp() As Single = {0.5, 0.6, 0.7}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.6, 0.7}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {80}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -2834,7 +2844,7 @@ Public Class Form2
         chk_Algorithm_M.Checked = False
         chk_Algorithm_N.Checked = False
         chk_Algorithm_E2.Checked = False
-
+        chk_Algorithm_N1.Checked = False
         chk_Algorithm_O.Checked = True
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -2854,35 +2864,42 @@ Public Class Form2
                             For f As Integer = 0 To O_마감시간_temp.Length - 1
                                 For g As Integer = 0 To O_tick_count_기준_temp.Length - 1
                                     For h As Integer = 0 To O_해제tick_count_기준_temp.Length - 1
+                                        For i As Integer = 0 To 선물상관계수최저_temp.Length - 1
+                                            For j As Integer = 0 To 외국인현물상관계수최저_temp.Length - 1
+                                                For k As Integer = 0 To 상관계수계산인덱스길이_temp.Length - 1
+                                                    O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
+                                                    O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
+                                                    O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
+                                                    O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
+                                                    O_시작시간 = O_시작시간_temp(e)
+                                                    O_마감시간 = O_마감시간_temp(f)
+                                                    O_tick_count_기준 = O_tick_count_기준_temp(g)
+                                                    O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
+                                                    선물상관계수최저 = 선물상관계수최저_temp(i)
+                                                    외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
+                                                    상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
 
-                                        O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
-                                        O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
-                                        O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
-                                        O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
-                                        O_시작시간 = O_시작시간_temp(e)
-                                        O_마감시간 = O_마감시간_temp(f)
-                                        O_tick_count_기준 = O_tick_count_기준_temp(g)
-                                        O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
+                                                    Dim cntstr As String
+                                                    If cnt < 10 Then
+                                                        cntstr = "00" & cnt.ToString()
+                                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                                        cntstr = "0" & cnt.ToString()
+                                                    Else
+                                                        cntstr = cnt.ToString()
+                                                    End If
 
-                                        Dim cntstr As String
-                                        If cnt < 10 Then
-                                            cntstr = "00" & cnt.ToString()
-                                        ElseIf cnt >= 10 And cnt < 100 Then
-                                            cntstr = "0" & cnt.ToString()
-                                        Else
-                                            cntstr = cnt.ToString()
-                                        End If
+                                                    SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
+                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 1), Math.Round(외국인현물상관계수최저, 1), 상관계수계산인덱스길이)
 
-                                        SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
-                                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준)
+                                                    Add_Log("", SoonMesuSimulation_조건)
+                                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
-                                        Add_Log("", SoonMesuSimulation_조건)
-                                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                    cnt += 1
 
-                                        cnt += 1
+                                                Next
+                                            Next
+                                        Next
                                     Next
-
-
                                 Next
                             Next
                         Next
