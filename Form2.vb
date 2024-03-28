@@ -108,96 +108,91 @@ Public Class Form2
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
         grid_3.ColumnCount = 5
-        grid_3.RowCount = PIP_Point_Lists.Length
-
-
-        If PIP_Point_Lists.Length > 0 Then
-
-            grid_3.RowHeadersVisible = False
-            grid_3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-
-            For i As Integer = 0 To grid_3.ColumnCount - 1
-                grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-                grid_3.Columns(i).Width = 70
-            Next
-
-            grid_3.Columns(0).HeaderText = " 주체"
-            grid_3.Columns(1).HeaderText = "-"
-            grid_3.Columns(2).HeaderText = "금액"
-            grid_3.Columns(3).HeaderText = "기울기"
-            grid_3.Columns(4).HeaderText = "매도기준"
-            grid_3.Columns(0).Width = 120
-            grid_3.Columns(3).Width = 100
-            grid_3.Columns(4).Width = 100
+        grid_3.RowCount = 5
 
 
 
-            '데이터 입력하기
+        grid_3.RowHeadersVisible = False
 
-            For i = 0 To PIP_Point_Lists.Length - 1
+        grid_3.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
-                Dim 주체 As String
-                Dim 금액 As Long
-                If i = 0 Then
-                    주체 = " (합계)"
-                    금액 = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
-                ElseIf i = 1 Then
-                    주체 = " (외국인)"
-                    금액 = 순매수리스트(currentIndex_순매수).외국인순매수
-                ElseIf i = 2 Then
+        For i As Integer = 0 To grid_3.ColumnCount - 1
+            grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+            grid_3.Columns(i).Width = 70
+        Next
 
-                    주체 = " (기관)"
-                    금액 = 순매수리스트(currentIndex_순매수).기관순매수
-                Else
-                    주체 = " (외국인선물)"
-                    금액 = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
-                End If
-                grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
-                'grid_3.Rows(i).Cells(1).Value = PIP_Point_Lists(i).PointCount
-                grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
-                If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
-                If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
-
-                '                Dim 시작전기울기 = Calc_직선기울기계산(0)
-                Dim 매수기준기울기 As Single = Math.Round(틱당기울기계산(i, O_tick_count_기준), 1)
-
-                grid_3.Rows(i).Cells(3).Value = 매수기준기울기
-
-                If i = 1 And 매수기준기울기 > O_외국인현물발생기준기울기 Then
-                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
-                ElseIf i = 1 And 매수기준기울기 < (O_외국인현물발생기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
-                End If
-
-                If i = 3 And 매수기준기울기 > O_선물발생기준기울기 Then
-                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
-                ElseIf i = 3 And 매수기준기울기 < (O_선물발생기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
-                End If
-
-
-                Dim 매도기준기울기 As Single = Math.Round(틱당기울기계산(i, O_해제tick_count_기준), 1)
-                grid_3.Rows(i).Cells(4).Value = 매도기준기울기
-
-                If i = 1 And 매도기준기울기 > O_외국인현물해제기준기울기 Then
-                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
-                ElseIf i = 1 And 매도기준기울기 < (O_외국인현물해제기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
-                End If
-
-                If i = 3 And 매도기준기울기 > O_선물해제기준기울기 Then
-                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
-                ElseIf i = 3 And 매도기준기울기 < (O_선물해제기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
-                End If
+        grid_3.Columns(0).HeaderText = "주체"
+        grid_3.Columns(1).HeaderText = "5분(N1)"
+        grid_3.Columns(2).HeaderText = "12.5분(매도)"
+        grid_3.Columns(3).HeaderText = "20분(O 기준)"
+        grid_3.Columns(4).HeaderText = "40분(상관)"
+        grid_3.Columns(0).Width = 120
+        grid_3.Columns(3).Width = 100
+        grid_3.Columns(4).Width = 100
 
 
 
-                'grid_3.Rows(i).Cells(3).Style.Alignment = DataGridViewContentAlignment.MiddleLeft
+        For i = 0 To 3
 
-            Next
+            Dim 주체 As String
+            Dim 금액 As Long
+            If i = 0 Then
+                주체 = " (합계)"
+                금액 = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
+            ElseIf i = 1 Then
+                주체 = " (외국인)"
+                금액 = 순매수리스트(currentIndex_순매수).외국인순매수
+            ElseIf i = 2 Then
+                주체 = " (기관)"
+                금액 = 순매수리스트(currentIndex_순매수).기관순매수
+            Else
+                주체 = " (외국인선물)"
+                금액 = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
+            End If
 
-        End If
+
+            grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
+            grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
+
+
+            If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
+            If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
+
+
+            'Dim 시작전기울기 = Calc_직선기울기계산(0)
+            Dim 매수기준기울기 As Single = Math.Round(틱당기울기계산(i, O_tick_count_기준), 1)
+
+            grid_3.Rows(i).Cells(3).Value = 매수기준기울기
+
+            If i = 1 And 매수기준기울기 > O_외국인현물발생기준기울기 Then
+                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
+            ElseIf i = 1 And 매수기준기울기 < (O_외국인현물발생기준기울기 * -1) Then
+                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
+            End If
+
+            If i = 3 And 매수기준기울기 > O_선물발생기준기울기 Then
+                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
+            ElseIf i = 3 And 매수기준기울기 < (O_선물발생기준기울기 * -1) Then
+                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
+            End If
+
+
+            Dim 매도기준기울기 As Single = Math.Round(틱당기울기계산(i, O_해제tick_count_기준), 1)
+            grid_3.Rows(i).Cells(4).Value = 매도기준기울기
+
+            If i = 1 And 매도기준기울기 > O_외국인현물해제기준기울기 Then
+                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
+            ElseIf i = 1 And 매도기준기울기 < (O_외국인현물해제기준기울기 * -1) Then
+                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
+            End If
+
+            If i = 3 And 매도기준기울기 > O_선물해제기준기울기 Then
+                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
+            ElseIf i = 3 And 매도기준기울기 < (O_선물해제기준기울기 * -1) Then
+                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
+            End If
+        Next
+
 
         grid_3.Refresh()
 
