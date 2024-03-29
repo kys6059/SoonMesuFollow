@@ -118,19 +118,17 @@ Public Class Form2
 
         For i As Integer = 0 To grid_3.ColumnCount - 1
             grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid_3.Columns(i).Width = 70
+            grid_3.Columns(i).Width = 100
         Next
 
         grid_3.Columns(0).HeaderText = "주체"
-        grid_3.Columns(1).HeaderText = "5분(N1)"
-        grid_3.Columns(2).HeaderText = "12.5분(매도)"
-        grid_3.Columns(3).HeaderText = "20분(O 기준)"
-        grid_3.Columns(4).HeaderText = "40분(상관)"
-        grid_3.Columns(0).Width = 120
-        grid_3.Columns(3).Width = 100
-        grid_3.Columns(4).Width = 100
+        grid_3.Columns(1).HeaderText = "5분 (N1)"
+        grid_3.Columns(2).HeaderText = "12.5분(매도 기준)"
+        grid_3.Columns(3).HeaderText = "20분(O 발생 기준)"
+        grid_3.Columns(4).HeaderText = "40분(상관 기준)"
 
 
+        Dim 시간인덱스 = New Integer() {N1_tick_count_기준_선물, O_해제tick_count_기준, O_tick_count_기준, 상관계수계산인덱스길이}
 
         For i = 0 To 3
 
@@ -158,39 +156,25 @@ Public Class Form2
             If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
             If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
 
+            For j As Integer = 0 To 시간인덱스.Length - 1
 
-            'Dim 시작전기울기 = Calc_직선기울기계산(0)
-            Dim 매수기준기울기 As Single = Math.Round(틱당기울기계산(i, O_tick_count_기준), 1)
+                Dim 데이터기울기 As Single = Math.Round(틱당기울기계산(i, 시간인덱스(j)), 1)
+                grid_3.Rows(i).Cells(j + 1).Value = 데이터기울기
 
-            grid_3.Rows(i).Cells(3).Value = 매수기준기울기
-
-            If i = 1 And 매수기준기울기 > O_외국인현물발생기준기울기 Then
-                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
-            ElseIf i = 1 And 매수기준기울기 < (O_외국인현물발생기준기울기 * -1) Then
-                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
-            End If
-
-            If i = 3 And 매수기준기울기 > O_선물발생기준기울기 Then
-                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Red
-            ElseIf i = 3 And 매수기준기울기 < (O_선물발생기준기울기 * -1) Then
-                grid_3.Rows(i).Cells(3).Style.ForeColor = Color.Blue
-            End If
+                If i = 1 And j = 2 And 데이터기울기 > O_외국인현물발생기준기울기 Then
+                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Red
+                ElseIf i = 1 And j = 2 And 데이터기울기 < (O_외국인현물발생기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Blue
+                End If
 
 
-            Dim 매도기준기울기 As Single = Math.Round(틱당기울기계산(i, O_해제tick_count_기준), 1)
-            grid_3.Rows(i).Cells(4).Value = 매도기준기울기
+                If i = 3 And j = 2 And 데이터기울기 > O_선물발생기준기울기 Then
+                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Red
+                ElseIf i = 3 And j = 2 And 데이터기울기 < (O_선물발생기준기울기 * -1) Then
+                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Blue
+                End If
 
-            If i = 1 And 매도기준기울기 > O_외국인현물해제기준기울기 Then
-                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
-            ElseIf i = 1 And 매도기준기울기 < (O_외국인현물해제기준기울기 * -1) Then
-                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
-            End If
-
-            If i = 3 And 매도기준기울기 > O_선물해제기준기울기 Then
-                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Red
-            ElseIf i = 3 And 매도기준기울기 < (O_선물해제기준기울기 * -1) Then
-                grid_3.Rows(i).Cells(4).Style.ForeColor = Color.Blue
-            End If
+            Next
         Next
 
 
