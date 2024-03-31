@@ -1,4 +1,5 @@
 ﻿Option Explicit On
+Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports Google.Api
 Imports Newtonsoft.Json
@@ -107,7 +108,7 @@ Public Class Form2
 
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
-        grid_3.ColumnCount = 5
+        grid_3.ColumnCount = 6
         grid_3.RowCount = 5
 
 
@@ -122,10 +123,13 @@ Public Class Form2
         Next
 
         grid_3.Columns(0).HeaderText = "주체"
-        grid_3.Columns(1).HeaderText = "5분 (N1)"
-        grid_3.Columns(2).HeaderText = "12.5분(매도 기준)"
-        grid_3.Columns(3).HeaderText = "20분(O 발생 기준)"
-        grid_3.Columns(4).HeaderText = "40분(상관 기준)"
+        grid_3.Columns(1).HeaderText = "금액"
+        grid_3.Columns(2).HeaderText = "5분(N1)"
+        grid_3.Columns(3).HeaderText = "12.5분(매도)"
+        grid_3.Columns(4).HeaderText = "20분(O 기준)"
+        grid_3.Columns(5).HeaderText = "40분(상관기준)"
+
+        grid_3.Columns(1).Width = 70
 
 
         Dim 시간인덱스 = New Integer() {N1_tick_count_기준_선물, O_해제tick_count_기준, O_tick_count_기준, 상관계수계산인덱스길이}
@@ -150,28 +154,29 @@ Public Class Form2
 
 
             grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
-            grid_3.Rows(i).Cells(2).Value = Format(금액, "###,##0")
+            grid_3.Rows(i).Cells(1).Value = Format(금액, "###,##0")
 
 
-            If 금액 > 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Red
-            If 금액 < 0 Then grid_3.Rows(i).Cells(2).Style.ForeColor = Color.Blue
+            If 금액 > 0 Then grid_3.Rows(i).Cells(1).Style.ForeColor = Color.Red
+            If 금액 < 0 Then grid_3.Rows(i).Cells(1).Style.ForeColor = Color.Blue
 
             For j As Integer = 0 To 시간인덱스.Length - 1
 
                 Dim 데이터기울기 As Single = Math.Round(틱당기울기계산(i, 시간인덱스(j)), 1)
-                grid_3.Rows(i).Cells(j + 1).Value = 데이터기울기
+
+                grid_3.Rows(i).Cells(j + 2).Value = 데이터기울기
 
                 If i = 1 And j = 2 And 데이터기울기 > O_외국인현물발생기준기울기 Then
-                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Red
+                    grid_3.Rows(i).Cells(j + 2).Style.ForeColor = Color.Red
                 ElseIf i = 1 And j = 2 And 데이터기울기 < (O_외국인현물발생기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Blue
+                    grid_3.Rows(i).Cells(j + 2).Style.ForeColor = Color.Blue
                 End If
 
 
                 If i = 3 And j = 2 And 데이터기울기 > O_선물발생기준기울기 Then
-                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Red
+                    grid_3.Rows(i).Cells(j + 2).Style.ForeColor = Color.Red
                 ElseIf i = 3 And j = 2 And 데이터기울기 < (O_선물발생기준기울기 * -1) Then
-                    grid_3.Rows(i).Cells(j + 1).Style.ForeColor = Color.Blue
+                    grid_3.Rows(i).Cells(j + 2).Style.ForeColor = Color.Blue
                 End If
 
             Next
@@ -277,7 +282,7 @@ Public Class Form2
 
 
         Init_MACD_Graph()
-            Draw_MACD_Graph()
+        Draw_MACD_Graph()
 
 
 
@@ -338,14 +343,6 @@ Public Class Form2
                 ElseIf i = 3 Then
                     F2_Chart_순매수.Series(str).Color = Color.Red
                 End If
-
-                'str = "PIP_" + i.ToString()
-                'F2_Chart_순매수.Series.Add(str)
-                'F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
-                'F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
-                'F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
-                'F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
-                'F2_Chart_순매수.Series(str).BorderWidth = 2
 
                 str = "slope_" + i.ToString()
                 F2_Chart_순매수.Series.Add(str)
@@ -423,51 +420,36 @@ Public Class Form2
             F2_Chart_순매수.ChartAreas("ChartArea_0").AxisY2.Minimum = min - 1
 
 
+            Dim 기준인덱스 As Integer = Val(txt_순매수기준인덱스.Text)
+
             If currentIndex_순매수 >= 0 Then
-
-                'For i As Integer = 0 To 2
-                'Dim PIP_Series As String = "PIP_" + i.ToString()
-                'If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) or i = 3 Then
-                ''PIP 시리즈를 표시한다
-                'If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
-                'For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
-                'Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-                'Dim target순매수 As Long = Get순매수(point, i)
-                'F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
-                'Next
-
-                'End If
-
-                'End If
-
-                'Next
 
                 For i As Integer = 0 To 3
 
                     Dim 기울기시리즈 As String = "slope_" + i.ToString()
                     If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Then
-                        If currentIndex_순매수 - E2_tick_count_기준 >= 0 Then
+                        If currentIndex_순매수 - 기준인덱스 >= 0 Then
 
                             If i = 1 Then
 
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인순매수)
 
                             ElseIf i = 0 Then
 
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인_기관_순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_기관_순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_기관_순매수)
 
                             ElseIf i = 2 Then
 
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).기관순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).기관순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
                             ElseIf i = 3 Then
 
 
                                 If i = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
 
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - E2_tick_count_기준, 순매수리스트(currentIndex_순매수 - E2_tick_count_기준).외국인_선물_순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_선물_순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
 
                             End If
@@ -484,7 +466,7 @@ Public Class Form2
                     Dim Str As String
 
                     For j As Integer = 0 To 3  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
-                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
+                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or (j = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0) Then
                             '신호를 그리든데 각각의 순매수라인에 그린다
                             Str = "Shinho_" + i.ToString() + j.ToString()
                             F2_Chart_순매수.Series.Add(Str)
@@ -737,6 +719,8 @@ Public Class Form2
             ReceiveCount = 0
         End If
 
+
+
     End Sub
 
     Private Sub 월목라디오선택()
@@ -935,7 +919,7 @@ Public Class Form2
             End If
 
             'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
-            'If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
+            If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
 
 
 
@@ -1094,6 +1078,10 @@ Public Class Form2
                         Chart2.Series(MACD_CA_기본(0)).Points(retindex).ToolTip = str
                         Chart2.Series(MACD_CA_기본(1)).Points(retindex).ToolTip = str
 
+                        '신호에 세로 빨간색선 그리기
+
+
+
                     End If
                 Next
                 Chart2.ChartAreas(callput).AxisY.Minimum = minValue
@@ -1101,6 +1089,57 @@ Public Class Form2
 
             Next
         End If
+
+        '신호를 그린다
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                Dim Str As String = "Shinho_" + i.ToString()
+                Chart2.Series.Add(Str)
+
+                If s.A08_콜풋 = 0 Then
+                    Chart2.Series(Str).ChartArea = "MACD_CHART_0"
+                Else
+                    Chart2.Series(Str).ChartArea = "MACD_CHART_1"
+                End If
+
+                Chart2.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart2.Series(Str).Color = Color.DarkGreen
+                Chart2.Series(Str).BorderWidth = 3
+
+                '시작점,끝점 찾기
+                Dim 신호시작점 As Integer = 순매수시간으로1MIN인덱스찾기(Val(s.A02_발생시간))
+                Dim 신호끝점 As Integer
+
+                If currentIndex_1MIn >= 신호시작점 Then Chart2.Series(Str).Points.AddXY(신호시작점, 0.2)  '시작점
+                If currentIndex_1MIn >= 신호시작점 Then Chart2.Series(Str).Points.AddXY(신호시작점, 0)  '시작점
+
+                If s.A15_현재상태 = 1 Then '끝점
+                    신호끝점 = currentIndex_1MIn
+                    Chart2.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                Else
+                    신호끝점 = 순매수시간으로1MIN인덱스찾기(Val(s.A18_매도시간))
+                    Chart2.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+
+                End If
+
+                If currentIndex_1MIn >= 신호끝점 Then
+                    Chart2.Series(Str).Points.AddXY(신호끝점, 0)
+                    Chart2.Series(Str).Points.AddXY(신호끝점, 0.2)
+                    Dim str1 As String = String.Format("신호시작점 : {0},시작시간: {1}, 신호끝점: {2}", 신호시작점, s.A02_발생시간, 신호끝점)
+                    Chart2.Series(Str).Points(0).ToolTip = str1
+                    Chart2.Series(Str).Points(1).ToolTip = str1
+                    Chart2.Series(Str).Points(2).ToolTip = str1
+
+                End If
+
+
+
+            Next
+        End If
+
+
 
         Chart2.Visible = True
 
@@ -1828,7 +1867,7 @@ Public Class Form2
         'fullTest_B()
         'fullTest_M()
         'fullTest_N()
-        'fullTest_N1()
+        fullTest_N1()
 
         'fullTest_C()
 
@@ -1841,7 +1880,7 @@ Public Class Form2
 
         'RSI_Test()
 
-        fullTest_O()
+        'fullTest_O()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2009,11 +2048,11 @@ Public Class Form2
 
     Private Sub fullTest_N1()
         '231225 이걸로 확정함
-        Dim N1_최저MACD선값기준_temp() As Single = {-0.2, -0.25, -0.3, -0.4, -0.17, -0.14, -0.11, -0.08}
+        Dim N1_최저MACD선값기준_temp() As Single = {-0.11, -0.13, -0.15}
         Dim N1_tick_count_기준_선물_temp() As Integer = {10, 20, 30, 40}
-        Dim N1_선물기울기_기준_temp() As Single = {1, 5, 10, 15, 20, 25}
+        Dim N1_선물기울기_기준_temp() As Single = {8, 10, 12, 15}
         Dim N1_마감시간_temp() As Integer = {1500}
-        Dim N1_시작시간_temp() As Integer = {920}
+        Dim N1_시작시간_temp() As Integer = {1000}
 
 
 
@@ -2063,7 +2102,7 @@ Public Class Form2
 
 
                             SoonMesuSimulation_조건 = String.Format("N1_TEST_CNT_{0}", cntstr)
-                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", N1_선물기울기_기준_선물우선, N1_tick_count_기준_선물, N1_선물기울기_기준_선물우선, N1_마감시간_temp(d), N1_시작시간_temp(e))
+                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}", N1_최저MACD선값기준_선물우선, N1_tick_count_기준_선물, N1_선물기울기_기준_선물우선, N1_마감시간_temp(d), N1_시작시간_temp(e))
 
                             Console.WriteLine(SoonMesuSimulation_조건)
                             Add_Log("", SoonMesuSimulation_조건)
