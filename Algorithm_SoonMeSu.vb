@@ -92,7 +92,7 @@ Module Algorithm_SoonMeSu
     'D 알고리즘용 시작
     'CNT_009_A_50_B_0.59_C_0.6_D_0.33_E_0.4  ------------ B231115_T001 테스트  결과
 
-    Public 이동평균선_기준일자 As Integer = 65       '이동평균선 갯수 기준
+    Public 이동평균선_기준일자 As Integer = 60       '이동평균선 갯수 기준
     Public X_계산기준봉비율 As Single = 0.59         '장대양봉의 크기를 계산하는 기준으로 X / 이동평균선_기준일자 비율을 의미함     230725 조건 재설정함 켈리지수 54. 승률 67%
     Public Y_장대양봉기준비율 As Single = 0.6      'X_계산기준봉비율내의 캔들들의 최대최소값의 차에 비해 어느정도인지에 대한 비율
     Public 장대양봉손절기준비율 As Single = 2.5    '장대양봉의 크기를 1로 두고 장대양봉 위에서부터 몇%에서 손절할지 결정함  - 추가
@@ -1036,16 +1036,23 @@ Module Algorithm_SoonMeSu
         End If
         'Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()  -- 이거 지워야 함
 
-        Dim 옵션익절기준 As Single = Val(Form2.txt_F2_익절차.Text)
-        If s.A21_환산이익율 < 옵션가손절매기준 Then
+
+
+        If isRealFlag = True And s.A21_환산이익율 < 옵션가손절매기준 Then
 
             매도사유 = "option_son"
 
-            If isRealFlag = False Then
-                s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
-                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-            End If
+        End If
+
+        Dim 저가 As Single = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2)
+        Dim 저가기준환산이익율 As Single = Math.Round(((저가 - s.A10_신호발생가격) / s.A10_신호발생가격) - 슬리피지, 3)
+        If 저가 > 0 And 저가기준환산이익율 < 옵션가손절매기준 And isRealFlag = False Then
+
+            매도사유 = "option_son"
+
+            s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
+            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
 
         End If
 
@@ -1320,7 +1327,7 @@ Module Algorithm_SoonMeSu
 
                     '선물이 낮아지면
 
-                    If O_선물해제기준기울기 > 선물현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                    If O_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
@@ -1339,7 +1346,7 @@ Module Algorithm_SoonMeSu
                 Else
 
                     '선물이 낮아지면
-                    If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                    If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
@@ -2475,7 +2482,7 @@ Module Algorithm_SoonMeSu
                     If (i = 0 And 선물기울기 > 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선 And 동일방향 > 0) Or (i = 1 And 선물기울기 < 0 And 선물기울기_절대치 > N1_선물기울기_기준_선물우선 And 동일방향 > 0) Then
 
                         Dim 상관계수 As Boolean = Get상관계수상태()
-                        If 상관계수 = True Then
+                        If 상관계수 = True And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)

@@ -119,7 +119,7 @@ Public Class Form2
 
         For i As Integer = 0 To grid_3.ColumnCount - 1
             grid_3.Columns(i).HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
-            grid_3.Columns(i).Width = 100
+            grid_3.Columns(i).Width = 90
         Next
 
         grid_3.Columns(0).HeaderText = "주체"
@@ -130,6 +130,7 @@ Public Class Form2
         grid_3.Columns(5).HeaderText = "40분(상관기준)"
 
         grid_3.Columns(1).Width = 70
+        grid_3.Columns(2).Width = 70
 
 
         Dim 시간인덱스 = New Integer() {N1_tick_count_기준_선물, O_해제tick_count_기준, O_tick_count_기준, 상관계수계산인덱스길이}
@@ -673,6 +674,11 @@ Public Class Form2
     End Sub
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim x As Integer = grid_shinho.Left + grid_shinho.Width + 50
+        Dim y As Integer = btn_신호를저장.Top + btn_신호를저장.Height + 50
+
+        Me.Size = New Size(x, y)
+
         cmb_F2_순매수기준.Items.Clear()
         cmb_F2_순매수기준.Items.Add("0.FOR_SYS")
         cmb_F2_순매수기준.Items.Add("1.FOR_KIG")
@@ -1867,7 +1873,7 @@ Public Class Form2
         'fullTest_B()
         'fullTest_M()
         'fullTest_N()
-        fullTest_N1()
+        'fullTest_N1()
 
         'fullTest_C()
 
@@ -1880,7 +1886,7 @@ Public Class Form2
 
         'RSI_Test()
 
-        'fullTest_O()
+        fullTest_O()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2126,9 +2132,9 @@ Public Class Form2
 
         '0일 3일
         Dim 익절차() As String = {"11", "09", "07", "05", "13"} 'L
-        Dim 옵션기준손절매() As String = {"-0.23", "-0.20", "-0.26", "-0.28"} 'M
-        Dim 중간청산이익목표() As String = {"0.34", "0.38", "0.30"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.21, 0.25, 0.28}
+        Dim 옵션기준손절매() As String = {"-0.23", "-0.20", "-0.26", "-0.28", "-0.30"} 'M
+        Dim 중간청산이익목표() As String = {"0.30"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.25, 0.28}
 
         '1,2,6일
         'Dim 익절차() As String = {"11", "10"} 'L
@@ -2836,7 +2842,7 @@ Public Class Form2
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {14, 12} ', 14, 16}    'A
+        Dim O_선물발생기준기울기_temp() As Single = {16, 13} ', 14, 16}    'A
         Dim O_외국인현물발생기준기울기_temp() As Single = {3, 5} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {2.0}    'A
@@ -2849,9 +2855,9 @@ Public Class Form2
         Dim O_tick_count_기준_temp() As Integer = {40} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {25}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5, 0.6, 0.7}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.6, 0.7}
-        Dim 상관계수계산인덱스길이_temp() As Integer = {80}
+        Dim 선물상관계수최저_temp() As Single = {0.5, 0.7, 0.8}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.7, 0.8}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {80, 60, 40}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
