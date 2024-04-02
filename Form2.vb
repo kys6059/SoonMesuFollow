@@ -2842,22 +2842,22 @@ Public Class Form2
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16, 13} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {3, 5} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {2.0}    'A
-        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0}    'B
+        Dim O_선물해제기준기울기_temp() As Single = {2.0, 4.0, 6.0, 8.0}    'A
+        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0, 1.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
         Dim O_마감시간_temp() As String = {"150000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {40} ', 36, 40}
-        Dim O_해제tick_count_기준_temp() As Integer = {25}
+        Dim O_해제tick_count_기준_temp() As Integer = {25, 40, 20, 30}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5, 0.7, 0.8}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.7, 0.8}
-        Dim 상관계수계산인덱스길이_temp() As Integer = {80, 60, 40}
+        Dim 선물상관계수최저_temp() As Single = {0.5}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.7}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {80}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False

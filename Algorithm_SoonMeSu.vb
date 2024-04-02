@@ -421,7 +421,7 @@ Module Algorithm_SoonMeSu
     Public O_선물발생기준기울기 As Single = 16.0
     Public O_외국인현물발생기준기울기 As Single = 3.0
 
-    Public O_선물해제기준기울기 As Single = 2.0
+    Public O_선물해제기준기울기 As Single = 6.0
     Public O_외국인현물해제기준기울기 As Single = 2.0
 
     Public O_tick_count_기준 As Integer = 40
@@ -449,7 +449,7 @@ Module Algorithm_SoonMeSu
             일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
         End If
 
-        'If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '일단 전부다 함
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '일단 전부다 함
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
             Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
@@ -2365,10 +2365,6 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        'If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False And Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 Then Return  '아래의 마감시간이 자꾸 오동작하여 추가함
-        'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
-
-
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
@@ -2447,7 +2443,7 @@ Module Algorithm_SoonMeSu
         'If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다   --- 이건 거의 (-) 영역에서 일어나는 일이라 이건 제외한다
 
 
-        'If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
+        'If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '24.4월2일 확인 결과 아직은 결과가 좋아서 N1에는 동작하도록 함
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N1_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N1_시작시간 Then Return
 
 
