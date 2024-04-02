@@ -162,6 +162,8 @@ Module Algorithm_SoonMeSu
 
     Public M_선물기울기_기준 As Integer = 13
 
+    Public N_MACD선의값_상한허용치 As Single = 0.16
+
 
 
 
@@ -435,6 +437,8 @@ Module Algorithm_SoonMeSu
     Public 외국인현물상관계수최저 As Double = 0.7
     Public 상관계수계산인덱스길이 As Integer = 80
 
+    Public O_다시발생시적용배율 As Single = 3.0
+
 
     Public Sub CalcAlgorithm_O()
 
@@ -455,32 +459,37 @@ Module Algorithm_SoonMeSu
             Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
             Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
 
-
             Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
             Dim 외국인현물순매수기울기_절대치 As Single = Math.Abs(외국인현물순매수기울기)
 
-
             If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
 
+            If 선물순매수기울기 > 0 Then  '  콜 방향
 
-            If 선물순매수기울기_절대치 > O_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+                '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
+
+                If is동일신호가현재살아있나("O", 0) Then Return
+
+                Dim offset As Single = 1.0
+
+                If is동일신호가있나("O", 0) = True Then
+                    offset = O_다시발생시적용배율
+                End If
 
 
-                If 선물순매수기울기 > 0 Then  '  콜 방향
+                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                        Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
 
 
-                    '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
-                    If is동일신호가있나("O", 0) = True Then Return
+                        If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
+                            If Get상관계수상태() Then
+                                Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                                SoonMesuShinhoList.Add(shinho)
+                            End If
 
-                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
-
-                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
-
-                        If Get상관계수상태() Then
-                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                            SoonMesuShinhoList.Add(shinho)
                         End If
 
                     End If
@@ -488,7 +497,16 @@ Module Algorithm_SoonMeSu
 
                 Else ' 풋 방향
 
-                    If is동일신호가있나("O", 1) = True Then Return
+
+                    'If is동일신호가현재살아있나("O", 1) Then Return
+
+                    Dim offset As Single = 1.0
+
+                If is동일신호가있나("O", 1) = True Then
+                    offset = O_다시발생시적용배율
+                End If
+
+                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
 
@@ -501,10 +519,10 @@ Module Algorithm_SoonMeSu
                         End If
 
                     End If
-
                 End If
 
             End If
+
         End If
 
 
@@ -2382,6 +2400,9 @@ Module Algorithm_SoonMeSu
             'If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 And 일분옵션데이터((i + 1) Mod 2).MACD_Result(1, Index) < 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생할 때 반대쪽은 이미 0보다 작아야 함
             If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 Then
 
+                'MACD선이 너무 높은데 있으면서 신호가 뜨는걸 방지하는 기능 추가
+                If 일분옵션데이터(i).CA_기본(0, Index) > N_MACD선의값_상한허용치 Then Continue For
+
                 '기울기 계산
                 Dim 기울기 As Single = Math.Round(일분옵션데이터(i).CA_기본(0, Index) - 일분옵션데이터(i).CA_기본(0, Index - 1), 4)
 
@@ -2391,10 +2412,10 @@ Module Algorithm_SoonMeSu
 
                         '여기 선물케이스 정리해서 넣을 것
 
-                        Dim 선물기울기 As Integer = 틱당기울기계산(3, O_tick_count_기준)
-                        Dim 현물기울기 As Integer = 틱당기울기계산(1, O_tick_count_기준)
+                        Dim 선물기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
+                        Dim 현물기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
                         Dim 동일방향 As Integer = 선물기울기 * 현물기울기
-                        Dim 선물기울기_절대치 As Integer = Math.Abs(선물기울기)
+                        Dim 선물기울기_절대치 As Single = Math.Abs(선물기울기)
 
 
                         If 동일방향 <= 0 Then Continue For
