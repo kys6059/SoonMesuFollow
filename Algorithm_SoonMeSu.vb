@@ -498,9 +498,9 @@ Module Algorithm_SoonMeSu
                 Else ' 풋 방향
 
 
-                    'If is동일신호가현재살아있나("O", 1) Then Return
+                If is동일신호가현재살아있나("O", 1) Then Return
 
-                    Dim offset As Single = 1.0
+                Dim offset As Single = 1.0
 
                 If is동일신호가있나("O", 1) = True Then
                     offset = O_다시발생시적용배율
@@ -961,6 +961,13 @@ Module Algorithm_SoonMeSu
                     End If
 
 
+                    '신호리스트의 최신을 찾아서 만약 현재와 방향이 다르면 reverse한다   -- 20230806 추가
+                    Dim 최종신호 As Integer = 현재신호계산하기()
+                    If (s.A08_콜풋 = 0 And 최종신호 < 0) Or (s.A08_콜풋 = 1 And 최종신호 > 0) Then
+                        ret = "reverse"
+                    End If
+
+
                     If ret <> "" Then
                         죽은신호처리하기(s, ret)
                     End If
@@ -1035,13 +1042,6 @@ Module Algorithm_SoonMeSu
             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
             s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
         End If
-
-        '신호리스트의 최신을 찾아서 만약 현재와 방향이 다르면 reverse한다   -- 20230806 추가
-        Dim 최종신호 As Integer = 현재신호계산하기()
-        If (s.A08_콜풋 = 0 And 최종신호 < 0) Or (s.A08_콜풋 = 1 And 최종신호 > 0) Then
-            매도사유 = "reverse"
-        End If
-
 
         '옵션가격 기준 손절매, 익절
         Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
