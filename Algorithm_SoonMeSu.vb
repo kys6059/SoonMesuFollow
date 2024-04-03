@@ -214,6 +214,25 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
+    Private Function 같은방향같은시간발생신호가있는지(ByVal callput As Integer) As Boolean
+
+        Dim ret As Boolean = False
+
+        If SoonMesuShinhoList IsNot Nothing Then
+
+
+            For i As Integer = 0 To SoonMesuShinhoList.Count - 1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A15_현재상태 = 1 And s.A08_콜풋 = callput And s.A01_발생Index = currentIndex_순매수 Then ret = True
+            Next
+
+        End If
+
+        Return ret
+
+    End Function
+
+
     Public Sub CalcAlgorithm_A()  '10시20분부터 11시30분까지 순매수 알고리즘
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
@@ -469,6 +488,7 @@ Module Algorithm_SoonMeSu
                 '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
 
                 If is동일신호가현재살아있나("O", 0) Then Return
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
                 Dim offset As Single = 1.0
 
@@ -479,26 +499,26 @@ Module Algorithm_SoonMeSu
 
                 If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
-                        Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
 
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
-
-                            If Get상관계수상태() Then
-                                Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                                SoonMesuShinhoList.Add(shinho)
-                            End If
-
+                        If Get상관계수상태() Then
+                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                            SoonMesuShinhoList.Add(shinho)
                         End If
 
                     End If
 
+                End If
 
-                Else ' 풋 방향
+
+            Else ' 풋 방향
 
 
                 If is동일신호가현재살아있나("O", 1) Then Return
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
                 Dim offset As Single = 1.0
 
