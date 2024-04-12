@@ -75,6 +75,9 @@ Public Class Form2
 
             CalcRSIData() 'RSI 값을 계산한다
 
+
+            Calc스토캐스틱()
+
             CalcAlgorithmAll() '--------------------------- 신호 발생 / 해제 확인
 
             If chk_F2_화면끄기.Checked = False Then
@@ -285,7 +288,8 @@ Public Class Form2
         Init_MACD_Graph()
         Draw_MACD_Graph()
 
-
+        Init_스토캐스틱_Graph()
+        Draw_스토캐스틱_Graph()
 
 
 
@@ -1150,6 +1154,176 @@ Public Class Form2
         Chart2.Visible = True
 
     End Sub
+
+    Private Sub Init_스토캐스틱_Graph()
+
+        'Chart_스토캐스틱.Visible = False
+        Dim str, ChartAreaStr As String
+
+        Chart_스토캐스틱.Series.Clear()
+        Chart_스토캐스틱.ChartAreas.Clear()
+        Chart_스토캐스틱.Legends.Clear()
+        Chart_스토캐스틱.Annotations.Clear()
+
+        For i As Integer = 0 To 1 '콜풋
+
+            ChartAreaStr = "Stocastic_CHART_" + i.ToString()
+            Chart_스토캐스틱.ChartAreas.Add(ChartAreaStr)
+
+            For j As Integer = 0 To 2
+                str = "basic_series_" + i.ToString() + "_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+                Chart_스토캐스틱.Series.Add(str)
+                Chart_스토캐스틱.Series(str).ChartArea = ChartAreaStr
+                Chart_스토캐스틱.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart_스토캐스틱.Series(str).BorderWidth = 1
+                Chart_스토캐스틱.Series(str).Color = Color.Green
+
+            Next
+
+
+            For j As Integer = 0 To 1
+                str = "Line" + i.ToString() + "_" + j.ToString()
+                Chart_스토캐스틱.Series.Add(str)
+                Chart_스토캐스틱.Series(str).ChartArea = ChartAreaStr
+                Chart_스토캐스틱.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart_스토캐스틱.Series(str).BorderWidth = 1
+
+                If j = 0 Then
+                    Chart_스토캐스틱.Series(str).Color = Color.Red
+                    Chart_스토캐스틱.Series(str).BorderWidth = 2
+                ElseIf j = 1 Then
+                    Chart_스토캐스틱.Series(str).Color = Color.Black
+                End If
+            Next
+
+            'Lebel 설정
+            Chart_스토캐스틱.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+
+            '축 선 속성 설정
+            Chart_스토캐스틱.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart_스토캐스틱.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
+            Chart_스토캐스틱.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Chart_스토캐스틱.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+            'Chart_스토캐스틱.ChartAreas(i).AxisY.Interval = 0.2
+
+        Next
+
+    End Sub
+
+
+    Private Sub Draw_스토캐스틱_Graph()
+
+        Dim i, callput, retindex As Integer
+
+        If currentIndex_1MIn >= 0 Then
+
+            For i = 0 To Chart_스토캐스틱.Series.Count - 1
+                Chart_스토캐스틱.Series(i).Points.Clear()
+            Next
+
+            For callput = 0 To 1
+
+                Dim maxValue As Single = 100
+                Dim minValue As Single = 0
+
+                For j As Integer = 0 To 2
+                    Dim BasicSeries As String = "basic_series_" + callput.ToString() + "_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+                    For i = 0 To currentIndex_1MIn
+                        If j = 0 Then
+                            retindex = Chart_스토캐스틱.Series(BasicSeries).Points.AddXY(i, 0) ' 위의 그래프와 X축을 통일하기 위해 0 값을 모든 X값에 먼저 넣는다
+                            Chart_스토캐스틱.Series(BasicSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))                   'X축 시간
+                        ElseIf j = 1 Then
+                            retindex = Chart_스토캐스틱.Series(BasicSeries).Points.AddXY(i, 20)
+                        ElseIf j = 2 Then
+                            retindex = Chart_스토캐스틱.Series(BasicSeries).Points.AddXY(i, 80)
+                        End If
+
+                    Next
+                Next
+
+                Dim 메인시리즈(1) As String
+
+                For j = 0 To 1
+                    메인시리즈(j) = "Line" + callput.ToString() + "_" + j.ToString()
+                Next
+
+                For i = 0 To currentIndex_1MIn
+                    ' main Series 입력
+                    If 일분옵션데이터(callput).price(i, 0) > 0 Then
+
+                        retindex = Chart_스토캐스틱.Series(메인시리즈(0)).Points.AddXY(i, 일분옵션데이터(callput).ST_FastK(i))
+                        Chart_스토캐스틱.Series(메인시리즈(1)).Points.AddXY(retindex, 일분옵션데이터(callput).ST_FastD(i))
+
+                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}{7}SlowK:{8}{9}SlowD:{10}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, Math.Round(일분옵션데이터(callput).이동평균선(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).ST_FastK(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).ST_FastD(i), 1))
+
+                        Chart_스토캐스틱.Series(메인시리즈(0)).Points(retindex).ToolTip = str
+                        Chart_스토캐스틱.Series(메인시리즈(1)).Points(retindex).ToolTip = str
+
+                    End If
+                Next
+
+
+            Next
+        End If
+
+        '신호를 그린다
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                Dim Str As String = "Shinho_" + i.ToString()
+                Chart_스토캐스틱.Series.Add(Str)
+
+                If s.A08_콜풋 = 0 Then
+                    Chart_스토캐스틱.Series(Str).ChartArea = "Stocastic_CHART_0"
+                Else
+                    Chart_스토캐스틱.Series(Str).ChartArea = "Stocastic_CHART_1"
+                End If
+
+                Chart_스토캐스틱.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Chart_스토캐스틱.Series(Str).Color = Color.DarkGreen
+                Chart_스토캐스틱.Series(Str).BorderWidth = 3
+
+                '시작점,끝점 찾기
+                Dim 신호시작점 As Integer = 순매수시간으로1MIN인덱스찾기(Val(s.A02_발생시간))
+                Dim 신호끝점 As Integer
+
+                If currentIndex_1MIn >= 신호시작점 Then Chart_스토캐스틱.Series(Str).Points.AddXY(신호시작점, 100)  '시작점
+                If currentIndex_1MIn >= 신호시작점 Then Chart_스토캐스틱.Series(Str).Points.AddXY(신호시작점, 0)  '시작점
+
+                If s.A15_현재상태 = 1 Then '끝점
+                    신호끝점 = currentIndex_1MIn
+                    Chart_스토캐스틱.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                Else
+                    신호끝점 = 순매수시간으로1MIN인덱스찾기(Val(s.A18_매도시간))
+                    Chart_스토캐스틱.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+
+                End If
+
+                If currentIndex_1MIn >= 신호끝점 Then
+                    Chart_스토캐스틱.Series(Str).Points.AddXY(신호끝점, 0)
+                    Chart_스토캐스틱.Series(Str).Points.AddXY(신호끝점, 100)
+                    Dim str1 As String = String.Format("신호시작점 : {0},시작시간: {1}, 신호끝점: {2}", 신호시작점, s.A02_발생시간, 신호끝점)
+                    Chart_스토캐스틱.Series(Str).Points(0).ToolTip = str1
+                    Chart_스토캐스틱.Series(Str).Points(1).ToolTip = str1
+                    Chart_스토캐스틱.Series(Str).Points(2).ToolTip = str1
+                End If
+
+
+
+            Next
+        End If
+
+
+
+        Chart_스토캐스틱.Visible = True
+
+    End Sub
+
+
+
 
 
     Private Sub Init_Option_1min_Graph()

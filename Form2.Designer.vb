@@ -32,6 +32,9 @@ Partial Class Form2
         Dim ChartArea3 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend3 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series3 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea4 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend4 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series4 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_자동저장모드 = New System.Windows.Forms.CheckBox()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
@@ -206,6 +209,8 @@ Partial Class Form2
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.TabPage6 = New System.Windows.Forms.TabPage()
+        Me.Chart_스토캐스틱 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -232,6 +237,8 @@ Partial Class Form2
         Me.TabPage3.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage4.SuspendLayout()
+        Me.TabPage6.SuspendLayout()
+        CType(Me.Chart_스토캐스틱, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -2463,6 +2470,7 @@ Partial Class Form2
         Me.Tab_종합주가.Controls.Add(Me.TabPage1)
         Me.Tab_종합주가.Controls.Add(Me.TabPage2)
         Me.Tab_종합주가.Controls.Add(Me.TabPage3)
+        Me.Tab_종합주가.Controls.Add(Me.TabPage6)
         Me.Tab_종합주가.Location = New System.Drawing.Point(558, 225)
         Me.Tab_종합주가.Name = "Tab_종합주가"
         Me.Tab_종합주가.SelectedIndex = 0
@@ -2536,6 +2544,33 @@ Partial Class Form2
         Me.TabPage5.Text = "공백"
         Me.TabPage5.UseVisualStyleBackColor = True
         '
+        'TabPage6
+        '
+        Me.TabPage6.Controls.Add(Me.Chart_스토캐스틱)
+        Me.TabPage6.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage6.Name = "TabPage6"
+        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage6.Size = New System.Drawing.Size(1100, 731)
+        Me.TabPage6.TabIndex = 3
+        Me.TabPage6.Text = "스토캐스틱"
+        Me.TabPage6.UseVisualStyleBackColor = True
+        '
+        'Chart_스토캐스틱
+        '
+        ChartArea4.Name = "ChartArea1"
+        Me.Chart_스토캐스틱.ChartAreas.Add(ChartArea4)
+        Legend4.Name = "Legend1"
+        Me.Chart_스토캐스틱.Legends.Add(Legend4)
+        Me.Chart_스토캐스틱.Location = New System.Drawing.Point(39, 32)
+        Me.Chart_스토캐스틱.Name = "Chart_스토캐스틱"
+        Series4.ChartArea = "ChartArea1"
+        Series4.Legend = "Legend1"
+        Series4.Name = "Series1"
+        Me.Chart_스토캐스틱.Series.Add(Series4)
+        Me.Chart_스토캐스틱.Size = New System.Drawing.Size(1024, 521)
+        Me.Chart_스토캐스틱.TabIndex = 41
+        Me.Chart_스토캐스틱.Text = "Cht_스토캐스틱"
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2606,6 +2641,8 @@ Partial Class Form2
         Me.TabPage3.ResumeLayout(False)
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage4.ResumeLayout(False)
+        Me.TabPage6.ResumeLayout(False)
+        CType(Me.Chart_스토캐스틱, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -2784,4 +2821,6 @@ Partial Class Form2
     Friend WithEvents chk_Algorithm_N1 As CheckBox
     Friend WithEvents txt_순매수기준인덱스 As RichTextBox
     Friend WithEvents Label5 As Label
+    Friend WithEvents TabPage6 As TabPage
+    Friend WithEvents Chart_스토캐스틱 As DataVisualization.Charting.Chart
 End Class

@@ -2729,4 +2729,107 @@ Module Algorithm_SoonMeSu
 
     End Function
 
+    Public Sub Calc스토캐스틱()
+
+        For callput As Integer = 0 To 1
+            For j As Integer = 0 To currentIndex_1MIn
+
+                If j < 스토캐스틱_설정(0) Then Continue For
+
+                스토캐스틱값_계산(callput, j)
+
+            Next
+        Next
+    End Sub
+
+    '계산값 정의 : '0은 아무 것도 없는 거, 1은 상승추월, -1은 하락추월
+    Public Sub 스토캐스틱값_계산(ByVal callput As Integer, ByVal index As Integer)
+
+
+        Dim ret As Single = 0.0
+
+        'Nmt = 10,5,5
+        'Nmt = 15,7,5
+        'Nmt = 30,10,10
+        'FastK = (현재가격 - N일 중 최저가) / (N일중 최고가 - N일중 최저가) * 100
+        'FastD = FastK 값의 m 거래일 간의 이동평균값
+        'SlowK = FastD 값의 m 거래일 간의 이동평균값
+        'SlowD = SlowK 값의 t 거래일 간의 이동평균값
+
+        일분옵션데이터(callput).ST_FastK(index) = FastK계산(callput, index, 스토캐스틱_설정(0))
+        일분옵션데이터(callput).ST_FastD(index) = 스토캐스틱_이평선계산(callput, index, "FastK", 스토캐스틱_설정(1))
+        일분옵션데이터(callput).ST_SlowK(index) = 스토캐스틱_이평선계산(callput, index, "FastD", 스토캐스틱_설정(1))
+        일분옵션데이터(callput).ST_SlowD(index) = 스토캐스틱_이평선계산(callput, index, "SlowK", 스토캐스틱_설정(2))
+
+    End Sub
+
+    Private Function FastK계산(ByVal callput As Integer, ByVal index As Integer, ByVal N As Integer) As Single
+
+        Dim N일중최고가 As Single = 0.01
+        Dim N일중최저가 As Single = 100.0
+
+        For i As Integer = 0 To N - 1
+
+            If 일분옵션데이터(callput).price(index - i, 3) > 0 Then
+
+                If 일분옵션데이터(callput).price(index - i, 1) > N일중최고가 Then N일중최고가 = 일분옵션데이터(callput).price(index - i, 1)
+                If 일분옵션데이터(callput).price(index - i, 2) < N일중최저가 Then N일중최저가 = 일분옵션데이터(callput).price(index - i, 2)
+
+            End If
+
+        Next
+
+        Dim FastK As Single
+        Dim 현재가 As Single = 일분옵션데이터(callput).price(index, 3)
+
+        If 현재가 > 0 Then
+            FastK = (현재가 - N일중최저가) / (N일중최고가 - N일중최저가) * 100
+        End If
+
+        Return FastK
+    End Function
+
+    Private Function 스토캐스틱_이평선계산(ByVal callput As Integer, ByVal index As Integer, ByVal source As String, ByVal 이평선기준일 As Integer) As Single
+
+
+
+        Dim sumValue As Single = 0
+        Dim cnt As Integer = 0
+
+        If index < 이평선기준일 Then Return 0       ' 현재 index가 이동평균계산기준일자보다 작으면 패스한다
+
+        For i As Integer = 1 To 이평선기준일  '자기를 포함한 이동평균선기준일자까지 더한다
+
+            If source = "FastK" Then
+
+                If 일분옵션데이터(callput).ST_FastK(index - i) > 0 Then
+                    sumValue = sumValue + 일분옵션데이터(callput).ST_FastK(index - i)
+                    cnt += 1
+                End If
+
+            ElseIf source = "FastD" Then
+
+                If 일분옵션데이터(callput).ST_FastD(index - i) > 0 Then
+                    sumValue = sumValue + 일분옵션데이터(callput).ST_FastD(index - i)
+                    cnt += 1
+                End If
+
+
+            ElseIf source = "SlowK" Then
+
+                If 일분옵션데이터(callput).ST_SlowK(index - i) > 0 Then
+                    sumValue = sumValue + 일분옵션데이터(callput).ST_SlowK(index - i)
+                    cnt += 1
+                End If
+
+            End If
+
+
+        Next
+
+        Dim 이동평균값 As Single = sumValue / cnt
+        Return 이동평균값
+
+    End Function
+
 End Module

@@ -36,6 +36,11 @@ Module Module_For1Min
         Dim CA_팔때(,) As Single 'MACD 관련 계산치들
         Dim MACD_Result(,) As Integer
         Dim RSI() As Single
+        Dim 스토캐스틱_결과() As Integer
+        Dim ST_FastK() As Single
+        Dim ST_FastD() As Single
+        Dim ST_SlowK() As Single
+        Dim ST_SlowD() As Single
 
         Public Sub Initialize()
             ReDim ctime(480) '
@@ -47,6 +52,11 @@ Module Module_For1Min
             ReDim CA_팔때(3, 480)
             ReDim MACD_Result(3, 480)
             ReDim RSI(480)
+            ReDim 스토캐스틱_결과(480)
+            ReDim ST_FastK(480)
+            ReDim ST_FastD(480)
+            ReDim ST_SlowK(480)
+            ReDim ST_SlowD(480)
         End Sub
     End Structure
 
@@ -94,7 +104,6 @@ Module Module_For1Min
     Public MA_Interval() As Integer = {12, 26, 60, 19, 39}  '이평선의 날짜들을 미리 지정한다
     Public max_interval As Integer
 
-
     '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
     Public 일분옵션데이터() As 일분데이터템플릿
 
@@ -129,6 +138,9 @@ Module Module_For1Min
     Public RSI_익절기준 As Single = 0.75  '이정도 수익 이상일때만 RSI로 익절을 한다
 
 
+    Public 스토캐스틱_설정() As Integer = {10, 5, 5}  '10,5,5,,,,, 15,7,5,     30,10,10 3ㄱ초기에 이렇게 할 계획임
+
+
     Public Sub InitDataStructure_1Min()
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
@@ -160,6 +172,7 @@ Module Module_For1Min
         Else
             optionList.Clear()
         End If
+
 
     End Sub
 
@@ -876,6 +889,7 @@ Module Module_For1Min
         'Dim ret As Double = Sxy / Sqrt(Sxx * Syy)
         'Return ret
     End Function ' Correl
+
 
 
 
