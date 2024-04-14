@@ -132,8 +132,8 @@ Module Module_For1Min
 
 
     'RSI 관련 변수
-    Public RSI_기준일 As Integer = 23
-    Public RSI_과열기준 As Single = 0.8
+    Public RSI_기준일 As Integer = 18
+    Public RSI_과열기준 As Single = 0.75
     Public RSI_침체기준 As Single = 0.2
     Public RSI_익절기준 As Single = 0.75  '이정도 수익 이상일때만 RSI로 익절을 한다
 

@@ -209,6 +209,9 @@ Module Algorithm_SoonMeSu
 
             If Form2.chk_Algorithm_E2.Checked = True Then CalcAlgorithm_E2()
             If Form2.chk_Algorithm_O.Checked = True Then CalcAlgorithm_O()
+            If Form2.chk_Algorithm_P.Checked = True Then CalcAlgorithm_P(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_R.Checked = True Then CalcAlgorithm_R(일분옵션데이터_CurrentIndex)
+
 
         End If
 
@@ -504,6 +507,10 @@ Module Algorithm_SoonMeSu
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
                         If Get상관계수상태() Then
+
+                            If 혹시_지금_과매수상태인가(0, 일분옵션데이터_CurrentIndex - 1) = True Then Return
+
+
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
                             SoonMesuShinhoList.Add(shinho)
@@ -528,11 +535,14 @@ Module Algorithm_SoonMeSu
 
                 If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
-                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
 
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
                         If Get상관계수상태() Then
+
+                            If 혹시_지금_과매수상태인가(1, 일분옵션데이터_CurrentIndex - 1) = True Then Return
+
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
                             SoonMesuShinhoList.Add(shinho)
@@ -889,7 +899,7 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex >= 0 Then
 
-            If shinho.A03_신호ID = "D" Or shinho.A03_신호ID = "M" Or shinho.A03_신호ID = "N" Then
+            If shinho.A03_신호ID = "D" Or shinho.A03_신호ID = "M" Or shinho.A03_신호ID = "N" Or shinho.A03_신호ID = "P" Or shinho.A03_신호ID = "R" Then  '이전 틱이 끝나고 새로운 틱에서 사는 건 시가를 입력한다
 
                 Dim buyingPrice As Single
                 If 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 0 Then
@@ -972,6 +982,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_E2(s, 일분옵션데이터_CurrentIndex)
                             Case "O"
                                 ret = 살아있는신호확인하기_O(s, 일분옵션데이터_CurrentIndex)
+                            Case "P"
+                                ret = 살아있는신호확인하기_P(s, 일분옵션데이터_CurrentIndex)
                         End Select
                     End If
 
@@ -1103,11 +1115,14 @@ Module Algorithm_SoonMeSu
         'RSI에 의한 익절 확인
         If s.A21_환산이익율 > RSI_익절기준 Then  'RSI 익절기준을 넘었고
 
+
             If 일분옵션데이터(s.A08_콜풋).RSI(일분옵션데이터_CurrentIndex) > RSI_과열기준 Then
 
                 매도사유 = "RSI_IK"
 
+
             End If
+
         End If
 
 
@@ -2445,6 +2460,8 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
 
+                            'If 스토캐스틱_기준_과열인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For  -- O에는 효과가 있으나 N에서는 손해라서 제외함
+
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
                             'Add_Log("N신호:", log_str)
@@ -2631,6 +2648,50 @@ Module Algorithm_SoonMeSu
 
     End Function
 
+
+
+    Private Function 살아있는신호확인하기_P(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+            'SlowK가 SlowD보다 작아지면 매도
+            Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+            Dim callput = s.A08_콜풋
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+
+            Dim SlowD기준값 = 일분옵션데이터(callput).ST_SlowD(Index) - P_매도_SlowK_SlowD_아래값
+
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 And 일분옵션데이터(callput).ST_SlowK(Index) < SlowD기준값 Then
+                매도사유 = "P_below_D1"
+            End If
+
+
+            'If 일분옵션데이터(callput).ST_SlowK(Index - 1) > 일분옵션데이터(callput).ST_SlowD(Index - 1) And 일분옵션데이터(callput).ST_SlowK(Index) < 일분옵션데이터(callput).ST_SlowD(Index) Then ' SlowK가 SlowD보다 낮아지면 매도
+            '   매도사유 = "P_below_D"
+            'End If
+
+            '최근 M회 중 과열조건이 N회 이상이면 매도 --- 이건 나중에 추가
+
+        End If
+
+
+
+        If 매도사유 <> "" Then
+            If isRealFlag = False Then
+                s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
+
+            End If
+            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 0.02, 3)
+        End If
+
+        Return 매도사유
+
+    End Function
+
     '기울기가 반전되거나
     '외국인 선물이 반대방향으로 바뀌면 매도
 
@@ -2645,7 +2706,7 @@ Module Algorithm_SoonMeSu
             Dim callput = s.A08_콜풋
 
             Dim 마지막순매수index As Integer = Get마지막순매수Index()
-            If 마지막순매수index + 신호최소유지시간index < 일분옵션데이터_CurrentIndex Then Return ""  '신호최소유지index가 넘지 않았으면 그냥 유지한다
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then Return ""  '신호최소유지index가 넘지 않았으면 그냥 유지한다
 
             '기울기 계산
             Dim 직전기울기 As Single = Math.Round(일분옵션데이터(callput).CA_기본(0, Index) - 일분옵션데이터(callput).CA_기본(0, Index - 1), 4)
@@ -2753,13 +2814,13 @@ Module Algorithm_SoonMeSu
         'Nmt = 30,10,10
         'FastK = (현재가격 - N일 중 최저가) / (N일중 최고가 - N일중 최저가) * 100
         'FastD = FastK 값의 m 거래일 간의 이동평균값
-        'SlowK = FastD 값의 m 거래일 간의 이동평균값
+        'SlowK = FastD
         'SlowD = SlowK 값의 t 거래일 간의 이동평균값
 
         일분옵션데이터(callput).ST_FastK(index) = FastK계산(callput, index, 스토캐스틱_설정(0))
-        일분옵션데이터(callput).ST_FastD(index) = 스토캐스틱_이평선계산(callput, index, "FastK", 스토캐스틱_설정(1))
-        일분옵션데이터(callput).ST_SlowK(index) = 스토캐스틱_이평선계산(callput, index, "FastD", 스토캐스틱_설정(1))
-        일분옵션데이터(callput).ST_SlowD(index) = 스토캐스틱_이평선계산(callput, index, "SlowK", 스토캐스틱_설정(2))
+        일분옵션데이터(callput).ST_FastD(index) = 스토캐스틱_이평선계산_지수이평(callput, index, "FastD", 스토캐스틱_설정(1))
+        일분옵션데이터(callput).ST_SlowK(index) = 일분옵션데이터(callput).ST_FastD(index)
+        일분옵션데이터(callput).ST_SlowD(index) = 스토캐스틱_이평선계산_지수이평(callput, index, "SlowD", 스토캐스틱_설정(2))
 
     End Sub
 
@@ -2789,7 +2850,7 @@ Module Algorithm_SoonMeSu
         Return FastK
     End Function
 
-    Private Function 스토캐스틱_이평선계산(ByVal callput As Integer, ByVal index As Integer, ByVal source As String, ByVal 이평선기준일 As Integer) As Single
+    Private Function 스토캐스틱_이평선계산(ByVal callput As Integer, ByVal index As Integer, ByVal 목적이평선 As String, ByVal 이평선기준일 As Integer) As Single
 
 
 
@@ -2798,24 +2859,16 @@ Module Algorithm_SoonMeSu
 
         If index < 이평선기준일 Then Return 0       ' 현재 index가 이동평균계산기준일자보다 작으면 패스한다
 
-        For i As Integer = 1 To 이평선기준일  '자기를 포함한 이동평균선기준일자까지 더한다
+        For i As Integer = 0 To 이평선기준일 - 1  '자기를 포함한 이동평균선기준일자까지 더한다
 
-            If source = "FastK" Then
+            If 목적이평선 = "FastD" Then
 
                 If 일분옵션데이터(callput).ST_FastK(index - i) > 0 Then
                     sumValue = sumValue + 일분옵션데이터(callput).ST_FastK(index - i)
                     cnt += 1
                 End If
 
-            ElseIf source = "FastD" Then
-
-                If 일분옵션데이터(callput).ST_FastD(index - i) > 0 Then
-                    sumValue = sumValue + 일분옵션데이터(callput).ST_FastD(index - i)
-                    cnt += 1
-                End If
-
-
-            ElseIf source = "SlowK" Then
+            ElseIf 목적이평선 = "SlowD" Then
 
                 If 일분옵션데이터(callput).ST_SlowK(index - i) > 0 Then
                     sumValue = sumValue + 일분옵션데이터(callput).ST_SlowK(index - i)
@@ -2830,6 +2883,212 @@ Module Algorithm_SoonMeSu
         Dim 이동평균값 As Single = sumValue / cnt
         Return 이동평균값
 
+    End Function
+
+    Private Function 스토캐스틱_이평선계산_지수이평(ByVal callput As Integer, ByVal index As Integer, ByVal 목적이평선 As String, ByVal 이평선기준일 As Integer) As Single
+
+        Dim sumValue As Single = 0
+        Dim cnt As Integer = 0
+
+        If index < 이평선기준일 Then Return 0       ' 현재 index가 이동평균계산기준일자보다 작으면 패스한다
+
+        '첫 번째 EMA 값 = (현재 종가 * EMA 가중치) + (이전 EMA 값 * (1 - EMA 가중치))				
+        'EMA가중치 = (2 / (기간 + 1))
+
+        Dim 이동평균값 As Single = 0
+        Dim 이전EMA값 As Single = 0
+        Dim EMA가중치 As Single = (2 / (이평선기준일 + 1))
+
+
+        If 목적이평선 = "FastD" Then
+
+            이전EMA값 = 일분옵션데이터(callput).ST_FastD(index - 1)
+            If 이전EMA값 = 0 Then 이전EMA값 = 일분옵션데이터(callput).ST_FastK(index)
+
+            이동평균값 = (일분옵션데이터(callput).ST_FastK(index) * EMA가중치) + (이전EMA값 * (1 - EMA가중치))
+
+        ElseIf 목적이평선 = "SlowD" Then
+
+            이전EMA값 = 일분옵션데이터(callput).ST_SlowD(index - 1)
+            If 이전EMA값 = 0 Then 이전EMA값 = 일분옵션데이터(callput).ST_SlowK(index)
+
+            이동평균값 = (일분옵션데이터(callput).ST_SlowK(index) * EMA가중치) + (이전EMA값 * (1 - EMA가중치))
+
+        End If
+
+
+        Return 이동평균값
+
+    End Function
+
+    Private Function 혹시_지금_과매수상태인가(ByVal callput As Integer, ByVal index As Integer) As Boolean
+
+
+
+        Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
+        Dim 현재RSI값 As Single = 일분옵션데이터(callput).RSI(index)
+
+        If 현재slowK값 > 80 Then
+
+            Return True
+
+        Else
+            Return False
+        End If
+
+    End Function
+
+
+    Public P_아래기준선 As Single = 20
+    Public P선물기울기_기준 As Single = 6
+    Public P_매도_SlowK_SlowD_아래값 As Single = 5
+
+
+    '스토캐스틱 조건 + 상관 + 
+    Public Sub CalcAlgorithm_P(ByVal 일분옵션데이터_CurrentIndex As Integer) '스토캐스틱 조건 + 상관 + 외국인순매수 + 외국인현물매수 조건 4개 모두 만족
+
+        max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
+
+        If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
+
+
+
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+
+        For i As Integer = 0 To 1
+
+            If is동일신호가현재살아있나("P", i) Then Continue For
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
+
+
+            '여기서 해당 방향 기본 조건 확인해서 아니면 빠진다  --------------------------------------------------- 나중에 추가
+
+            If 일분옵션데이터(i).MACD_Result(2, Index) < 0 Then Continue For  ' 장기 이동평균선 위에 있을 때만 신호
+
+
+
+            Dim 선물기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
+            Dim 현물기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
+            Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+            Dim 선물기울기_절대치 As Single = Math.Abs(선물기울기)
+
+
+            'If 동일방향 <= 0 Then Continue For
+            If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < P선물기울기_기준) Then Continue For
+            If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < P선물기울기_기준) Then Continue For
+
+            Dim 상관계수 As Boolean = Get상관계수상태()
+            If 상관계수 = False Then Continue For
+
+
+
+            If 일분옵션데이터(i).ST_SlowK(Index) <= P_아래기준선 And 일분옵션데이터(i).ST_SlowK(Index) > 0 Then  '이전 틱이 아래기준선 이하이고
+
+                'If 일분옵션데이터(i).ST_SlowK(Index - 1) < 일분옵션데이터(i).ST_SlowD(Index - 1) And 일분옵션데이터(i).ST_SlowK(Index) > 일분옵션데이터(i).ST_SlowD(Index) Then ' SlowK가 SlowD보다 전틱은 낮은 상태에서 상향돌파할 때 신호
+
+                Dim 이전기울기 As Single = 일분옵션데이터(i).ST_SlowK(Index - 1) - 일분옵션데이터(i).ST_SlowK(Index - 2)
+                Dim 직전기울기 As Single = 일분옵션데이터(i).ST_SlowK(Index) - 일분옵션데이터(i).ST_SlowK(Index - 1)
+                If 이전기울기 < 0 And 직전기울기 > 0 Then ' 힌지 : K선  기울기가 뒤집어 질 때 - 주로 교차전에 발생 교차 전
+
+                    Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                    Dim log_str As String = String.Format("P 콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)
+                    Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("P", i)
+
+                    SoonMesuShinhoList.Add(shinho)
+
+                End If
+
+            End If
+
+        Next
+
+    End Sub
+
+
+    Public RSI가_50보다_낮은비율_기준 As Single = 0.6   '앞전에 50보다 낮아서 기고 있으면 돌파신호가 허위일 확률이 높다. 하여 이게 일정이상인 경우에만 신호가 발생하도록 조절한다
+    Public RSI_50_낮은비율_인덱스_기준 As Single = 80
+    Public RSI_R_Logic_시작시간_기준 As Integer = 103000
+
+
+    'RSI 저점 상향 돌파 - 단, 그 전 일정 기간동안 50보다 낮은점의 비율이 Y보다 커야 한다
+
+    'R_023_A_18_B_0.75_C_0.35_D_0.6_E_80_F_103000  -- 4승 무패였음
+
+    Public Sub CalcAlgorithm_R(ByVal 일분옵션데이터_CurrentIndex As Integer) '스토캐스틱 조건 + 상관 + 외국인순매수 + 외국인현물매수 조건 4개 모두 만족
+
+        max_interval = MA_Interval(2) '전역변수 max_interval에 값을 넣어 놓는다
+
+        If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
+        If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
+
+        'If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < RSI_R_Logic_시작시간_기준 Then Return   '시작시간만 추가해본다
+
+        Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
+
+        For i As Integer = 0 To 1
+
+            If is동일신호가현재살아있나("R", i) Then Continue For
+            If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
+
+
+            'If 일분옵션데이터(i).MACD_Result(2, Index) < 0 Then Continue For  ' 장기 이동평균선 위에 있을 때만 신호  ----------------------------------------------------------- 이건 나중에 확인함
+
+
+
+            Dim 선물기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
+            Dim 현물기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
+            Dim 동일방향 As Integer = 선물기울기 * 현물기울기
+            Dim 선물기울기_절대치 As Single = Math.Abs(선물기울기)
+
+
+            If 동일방향 <= 0 Then Continue For
+            If i = 0 And (선물기울기 < 0 Or 선물기울기_절대치 < P선물기울기_기준) Then Continue For  '----------------------------------------------------------- 이건 나중에 확인함
+            If i = 1 And (선물기울기 > 0 Or 선물기울기_절대치 < P선물기울기_기준) Then Continue For  '----------------------------------------------------------- 이건 나중에 확인함
+
+            Dim 상관계수 As Boolean = Get상관계수상태()
+            If 상관계수 = False Then Continue For
+
+
+
+            If 일분옵션데이터(i).RSI(Index) > RSI_침체기준 And 일분옵션데이터(i).RSI(Index - 1) > 0 And 일분옵션데이터(i).RSI(Index - 1) < RSI_침체기준 Then  '전전틱은 침체기준보다 작았다가 전틱은 침체기준을 상향하면
+
+
+                '이전틱이 50보다 낮은 값의 비율을 구한다
+                Dim RSI_under_50_ratio As Single = RSI_50보다_낮은비율_구하기(i, Index)
+
+                If RSI_under_50_ratio > RSI가_50보다_낮은비율_기준 Then
+                    Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
+                    Dim log_str As String = String.Format("R 콜풋:{0}:인덱스:{1}:남은날짜:{2}:발생일자:{3}", i, Index, 남은날짜, 순매수리스트(currentIndex_순매수).sDate)
+                    Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("R", i)
+
+                    SoonMesuShinhoList.Add(shinho)
+                End If
+
+            End If
+        Next
+
+    End Sub
+
+    Private Function RSI_50보다_낮은비율_구하기(ByVal callput As Integer, ByVal index As Integer) As Single
+
+        Dim sum As Single = 0
+        Dim cnt As Integer = 0
+
+        For i As Integer = 1 To Math.Min(RSI_50_낮은비율_인덱스_기준, index - 1)
+
+            If 일분옵션데이터(callput).RSI(index - i) > 0 Then
+                sum += 일분옵션데이터(callput).RSI(index - i)
+                cnt += 1
+            End If
+
+        Next
+
+        Return sum / cnt
     End Function
 
 End Module

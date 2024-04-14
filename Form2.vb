@@ -1,4 +1,5 @@
 ﻿Option Explicit On
+Imports System.Net.Security
 Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports Google.Api
@@ -290,6 +291,9 @@ Public Class Form2
 
         Init_스토캐스틱_Graph()
         Draw_스토캐스틱_Graph()
+
+        Init_RSI_Graph()
+        Draw_RSI_Graph()
 
 
 
@@ -1227,6 +1231,10 @@ Public Class Form2
                 Dim maxValue As Single = 100
                 Dim minValue As Single = 0
 
+                Chart_스토캐스틱.ChartAreas(callput).AxisY.Minimum = minValue
+                Chart_스토캐스틱.ChartAreas(callput).AxisY.Maximum = maxValue
+
+
                 For j As Integer = 0 To 2
                     Dim BasicSeries As String = "basic_series_" + callput.ToString() + "_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
 
@@ -1253,10 +1261,10 @@ Public Class Form2
                     ' main Series 입력
                     If 일분옵션데이터(callput).price(i, 0) > 0 Then
 
-                        retindex = Chart_스토캐스틱.Series(메인시리즈(0)).Points.AddXY(i, 일분옵션데이터(callput).ST_FastK(i))
-                        Chart_스토캐스틱.Series(메인시리즈(1)).Points.AddXY(retindex, 일분옵션데이터(callput).ST_FastD(i))
+                        retindex = Chart_스토캐스틱.Series(메인시리즈(0)).Points.AddXY(i, 일분옵션데이터(callput).ST_SlowK(i))
+                        Chart_스토캐스틱.Series(메인시리즈(1)).Points.AddXY(retindex, 일분옵션데이터(callput).ST_SlowD(i))
 
-                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}{7}SlowK:{8}{9}SlowD:{10}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, Math.Round(일분옵션데이터(callput).이동평균선(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).ST_FastK(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).ST_FastD(i), 1))
+                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}{7}SlowK:{8}{9}SlowD:{10}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, Math.Round(일분옵션데이터(callput).이동평균선(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).ST_SlowK(i), 2), vbCrLf, Math.Round(일분옵션데이터(callput).ST_SlowD(i), 2))
 
                         Chart_스토캐스틱.Series(메인시리즈(0)).Points(retindex).ToolTip = str
                         Chart_스토캐스틱.Series(메인시리즈(1)).Points(retindex).ToolTip = str
@@ -1322,7 +1330,176 @@ Public Class Form2
 
     End Sub
 
+    Private Sub Init_RSI_Graph()
 
+        'Cht_RSI.Visible = False
+        Dim str, ChartAreaStr As String
+
+        Cht_RSI.Series.Clear()
+        Cht_RSI.ChartAreas.Clear()
+        Cht_RSI.Legends.Clear()
+        Cht_RSI.Annotations.Clear()
+
+        For i As Integer = 0 To 1 '콜풋
+
+            ChartAreaStr = "CHART_" + i.ToString()
+            Cht_RSI.ChartAreas.Add(ChartAreaStr)
+
+            For j As Integer = 0 To 2
+                str = "basic_series_" + i.ToString() + "_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+                Cht_RSI.Series.Add(str)
+                Cht_RSI.Series(str).ChartArea = ChartAreaStr
+                Cht_RSI.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Cht_RSI.Series(str).BorderWidth = 1
+                Cht_RSI.Series(str).Color = Color.Green
+
+            Next
+
+
+            For j As Integer = 0 To 1
+                str = "Line" + i.ToString() + "_" + j.ToString()
+                Cht_RSI.Series.Add(str)
+                Cht_RSI.Series(str).ChartArea = ChartAreaStr
+                Cht_RSI.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Cht_RSI.Series(str).BorderWidth = 1
+
+                If j = 0 Then
+                    Cht_RSI.Series(str).Color = Color.Red
+                    Cht_RSI.Series(str).BorderWidth = 2
+                ElseIf j = 1 Then
+                    Cht_RSI.Series(str).Color = Color.Black
+                End If
+            Next
+
+            'Lebel 설정
+            Cht_RSI.ChartAreas(i).AxisY.LabelStyle.Format = "{0:0.00}"
+
+            '축 선 속성 설정
+            Cht_RSI.ChartAreas(i).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Cht_RSI.ChartAreas(i).AxisX.MajorGrid.LineColor = Color.Gray
+            Cht_RSI.ChartAreas(i).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+            Cht_RSI.ChartAreas(i).AxisY.MajorGrid.LineColor = Color.Gray
+            'Cht_RSI.ChartAreas(i).AxisY.Interval = 0.2
+
+        Next
+
+    End Sub
+
+
+    Private Sub Draw_RSI_Graph()
+
+        Dim i, callput, retindex As Integer
+
+        If currentIndex_1MIn >= 0 Then
+
+            For i = 0 To Cht_RSI.Series.Count - 1
+                Cht_RSI.Series(i).Points.Clear()
+            Next
+
+            For callput = 0 To 1
+
+                Dim maxValue As Single = 100
+                Dim minValue As Single = 0
+
+                Cht_RSI.ChartAreas(callput).AxisY.Minimum = minValue
+                Cht_RSI.ChartAreas(callput).AxisY.Maximum = maxValue
+
+
+                For j As Integer = 0 To 2
+                    Dim BasicSeries As String = "basic_series_" + callput.ToString() + "_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+                    For i = 0 To currentIndex_1MIn
+                        If j = 0 Then
+                            retindex = Cht_RSI.Series(BasicSeries).Points.AddXY(i, 50) ' 위의 그래프와 X축을 통일하기 위해 0 값을 모든 X값에 먼저 넣는다
+                            Cht_RSI.Series(BasicSeries).Points(retindex).AxisLabel = Format("{0}", 일분옵션데이터(callput).ctime(i))                   'X축 시간
+                        ElseIf j = 1 Then
+                            retindex = Cht_RSI.Series(BasicSeries).Points.AddXY(i, RSI_침체기준 * 100)
+                        ElseIf j = 2 Then
+                            retindex = Cht_RSI.Series(BasicSeries).Points.AddXY(i, RSI_과열기준 * 100)
+                        End If
+
+                    Next
+                Next
+
+                Dim 메인시리즈(1) As String
+
+                For j = 0 To 1
+                    메인시리즈(j) = "Line" + callput.ToString() + "_" + j.ToString()
+                Next
+
+                For i = 0 To currentIndex_1MIn
+                    ' main Series 입력
+                    If 일분옵션데이터(callput).price(i, 0) > 0 Then
+
+                        retindex = Cht_RSI.Series(메인시리즈(0)).Points.AddXY(i, 일분옵션데이터(callput).RSI(i) * 100)  ' 이까지 봤음
+                        'Cht_RSI.Series(메인시리즈(1)).Points.AddXY(retindex, 일분옵션데이터(callput).ST_SlowD(i))
+
+                        Dim str As String = String.Format("시간:{0}{1}시가:{2}{3}종가:{4}{5}이평:{6}{7}RSI:{8}", 일분옵션데이터(0).ctime(i), vbCrLf, 일분옵션데이터(callput).price(i, 0), vbCrLf, 일분옵션데이터(callput).price(i, 3), vbCrLf, Math.Round(일분옵션데이터(callput).이동평균선(i), 1), vbCrLf, Math.Round(일분옵션데이터(callput).RSI(i) * 100, 2))
+
+                        Cht_RSI.Series(메인시리즈(0)).Points(retindex).ToolTip = str
+                        'Cht_RSI.Series(메인시리즈(1)).Points(retindex).ToolTip = str
+
+                    End If
+                Next
+
+
+            Next
+        End If
+
+        '신호를 그린다
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                Dim Str As String = "Shinho_" + i.ToString()
+                Cht_RSI.Series.Add(Str)
+
+                If s.A08_콜풋 = 0 Then
+                    Cht_RSI.Series(Str).ChartArea = "CHART_0"
+                Else
+                    Cht_RSI.Series(Str).ChartArea = "CHART_1"
+                End If
+
+                Cht_RSI.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Cht_RSI.Series(Str).Color = Color.DarkGreen
+                Cht_RSI.Series(Str).BorderWidth = 3
+
+                '시작점,끝점 찾기
+                Dim 신호시작점 As Integer = 순매수시간으로1MIN인덱스찾기(Val(s.A02_발생시간))
+                Dim 신호끝점 As Integer
+
+                If currentIndex_1MIn >= 신호시작점 Then Cht_RSI.Series(Str).Points.AddXY(신호시작점, 100)  '시작점
+                If currentIndex_1MIn >= 신호시작점 Then Cht_RSI.Series(Str).Points.AddXY(신호시작점, 0)  '시작점
+
+                If s.A15_현재상태 = 1 Then '끝점
+                    신호끝점 = currentIndex_1MIn
+                    Cht_RSI.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                Else
+                    신호끝점 = 순매수시간으로1MIN인덱스찾기(Val(s.A18_매도시간))
+                    Cht_RSI.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+
+                End If
+
+                If currentIndex_1MIn >= 신호끝점 Then
+                    Cht_RSI.Series(Str).Points.AddXY(신호끝점, 0)
+                    Cht_RSI.Series(Str).Points.AddXY(신호끝점, 100)
+                    Dim str1 As String = String.Format("신호시작점 : {0},시작시간: {1}, 신호끝점: {2}", 신호시작점, s.A02_발생시간, 신호끝점)
+                    Cht_RSI.Series(Str).Points(0).ToolTip = str1
+                    Cht_RSI.Series(Str).Points(1).ToolTip = str1
+                    Cht_RSI.Series(Str).Points(2).ToolTip = str1
+                End If
+
+
+
+            Next
+        End If
+
+
+
+        Cht_RSI.Visible = True
+
+    End Sub
 
 
 
@@ -2046,7 +2223,7 @@ Public Class Form2
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
-        fullTest_N()
+        'fullTest_N()
         'fullTest_N1()
 
         'fullTest_C()
@@ -2060,7 +2237,10 @@ Public Class Form2
 
         'RSI_Test()
 
+        fulltest_R()
+
         'fullTest_O()
+        'fullTest_P()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3121,24 +3301,27 @@ Public Class Form2
 
     End Sub
 
-    '    Public RSI_기준일 As Integer = 14
-    '   Public RSI_과열기준 As Single = 0.8
-    '   Public RSI_익절기준 As Single = 0.5  '이정도 수익 이상일때만 RSI로 익절을 한다
+    '    Public RSI_기준일 As Integer = 18
+    '   Public RSI_과열기준 As Single = 0.75
+    '   Public RSI_익절기준 As Single = 0.75  '이정도 수익 이상일때만 RSI로 익절을 한다
 
     Private Sub RSI_Test()
 
-        Dim RSI_기준일_temp() As String = {23, 25, 26}                  'A
-        Dim RSI_과열기준_temp() As Single = {0.78, 0.8, 0.82}                      'B
-        Dim RSI_익절기준_temp() As Single = {0.6, 0.75, 0.9, 1.0}         'C
+        Dim RSI_기준일_temp() As String = {23, 14, 18, 30}                  'A
+        Dim RSI_과열기준_temp() As Single = {0.7, 0.75, 0.8}                      'B
+        Dim RSI_익절기준_temp() As Single = {0.65, 0.75, 0.85, 1.0}         'C
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
         chk_Algorithm_C.Checked = False
         chk_Algorithm_D.Checked = False
-        chk_Algorithm_E.Checked = True
+        chk_Algorithm_E.Checked = False
         chk_Algorithm_G.Checked = False
-        chk_Algorithm_M.Checked = True
+        chk_Algorithm_M.Checked = False
         chk_Algorithm_N.Checked = True
+        chk_Algorithm_O.Checked = True
+        chk_Algorithm_P.Checked = False
+        chk_Algorithm_N1.Checked = True
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -3165,7 +3348,7 @@ Public Class Form2
                         cntstr = cnt.ToString()
                     End If
 
-                    SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                    SoonMesuSimulation_조건 = String.Format("RSI_TEST_{0}", cntstr)
                     SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}", RSI_기준일, RSI_과열기준, RSI_익절기준)
 
                     Add_Log("", SoonMesuSimulation_조건)
@@ -3174,6 +3357,85 @@ Public Class Form2
                     cnt += 1
                 Next
 
+            Next
+        Next
+    End Sub
+
+    '   Public RSI_기준일 As Integer = 14
+    '   Public RSI_과열기준 As Single = 0.8
+    '   Public RSI_침체기준 As Single = 0.2  
+
+
+    ' Public RSI가_50보다_낮은비율_기준 As Single = 0.5   '앞전에 50보다 낮아서 기고 있으면 돌파신호가 허위일 확률이 높다. 하여 이게 일정이상인 경우에만 신호가 발생하도록 조절한다
+    ' Public RSI_50_낮은비율_인덱스_기준 As Single = 120
+    ' Public RSI_R_Logic_시작시간_기준 As Integer = 103000
+
+    Private Sub fulltest_R()
+
+        Dim RSI_기준일_temp() As String = {18}                  'A
+        Dim RSI_과열기준_temp() As Single = {0.75}                      'B
+        Dim RSI_침체기준_temp() As Single = {0.3, 0.35, 0.38}         'C
+        Dim RSI가_50보다_낮은비율_기준_temp() As Single = {0.55, 0.5, 0.6}   '앞전에 50보다 낮아서 기고 있으면 돌파신호가 허위일 확률이 높다. 하여 이게 일정이상인 경우에만 신호가 발생하도록 조절한다
+        Dim RSI_50_낮은비율_인덱스_기준_temp() As Single = {80}
+        Dim RSI_R_Logic_시작시간_기준_temp() As Integer = {103000}
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_P.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_R.Checked = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To RSI_기준일_temp.Length - 1
+            For b As Integer = 0 To RSI_과열기준_temp.Length - 1
+                For c As Integer = 0 To RSI_침체기준_temp.Length - 1
+                    For d As Integer = 0 To RSI가_50보다_낮은비율_기준_temp.Length - 1
+                        For e As Integer = 0 To RSI_50_낮은비율_인덱스_기준_temp.Length - 1
+                            For f As Integer = 0 To RSI_R_Logic_시작시간_기준_temp.Length - 1
+
+                                RSI_기준일 = RSI_기준일_temp(a)
+                                RSI_과열기준 = RSI_과열기준_temp(b)
+                                RSI_침체기준 = RSI_침체기준_temp(c)
+                                RSI가_50보다_낮은비율_기준 = RSI가_50보다_낮은비율_기준_temp(d)
+                                RSI_50_낮은비율_인덱스_기준 = RSI_50_낮은비율_인덱스_기준_temp(e)
+                                RSI_R_Logic_시작시간_기준 = RSI_R_Logic_시작시간_기준_temp(f)
+
+
+                                Dim cntstr As String
+                                If cnt < 10 Then
+                                    cntstr = "00" & cnt.ToString()
+                                ElseIf cnt >= 10 And cnt < 100 Then
+                                    cntstr = "0" & cnt.ToString()
+                                Else
+                                    cntstr = cnt.ToString()
+                                End If
+
+                                SoonMesuSimulation_조건 = String.Format("R_{0}", cntstr)
+                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}", RSI_기준일, RSI_과열기준, RSI_침체기준, RSI가_50보다_낮은비율_기준, RSI_50_낮은비율_인덱스_기준, RSI_R_Logic_시작시간_기준)
+
+                                Add_Log("", SoonMesuSimulation_조건)
+                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                                cnt += 1
+
+                            Next
+                        Next
+                    Next
+                Next
             Next
         Next
     End Sub
@@ -3249,6 +3511,132 @@ Public Class Form2
     Private Sub btn_신호를저장_Click(sender As Object, e As EventArgs) Handles btn_신호를저장.Click
         InsertRealShinhoList()
     End Sub
+
+
+    '스토캐스틱 신호 - P
+    '변수리스트
+
+    'Public 선물상관계수최저 As Double = 0.5
+    'Public 외국인현물상관계수최저 As Double = 0.7
+    'Public P_아래기준선 As Single = 30
+    'Public P선물기울기_기준 As Single = 6
+    'P_매도_SlowK_SlowD_아래값 =5
+
+
+    'N_TEST_CNT_011_A_0.5_B_0.5_C_28_D_4_E_3_F)9
+
+    Private Sub fullTest_P()
+        '231225 이걸로 확정함
+        Dim 선물상관계수최저_temp() As Single = {0.5, 0.6}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.6, 0.7}
+        Dim P_아래기준선_temp() As Single = {28, 24, 20}
+        Dim P선물기울기_기준_temp() As Integer = {4, 6}
+        Dim P_스토캐스틱기간_temp() As Integer = {1, 2, 3, 4}
+        Dim P_매도_SlowK_SlowD_아래값_temp() As Integer = {10, 11}
+
+
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_P.Checked = True
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To 선물상관계수최저_temp.Length - 1
+            For b As Integer = 0 To 외국인현물상관계수최저_temp.Length - 1
+                For c As Integer = 0 To P_아래기준선_temp.Length - 1
+                    For d As Integer = 0 To P선물기울기_기준_temp.Length - 1
+                        For e As Integer = 0 To P_스토캐스틱기간_temp.Length - 1
+                            For f As Integer = 0 To P_매도_SlowK_SlowD_아래값_temp.Length - 1
+
+
+                                선물상관계수최저 = 선물상관계수최저_temp(a)
+                                외국인현물상관계수최저 = 외국인현물상관계수최저_temp(b)
+                                P_아래기준선 = P_아래기준선_temp(c)
+                                P선물기울기_기준 = P선물기울기_기준_temp(d)
+                                P_매도_SlowK_SlowD_아래값 = P_매도_SlowK_SlowD_아래값_temp(f)
+
+                                If P_스토캐스틱기간_temp(e) = 1 Then
+
+                                    스토캐스틱_설정(0) = 8
+                                    스토캐스틱_설정(1) = 4
+                                    스토캐스틱_설정(2) = 4
+
+
+                                ElseIf P_스토캐스틱기간_temp(e) = 2 Then
+
+                                    스토캐스틱_설정(0) = 17
+                                    스토캐스틱_설정(1) = 9
+                                    스토캐스틱_설정(2) = 8
+
+                                ElseIf P_스토캐스틱기간_temp(e) = 3 Then
+
+                                    스토캐스틱_설정(0) = 11
+                                    스토캐스틱_설정(1) = 6
+                                    스토캐스틱_설정(2) = 5
+                                ElseIf P_스토캐스틱기간_temp(e) = 4 Then
+
+                                    스토캐스틱_설정(0) = 14
+                                    스토캐스틱_설정(1) = 7
+                                    스토캐스틱_설정(2) = 7
+
+
+                                End If
+
+                                Dim cntstr As String
+                                If cnt < 10 Then
+                                    cntstr = "00" & cnt.ToString()
+                                ElseIf cnt >= 10 And cnt < 100 Then
+                                    cntstr = "0" & cnt.ToString()
+                                Else
+                                    cntstr = cnt.ToString()
+                                End If
+
+                                SoonMesuSimulation_조건 = String.Format("N_TEST_CNT_{0}", cntstr)
+                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F){5}", 선물상관계수최저_temp(a), 외국인현물상관계수최저_temp(b), P_아래기준선_temp(c), P선물기울기_기준_temp(d), P_스토캐스틱기간_temp(e), P_매도_SlowK_SlowD_아래값_temp(f))
+
+                                Console.WriteLine(SoonMesuSimulation_조건)
+                                Add_Log("", SoonMesuSimulation_조건)
+                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                cnt += 1
+
+                            Next
+
+                        Next
+
+
+                    Next
+
+
+                Next
+
+
+            Next
+        Next
+
+
+
+
+
+
+
+    End Sub
+
 
 
 End Class
