@@ -2581,7 +2581,7 @@ Module Algorithm_SoonMeSu
                         'If 상관계수 = True Then  'N2는 선물기울기보다는 -0.3 의 MACD 값을 중요시하기 때문에 상관계수는 적용하지 않음
 
                         Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
-                            Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)
+                        Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)
                         'Add_Log("N2신호:", log_str)
 
 
@@ -2593,7 +2593,7 @@ Module Algorithm_SoonMeSu
 
                     End If
 
-                    End If
+                End If
 
             End If
         Next
@@ -2928,7 +2928,7 @@ Module Algorithm_SoonMeSu
         Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
         Dim 현재RSI값 As Single = 일분옵션데이터(callput).RSI(index)
 
-        If 현재slowK값 > 80 Then
+        If 현재slowK값 > 75 Then
 
             Return True
 
