@@ -512,13 +512,13 @@ Module Algorithm_SoonMeSu
                                 Return
                             End If
 
-                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 75 Then
+                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
                                 Return
                             End If
 
-                            If is스토캐스틱하락상태(0, 일분옵션데이터_CurrentIndex - 1) = True Then
-                                Return
-                            End If
+                            'If is스토캐스틱하락상태(0, 일분옵션데이터_CurrentIndex - 1) = True Then
+                            'Return
+                            'End If
 
 
 
@@ -557,13 +557,13 @@ Module Algorithm_SoonMeSu
                             End If
 
 
-                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 75 Then
+                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
                                 Return
                             End If
 
-                            If is스토캐스틱하락상태(1, 일분옵션데이터_CurrentIndex - 1) = True Then
-                                Return
-                            End If
+                            'If is스토캐스틱하락상태(1, 일분옵션데이터_CurrentIndex - 1) = True Then
+                            ' Return
+                            'End If
 
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
@@ -2484,13 +2484,10 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
 
-                            If is과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then
-                                Continue For
-                            End If
+                            'If is과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then   'N에 적용 시 결과가 더 안좋아서 일단 제외함
+                            'Continue For
+                            'End If
 
-                            If 일분옵션데이터(i).ST_SlowK(일분옵션데이터_CurrentIndex) > 75 Then
-                                Continue For
-                            End If
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
@@ -2960,7 +2957,7 @@ Module Algorithm_SoonMeSu
         Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
         Dim 현재RSI값 As Single = 일분옵션데이터(callput).RSI(index)
 
-        If 현재slowK값 > 75 Then
+        If 현재slowK값 > 80 Then
 
             Return True
 
