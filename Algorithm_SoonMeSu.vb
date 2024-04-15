@@ -2460,7 +2460,7 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
 
-                            'If 스토캐스틱_기준_과열인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For  -- O에는 효과가 있으나 N에서는 손해라서 제외함
+                            If 혹시_지금_과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
@@ -2537,6 +2537,8 @@ Module Algorithm_SoonMeSu
 
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then
+
+                            If 혹시_지금_과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)
