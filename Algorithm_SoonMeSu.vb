@@ -453,7 +453,7 @@ Module Algorithm_SoonMeSu
 
 
     Public O_시작시간 As Integer = 100000
-    Public O_마감시간 As Integer = 150000
+    Public O_마감시간 As Integer = 145000
 
     Public 선물상관계수최저 As Double = 0.5
     Public 외국인현물상관계수최저 As Double = 0.7
@@ -508,15 +508,26 @@ Module Algorithm_SoonMeSu
 
                         If Get상관계수상태() Then
 
-                            If 혹시_지금_과매수상태인가(0, 일분옵션데이터_CurrentIndex - 1) = True Then Return
+                            If is과매수상태인가(0, 일분옵션데이터_CurrentIndex - 1) = True Then
+                                Return
+                            End If
+
+                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 75 Then
+                                Return
+                            End If
+
+                            If is스토캐스틱하락상태(0, 일분옵션데이터_CurrentIndex - 1) = True Then
+                                Return
+                            End If
+
 
 
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                            SoonMesuShinhoList.Add(shinho)
-                        End If
+                                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                                SoonMesuShinhoList.Add(shinho)
+                            End If
 
-                    End If
+                        End If
 
                 End If
 
@@ -541,7 +552,18 @@ Module Algorithm_SoonMeSu
 
                         If Get상관계수상태() Then
 
-                            If 혹시_지금_과매수상태인가(1, 일분옵션데이터_CurrentIndex - 1) = True Then Return
+                            If is과매수상태인가(1, 일분옵션데이터_CurrentIndex - 1) = True Then
+                                Return
+                            End If
+
+
+                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 75 Then
+                                Return
+                            End If
+
+                            If is스토캐스틱하락상태(1, 일분옵션데이터_CurrentIndex - 1) = True Then
+                                Return
+                            End If
 
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
@@ -849,6 +871,8 @@ Module Algorithm_SoonMeSu
 
 
     Private Function MakeSoonMesuShinho(ByVal 신호ID As String, ByVal callput As Integer) As 순매수신호_탬플릿
+
+
 
         Dim shinho As 순매수신호_탬플릿 = New 순매수신호_탬플릿
 
@@ -2460,7 +2484,13 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
 
-                            If 혹시_지금_과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
+                            If is과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then
+                                Continue For
+                            End If
+
+                            If 일분옵션데이터(i).ST_SlowK(일분옵션데이터_CurrentIndex) > 75 Then
+                                Continue For
+                            End If
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
@@ -2538,7 +2568,7 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then
 
-                            If 혹시_지금_과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
+                            If is과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)
@@ -2923,7 +2953,7 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Private Function 혹시_지금_과매수상태인가(ByVal callput As Integer, ByVal index As Integer) As Boolean
+    Private Function is과매수상태인가(ByVal callput As Integer, ByVal index As Integer) As Boolean
 
 
 
@@ -2931,6 +2961,23 @@ Module Algorithm_SoonMeSu
         Dim 현재RSI값 As Single = 일분옵션데이터(callput).RSI(index)
 
         If 현재slowK값 > 75 Then
+
+            Return True
+
+        Else
+            Return False
+        End If
+
+    End Function
+
+    Private Function is스토캐스틱하락상태(ByVal callput As Integer, ByVal index As Integer) As Boolean
+
+
+
+        Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
+        Dim 직전slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index - 1)
+
+        If 현재slowK값 < 직전slowK값 Then
 
             Return True
 
