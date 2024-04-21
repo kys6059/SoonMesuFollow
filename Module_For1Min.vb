@@ -20,6 +20,12 @@ Module Module_For1Min
         Dim 코스피지수 As Single
         Dim 코스피지수_이동평균선 As Single
         Dim 외국인_선물_순매수 As Long
+        Dim 상관계수() As Double
+
+        Public Sub Initialize()
+            ReDim 상관계수(4) '0-외국인기관합, 1-외국인, 2-기관, 3-선물, 4-개인
+        End Sub
+
     End Structure
 
 
@@ -145,6 +151,11 @@ Module Module_For1Min
 
         '이하 외국인순매수 데이터 확보용 자료구조 추가 20220821
         ReDim 순매수리스트(999) '외국인 순매수금액이 커지면 코스피 지수 상승하는 상황을 고려하는 리스트 - 하루치임
+
+        For i As Integer = 0 To 999
+            순매수리스트(i).Initialize()
+        Next
+
         ReDim 일분옵션데이터(1)
         For i As Integer = 0 To 1
             일분옵션데이터(i).Initialize()
@@ -735,14 +746,20 @@ Module Module_For1Min
     End Function
 
     Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer) As Single
+
         Dim ret As Single = 0
+
         Try
             Dim current, prev As Single
             Dim cnt As Integer = 0
+            Dim tick_count_보정치 As Integer = tick_count
+
+            If currentIndex_순매수 < tick_count Then
+                tick_count_보정치 = Math.Round(currentIndex_순매수 * O1_짧을때_보정치, 0)
+            End If
 
 
-
-            Dim tempIndex As Integer = currentIndex_순매수 - tick_count
+            Dim tempIndex As Integer = currentIndex_순매수 - tick_count_보정치
 
             If tempIndex < 0 Or tempIndex >= 순매수리스트카운트 Then Return 0
 
@@ -773,7 +790,7 @@ Module Module_For1Min
 
             End If
 
-            ret = (current - prev) / tick_count
+            ret = (current - prev) / tick_count_보정치
 
         Catch ex As Exception
             Add_Log("Exception", "틱당기울기계산")

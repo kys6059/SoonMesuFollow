@@ -76,6 +76,8 @@ Public Class Form2
 
             CalcRSIData() 'RSI 값을 계산한다
 
+            Calc_O_상관계수()
+
 
             Calc스토캐스틱()
 
@@ -295,6 +297,8 @@ Public Class Form2
         Init_RSI_Graph()
         Draw_RSI_Graph()
 
+        Init_상관계수_Graph()
+        Draw_상관계수_Graph()
 
 
     End Sub
@@ -939,7 +943,7 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            For j As Integer = 110 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000
+            For j As Integer = 50 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000
 
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
@@ -2223,7 +2227,7 @@ Public Class Form2
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
-        'fullTest_N()
+        fullTest_N()
         'fullTest_N1()
 
         'fullTest_C()
@@ -2237,10 +2241,11 @@ Public Class Form2
 
         'RSI_Test()
 
-        fulltest_R()
+        'fulltest_R()
 
         'fullTest_O()
         'fullTest_P()
+        'fullTest_Q()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2316,16 +2321,17 @@ Public Class Form2
     End Sub
 
     '20240211 테스트 결과 C_TEST_CNT_012_A_0.005_B_58_C_0.007_D_1230
+    ' B240421_N103   N_TEST_CNT_013_A_0.005_B_60_C_0.015_D_1230_E_1000_F_13_G_0.16_H_80
 
     Private Sub fullTest_N()
         '231225 이걸로 확정함
-        Dim N_기울기최저기준_temp() As Single = {0.003}
+        Dim N_기울기최저기준_temp() As Single = {0.005}
         Dim N_장기추세선기준일_temp() As Integer = {60}
-        Dim N_기울기최고기준_temp() As Single = {0.015}
-        Dim N_마감시간_temp() As Integer = {1230, 1500}
+        Dim N_기울기최고기준_temp() As Single = {0.015, 0.018, 0.022, 0.026}
+        Dim N_마감시간_temp() As Integer = {1230}
         Dim N_시작시간_temp() As Integer = {1000}
-        Dim M_선물기울기_기준_temp() As Integer = {10, 13}
-        Dim N_MACD선의값_상한허용치_temp() As Single = {0.07, 0.1, 0.13, 0.16, 0.19, 0.22, 0.25}
+        Dim M_선물기울기_기준_temp() As Integer = {13}
+        Dim N_MACD선의값_상한허용치_temp() As Single = {0.14, 0.16, 0.2, 0.24}
 
 
         chk_Algorithm_A.Checked = False
@@ -2338,7 +2344,7 @@ Public Class Form2
         chk_Algorithm_N.Checked = True
         chk_Algorithm_O.Checked = False
         chk_Algorithm_N1.Checked = False
-
+        chk_Algorithm_Q.Checked = False
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -2355,31 +2361,34 @@ Public Class Form2
                         For e As Integer = 0 To N_시작시간_temp.Length - 1
                             For f As Integer = 0 To M_선물기울기_기준_temp.Length - 1
                                 For g As Integer = 0 To N_MACD선의값_상한허용치_temp.Length - 1
-                                    Dim cntstr As String
-                                    If cnt < 10 Then
-                                        cntstr = "00" & cnt.ToString()
-                                    ElseIf cnt >= 10 And cnt < 100 Then
-                                        cntstr = "0" & cnt.ToString()
-                                    Else
-                                        cntstr = cnt.ToString()
-                                    End If
 
+                                    Dim cntstr As String
+                                        If cnt < 10 Then
+                                            cntstr = "00" & cnt.ToString()
+                                        ElseIf cnt >= 10 And cnt < 100 Then
+                                            cntstr = "0" & cnt.ToString()
+                                        Else
+                                            cntstr = cnt.ToString()
+                                        End If
 
                                     N_기울기최저기준 = N_기울기최저기준_temp(a)
-                                    MA_Interval(2) = N_장기추세선기준일_temp(b)
-                                    N_기울기최고기준 = N_기울기최고기준_temp(c)
-                                    N_마감시간 = N_마감시간_temp(d)
-                                    N_시작시간 = N_시작시간_temp(e)
-                                    M_선물기울기_기준 = M_선물기울기_기준_temp(f)
-                                    N_MACD선의값_상한허용치 = N_MACD선의값_상한허용치_temp(g)
+                                        MA_Interval(2) = N_장기추세선기준일_temp(b)
+                                        N_기울기최고기준 = N_기울기최고기준_temp(c)
+                                        N_마감시간 = N_마감시간_temp(d)
+                                        N_시작시간 = N_시작시간_temp(e)
+                                        M_선물기울기_기준 = M_선물기울기_기준_temp(f)
+                                        N_MACD선의값_상한허용치 = N_MACD선의값_상한허용치_temp(g)
+
 
                                     SoonMesuSimulation_조건 = String.Format("N_TEST_CNT_{0}", cntstr)
                                     SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", N_기울기최저기준_temp(a), N_장기추세선기준일_temp(b), N_기울기최고기준_temp(c), N_마감시간_temp(d), N_시작시간_temp(e), M_선물기울기_기준, N_MACD선의값_상한허용치)
 
                                     Console.WriteLine(SoonMesuSimulation_조건)
-                                    Add_Log("", SoonMesuSimulation_조건)
-                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
-                                    cnt += 1
+                                        Add_Log("", SoonMesuSimulation_조건)
+                                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                        cnt += 1
+
+
                                 Next
 
 
@@ -3200,26 +3209,28 @@ Public Class Form2
     'Public 외국인현물상관계수최저 As Double = 0.3
     'Public 상관계수계산인덱스길이 As Integer = 60
 
+
+    'B240421_T001    O_CNT_044_A_13_B_3_C_6_D_2_E_100000_F_145000_G_40_H_25_I_0.5_J_0.5_K_80_L_3
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16, 13, 18} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {3, 5, 7} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {6.0}    'A
-        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0, 1.0, 0.1}    'B
+        Dim O_외국인현물해제기준기울기_temp() As Single = {2.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
-        Dim O_마감시간_temp() As String = {"150000"}           'D
+        Dim O_마감시간_temp() As String = {"145000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {40} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {25}
 
         Dim 선물상관계수최저_temp() As Single = {0.5}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.7}
-        Dim 상관계수계산인덱스길이_temp() As Integer = {80}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.7, 0.6, 0.5}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {80, 70}
 
-        Dim O_다시발생시적용배율_temp() As Single = {2.5, 3.0, 3.5, 4.0, 4.5}
+        Dim O_다시발생시적용배율_temp() As Single = {3.0, 2.0}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3231,6 +3242,7 @@ Public Class Form2
         chk_Algorithm_N.Checked = False
         chk_Algorithm_E2.Checked = False
         chk_Algorithm_N1.Checked = False
+        chk_Algorithm_P.Checked = False
         chk_Algorithm_O.Checked = True
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -3285,6 +3297,132 @@ Public Class Form2
 
                                                         cnt += 1
 
+                                                    Next
+
+                                                Next
+                                            Next
+                                        Next
+                                    Next
+                                Next
+                            Next
+                        Next
+                    Next
+                Next
+            Next
+        Next
+
+    End Sub
+
+
+    'Public Q_선물발생기준기울기 As Single = 16.0
+    'Public Q_외국인현물발생기준기울기 As Single = 3.0
+
+    'Public Q_선물해제기준기울기 As Single = 10.0
+    'Public Q_외국인현물해제기준기울기 As Single = 2.0
+
+
+    'Public Q_tick_count_기준 As Integer = 25
+    'Public Q_해제tick_count_기준 As Integer = 10
+
+
+    'Public Q_시작시간 As Integer = 91700
+    'Public Q_마감시간 As Integer = 94300
+
+    'Public Q_선물상관계수최저 As Double = 0.5
+    'Public Q_외국인현물상관계수최저 As Double = 0.5
+    'Public Q_상관계수계산인덱스길이 As Integer = 80
+
+
+    'Public Q_다시발생시적용배율 As Single = 100.0
+
+    'Public O1_짧을때_보정치 As Single = 0.8
+
+    'Q_CNT_011_A_13_B_3_C_6_D_2_E_93500_F_95900_G_25_H_10_I_0.6_J_0.6_K_80_M_0.8
+    'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
+
+    Private Sub fullTest_Q()
+
+        Dim Q_선물발생기준기울기_temp() As Single = {13, 10}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {1, 3}
+
+        Dim Q_선물해제기준기울기_temp() As Single = {6.0, 3.0}
+        Dim Q_외국인현물해제기준기울기_temp() As Single = {0.5, 0.1}    'B
+
+        Dim Q_시작시간_temp() As String = {"92000", "92700", "93500"}
+        Dim Q_마감시간_temp() As String = {"95900"}
+
+
+        Dim Q_tick_count_기준_temp() As Integer = {25} ', 36, 40}
+        Dim Q_해제tick_count_기준_temp() As Integer = {10, 16}
+
+        Dim Q_선물상관계수최저_temp() As Single = {0.6}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.6}
+        Dim Q_상관계수계산인덱스길이_temp() As Integer = {80}
+
+        Dim Q_다시발생시적용배율_temp() As Single = {1, 2, 3}
+        Dim O1_짧을때_보정치_temp() As Single = {0.8}
+
+
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_Q.Checked = True
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+
+        For a As Integer = 0 To Q_선물발생기준기울기_temp.Length - 1
+            For b As Integer = 0 To Q_외국인현물발생기준기울기_temp.Length - 1
+                For c As Integer = 0 To Q_선물해제기준기울기_temp.Length - 1
+                    For d As Integer = 0 To Q_외국인현물해제기준기울기_temp.Length - 1
+                        For e As Integer = 0 To Q_시작시간_temp.Length - 1
+                            For f As Integer = 0 To Q_마감시간_temp.Length - 1
+                                For g As Integer = 0 To Q_tick_count_기준_temp.Length - 1
+                                    For h As Integer = 0 To Q_해제tick_count_기준_temp.Length - 1
+                                        For i As Integer = 0 To Q_선물상관계수최저_temp.Length - 1
+                                            For j As Integer = 0 To Q_외국인현물상관계수최저_temp.Length - 1
+                                                For k As Integer = 0 To Q_상관계수계산인덱스길이_temp.Length - 1
+                                                    For l As Integer = 0 To Q_다시발생시적용배율_temp.Length - 1
+                                                        For m As Integer = 0 To O1_짧을때_보정치_temp.Length - 1
+
+                                                            Q_선물발생기준기울기 = Q_선물발생기준기울기_temp(a)
+                                                            Q_외국인현물발생기준기울기 = Q_외국인현물발생기준기울기_temp(b)
+                                                            Q_선물해제기준기울기 = Q_선물해제기준기울기_temp(c)
+                                                            Q_외국인현물해제기준기울기 = Q_외국인현물해제기준기울기_temp(d)
+                                                            Q_시작시간 = Q_시작시간_temp(e)
+                                                            Q_마감시간 = Q_마감시간_temp(f)
+                                                            Q_tick_count_기준 = Q_tick_count_기준_temp(g)
+                                                            Q_해제tick_count_기준 = Q_해제tick_count_기준_temp(h)
+                                                            Q_선물상관계수최저 = Q_선물상관계수최저_temp(i)
+                                                            Q_외국인현물상관계수최저 = Q_외국인현물상관계수최저_temp(j)
+                                                            Q_상관계수계산인덱스길이 = Q_상관계수계산인덱스길이_temp(k)
+                                                            Q_다시발생시적용배율 = Q_다시발생시적용배율_temp(l)
+                                                            O1_짧을때_보정치 = O1_짧을때_보정치_temp(m)
+
+                                                            Dim cntstr As String
+                                                            If cnt < 10 Then
+                                                                cntstr = "00" & cnt.ToString()
+                                                            ElseIf cnt >= 10 And cnt < 100 Then
+                                                                cntstr = "0" & cnt.ToString()
+                                                            Else
+                                                                cntstr = cnt.ToString()
+                                                            End If
+
+                                                            SoonMesuSimulation_조건 = String.Format("Q_CNT_{0}", cntstr)
+                                                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}", Q_선물발생기준기울기, Q_외국인현물발생기준기울기, Q_선물해제기준기울기, Q_외국인현물해제기준기울기, Q_시작시간, Q_마감시간, Q_tick_count_기준, Q_해제tick_count_기준, Math.Round(Q_선물상관계수최저, 1), Math.Round(Q_외국인현물상관계수최저, 1), Q_상관계수계산인덱스길이, Q_다시발생시적용배율, O1_짧을때_보정치)
+
+                                                            Add_Log("", SoonMesuSimulation_조건)
+                                                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                                                            cnt += 1
+                                                        Next
                                                     Next
 
                                                 Next
@@ -3629,11 +3767,199 @@ Public Class Form2
             Next
         Next
 
+    End Sub
+
+    Private Sub Init_상관계수_Graph()
+
+        'Cht_상관계수.Visible = False
+        Dim str, ChartAreaStr As String
+
+        Cht_상관계수.Series.Clear()
+        Cht_상관계수.ChartAreas.Clear()
+        Cht_상관계수.Legends.Clear()
+        Cht_상관계수.Annotations.Clear()
 
 
 
+        ChartAreaStr = "CHART"
+        Cht_상관계수.ChartAreas.Add(ChartAreaStr)
 
 
+        For j As Integer = 0 To 2
+            str = "basic_series_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+            Cht_상관계수.Series.Add(str)
+            Cht_상관계수.Series(str).ChartArea = ChartAreaStr
+            Cht_상관계수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Cht_상관계수.Series(str).BorderWidth = 1
+            Cht_상관계수.Series(str).Color = Color.Green
+
+        Next
+
+
+
+        For j As Integer = 0 To 4
+            str = "Line" + "_" + j.ToString()
+            Cht_상관계수.Series.Add(str)
+            Cht_상관계수.Series(str).ChartArea = ChartAreaStr
+            Cht_상관계수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+            Cht_상관계수.Series(str).BorderWidth = 1
+
+            If j = 3 Then
+                Cht_상관계수.Series(str).Color = Color.Red
+                Cht_상관계수.Series(str).BorderWidth = 2
+            ElseIf j = 1 Then
+                Cht_상관계수.Series(str).Color = Color.Blue
+                Cht_상관계수.Series(str).BorderWidth = 2
+            Else
+                Cht_상관계수.Series(str).Color = Color.Black
+
+            End If
+        Next
+
+
+        'Lebel 설정
+        Cht_상관계수.ChartAreas(0).AxisY.LabelStyle.Format = "{0:0.00}"
+
+        '축 선 속성 설정
+        Cht_상관계수.ChartAreas(0).AxisX.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        Cht_상관계수.ChartAreas(0).AxisX.MajorGrid.LineColor = Color.Gray
+        Cht_상관계수.ChartAreas(0).AxisY.MajorGrid.LineDashStyle = DataVisualization.Charting.ChartDashStyle.Dot
+        Cht_상관계수.ChartAreas(0).AxisY.MajorGrid.LineColor = Color.Gray
+
+
+
+    End Sub
+
+
+    Private Sub Draw_상관계수_Graph()
+
+        Dim i, retindex As Integer
+
+        'If currentIndex_순매수 > 240 Then currentIndex_순매수 = 240  '테스트용
+
+        If currentIndex_순매수 >= 0 Then
+
+            For i = 0 To Cht_상관계수.Series.Count - 1
+                Cht_상관계수.Series(i).Points.Clear()
+            Next
+
+            Dim maxValue As Single = 100
+            Dim minValue As Single = -100
+
+
+            Cht_상관계수.ChartAreas(0).AxisY.Minimum = minValue
+            Cht_상관계수.ChartAreas(0).AxisY.Maximum = maxValue
+
+            For j As Integer = 0 To 2
+                Dim BasicSeries As String = "basic_series_" + j.ToString()  '0,20,80 3개의 수평선을 그린다
+
+                For i = 0 To currentIndex_순매수
+                    If j = 0 Then
+                        retindex = Cht_상관계수.Series(BasicSeries).Points.AddXY(i, 50) ' 위의 그래프와 X축을 통일하기 위해 0 값을 모든 X값에 먼저 넣는다
+                        Cht_상관계수.Series(BasicSeries).Points(retindex).AxisLabel = Format("{0}", 순매수리스트(i).sTime)                   'X축 시간
+                    ElseIf j = 1 Then
+                        retindex = Cht_상관계수.Series(BasicSeries).Points.AddXY(i, 0)
+                    ElseIf j = 2 Then
+                        retindex = Cht_상관계수.Series(BasicSeries).Points.AddXY(i, -50)
+                    End If
+
+                Next
+            Next
+
+            Dim 메인시리즈(4) As String
+
+            Dim 주체 As String
+
+
+
+            For j = 0 To 4
+                    메인시리즈(j) = "Line" + "_" + j.ToString()
+
+                If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then   '합계, 외국인, 기관, 선물, 개인
+
+                    For i = 0 To currentIndex_순매수
+
+
+                        retindex = Cht_상관계수.Series(메인시리즈(j)).Points.AddXY(i, 순매수리스트(i).상관계수(j) * 100)
+
+                        If j = 0 Then
+                            주체 = "0-합계"
+                        ElseIf j = 1 Then
+                            주체 = "1-외국인현물"
+                        ElseIf j = 2 Then
+                            주체 = "2-기관"
+                        ElseIf j = 3 Then
+                            주체 = "3-외국인선물"
+                        Else
+                            주체 = "4-개인"
+                        End If
+
+                        Dim str As String = String.Format("주체:{0}{1}인덱스:{2}{3}시간:{4}{5}상관계수:{6}", 주체, vbCrLf, i, vbCrLf, 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).상관계수(j))
+                        Cht_상관계수.Series(메인시리즈(j)).Points(retindex).ToolTip = str
+                    Next
+
+                End If
+
+
+            Next
+
+
+
+            End If
+
+
+            '신호를 그린다
+            If SoonMesuShinhoList IsNot Nothing Then
+            For i = 0 To SoonMesuShinhoList.Count - 1
+
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                Dim Str As String = "Shinho_" + i.ToString()
+                Cht_상관계수.Series.Add(Str)
+
+
+                Cht_상관계수.Series(Str).ChartArea = "CHART"
+
+                Cht_상관계수.Series(Str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                Cht_상관계수.Series(Str).Color = Color.DarkGreen
+                Cht_상관계수.Series(Str).BorderWidth = 3
+
+                '시작점,끝점 찾기
+                Dim 신호시작점 As Integer = s.A01_발생Index
+                Dim 신호끝점 As Integer
+
+                If currentIndex_순매수 >= 신호시작점 Then
+                    Cht_상관계수.Series(Str).Points.AddXY(신호시작점, 100)  '시작점
+                    Cht_상관계수.Series(Str).Points.AddXY(신호시작점, 0)  '시작점
+                End If
+
+                If s.A15_현재상태 = 1 Then '끝점
+                    신호끝점 = currentIndex_순매수
+                    Cht_상관계수.Series(Str).BorderDashStyle = ChartDashStyle.Solid
+                Else
+                    신호끝점 = s.A19_매도Index
+                    Cht_상관계수.Series(Str).BorderDashStyle = ChartDashStyle.Dot
+
+                End If
+
+                If currentIndex_순매수 >= 신호끝점 Then
+                    Cht_상관계수.Series(Str).Points.AddXY(신호끝점, 0)
+                    Cht_상관계수.Series(Str).Points.AddXY(신호끝점, 100)
+                    Dim str1 As String = String.Format("신호시작점 : {0},시작시간: {1}, 신호끝점: {2}", 신호시작점, s.A02_발생시간, 신호끝점)
+                    Cht_상관계수.Series(Str).Points(0).ToolTip = str1
+                    Cht_상관계수.Series(Str).Points(1).ToolTip = str1
+                    Cht_상관계수.Series(Str).Points(2).ToolTip = str1
+                    Cht_상관계수.Series(Str).Points(2).ToolTip = str1
+                End If
+
+
+
+            Next
+        End If
+
+
+
+        Cht_상관계수.Visible = True
 
     End Sub
 

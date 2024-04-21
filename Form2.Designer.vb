@@ -38,6 +38,9 @@ Partial Class Form2
         Dim ChartArea5 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
         Dim Legend5 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
         Dim Series5 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea6 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend6 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series6 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_자동저장모드 = New System.Windows.Forms.CheckBox()
         Me.chk_F2_AutoSave = New System.Windows.Forms.CheckBox()
@@ -190,6 +193,7 @@ Partial Class Form2
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel13 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_Algorithm_R = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_P = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_N1 = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_O = New System.Windows.Forms.CheckBox()
@@ -211,13 +215,15 @@ Partial Class Form2
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.TabPage6 = New System.Windows.Forms.TabPage()
         Me.Chart_스토캐스틱 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.TabPage7 = New System.Windows.Forms.TabPage()
+        Me.Cht_RSI = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
-        Me.TabPage7 = New System.Windows.Forms.TabPage()
-        Me.Cht_RSI = New System.Windows.Forms.DataVisualization.Charting.Chart()
-        Me.chk_Algorithm_R = New System.Windows.Forms.CheckBox()
+        Me.TabPage8 = New System.Windows.Forms.TabPage()
+        Me.Cht_상관계수 = New System.Windows.Forms.DataVisualization.Charting.Chart()
+        Me.chk_Algorithm_Q = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -244,10 +250,12 @@ Partial Class Form2
         Me.TabPage3.SuspendLayout()
         Me.TabPage6.SuspendLayout()
         CType(Me.Chart_스토캐스틱, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TabControl2.SuspendLayout()
-        Me.TabPage4.SuspendLayout()
         Me.TabPage7.SuspendLayout()
         CType(Me.Cht_RSI, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabControl2.SuspendLayout()
+        Me.TabPage4.SuspendLayout()
+        Me.TabPage8.SuspendLayout()
+        CType(Me.Cht_상관계수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -2350,6 +2358,7 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_Q, 5, 0)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_R, 4, 0)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_P, 3, 0)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_N1, 1, 0)
@@ -2367,6 +2376,20 @@ Partial Class Form2
         Me.TableLayoutPanel13.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel13.Size = New System.Drawing.Size(971, 96)
         Me.TableLayoutPanel13.TabIndex = 38
+        '
+        'chk_Algorithm_R
+        '
+        Me.chk_Algorithm_R.AutoSize = True
+        Me.chk_Algorithm_R.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_R.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_R.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_R.Location = New System.Drawing.Point(648, 3)
+        Me.chk_Algorithm_R.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.chk_Algorithm_R.Name = "chk_Algorithm_R"
+        Me.chk_Algorithm_R.Size = New System.Drawing.Size(153, 42)
+        Me.chk_Algorithm_R.TabIndex = 16
+        Me.chk_Algorithm_R.Text = "R(RSI) -다이버전스"
+        Me.chk_Algorithm_R.UseVisualStyleBackColor = False
         '
         'chk_Algorithm_P
         '
@@ -2565,7 +2588,7 @@ Partial Class Form2
         Series3.Legend = "Legend1"
         Series3.Name = "Series1"
         Me.Chart2.Series.Add(Series3)
-        Me.Chart2.Size = New System.Drawing.Size(1197, 347)
+        Me.Chart2.Size = New System.Drawing.Size(1260, 648)
         Me.Chart2.TabIndex = 40
         Me.Chart2.Text = "Chart2"
         '
@@ -2586,6 +2609,7 @@ Partial Class Form2
         Me.Tab_종합주가.Controls.Add(Me.TabPage3)
         Me.Tab_종합주가.Controls.Add(Me.TabPage6)
         Me.Tab_종합주가.Controls.Add(Me.TabPage7)
+        Me.Tab_종합주가.Controls.Add(Me.TabPage8)
         Me.Tab_종합주가.Location = New System.Drawing.Point(651, 208)
         Me.Tab_종합주가.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.Tab_종합주가.Name = "Tab_종합주가"
@@ -2626,7 +2650,7 @@ Partial Class Form2
         Me.TabPage3.Padding = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.TabPage3.Size = New System.Drawing.Size(1285, 673)
         Me.TabPage3.TabIndex = 2
-        Me.TabPage3.Text = "보조지표"
+        Me.TabPage3.Text = "--- MACD ---"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
         'TabPage6
@@ -2657,6 +2681,34 @@ Partial Class Form2
         Me.Chart_스토캐스틱.Size = New System.Drawing.Size(1195, 578)
         Me.Chart_스토캐스틱.TabIndex = 41
         Me.Chart_스토캐스틱.Text = "Cht_스토캐스틱"
+        '
+        'TabPage7
+        '
+        Me.TabPage7.Controls.Add(Me.Cht_RSI)
+        Me.TabPage7.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage7.Name = "TabPage7"
+        Me.TabPage7.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage7.Size = New System.Drawing.Size(1285, 673)
+        Me.TabPage7.TabIndex = 4
+        Me.TabPage7.Text = "--- RSI ---"
+        Me.TabPage7.UseVisualStyleBackColor = True
+        '
+        'Cht_RSI
+        '
+        ChartArea5.Name = "ChartArea1"
+        Me.Cht_RSI.ChartAreas.Add(ChartArea5)
+        Legend5.Name = "Legend1"
+        Me.Cht_RSI.Legends.Add(Legend5)
+        Me.Cht_RSI.Location = New System.Drawing.Point(45, 47)
+        Me.Cht_RSI.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.Cht_RSI.Name = "Cht_RSI"
+        Series5.ChartArea = "ChartArea1"
+        Series5.Legend = "Legend1"
+        Series5.Name = "Series1"
+        Me.Cht_RSI.Series.Add(Series5)
+        Me.Cht_RSI.Size = New System.Drawing.Size(1195, 578)
+        Me.Cht_RSI.TabIndex = 42
+        Me.Cht_RSI.Text = "Cht_RSI"
         '
         'TabControl2
         '
@@ -2709,47 +2761,49 @@ Partial Class Form2
         Me.chk_Algorithm_F.Text = "Algorithm_F"
         Me.chk_Algorithm_F.UseVisualStyleBackColor = False
         '
-        'TabPage7
+        'TabPage8
         '
-        Me.TabPage7.Controls.Add(Me.Cht_RSI)
-        Me.TabPage7.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage7.Name = "TabPage7"
-        Me.TabPage7.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage7.Size = New System.Drawing.Size(1285, 673)
-        Me.TabPage7.TabIndex = 4
-        Me.TabPage7.Text = "--- RSI ---"
-        Me.TabPage7.UseVisualStyleBackColor = True
+        Me.TabPage8.Controls.Add(Me.Cht_상관계수)
+        Me.TabPage8.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage8.Name = "TabPage8"
+        Me.TabPage8.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage8.Size = New System.Drawing.Size(1285, 673)
+        Me.TabPage8.TabIndex = 5
+        Me.TabPage8.Text = "상관계수"
+        Me.TabPage8.UseVisualStyleBackColor = True
         '
-        'Cht_RSI
+        'Cht_상관계수
         '
-        ChartArea5.Name = "ChartArea1"
-        Me.Cht_RSI.ChartAreas.Add(ChartArea5)
-        Legend5.Name = "Legend1"
-        Me.Cht_RSI.Legends.Add(Legend5)
-        Me.Cht_RSI.Location = New System.Drawing.Point(45, 47)
-        Me.Cht_RSI.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.Cht_RSI.Name = "Cht_RSI"
-        Series5.ChartArea = "ChartArea1"
-        Series5.Legend = "Legend1"
-        Series5.Name = "Series1"
-        Me.Cht_RSI.Series.Add(Series5)
-        Me.Cht_RSI.Size = New System.Drawing.Size(1195, 578)
-        Me.Cht_RSI.TabIndex = 42
-        Me.Cht_RSI.Text = "Cht_RSI"
+        ChartArea6.Name = "ChartArea1"
+        Me.Cht_상관계수.ChartAreas.Add(ChartArea6)
+        Legend6.Name = "Legend1"
+        Me.Cht_상관계수.Legends.Add(Legend6)
+        Me.Cht_상관계수.Location = New System.Drawing.Point(45, 47)
+        Me.Cht_상관계수.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.Cht_상관계수.Name = "Cht_상관계수"
+        Series6.ChartArea = "ChartArea1"
+        Series6.Legend = "Legend1"
+        Series6.Name = "Series1"
+        Me.Cht_상관계수.Series.Add(Series6)
+        Me.Cht_상관계수.Size = New System.Drawing.Size(1213, 597)
+        Me.Cht_상관계수.TabIndex = 43
+        Me.Cht_상관계수.Text = "Chart3"
         '
-        'chk_Algorithm_R
+        'chk_Algorithm_Q
         '
-        Me.chk_Algorithm_R.AutoSize = True
-        Me.chk_Algorithm_R.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_R.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_Algorithm_R.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_R.Location = New System.Drawing.Point(648, 3)
-        Me.chk_Algorithm_R.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.chk_Algorithm_R.Name = "chk_Algorithm_R"
-        Me.chk_Algorithm_R.Size = New System.Drawing.Size(153, 42)
-        Me.chk_Algorithm_R.TabIndex = 16
-        Me.chk_Algorithm_R.Text = "R(RSI) -다이버전스"
-        Me.chk_Algorithm_R.UseVisualStyleBackColor = False
+        Me.chk_Algorithm_Q.AutoSize = True
+        Me.chk_Algorithm_Q.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_Q.Checked = True
+        Me.chk_Algorithm_Q.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_Q.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_Q.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_Q.Location = New System.Drawing.Point(809, 3)
+        Me.chk_Algorithm_Q.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.chk_Algorithm_Q.Name = "chk_Algorithm_Q"
+        Me.chk_Algorithm_Q.Size = New System.Drawing.Size(158, 42)
+        Me.chk_Algorithm_Q.TabIndex = 17
+        Me.chk_Algorithm_Q.Text = "Q_아침일찍"
+        Me.chk_Algorithm_Q.UseVisualStyleBackColor = False
         '
         'Form2
         '
@@ -2831,10 +2885,12 @@ Partial Class Form2
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage6.ResumeLayout(False)
         CType(Me.Chart_스토캐스틱, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TabControl2.ResumeLayout(False)
-        Me.TabPage4.ResumeLayout(False)
         Me.TabPage7.ResumeLayout(False)
         CType(Me.Cht_RSI, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabControl2.ResumeLayout(False)
+        Me.TabPage4.ResumeLayout(False)
+        Me.TabPage8.ResumeLayout(False)
+        CType(Me.Cht_상관계수, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -3019,4 +3075,7 @@ Partial Class Form2
     Friend WithEvents TabPage7 As TabPage
     Friend WithEvents Cht_RSI As DataVisualization.Charting.Chart
     Friend WithEvents chk_Algorithm_R As CheckBox
+    Friend WithEvents TabPage8 As TabPage
+    Friend WithEvents Cht_상관계수 As DataVisualization.Charting.Chart
+    Friend WithEvents chk_Algorithm_Q As CheckBox
 End Class
