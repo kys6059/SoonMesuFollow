@@ -734,6 +734,7 @@ Public Class Form2
             InitDataStructure()
             InitDataStructure_1Min()
             이베스트로그인함수()
+
             ReceiveCount = 0
         End If
 
@@ -3963,6 +3964,12 @@ Public Class Form2
 
     End Sub
 
-
-
+    Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles Button2.Click
+        Add_Log("", "자동시작")
+        InitDataStructure()
+        InitDataStructure_1Min()
+        이베스트로그인함수()
+        'InitDataStructure_1Min()
+        ReceiveCount = 0
+    End Sub
 End Class
