@@ -754,37 +754,43 @@ Module Module_For1Min
             Dim cnt As Integer = 0
             Dim tick_count_보정치 As Integer = tick_count
 
-            If currentIndex_순매수 < tick_count Then
-                tick_count_보정치 = Math.Round(currentIndex_순매수 * O1_짧을때_보정치, 0)
+            Dim targetIndex As Integer = currentIndex_순매수
+
+            If isRealFlag = False Then
+                targetIndex = currentIndex_순매수 - 2
+            End If
+
+            If targetIndex < tick_count Then
+                tick_count_보정치 = Math.Round(targetIndex * O1_짧을때_보정치, 0)
             End If
 
 
-            Dim tempIndex As Integer = currentIndex_순매수 - tick_count_보정치
+            Dim tempIndex As Integer = targetIndex - tick_count_보정치
 
             If tempIndex < 0 Or tempIndex >= 순매수리스트카운트 Then Return 0
 
             If source = 1 Then
 
-                current = 순매수리스트(currentIndex_순매수).외국인순매수
+                current = 순매수리스트(targetIndex).외국인순매수
                 prev = 순매수리스트(tempIndex).외국인순매수
 
             ElseIf source = 2 Then
 
-                current = 순매수리스트(currentIndex_순매수).기관순매수
+                current = 순매수리스트(targetIndex).기관순매수
                 prev = 순매수리스트(tempIndex).기관순매수
 
             ElseIf source = 0 Then
 
-                current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
+                current = 순매수리스트(targetIndex).외국인_기관_순매수
                 prev = 순매수리스트(tempIndex).외국인_기관_순매수
 
             ElseIf source = 3 Then
 
-                current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
+                current = 순매수리스트(targetIndex).외국인_선물_순매수
                 prev = 순매수리스트(tempIndex).외국인_선물_순매수
 
-                If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 And currentIndex_순매수 > 0 Then
-                    current = 순매수리스트(currentIndex_순매수 - 1).외국인_선물_순매수
+                If current = 0 And targetIndex + 1 = timeIndex_순매수 And targetIndex > 0 Then
+                    current = 순매수리스트(targetIndex - 1).외국인_선물_순매수
                     tick_count -= 1
                 End If
 
