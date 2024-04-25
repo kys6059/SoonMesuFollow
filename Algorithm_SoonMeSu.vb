@@ -2875,16 +2875,17 @@ Module Algorithm_SoonMeSu
 
 
                 End If
-                'End If
+
 
                 If 일분옵션데이터(callput).MACD_Result(0, Index - 1) > 0 And 일분옵션데이터(callput).MACD_Result(0, Index) < 0 Then  '0보다 작아지면 바로 매도하기 추가 실험
                     매도사유 = "N_below_0"
                 End If
             End If
 
+
         End If
 
-        If 매도사유 <> "" Then
+            If 매도사유 <> "" Then
             If isRealFlag = False Then
                 s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
 
