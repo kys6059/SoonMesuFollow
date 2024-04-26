@@ -102,6 +102,9 @@ Module Module_For1Min
 
     End Structure
 
+    Public selectedJongmokIndex(1) As Integer
+
+
     'DB에 저장하기 위해 호출할 때 쓰는 인덱스
     Public 호출할인덱스번호 As Integer = 0
     Public 모든인덱스수신됨Counter As Integer = 0  'TotlaCount * 2배가 되면 다 받은 것임

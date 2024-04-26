@@ -1143,7 +1143,7 @@ Public Class Form2
 
                 End If
 
-                If currentIndex_1MIn >= 신호끝점 Then
+                If currentIndex_1MIn >= 신호끝점 And 신호끝점 > 신호시작점 Then
                     Chart2.Series(Str).Points.AddXY(신호끝점, 0)
                     Chart2.Series(Str).Points.AddXY(신호끝점, 0.2)
                     Dim str1 As String = String.Format("신호시작점 : {0},시작시간: {1}, 신호끝점: {2}", 신호시작점, s.A02_발생시간, 신호끝점)

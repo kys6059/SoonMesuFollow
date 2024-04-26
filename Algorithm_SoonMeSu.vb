@@ -2885,7 +2885,7 @@ Module Algorithm_SoonMeSu
 
         End If
 
-            If 매도사유 <> "" Then
+        If 매도사유 <> "" Then
             If isRealFlag = False Then
                 s.A14_현재가격 = Math.Round(일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0), 2)  '해당 틱의 시가로 조정
 

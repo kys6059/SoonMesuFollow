@@ -77,7 +77,7 @@ Module Module_common
     Public timeIndex As Integer '시간이 내려감에따라 증가하는 인덱스  - 항상 초기화 필요(DB에서 가져올 때, 대신에서 가져올때)
     Public currentIndex As Integer '시뮬레이션할 때 현재커서 위치를 나타냄
     Public 콜선택된행사가(1) As String
-    Public selectedJongmokIndex(1) As Integer
+
 
     Public JongmokTargetPrice As Single  '기준이 되는 targetprice - default 2.0
     Public timerCount As Integer
