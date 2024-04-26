@@ -124,8 +124,8 @@ Module Module_common
         timeIndex = -1
 
         JongmokTargetPrice = Val(Form1.txt_JongmokTargetPrice.Text)
-        selectedJongmokIndex(0) = -1
-        selectedJongmokIndex(1) = -1
+        'selectedJongmokIndex(0) = -1
+        'selectedJongmokIndex(1) = -1
 
         If optionList Is Nothing Then
             optionList = New List(Of ListTemplate)
