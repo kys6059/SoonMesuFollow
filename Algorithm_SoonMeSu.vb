@@ -212,10 +212,10 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_N1.Checked = True Then CalcAlgorithm_N1(일분옵션데이터_CurrentIndex)
 
             If Form2.chk_Algorithm_E2.Checked = True Then CalcAlgorithm_E2()
-            If Form2.chk_Algorithm_O.Checked = True Then CalcAlgorithm_O()
+            If Form2.chk_Algorithm_O.Checked = True Then CalcAlgorithm_O(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_P.Checked = True Then CalcAlgorithm_P(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_R.Checked = True Then CalcAlgorithm_R(일분옵션데이터_CurrentIndex)
-            If Form2.chk_Algorithm_Q.Checked = True Then CalcAlgorithm_Q()
+            If Form2.chk_Algorithm_Q.Checked = True Then CalcAlgorithm_Q(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -231,6 +231,7 @@ Module Algorithm_SoonMeSu
             For i As Integer = 0 To SoonMesuShinhoList.Count - 1
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                 If s.A15_현재상태 = 1 And s.A08_콜풋 = callput And s.A01_발생Index = currentIndex_순매수 Then ret = True
+                If s.A08_콜풋 = callput And s.A19_매도Index = currentIndex_순매수 Then ret = True
             Next
 
         End If
@@ -446,14 +447,14 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
-    Public O_선물발생기준기울기 As Single = 13.0
+    Public O_선물발생기준기울기 As Single = 16.0
     Public O_외국인현물발생기준기울기 As Single = 3.0
 
     Public O_선물해제기준기울기 As Single = 6.0
-    Public O_외국인현물해제기준기울기 As Single = 2.0
+    Public O_외국인현물해제기준기울기 As Single = 1.0
 
-    Public O_tick_count_기준 As Integer = 40
-    Public O_해제tick_count_기준 As Integer = 25
+    Public O_tick_count_기준 As Integer = 20
+    Public O_해제tick_count_기준 As Integer = 20
 
 
     Public O_시작시간 As Integer = 100000
@@ -462,24 +463,16 @@ Module Algorithm_SoonMeSu
     Public 선물상관계수최저 As Double = 0.5
     Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 80
-
     Public O_다시발생시적용배율 As Single = 3.0
 
     'B240421_T001    O_CNT_044_A_13_B_3_C_6_D_2_E_100000_F_145000_G_40_H_25_I_0.5_J_0.5_K_80_L_3
+    'B240505_O302    O_CNT_007_A_16_B_3_C_6_D_1_E_100000_F_145000_G_30_H_20_I_0.5_J_0.6_K_80_L_3
+    'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
 
-
-    Public Sub CalcAlgorithm_O()
+    Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
         Dim endTime As Integer = O_마감시간
-
-
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '일단 전부다 함
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
@@ -493,8 +486,6 @@ Module Algorithm_SoonMeSu
             If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
 
             If 선물순매수기울기 > 0 Then  '  콜 방향
-
-                '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
 
                 If is동일신호가현재살아있나("O", 0) Then Return
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
@@ -512,39 +503,22 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        'If Get상관계수상태() Then
+                        If Get상관계수상태() Then
 
-                        'End If
-
-
-                        If 순매수리스트(currentIndex_순매수).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수).상관계수(3) > 선물상관계수최저 Then
-
-
-                            If is과매수상태인가(0, 일분옵션데이터_CurrentIndex - 1) = True Then
+                            If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 하향 중이면 무시
                                 Return
                             End If
-
-
-                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
-                                Return
-                            End If
-
-
-                            'If is스토캐스틱하락상태(0, 일분옵션데이터_CurrentIndex - 1) = True Then
-                            'Return
-                            'End If
-
-
 
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
 
                             SoonMesuShinhoList.Add(shinho)
+
+                        End If
+
                         End If
 
                     End If
-
-                End If
 
 
             Else ' 풋 방향
@@ -567,18 +541,9 @@ Module Algorithm_SoonMeSu
 
                         If Get상관계수상태() Then
 
-                            If is과매수상태인가(1, 일분옵션데이터_CurrentIndex - 1) = True Then
+                            If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
                                 Return
                             End If
-
-
-                            If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
-                                Return
-                            End If
-
-                            'If is스토캐스틱하락상태(1, 일분옵션데이터_CurrentIndex - 1) = True Then
-                            ' Return
-                            'End If
 
                             Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
@@ -620,19 +585,10 @@ Module Algorithm_SoonMeSu
     Public O1_짧을때_보정치 As Single = 0.8
 
     'B240421_Q202 'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
-    Public Sub CalcAlgorithm_Q()
+    Public Sub CalcAlgorithm_Q(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = Q_시작시간
         Dim endTime As Integer = Q_마감시간
-
-
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
-
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
@@ -676,10 +632,10 @@ Module Algorithm_SoonMeSu
 
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 0)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 0)
 
-                            SoonMesuShinhoList.Add(shinho)
-                        End If
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
 
 
 
@@ -714,9 +670,9 @@ Module Algorithm_SoonMeSu
                         'End If
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 1)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 1)
-                            SoonMesuShinhoList.Add(shinho)
-                        End If
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 1)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
 
                 End If
 
@@ -733,14 +689,9 @@ Module Algorithm_SoonMeSu
 
         Dim ret As Boolean = False
 
-        Dim 상관계수(4) As Double
-        '0-외국인기관합, 1-외국인, 2-기관, 3-선물, 4-개인
-        Dim startPoint As Integer = Math.Max(0, currentIndex_순매수 - 상관계수계산인덱스길이)
-        For t As Integer = 0 To 4
-            상관계수(t) = Correl(t, startPoint, currentIndex_순매수 - 1)
-        Next
-
-        If 상관계수(1) > 외국인현물상관계수최저 And 상관계수(3) > 선물상관계수최저 Then ret = True
+        If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
+            ret = True
+        End If
 
         Return ret
     End Function
@@ -1288,14 +1239,13 @@ Module Algorithm_SoonMeSu
         If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
 
 
-        'RSI에 의한 익절 확인
+        'RSI에 의한 익절 확인  -- 제외 -- 알 수 없는 오동작 240321으로 제외함
         If s.A21_환산이익율 > RSI_익절기준 Then  'RSI 익절기준을 넘었고
 
 
             If 일분옵션데이터(s.A08_콜풋).RSI(일분옵션데이터_CurrentIndex) > RSI_과열기준 Then
 
-                매도사유 = "RSI_IK"
-
+                '매도사유 = "RSI_IK"
 
             End If
 
@@ -2664,8 +2614,6 @@ Module Algorithm_SoonMeSu
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
-
-
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
 
         For i As Integer = 0 To 1
@@ -2675,8 +2623,7 @@ Module Algorithm_SoonMeSu
             If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
 
 
-            'If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 And 일분옵션데이터((i + 1) Mod 2).MACD_Result(1, Index) < 0 Then   '단순히 0보다 작았다가 커질때 신호가 발생할 때 반대쪽은 이미 0보다 작아야 함
-            If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 Then
+            If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 Then  '신호선을 MACD선이 상향 돌파
 
                 'MACD선이 너무 높은데 있으면서 신호가 뜨는걸 방지하는 기능 추가
                 If 일분옵션데이터(i).CA_기본(0, Index) > N_MACD선의값_상한허용치 Then Continue For
@@ -2709,18 +2656,18 @@ Module Algorithm_SoonMeSu
 
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
-                                Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
-                                'Add_Log("N신호:", log_str)
+                            Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
+                            'Add_Log("N신호:", log_str)
 
 
-                                Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N", i)
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N", i)
 
-                                SoonMesuShinhoList.Add(shinho)
+                            SoonMesuShinhoList.Add(shinho)
 
-
-                            End If
 
                         End If
+
+                    End If
 
                 End If
 
@@ -2787,7 +2734,7 @@ Module Algorithm_SoonMeSu
 
                         If 상관계수 = True And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then
 
-                            If is과매수상태인가(i, 일분옵션데이터_CurrentIndex - 1) = True Then Continue For
+
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format(" 콜풋:{0}:인덱스:{1}:선물기울기:{2} : 동일방향: {3}", i, Index, 선물기울기, 동일방향)
@@ -3207,34 +3154,30 @@ Module Algorithm_SoonMeSu
 
     End Function
 
-    Private Function is과매수상태인가(ByVal callput As Integer, ByVal index As Integer) As Boolean
+
+    'RSI가 상승하고 있으면 true
+    '반대는 false
+    Private Function 현재RSI의기울기방향(ByVal callput As Integer, ByVal index As Integer) As Boolean
 
 
-
-        Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
         Dim 현재RSI값 As Single = 일분옵션데이터(callput).RSI(index)
+        Dim 직전RSI값 As Single = 일분옵션데이터(callput).RSI(index - 1)
 
-        If 현재slowK값 > O_스토케스틱_과매수_기준 Then
-
+        If 현재RSI값 > 직전RSI값 Then
             Return True
-
         Else
             Return False
         End If
 
     End Function
 
-    Private Function is스토캐스틱하락상태(ByVal callput As Integer, ByVal index As Integer) As Boolean
-
-
+    Private Function is스토캐스틱하락상태(ByVal callput As Integer, ByVal index As Integer) As Boolean   '현재 사용하지 않음
 
         Dim 현재slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index)
         Dim 직전slowK값 As Single = 일분옵션데이터(callput).ST_SlowK(index - 1)
 
         If 현재slowK값 < 직전slowK값 Then
-
             Return True
-
         Else
             Return False
         End If

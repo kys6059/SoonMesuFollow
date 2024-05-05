@@ -242,6 +242,20 @@ Module Module_For1Min
 
         Dim 시분 As Integer = 순매수시간 / 100
 
+        Dim 시 As Integer = 순매수시간 / 10000
+        Dim 분 As Integer = 시분 Mod 100
+        Dim 초 As Integer = 순매수시간 Mod 100
+
+        If 초 = 30 Then  '30초이면 분에 1분을 더하도록 한다
+            Dim dt As DateTime = New DateTime(2024, 1, 1, 시, 분, 0)
+            dt = dt.AddMinutes(1)
+            시분 = Format(dt, "hhmm")
+        End If
+
+
+
+        'tDate = Format(Now(), "MM-dd hh:mm:ss")
+
         For i As Integer = 0 To timeIndex_1Min - 1
             If 시분 = Val(일분옵션데이터(0).ctime(i)) Then
                 ret = i
@@ -757,16 +771,11 @@ Module Module_For1Min
             Dim cnt As Integer = 0
             Dim tick_count_보정치 As Integer = tick_count
 
-            Dim targetIndex As Integer = currentIndex_순매수
-
-            If isRealFlag = False Then
-                targetIndex = currentIndex_순매수 - 2
-            End If
+            Dim targetIndex As Integer = currentIndex_순매수    '실제와 시뮬레이션 통일
 
             If targetIndex < tick_count Then
                 tick_count_보정치 = Math.Round(targetIndex * O1_짧을때_보정치, 0)
             End If
-
 
             Dim tempIndex As Integer = targetIndex - tick_count_보정치
 
