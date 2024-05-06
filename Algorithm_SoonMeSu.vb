@@ -155,13 +155,14 @@ Module Algorithm_SoonMeSu
 
     'N알고리즘 용
     ' B240421_N103   N_TEST_CNT_013_A_0.005_B_60_C_0.015_D_1230_E_1000_F_13_G_0.16_H_80
-    Public N_기울기최저기준 As Single = 0.005  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
-    Public N_기울기최고기준 As Single = 0.018  '240312 확인해 보니 007로 하니 한달동안 한번도 안사져서 0.009로 변경함
+    ' B240506_N001   N_TEST_CNT_058_A_0.006_B_60_C_0.015_D_1230_E_1000_F_12_G_0.16
+    Public N_기울기최저기준 As Single = 0.006  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
+    Public N_기울기최고기준 As Single = 0.015  '240312 확인해 보니 007로 하니 한달동안 한번도 안사져서 0.009로 변경함
 
     Public N_마감시간 As Integer = 1230
     Public N_시작시간 As Integer = 1000
 
-    Public M_선물기울기_기준 As Integer = 13
+    Public M_선물기울기_기준 As Integer = 12
 
     Public N_MACD선의값_상한허용치 As Single = 0.16
 
@@ -173,6 +174,7 @@ Module Algorithm_SoonMeSu
 
     'N1 알고리즘용 
     'case 1 N1_TEST_CNT_149_A_-0.11_B_10_C_25_D_1500_E_920
+    '
 
     Public N1_기울기최저기준 As Single = 0.001  '기울기가 일정 기준 이상일때만 사도록 하는 기능임. 참고로 2023년 9월부터 12월까지 평균은 0.01, 최대값은 0.059 였음   - 최소 확인 23.09.03 ! 12.22   - 0,3일 대상
     Public N1_마감시간 As Integer = 1500
@@ -516,9 +518,9 @@ Module Algorithm_SoonMeSu
 
                         End If
 
-                        End If
-
                     End If
+
+                End If
 
 
             Else ' 풋 방향
@@ -562,29 +564,30 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직 ----------- 아침일찍 매수하는 로직
 
-    Public Q_선물발생기준기울기 As Single = 13.0
+    Public Q_선물발생기준기울기 As Single = 14.0
     Public Q_외국인현물발생기준기울기 As Single = 3.0
 
-    Public Q_선물해제기준기울기 As Single = 3.0
-    Public Q_외국인현물해제기준기울기 As Single = 0.5
+    Public Q_선물해제기준기울기 As Single = 6.0
+    Public Q_외국인현물해제기준기울기 As Single = 1.0
 
 
     Public Q_tick_count_기준 As Integer = 25
-    Public Q_해제tick_count_기준 As Integer = 16
+    Public Q_해제tick_count_기준 As Integer = 15
 
 
-    Public Q_시작시간 As Integer = 93500
+    Public Q_시작시간 As Integer = 93000
     Public Q_마감시간 As Integer = 95900
 
     Public Q_선물상관계수최저 As Double = 0.6
     Public Q_외국인현물상관계수최저 As Double = 0.6
-    Public Q_상관계수계산인덱스길이 As Integer = 80
+    Public Q_상관계수계산인덱스길이 As Integer = 30
 
     Public Q_다시발생시적용배율 As Single = 3.0
 
     Public O1_짧을때_보정치 As Single = 0.8
 
-    'B240421_Q202 'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
+    'B240421_Q202                                       Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
+    'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
     Public Sub CalcAlgorithm_Q(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = Q_시작시간
@@ -602,8 +605,6 @@ Module Algorithm_SoonMeSu
 
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
-                '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
-
                 If is동일신호가현재살아있나("Q", 0) Then Return
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
@@ -616,35 +617,21 @@ Module Algorithm_SoonMeSu
 
                 If 선물순매수기울기_절대치 > Q_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > Q_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
+                    If Get상관계수상태() Then
 
-
-                    If 순매수리스트(currentIndex_순매수).상관계수(1) > Q_외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수).상관계수(3) > Q_선물상관계수최저 Then
-
-
-                        'If is과매수상태인가(0, 일분옵션데이터_CurrentIndex - 1) = True Then
-                        'Return
-                        'End If
-
-
-                        '    If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
-                        '   Return
-                        'End If
-
+                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 상승 중이면 무시
+                            Return
+                        End If
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 0)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 0)
 
                         SoonMesuShinhoList.Add(shinho)
                     End If
-
-
-
                 End If
 
 
             Else ' 풋 방향
-
-
                 If is동일신호가현재살아있나("Q", 1) Then Return
                 If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
@@ -656,18 +643,11 @@ Module Algorithm_SoonMeSu
 
                 If 선물순매수기울기_절대치 > Q_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > Q_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
+                    If Get상관계수상태() Then
 
-
-                    If 순매수리스트(currentIndex_순매수).상관계수(1) > Q_외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수).상관계수(3) > Q_선물상관계수최저 Then
-
-                        'If is과매수상태인가(1, 일분옵션데이터_CurrentIndex - 1) = True Then
-                        'Return
-                        'End If
-
-
-                        '    If 일분옵션데이터(1).ST_SlowK(일분옵션데이터_CurrentIndex - 1) > 80 Then
-                        '   Return
-                        'End If
+                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
+                            Return
+                        End If
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 1)
@@ -679,8 +659,6 @@ Module Algorithm_SoonMeSu
             End If
 
         End If
-
-
     End Sub
 
 
@@ -2650,15 +2628,10 @@ Module Algorithm_SoonMeSu
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
 
-                            'If is과매수상태인가(i, Index) = True Then   'N에 적용 시 결과가 더 안좋아서 일단 제외함
-                            'Continue For
-                            'End If
-
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)
                             'Add_Log("N신호:", log_str)
-
 
                             Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("N", i)
 

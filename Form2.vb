@@ -944,7 +944,7 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            For j As Integer = 20 To 180   '순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
+            For j As Integer = 110 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
 
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
@@ -2225,7 +2225,7 @@ Public Class Form2
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
-        'fullTest_N()
+        fullTest_N()
         'fullTest_N1()
 
         'fullTest_C()
@@ -2243,7 +2243,7 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        fullTest_Q()
+        'fullTest_Q()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2320,16 +2320,16 @@ Public Class Form2
 
     '20240211 테스트 결과 C_TEST_CNT_012_A_0.005_B_58_C_0.007_D_1230
     ' B240421_N103   N_TEST_CNT_013_A_0.005_B_60_C_0.015_D_1230_E_1000_F_13_G_0.16_H_80
-
+    ' B240506_N001   N_TEST_CNT_058_A_0.006_B_60_C_0.015_D_1230_E_1000_F_12_G_0.16
     Private Sub fullTest_N()
         '231225 이걸로 확정함
-        Dim N_기울기최저기준_temp() As Single = {0.005}
+        Dim N_기울기최저기준_temp() As Single = {0.006}
         Dim N_장기추세선기준일_temp() As Integer = {60}
-        Dim N_기울기최고기준_temp() As Single = {0.015, 0.018, 0.022, 0.026}
-        Dim N_마감시간_temp() As Integer = {1230}
-        Dim N_시작시간_temp() As Integer = {1000}
-        Dim M_선물기울기_기준_temp() As Integer = {13}
-        Dim N_MACD선의값_상한허용치_temp() As Single = {0.14, 0.16, 0.2, 0.24}
+        Dim N_기울기최고기준_temp() As Single = {0.015}
+        Dim N_마감시간_temp() As Integer = {1230, 1400, 1500}
+        Dim N_시작시간_temp() As Integer = {1000, 930, 945}
+        Dim M_선물기울기_기준_temp() As Integer = {12}
+        Dim N_MACD선의값_상한허용치_temp() As Single = {0.16}
 
 
         chk_Algorithm_A.Checked = False
@@ -3323,22 +3323,22 @@ Public Class Form2
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {13, 16, 20, 24}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {3, 5}
+        Dim Q_선물발생기준기울기_temp() As Single = {16, 14, 12}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {8.0, 6.0}
-        Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0, 0.1}    'B
+        Dim Q_선물해제기준기울기_temp() As Single = {6.0}
+        Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim Q_시작시간_temp() As String = {"92000", "92500", "93000", "93500"}
+        Dim Q_시작시간_temp() As String = {"92000", "92500", "93000"}
         Dim Q_마감시간_temp() As String = {"95900"}
 
 
-        Dim Q_tick_count_기준_temp() As Integer = {20, 25, 30} ', 36, 40}
-        Dim Q_해제tick_count_기준_temp() As Integer = {10, 16, 20}
+        Dim Q_tick_count_기준_temp() As Integer = {20, 25} ', 36, 40}
+        Dim Q_해제tick_count_기준_temp() As Integer = {15, 20}
 
-        Dim Q_선물상관계수최저_temp() As Single = {0.5}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5}
-        Dim Q_상관계수계산인덱스길이_temp() As Integer = {80}
+        Dim Q_선물상관계수최저_temp() As Single = {0.5, 0.6}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5, 0.6}
+        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
 
         Dim Q_다시발생시적용배율_temp() As Single = {3}
         Dim O1_짧을때_보정치_temp() As Single = {0.8}
