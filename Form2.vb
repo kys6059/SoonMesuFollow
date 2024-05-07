@@ -944,8 +944,8 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
-
+            'For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
+            For j As Integer = 20 To 180  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
                     chk_F2_화면끄기.Checked = False
@@ -2225,7 +2225,7 @@ Public Class Form2
         'fullTest_A()
         'fullTest_B()
         'fullTest_M()
-        fullTest_N()
+        'fullTest_N()
         'fullTest_N1()
 
         'fullTest_C()
@@ -2243,7 +2243,7 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3320,11 +3320,12 @@ Public Class Form2
 
     'Q_CNT_011_A_13_B_3_C_6_D_2_E_93500_F_95900_G_25_H_10_I_0.6_J_0.6_K_80_M_0.8
     'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
+    'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
 
     Private Sub fullTest_Q()
 
         Dim Q_선물발생기준기울기_temp() As Single = {16, 14, 12}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {3, 2}
 
         Dim Q_선물해제기준기울기_temp() As Single = {6.0}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
@@ -3333,12 +3334,12 @@ Public Class Form2
         Dim Q_마감시간_temp() As String = {"95900"}
 
 
-        Dim Q_tick_count_기준_temp() As Integer = {20, 25} ', 36, 40}
+        Dim Q_tick_count_기준_temp() As Integer = {20, 25, 30} ', 36, 40}
         Dim Q_해제tick_count_기준_temp() As Integer = {15, 20}
 
         Dim Q_선물상관계수최저_temp() As Single = {0.5, 0.6}
         Dim Q_외국인현물상관계수최저_temp() As Single = {0.5, 0.6}
-        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
+        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30, 40}
 
         Dim Q_다시발생시적용배율_temp() As Single = {3}
         Dim O1_짧을때_보정치_temp() As Single = {0.8}

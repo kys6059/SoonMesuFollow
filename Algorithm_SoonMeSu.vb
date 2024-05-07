@@ -954,7 +954,7 @@ Module Algorithm_SoonMeSu
 
         Dim shinho As 순매수신호_탬플릿 = New 순매수신호_탬플릿
 
-        Dim 일분옵션데이터_CurrentIndex As Integer
+        Dim 일분옵션데이터_CurrentIndex As Integer = currentIndex_1MIn
         If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
             일분옵션데이터_CurrentIndex = currentIndex_1MIn
         Else
@@ -972,7 +972,7 @@ Module Algorithm_SoonMeSu
         shinho.A07_신호해제종합주가지수 = 0
         shinho.A08_콜풋 = callput
         shinho.A09_행사가 = 일분옵션데이터(callput).HangSaGa
-        shinho.A10_신호발생가격 = 0 '------------------------------------------------ 이거
+        shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex, 3) '------------------------------------------------ 일단 채우기 20240507에 값이 안들어가는 문제가 있어 일단 채우고 뒤에서 조정
 
         shinho.A15_현재상태 = 1
         shinho.A16_이익률 = 0
