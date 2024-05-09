@@ -944,8 +944,8 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            'For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
-            For j As Integer = 20 To 180  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
+            For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
+                'For j As Integer = 20 To 180  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
                     chk_F2_화면끄기.Checked = False
@@ -2241,9 +2241,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
-        fullTest_Q()
+        'fullTest_Q()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3191,6 +3191,10 @@ Public Class Form2
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
+    'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
+
+
+    'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     Private Sub fullTest_O()
 
         Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
@@ -3203,14 +3207,14 @@ Public Class Form2
         Dim O_마감시간_temp() As String = {"145000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {30, 25, 20} ', 36, 40}
+        Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
         Dim 선물상관계수최저_temp() As Single = {0.5}
         Dim 외국인현물상관계수최저_temp() As Single = {0.5}
-        Dim 상관계수계산인덱스길이_temp() As Integer = {80, 60, 40, 30}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {3.0, 4.0}
+        Dim O_다시발생시적용배율_temp() As Single = {1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False

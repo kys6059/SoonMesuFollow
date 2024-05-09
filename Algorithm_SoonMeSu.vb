@@ -465,11 +465,13 @@ Module Algorithm_SoonMeSu
     Public 선물상관계수최저 As Double = 0.5
     Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 80
-    Public O_다시발생시적용배율 As Single = 3.0
+    Public O_다시발생시적용배율 As Single = 2.2
 
     'B240421_T001    O_CNT_044_A_13_B_3_C_6_D_2_E_100000_F_145000_G_40_H_25_I_0.5_J_0.5_K_80_L_3
     'B240505_O302    O_CNT_007_A_16_B_3_C_6_D_1_E_100000_F_145000_G_30_H_20_I_0.5_J_0.6_K_80_L_3
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
+
+    'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
 
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
