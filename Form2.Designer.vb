@@ -2326,8 +2326,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_N1.AutoSize = True
         Me.chk_Algorithm_N1.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_N1.Checked = True
-        Me.chk_Algorithm_N1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_N1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_N1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_N1.Location = New System.Drawing.Point(141, 3)
