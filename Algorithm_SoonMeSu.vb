@@ -996,7 +996,7 @@ Module Algorithm_SoonMeSu
         shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
 
 
-        If 일분옵션데이터_CurrentIndex >= 0 Then
+        If 일분옵션데이터_CurrentIndex > 0 Then
 
             If shinho.A03_신호ID = "D" Or shinho.A03_신호ID = "M" Or shinho.A03_신호ID = "N" Or shinho.A03_신호ID = "P" Or shinho.A03_신호ID = "R" Then  '이전 틱이 끝나고 새로운 틱에서 사는 건 시가를 입력한다
 
@@ -1015,11 +1015,16 @@ Module Algorithm_SoonMeSu
                 shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
             End If
 
-            If shinho.A10_신호발생가격 <= 0.02 Then shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3)
+            If shinho.A10_신호발생가격 <= 0.02 Then  'currentIndex에서 아직 못가져온 경우 간헐적으로 0이 되는 경우가 있어 그 경우 이전틱의 값으로 대체함
+                shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3)
+                shinho.A14_현재가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3)
+            End If
 
             shinho.A16_이익률 = Math.Round((shinho.A14_현재가격 - shinho.A10_신호발생가격) / shinho.A10_신호발생가격, 3)
-            End If
-            shinho.B00_etc = Form2.txt_F2_실험조건.Text
+
+        End If
+        shinho.B00_etc = Form2.txt_F2_실험조건.Text
+
 
         Return shinho
 
