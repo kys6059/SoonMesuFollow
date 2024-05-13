@@ -975,6 +975,7 @@ Module Algorithm_SoonMeSu
         shinho.A08_콜풋 = callput
         shinho.A09_행사가 = 일분옵션데이터(callput).HangSaGa
         shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex, 3) '------------------------------------------------ 일단 채우기 20240507에 값이 안들어가는 문제가 있어 일단 채우고 뒤에서 조정
+        If shinho.A10_신호발생가격 <= 0.02 Then shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3)
 
         shinho.A15_현재상태 = 1
         shinho.A16_이익률 = 0
@@ -993,12 +994,6 @@ Module Algorithm_SoonMeSu
         shinho.A60_손절기준차 = Form2.txt_F2_손절매차.Text
         shinho.A61_익절기준차 = Form2.txt_F2_익절차.Text
         shinho.A62_TimeoutTime = Form2.txt_F2_TimeoutTime.Text
-
-        If shinho.A03_신호ID = "D" Then
-            Dim 장대양봉크기 As Single = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 0)
-            shinho.A53_장대양봉손절가 = 일분옵션데이터(callput).price(currentIndex_1MIn - 1, 3) - (장대양봉크기 * 장대양봉손절기준비율)
-        End If
-
 
 
         If 일분옵션데이터_CurrentIndex >= 0 Then
@@ -1020,9 +1015,11 @@ Module Algorithm_SoonMeSu
                 shinho.A14_현재가격 = 일분옵션데이터(shinho.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
             End If
 
+            If shinho.A10_신호발생가격 <= 0.02 Then shinho.A10_신호발생가격 = 일분옵션데이터(callput).price(일분옵션데이터_CurrentIndex - 1, 3)
+
             shinho.A16_이익률 = Math.Round((shinho.A14_현재가격 - shinho.A10_신호발생가격) / shinho.A10_신호발생가격, 3)
-        End If
-        shinho.B00_etc = Form2.txt_F2_실험조건.Text
+            End If
+            shinho.B00_etc = Form2.txt_F2_실험조건.Text
 
         Return shinho
 
