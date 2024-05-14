@@ -1199,7 +1199,7 @@ Module Algorithm_SoonMeSu
 
         If isRealFlag = True And s.A21_환산이익율 < 옵션가손절매기준 Then
 
-            매도사유 = "option_son"
+            매도사유 = "son_" & s.A17_중간매도Flag.ToString()
 
         End If
 
@@ -1207,7 +1207,7 @@ Module Algorithm_SoonMeSu
         Dim 저가기준환산이익율 As Single = Math.Round(((저가 - s.A10_신호발생가격) / s.A10_신호발생가격) - 슬리피지, 3)
         If 저가 > 0 And 저가기준환산이익율 < 옵션가손절매기준 And isRealFlag = False Then
 
-            매도사유 = "option_son"
+            매도사유 = "son_" & s.A17_중간매도Flag.ToString()
 
             s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
             s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
