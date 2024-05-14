@@ -489,77 +489,76 @@ Module Algorithm_SoonMeSu
 
             If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
 
+            If Get상관계수상태() = False Then Return
+
+            'Dim 현재이평선상태 As Integer
+            'If 순매수리스트(currentIndex_순매수 - 1).코스피지수_이동평균선 < 순매수리스트(currentIndex_순매수 - 1).코스피지수 Then
+            '    현재이평선상태 = 1
+            'Else
+            '    현재이평선상태 = -1
+            'End If
+
+
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
-                If is동일신호가현재살아있나("O", 0) Then Return
-                If 같은방향같은시간발생신호가있는지(0) = True Then Return
+                    If is동일신호가현재살아있나("O", 0) Then Return
+                    If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
-                Dim offset As Single = 1.0
+                    Dim offset As Single = 1.0
 
-                If is동일신호가있나("O", 0) = True Then
-                    offset = O_다시발생시적용배율
-                End If
+                    If is동일신호가있나("O", 0) = True Then
+                        offset = O_다시발생시적용배율
+                    End If
 
+                    If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
-                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
-
-                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        If Get상관계수상태() Then
-
-                            If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 하향 중이면 무시
-                                Return
-                            End If
-
-                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-
-                            SoonMesuShinhoList.Add(shinho)
-
+                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 하향 중이면 무시
+                            Return
                         End If
+
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                        SoonMesuShinhoList.Add(shinho)
 
                     End If
 
                 End If
 
+                Else ' 풋 방향
 
-            Else ' 풋 방향
+                    If is동일신호가현재살아있나("O", 1) Then Return
+                    If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
+                    Dim offset As Single = 1.0
 
-                If is동일신호가현재살아있나("O", 1) Then Return
-                If 같은방향같은시간발생신호가있는지(1) = True Then Return
+                    If is동일신호가있나("O", 1) = True Then
+                        offset = O_다시발생시적용배율
+                    End If
 
-                Dim offset As Single = 1.0
-
-                If is동일신호가있나("O", 1) = True Then
-                    offset = O_다시발생시적용배율
-                End If
-
-                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+                    If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
 
+
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
-                        If Get상관계수상태() Then
-
-                            If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
-                                Return
-                            End If
-
-                            Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
-                            SoonMesuShinhoList.Add(shinho)
+                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
+                            Return
                         End If
 
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
+                        SoonMesuShinhoList.Add(shinho)
                     End If
                 End If
 
-            End If
+                End If
 
-        End If
+            End If
 
 
     End Sub
@@ -578,7 +577,7 @@ Module Algorithm_SoonMeSu
 
 
     Public Q_시작시간 As Integer = 93000
-    Public Q_마감시간 As Integer = 95900
+    Public Q_마감시간 As Integer = 94700
 
     Public Q_선물상관계수최저 As Double = 0.6
     Public Q_외국인현물상관계수최저 As Double = 0.6
@@ -668,6 +667,7 @@ Module Algorithm_SoonMeSu
     Private Function Get상관계수상태() As Boolean
 
         Dim ret As Boolean = False
+
 
         If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
             ret = True
@@ -2617,8 +2617,6 @@ Module Algorithm_SoonMeSu
 
                     If 일분옵션데이터(i).MACD_Result(2, Index) > 0 Then  ' 장기 이동평균선 위에 있을 때만 신호
 
-                        '여기 선물케이스 정리해서 넣을 것
-
                         Dim 선물기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
                         Dim 현물기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
                         Dim 동일방향 As Integer = 선물기울기 * 현물기울기
@@ -2631,7 +2629,6 @@ Module Algorithm_SoonMeSu
 
                         Dim 상관계수 As Boolean = Get상관계수상태()
                         If 상관계수 = True Then
-
 
                             Dim 남은날짜 As Integer = getRemainDate(sMonth, Val(순매수리스트(currentIndex_순매수).sDate)) Mod 7
                             Dim log_str As String = String.Format("콜풋:{0}:인덱스:{1}:남은날짜:{2}:기울기:{3}:발생일자:{4}", i, Index, 남은날짜, 기울기, 순매수리스트(currentIndex_순매수).sDate)

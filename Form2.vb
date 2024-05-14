@@ -937,10 +937,9 @@ Public Class Form2
                 일일조건설정(TargetDate)    '전체조건일 때는 스킵해야 함
             End If
 
-            'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '1,2,6 일만 한다
-            If 남은날짜 = 6 Or 남은날짜 = 2 Or 남은날짜 = 1 Then Continue For   '0,3 일만 한다
-
-
+            'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '0,3일 제외
+            If 남은날짜 = 2 Then Continue For   '2일 제외
+            If 남은날짜 = 6 Or 남은날짜 = 1 Then Continue For   '1,6일 제외
 
 
             '당일 내부에서 변경
@@ -2241,9 +2240,10 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
+        이평선테스트()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2498,10 +2498,10 @@ Public Class Form2
     Private Sub 매도조건테스트()
 
         '0일 3일
-        Dim 익절차() As String = {"11", "09", "07", "05", "13"} 'L
-        Dim 옵션기준손절매() As String = {"-0.23", "-0.20", "-0.26", "-0.28", "-0.30"} 'M
-        Dim 중간청산이익목표() As String = {"0.30"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.25, 0.28}
+        Dim 익절차() As String = {"09"} 'L
+        Dim 옵션기준손절매() As String = {"-0.14", "-0.16", "-0.18", "-0.20", "-0.22"} 'M
+        Dim 중간청산이익목표() As String = {"0.20", "0.18", "0.16", "0.14"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '1,2,6일
         'Dim 익절차() As String = {"11", "10"} 'L
@@ -2526,8 +2526,8 @@ Public Class Form2
                         txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
 
                         첫번째중간매도이익율 = 중간청산이익목표(n)
-                        두번째중간매도이익율 = 첫번째중간매도이익율 + 0.3
-                        세번째중간매도이익율 = 두번째중간매도이익율 + 0.3
+                        두번째중간매도이익율 = 첫번째중간매도이익율 + 0.2
+                        세번째중간매도이익율 = 두번째중간매도이익율 + 0.2
 
                         중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
 
@@ -3197,10 +3197,10 @@ Public Class Form2
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
+        Dim O_선물발생기준기울기_temp() As Single = {16, 18} ', 14, 16}    'A
         Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {6.0}    'A
+        Dim O_선물해제기준기울기_temp() As Single = {6.0, 4.0, 8.0}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
@@ -3210,11 +3210,11 @@ Public Class Form2
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5}
+        Dim 선물상관계수최저_temp() As Single = {0.5, 0.7}
         Dim 외국인현물상관계수최저_temp() As Single = {0.5}
         Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3}
+        Dim O_다시발생시적용배율_temp() As Single = {2.2}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3956,5 +3956,56 @@ Public Class Form2
         이베스트로그인함수()
         'InitDataStructure_1Min()
         ReceiveCount = 0
+    End Sub
+
+
+
+    Private Sub 이평선테스트()
+
+        Dim 이동평균선_기준일자_temp() As Integer = {10, 20, 30, 40, 50, 60}               'A
+
+
+
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_Q.Checked = False
+        chk_Algorithm_O.Checked = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+        For a As Integer = 0 To 이동평균선_기준일자_temp.Length - 1
+
+            이동평균선_기준일자 = 이동평균선_기준일자_temp(a)
+
+
+            Dim cntstr As String
+
+            If cnt < 10 Then
+                cntstr = "00" & cnt.ToString()
+            ElseIf cnt >= 10 And cnt < 100 Then
+                cntstr = "0" & cnt.ToString()
+            Else
+                cntstr = cnt.ToString()
+            End If
+
+
+            SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}", 이동평균선_기준일자_temp(a))
+
+
+            Console.WriteLine(SoonMesuSimulation_조건)
+            Add_Log("", SoonMesuSimulation_조건)
+
+            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+            cnt += 1
+
+
+        Next
+
     End Sub
 End Class
