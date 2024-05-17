@@ -2240,10 +2240,10 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        이평선테스트()
+        '이평선테스트()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3192,15 +3192,18 @@ Public Class Form2
 
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
-
-
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
+
+
+
+    'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
+
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16, 18} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {0.1, 1.5, 3, 4.5} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {6.0, 4.0, 8.0}    'A
+        Dim O_선물해제기준기울기_temp() As Single = {10.0}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
@@ -3210,8 +3213,8 @@ Public Class Form2
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5, 0.7}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.5}
+        Dim 선물상관계수최저_temp() As Single = {0.4}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.4}
         Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
         Dim O_다시발생시적용배율_temp() As Single = {2.2}

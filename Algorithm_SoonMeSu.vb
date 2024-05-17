@@ -473,6 +473,9 @@ Module Algorithm_SoonMeSu
 
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
 
+
+    'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
+
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
@@ -510,7 +513,7 @@ Module Algorithm_SoonMeSu
                         offset = O_다시발생시적용배율
                     End If
 
-                    If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)
 
@@ -528,18 +531,18 @@ Module Algorithm_SoonMeSu
 
                 End If
 
-                Else ' 풋 방향
+            Else ' 풋 방향
 
-                    If is동일신호가현재살아있나("O", 1) Then Return
-                    If 같은방향같은시간발생신호가있는지(1) = True Then Return
+                If is동일신호가현재살아있나("O", 1) Then Return
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
-                    Dim offset As Single = 1.0
+                Dim offset As Single = 1.0
 
-                    If is동일신호가있나("O", 1) = True Then
-                        offset = O_다시발생시적용배율
-                    End If
+                If is동일신호가있나("O", 1) = True Then
+                    offset = O_다시발생시적용배율
+                End If
 
-                    If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+                If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
 
@@ -556,9 +559,9 @@ Module Algorithm_SoonMeSu
                     End If
                 End If
 
-                End If
-
             End If
+
+        End If
 
 
     End Sub
