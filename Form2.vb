@@ -699,6 +699,7 @@ Public Class Form2
 
         Dim strToday As String = Format(Today, "yyMMdd")
         txt_F2_실험조건.Text = "B" + strToday
+        txt_순매수기준인덱스.Text = O_tick_count_기준
 
         ReceiveCount = 0
 
@@ -943,12 +944,13 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
-                'For j As Integer = 20 To 180  '--------------------------------------------------------------------------------- 950 부터 테스트를 위해 점프함  000000 , Q TEST를 위해서 제한
+            For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 전체 시간대 테스트
+                'For j As Integer = 20 To 180  '---------------------------------------------------------------------------------  Q TEST를 위해서 제한 10시반까지
                 currentIndex_순매수 = j
                 If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
                     chk_F2_화면끄기.Checked = False
                 End If
+
 
                 If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
 
@@ -966,22 +968,24 @@ Public Class Form2
 
                 End If
 
+
                 F2_Clac_DisplayAllGrid()
 
+
             Next
 
-            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-            For j = 0 To SoonMesuShinhoList.Count - 1
-                SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+                '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+                For j = 0 To SoonMesuShinhoList.Count - 1
+                    SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+                Next
+
+                'End If
+                Threading.Thread.Sleep(50)
+
             Next
 
-            'End If
-            Threading.Thread.Sleep(50)
-
-        Next
-
-        '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
-        If SoonMesuSimulationTotalShinhoList.Count > 0 Then
+            '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
+            If SoonMesuSimulationTotalShinhoList.Count > 0 Then
 
 
             InsertSoonMeSuShinhoResult("statistics")
@@ -2240,9 +2244,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         '이평선테스트()
 
         당일반복중_flag = False
@@ -3331,24 +3335,24 @@ Public Class Form2
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {16, 14, 12}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {3, 2}
+        Dim Q_선물발생기준기울기_temp() As Single = {24, 28}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {6.0}
+        Dim Q_선물해제기준기울기_temp() As Single = {6.0, 10.0, 16.0}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim Q_시작시간_temp() As String = {"92000", "92500", "93000"}
-        Dim Q_마감시간_temp() As String = {"95900"}
+        Dim Q_마감시간_temp() As String = {"94700"}
 
 
-        Dim Q_tick_count_기준_temp() As Integer = {20, 25, 30} ', 36, 40}
-        Dim Q_해제tick_count_기준_temp() As Integer = {15, 20}
+        Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
+        Dim Q_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim Q_선물상관계수최저_temp() As Single = {0.5, 0.6}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5, 0.6}
+        Dim Q_선물상관계수최저_temp() As Single = {0.5}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5}
         Dim Q_상관계수계산인덱스길이_temp() As Integer = {30, 40}
 
-        Dim Q_다시발생시적용배율_temp() As Single = {3}
+        Dim Q_다시발생시적용배율_temp() As Single = {2.2}
         Dim O1_짧을때_보정치_temp() As Single = {0.8}
 
 

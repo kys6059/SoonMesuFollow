@@ -568,22 +568,22 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직 ----------- 아침일찍 매수하는 로직
 
-    Public Q_선물발생기준기울기 As Single = 14.0
+    Public Q_선물발생기준기울기 As Single = 15.0
     Public Q_외국인현물발생기준기울기 As Single = 3.0
 
-    Public Q_선물해제기준기울기 As Single = 6.0
+    Public Q_선물해제기준기울기 As Single = 10.0
     Public Q_외국인현물해제기준기울기 As Single = 1.0
 
 
-    Public Q_tick_count_기준 As Integer = 25
-    Public Q_해제tick_count_기준 As Integer = 15
+    Public Q_tick_count_기준 As Integer = 20
+    Public Q_해제tick_count_기준 As Integer = 10
 
 
     Public Q_시작시간 As Integer = 93000
     Public Q_마감시간 As Integer = 94700
 
-    Public Q_선물상관계수최저 As Double = 0.6
-    Public Q_외국인현물상관계수최저 As Double = 0.6
+    Public Q_선물상관계수최저 As Double = 0.4
+    Public Q_외국인현물상관계수최저 As Double = 0.4
     Public Q_상관계수계산인덱스길이 As Integer = 30
 
     Public Q_다시발생시적용배율 As Single = 3.0
@@ -592,6 +592,9 @@ Module Algorithm_SoonMeSu
 
     'B240421_Q202                                       Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
     'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
+
+
+    'B240520_Q001 Q_CNT_123_A_14_B_3_C_10_D_1_E_93000_F_94700_G_20_H_20_I_0.4_J_0.4_K_40_L_2.2_M_0.8
     Public Sub CalcAlgorithm_Q(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = Q_시작시간
