@@ -452,7 +452,7 @@ Module Algorithm_SoonMeSu
     Public O_선물발생기준기울기 As Single = 16.0
     Public O_외국인현물발생기준기울기 As Single = 3.0
 
-    Public O_선물해제기준기울기 As Single = 6.0
+    Public O_선물해제기준기울기 As Single = 7.0
     Public O_외국인현물해제기준기울기 As Single = 1.0
 
     Public O_tick_count_기준 As Integer = 20
@@ -460,9 +460,9 @@ Module Algorithm_SoonMeSu
 
 
     Public O_시작시간 As Integer = 100000
-    Public O_마감시간 As Integer = 145000
+    Public O_마감시간 As Integer = 123000
 
-    Public 선물상관계수최저 As Double = 0.5
+    Public 선물상관계수최저 As Double = 0.4
     Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 80
     Public O_다시발생시적용배율 As Single = 2.2
@@ -470,18 +470,16 @@ Module Algorithm_SoonMeSu
     'B240421_T001    O_CNT_044_A_13_B_3_C_6_D_2_E_100000_F_145000_G_40_H_25_I_0.5_J_0.5_K_80_L_3
     'B240505_O302    O_CNT_007_A_16_B_3_C_6_D_1_E_100000_F_145000_G_30_H_20_I_0.5_J_0.6_K_80_L_3
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
-
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
-
-
     'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
+
+    'B240524_T102     O_CNT_003_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
 
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
         Dim endTime As Integer = O_마감시간
 
-        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '일단 전부다 함
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
             Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
@@ -504,14 +502,14 @@ Module Algorithm_SoonMeSu
 
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
-                    If is동일신호가현재살아있나("O", 0) Then Return
-                    If 같은방향같은시간발생신호가있는지(0) = True Then Return
+                If is동일신호가현재살아있나("O", 0) Then Return
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
-                    Dim offset As Single = 1.0
+                Dim offset As Single = 1.0
 
-                    If is동일신호가있나("O", 0) = True Then
-                        offset = O_다시발생시적용배율
-                    End If
+                If is동일신호가있나("O", 0) = True Then
+                    offset = O_다시발생시적용배율
+                End If
 
                 If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
@@ -1506,7 +1504,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_O_2"
+                        '매도사유 = "weak_O_2"
                     End If
 
 
@@ -1525,7 +1523,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_O_2"
+                        '매도사유 = "weak_O_2"
                     End If
 
                 End If
@@ -1599,10 +1597,6 @@ Module Algorithm_SoonMeSu
             End If
 
         End If
-
-
-
-
 
         Return 매도사유
     End Function
@@ -2599,7 +2593,6 @@ Module Algorithm_SoonMeSu
 
         If 일분옵션데이터_CurrentIndex < max_interval Then Return  '추세선이 아직  안 만들어졌으면 빠진다
 
-        If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
         If Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) > N_마감시간 Or Val(일분옵션데이터(0).ctime(일분옵션데이터_CurrentIndex)) < N_시작시간 Then Return
 
         Dim Index As Integer = 일분옵션데이터_CurrentIndex - 1
@@ -2607,9 +2600,8 @@ Module Algorithm_SoonMeSu
         For i As Integer = 0 To 1
             If is동일신호가현재살아있나("N", i) Then Continue For
             If is동일신호가현재살아있나("M", i) Then Continue For
-
+            If 같은방향같은시간발생신호가있는지(i) = True Then Continue For
             If 일분옵션데이터(i).price(Index, 3) < 0.2 Then Continue For '0.2보다 작으면 신호를 만들지 않는다
-
 
             If 일분옵션데이터(i).MACD_Result(1, Index - 1) < 0 And 일분옵션데이터(i).MACD_Result(1, Index) > 0 Then  '신호선을 MACD선이 상향 돌파
 
