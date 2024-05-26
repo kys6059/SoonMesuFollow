@@ -944,35 +944,35 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 전체 시간대 테스트
-                'For j As Integer = 20 To 180  '---------------------------------------------------------------------------------  Q TEST를 위해서 제한 10시반까지
-                currentIndex_순매수 = j
-                If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
-                    chk_F2_화면끄기.Checked = False
-                End If
-
-
-                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
-
-                    Dim 콜종목 As Integer = 적합한종목찾기(0)
-                    Dim 풋종목 As Integer = 적합한종목찾기(1)
-
-                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
-                        selectedJongmokIndex(0) = 콜종목
-                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
-                    End If
-                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
-                        selectedJongmokIndex(1) = 풋종목
-                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+            'For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 전체 시간대 테스트
+            For j As Integer = 20 To 180  '---------------------------------------------------------------------------------  Q TEST를 위해서 제한 10시반까지
+                    currentIndex_순매수 = j
+                    If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
+                        chk_F2_화면끄기.Checked = False
                     End If
 
-                End If
+
+                    If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                        Dim 콜종목 As Integer = 적합한종목찾기(0)
+                        Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                        If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                            selectedJongmokIndex(0) = 콜종목
+                            DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                        End If
+                        If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                            selectedJongmokIndex(1) = 풋종목
+                            DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                        End If
+
+                    End If
 
 
-                F2_Clac_DisplayAllGrid()
+                    F2_Clac_DisplayAllGrid()
 
 
-            Next
+                Next
 
                 '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
                 For j = 0 To SoonMesuShinhoList.Count - 1
@@ -2244,9 +2244,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         '이평선테스트()
 
         당일반복중_flag = False
@@ -3337,14 +3337,14 @@ Public Class Form2
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {24, 28}
+        Dim Q_선물발생기준기울기_temp() As Single = {15}
         Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {6.0, 10.0, 16.0}
+        Dim Q_선물해제기준기울기_temp() As Single = {10.0}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim Q_시작시간_temp() As String = {"92000", "92500", "93000"}
-        Dim Q_마감시간_temp() As String = {"94700"}
+        Dim Q_시작시간_temp() As String = {"93000"}
+        Dim Q_마감시간_temp() As String = {"94000"}
 
 
         Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
@@ -3352,9 +3352,9 @@ Public Class Form2
 
         Dim Q_선물상관계수최저_temp() As Single = {0.5}
         Dim Q_외국인현물상관계수최저_temp() As Single = {0.5}
-        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30, 40}
+        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
 
-        Dim Q_다시발생시적용배율_temp() As Single = {2.2}
+        Dim Q_다시발생시적용배율_temp() As Single = {3.0}
         Dim O1_짧을때_보정치_temp() As Single = {0.8}
 
 
