@@ -917,7 +917,7 @@ Public Class Form2
 
     End Sub
 
-    Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal 일일조건설정flag As Boolean)
+    Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal 일일조건설정flag As Boolean, Optional 끝나는인덱스 As Integer = 740)  '3시까지 기본값으로 지정
 
         isRealFlag = False
         당일반복중_flag = True
@@ -944,48 +944,47 @@ Public Class Form2
 
 
             '당일 내부에서 변경
-            'For j As Integer = 20 To 순매수리스트카운트 - 1  '--------------------------------------------------------------------------------- 전체 시간대 테스트
-            For j As Integer = 20 To 180  '---------------------------------------------------------------------------------  Q TEST를 위해서 제한 10시반까지
-                    currentIndex_순매수 = j
-                    If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
-                        chk_F2_화면끄기.Checked = False
+            For j As Integer = 40 To 끝나는인덱스  '---------------------------------------------------------------------------------  Q TEST를 위해서 제한 10시반까지
+                currentIndex_순매수 = j
+                If currentIndex_순매수 = 순매수리스트카운트 - 1 Then
+                    chk_F2_화면끄기.Checked = False
+                End If
+
+
+                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                    Dim 콜종목 As Integer = 적합한종목찾기(0)
+                    Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(0) = 콜종목
+                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                    End If
+                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(1) = 풋종목
+                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
                     End If
 
-
-                    If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
-
-                        Dim 콜종목 As Integer = 적합한종목찾기(0)
-                        Dim 풋종목 As Integer = 적합한종목찾기(1)
-
-                        If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
-                            selectedJongmokIndex(0) = 콜종목
-                            DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
-                        End If
-                        If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
-                            selectedJongmokIndex(1) = 풋종목
-                            DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
-                        End If
-
-                    End If
+                End If
 
 
-                    F2_Clac_DisplayAllGrid()
+                F2_Clac_DisplayAllGrid()
 
-
-                Next
-
-                '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-                For j = 0 To SoonMesuShinhoList.Count - 1
-                    SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
-                Next
-
-                'End If
-                Threading.Thread.Sleep(50)
 
             Next
 
-            '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
-            If SoonMesuSimulationTotalShinhoList.Count > 0 Then
+            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+            For j = 0 To SoonMesuShinhoList.Count - 1
+                SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
+            Next
+
+            'End If
+            Threading.Thread.Sleep(50)
+
+        Next
+
+        '여기서 DB에 입력하면 완료됨. 만약 입력하면 반드시 clear할 것
+        If SoonMesuSimulationTotalShinhoList.Count > 0 Then
 
 
             InsertSoonMeSuShinhoResult("statistics")
@@ -2244,9 +2243,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
-        fullTest_Q()
+        'fullTest_Q()
         '이평선테스트()
 
         당일반복중_flag = False
@@ -3197,19 +3196,17 @@ Public Class Form2
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
-
-
-
     'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
-
     'B240524_T102     O_CNT_003_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
 
+
+    'B240602_O001    O_CNT_000_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     Private Sub fullTest_O()
 
         Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
         Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {7.0}    'A
+        Dim O_선물해제기준기울기_temp() As Single = {7.0, 8.5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
@@ -3219,11 +3216,11 @@ Public Class Form2
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.4}
+        Dim 선물상관계수최저_temp() As Single = {0.5}
         Dim 외국인현물상관계수최저_temp() As Single = {0.5}
         Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {2.2}
+        Dim O_다시발생시적용배율_temp() As Single = {2.2, 2.6, 3.0}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3335,12 +3332,14 @@ Public Class Form2
     'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
     'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
 
+    'B240602_Q002  Q_CNT_007_A_30_B_3_C_16_D_1_E_93000_F_94000_G_20_H_20_I_0.5_J_0.5_K_30_L_3_M_0.8
+
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {15}
+        Dim Q_선물발생기준기울기_temp() As Single = {30}
         Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {10.0}
+        Dim Q_선물해제기준기울기_temp() As Single = {16, 20, 24, 28}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim Q_시작시간_temp() As String = {"93000"}
@@ -3414,7 +3413,7 @@ Public Class Form2
                                                             SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}", Q_선물발생기준기울기, Q_외국인현물발생기준기울기, Q_선물해제기준기울기, Q_외국인현물해제기준기울기, Q_시작시간, Q_마감시간, Q_tick_count_기준, Q_해제tick_count_기준, Math.Round(Q_선물상관계수최저, 1), Math.Round(Q_외국인현물상관계수최저, 1), Q_상관계수계산인덱스길이, Q_다시발생시적용배율, O1_짧을때_보정치)
 
                                                             Add_Log("", SoonMesuSimulation_조건)
-                                                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                            자동반복계산로직(cnt, False, 180) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
                                                             cnt += 1
                                                         Next

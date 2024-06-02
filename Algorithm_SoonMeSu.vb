@@ -462,7 +462,7 @@ Module Algorithm_SoonMeSu
     Public O_시작시간 As Integer = 100000
     Public O_마감시간 As Integer = 123000
 
-    Public 선물상관계수최저 As Double = 0.4
+    Public 선물상관계수최저 As Double = 0.5
     Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 80
     Public O_다시발생시적용배율 As Single = 2.2
@@ -472,9 +472,10 @@ Module Algorithm_SoonMeSu
     'B240505_O303    O_CNT_016_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_3
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
-
     'B240524_T102     O_CNT_003_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
 
+
+    'B240602_O001    O_CNT_000_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
@@ -517,7 +518,7 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 하향 중이면 무시
+                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
                             Return
                         End If
 
@@ -547,7 +548,7 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
-                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
+                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then
                             Return
                         End If
 
@@ -566,15 +567,15 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직 ----------- 아침일찍 매수하는 로직
 
-    Public Q_선물발생기준기울기 As Single = 15.0
+    Public Q_선물발생기준기울기 As Single = 30.0
     Public Q_외국인현물발생기준기울기 As Single = 3.0
 
-    Public Q_선물해제기준기울기 As Single = 10.0
+    Public Q_선물해제기준기울기 As Single = 16.0
     Public Q_외국인현물해제기준기울기 As Single = 1.0
 
 
     Public Q_tick_count_기준 As Integer = 20
-    Public Q_해제tick_count_기준 As Integer = 10
+    Public Q_해제tick_count_기준 As Integer = 20
 
 
     Public Q_시작시간 As Integer = 93000
@@ -591,9 +592,11 @@ Module Algorithm_SoonMeSu
     'B240421_Q202                                       Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
     'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
     'B240520_Q001 Q_CNT_123_A_14_B_3_C_10_D_1_E_93000_F_94700_G_20_H_20_I_0.4_J_0.4_K_40_L_2.2_M_0.8
-
-
     'B240526_T001 Q_CNT_012_A_15_B_3_C_10_D_1_E_93000_F_94000_G_20_H_20_I_0.5_J_0.5_K_30_L_3_M_0.8
+
+
+
+    'B240602_Q002  Q_CNT_007_A_30_B_3_C_16_D_1_E_93000_F_94000_G_20_H_20_I_0.5_J_0.5_K_30_L_3_M_0.8
     Public Sub CalcAlgorithm_Q(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = Q_시작시간
@@ -625,7 +628,7 @@ Module Algorithm_SoonMeSu
 
                     If Get상관계수상태() Then
 
-                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then '현재 RSI의 방향이 상승 중이면 무시
+                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
                             Return
                         End If
 
@@ -651,7 +654,7 @@ Module Algorithm_SoonMeSu
 
                     If Get상관계수상태() Then
 
-                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = True Then '현재 RSI의 방향이 상승 중이면 무시
+                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then
                             Return
                         End If
 
@@ -1569,7 +1572,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_Q_2"
+                        '매도사유 = "weak_Q_2"
                     End If
 
 
@@ -1588,7 +1591,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_Q_2"
+                        '매도사유 = "weak_Q_2"
                     End If
 
                 End If
