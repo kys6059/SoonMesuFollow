@@ -1742,12 +1742,12 @@ Public Class Form2
 
         If chk_모의투자연결.Checked = False Then
             nServerType = 0     ' 실서버
-            strServerAddress = "hts.etrade.co.kr"
+            strServerAddress = "api.ls-sec.co.kr" ' "hts.etrade.co.kr"
             거래비밀번호 = "3487"
             password = txt_ebest_pwd.Text
         Else
             nServerType = 1     ' 모의투자서버
-            strServerAddress = "demo.ebestsec.co.kr"
+            strServerAddress = "demo.ls-sec.co.kr"   '"demo.ebestsec.co.kr"
             password = "kys60590"
             거래비밀번호 = "0000"
         End If

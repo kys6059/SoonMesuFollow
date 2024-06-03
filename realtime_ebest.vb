@@ -68,7 +68,7 @@ Module realtime_ebest
     Dim XAQuery_EBEST_순매수현황조회 As XAQuery = New XAQuery
     Dim XAQuery_EBEST_외국인선물_순매수현황조회 As XAQuery = New XAQuery
 
-    Public Const g_strServerAddress As String = "hts.etrade.co.kr"
+    Public Const g_strServerAddress As String = "api.ls-sec.co.kr"     '"hts.etrade.co.kr"
     Public 거래비밀번호 As String = "3487"
     Public Const g_iPortNum As Integer = 20001
     Public EBESTisConntected As Boolean = False
