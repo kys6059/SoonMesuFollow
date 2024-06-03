@@ -1812,7 +1812,7 @@ Public Class Form2
 
         End Select
 
-        F2_Clac_DisplayAllGrid()    '계산도 1초마다 수행
+
 
 
 
@@ -1820,6 +1820,9 @@ Public Class Form2
         If timerCount >= timerMaxInterval Then timerCount = 0
     End Sub
 
+    Public Sub F2_Clac_DisplayAllGrid_함수호출()
+        F2_Clac_DisplayAllGrid()    '계산도 1초마다 수행
+    End Sub
     Private Sub 손절매수준설정(ByVal 남은날짜 As Integer)
 
         남은날짜 = 남은날짜 Mod 7

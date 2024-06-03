@@ -632,6 +632,7 @@ Module realtime_ebest
             If optionList.Count > 0 Then
 
                 일분옵션데이터채워넣기()
+                Form2.F2_Clac_DisplayAllGrid_함수호출()    '계산도 1초마다 수행
 
             End If
 
