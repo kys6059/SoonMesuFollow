@@ -218,6 +218,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_P.Checked = True Then CalcAlgorithm_P(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_R.Checked = True Then CalcAlgorithm_R(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_Q.Checked = True Then CalcAlgorithm_Q(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_S.Checked = True Then CalcAlgorithm_S(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -684,6 +685,18 @@ Module Algorithm_SoonMeSu
         Return ret
     End Function
 
+    Private Function Get상관계수상태_선물만() As Boolean
+
+        Dim ret As Boolean = False
+
+
+        If 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
+            ret = True
+        End If
+
+        Return ret
+    End Function
+
 
 
     Public Sub CalcAlgorithm_B() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403
@@ -1100,6 +1113,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_P(s, 일분옵션데이터_CurrentIndex)
                             Case "Q"
                                 ret = 살아있는신호확인하기_Q(s, 일분옵션데이터_CurrentIndex)
+                            Case "S"
+                                ret = 살아있는신호확인하기_S(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -1597,6 +1612,48 @@ Module Algorithm_SoonMeSu
                 End If
 
 
+
+            End If
+
+        End If
+
+        Return 매도사유
+    End Function
+
+    Private Function 살아있는신호확인하기_S(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+            Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, Q_해제tick_count_기준)
+            Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, Q_해제tick_count_기준)
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+                If s.A08_콜풋 = 0 Then
+
+                    '선물이 낮아지면
+
+                    If S_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_S_1"
+                    End If
+
+                Else
+
+                    '선물이 낮아지면
+                    If (S_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_S_1"
+                    End If
+
+                End If
 
             End If
 
@@ -3313,6 +3370,69 @@ Module Algorithm_SoonMeSu
         Return sum / cnt
     End Function
 
+    Public S_시작시간 As Integer = 90400
+    Public S_마감시간 As Integer = 91000
+    Public S_선물발생기준기울기 As Single = 60.0
+    Public S_외국인현물발생기준기울기 As Single
+    Public S_선물해제기준기울기 As Single = 50.0
+    Public S_외국인현물해제기준기울기 As Single
 
+    Public Sub CalcAlgorithm_S(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+        Dim startTime As Integer = S_시작시간
+        Dim endTime As Integer = S_마감시간
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim 선물순매수기울기 As Single = 틱당기울기계산(3, Q_tick_count_기준)
+            Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, Q_tick_count_기준)
+
+            Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
+            Dim 외국인현물순매수기울기_절대치 As Single = Math.Abs(외국인현물순매수기울기)
+
+            If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
+
+            If 선물순매수기울기 > 0 Then  '  콜 방향
+
+                If is동일신호가현재살아있나("S", 0) Then Return
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
+                If is동일신호가있나("S", 0) = True Then
+                    Return
+                End If
+
+                If 선물순매수기울기_절대치 > S_선물발생기준기울기 Then 'And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    If Get상관계수상태_선물만() Then
+                        Dim str As String = String.Format("S 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("S", 0)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+                End If
+
+
+            Else ' 풋 방향
+
+                If is동일신호가현재살아있나("S", 1) Then Return
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
+
+                If is동일신호가있나("S", 1) = True Then
+                    Return
+                End If
+
+                If 선물순매수기울기_절대치 > S_선물발생기준기울기 Then ' And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    If Get상관계수상태_선물만() Then
+                        Dim str As String = String.Format("S 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("S", 1)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+
+                End If
+
+            End If
+
+        End If
+    End Sub
 
 End Module
