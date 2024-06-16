@@ -194,8 +194,10 @@ Module realtime_ebest
         인출가능금액 = Val(XAQuery_계좌조회.GetFieldData("CFOBQ10500OutBlock2", "WthdwAbleAmt", 0))
 
         If 최종투자금액 = 0 Then
+
             Dim 켈리지수비율 As Single = Val(Form2.txt_F2_켈리지수비율.Text)
             최종투자금액 = 주문가능금액 * 켈리지수비율
+
         End If
 
         If TargetDate > 0 Then

@@ -1835,7 +1835,7 @@ Public Class Form2
 
         Select Case 남은날짜
             Case 0
-                켈리지수비율 = "0.23"
+                켈리지수비율 = "0.30"
             Case 1
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
@@ -1843,7 +1843,7 @@ Public Class Form2
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.23"
+                켈리지수비율 = "0.25"
             Case 6
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False

@@ -484,6 +484,8 @@ Module Algorithm_SoonMeSu
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
+            Dim offset As Single = 1.0
+
             Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
             Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
 
@@ -506,8 +508,6 @@ Module Algorithm_SoonMeSu
 
                 If is동일신호가현재살아있나("O", 0) Then Return
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
-
-                Dim offset As Single = 1.0
 
                 If is동일신호가있나("O", 0) = True Then
                     offset = O_다시발생시적용배율
@@ -535,8 +535,6 @@ Module Algorithm_SoonMeSu
 
                 If is동일신호가현재살아있나("O", 1) Then Return
                 If 같은방향같은시간발생신호가있는지(1) = True Then Return
-
-                Dim offset As Single = 1.0
 
                 If is동일신호가있나("O", 1) = True Then
                     offset = O_다시발생시적용배율
@@ -676,6 +674,7 @@ Module Algorithm_SoonMeSu
     Private Function Get상관계수상태() As Boolean
 
         Dim ret As Boolean = False
+        Dim 선물상관계수최저옵셋 As Single = 1.0  '10시30분 전에 이걸 올리는 걸 조절해봤더니 선물상관계수최저옵셋 = 1.2~1.4  이건 결과가 안좋아 삭제함 20240616
 
 
         If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
@@ -2011,7 +2010,12 @@ Module Algorithm_SoonMeSu
             Dim price As Single = it.price(direction, 3)
 
             Dim 진짜최종투자금액 As Long = 최종투자금액
-            If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
+
+            'If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
+
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 103000 Then   '10시30분 전에는 켈리지수가 않좋아서 70%만 투자한다
+                진짜최종투자금액 = 진짜최종투자금액 * 0.7
+            End If
 
             Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
 
