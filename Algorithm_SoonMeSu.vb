@@ -2013,7 +2013,7 @@ Module Algorithm_SoonMeSu
 
             'If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
 
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 103000 Then   '10시30분 전에는 켈리지수가 않좋아서 70%만 투자한다
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) < 102000 Then   '10시30분 전에는 켈리지수가 않좋아서 70%만 투자한다
                 진짜최종투자금액 = 진짜최종투자금액 * 0.7
             End If
 
