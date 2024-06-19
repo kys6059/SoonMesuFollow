@@ -1843,7 +1843,7 @@ Public Class Form2
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.25"
+                켈리지수비율 = "0.27"
             Case 6
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
@@ -2225,7 +2225,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2249,7 +2249,7 @@ Public Class Form2
         'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        fullTest_S()
+        'fullTest_S()
         '이평선테스트()
 
         당일반복중_flag = False
@@ -2504,16 +2504,18 @@ Public Class Form2
 
     Private Sub 매도조건테스트()
 
-        '0일 3일
-        Dim 익절차() As String = {"09"} 'L
-        Dim 옵션기준손절매() As String = {"-0.14", "-0.16", "-0.18", "-0.20", "-0.22"} 'M
-        Dim 중간청산이익목표() As String = {"0.20", "0.18", "0.16", "0.14"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
+        '나머지
+        'Dim 익절차() As String = {"09", "11"} 'L
+        'Dim 옵션기준손절매() As String = {"-0.14", "-0.16", "-0.18", "-0.20", "-0.22"} 'M
+        'Dim 중간청산이익목표() As String = {"0.20", "0.18", "0.16", "0.14"} 'N
+        'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
-        '1,2,6일
-        'Dim 익절차() As String = {"11", "10"} 'L
-        'Dim 옵션기준손절매() As String = {"-0.20", "-0.18", "-0.16", "-0.14", "-0.22", "-0.12"} 'M
-        'Dim 중간청산이익목표() As String = {"0.30", "0.35", "0.20", "0.25"} 'N
+        '0,3일
+        Dim 익절차() As String = {"11", "10", "9", "8", "7"} 'L
+        Dim 옵션기준손절매() As String = {"-0.28", "-0.24", "-0.20", "-0.16"} 'M
+        Dim 중간청산이익목표() As String = {"0.25"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.25, 0.21}
+        Dim 두세번째매도이익율_temp() As Single = {0.2}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -2528,38 +2530,41 @@ Public Class Form2
             For m As Integer = 0 To 옵션기준손절매.Length - 1
                 For n As Integer = 0 To 중간청산이익목표.Length - 1
                     For o As Integer = 0 To 중간매도후목표이익율_temp.Length - 1
+                        For p As Integer = 0 To 두세번째매도이익율_temp.Length - 1
+                            txt_F2_익절차.Text = 익절차(l)
+                            txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
 
-                        txt_F2_익절차.Text = 익절차(l)
-                        txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
+                            첫번째중간매도이익율 = 중간청산이익목표(n)
+                            두번째중간매도이익율 = 첫번째중간매도이익율 + 두세번째매도이익율_temp(p)
+                            세번째중간매도이익율 = 두번째중간매도이익율 + 두세번째매도이익율_temp(p)
 
-                        첫번째중간매도이익율 = 중간청산이익목표(n)
-                        두번째중간매도이익율 = 첫번째중간매도이익율 + 0.2
-                        세번째중간매도이익율 = 두번째중간매도이익율 + 0.2
-
-                        중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
+                            중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
 
 
-                        txt_F2_익절차.Refresh()
-                        txt_F2_옵션가기준손절매.Refresh()
+                            txt_F2_익절차.Refresh()
+                            txt_F2_옵션가기준손절매.Refresh()
 
-                        Dim cntstr As String
-                        If cnt < 10 Then
-                            cntstr = "00" & cnt.ToString()
-                        ElseIf cnt >= 10 And cnt < 100 Then
-                            cntstr = "0" & cnt.ToString()
-                        Else
-                            cntstr = cnt.ToString()
-                        End If
+                            Dim cntstr As String
+                            If cnt < 10 Then
+                                cntstr = "00" & cnt.ToString()
+                            ElseIf cnt >= 10 And cnt < 100 Then
+                                cntstr = "0" & cnt.ToString()
+                            Else
+                                cntstr = cnt.ToString()
+                            End If
 
-                        SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
+                            SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
 
-                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o))
+                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}_P_{4}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o), 두세번째매도이익율_temp(p))
 
-                        Console.WriteLine(SoonMesuSimulation_조건)
-                        Add_Log("", SoonMesuSimulation_조건)
-                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            Console.WriteLine(SoonMesuSimulation_조건)
+                            Add_Log("", SoonMesuSimulation_조건)
+                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
-                        cnt += 1
+                            cnt += 1
+                        Next
+
+
                     Next
                 Next
             Next
