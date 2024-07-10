@@ -2225,7 +2225,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2248,7 +2248,7 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -3345,21 +3345,21 @@ Public Class Form2
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {30}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {3}
+        Dim Q_선물발생기준기울기_temp() As Single = {30, 45, 60, 75, 90}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {3, 10}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {16, 20, 24, 28}
+        Dim Q_선물해제기준기울기_temp() As Single = {10, 20, 25}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim Q_시작시간_temp() As String = {"93000"}
+        Dim Q_시작시간_temp() As String = {"92000", "92500", "93000"}
         Dim Q_마감시간_temp() As String = {"94000"}
 
 
         Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
         Dim Q_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim Q_선물상관계수최저_temp() As Single = {0.5}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5}
+        Dim Q_선물상관계수최저_temp() As Single = {0.5, 0.35}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5, 0.35}
         Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
 
         Dim Q_다시발생시적용배율_temp() As Single = {3.0}

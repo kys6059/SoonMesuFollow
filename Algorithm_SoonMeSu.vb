@@ -569,7 +569,7 @@ Module Algorithm_SoonMeSu
     Public Q_선물발생기준기울기 As Single = 30.0
     Public Q_외국인현물발생기준기울기 As Single = 3.0
 
-    Public Q_선물해제기준기울기 As Single = 16.0
+    Public Q_선물해제기준기울기 As Single = 10.0
     Public Q_외국인현물해제기준기울기 As Single = 1.0
 
 
