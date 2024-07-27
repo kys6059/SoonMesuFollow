@@ -219,6 +219,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_R.Checked = True Then CalcAlgorithm_R(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_Q.Checked = True Then CalcAlgorithm_Q(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_S.Checked = True Then CalcAlgorithm_S(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_T.Checked = True Then CalcAlgorithm_T(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -696,6 +697,18 @@ Module Algorithm_SoonMeSu
         Return ret
     End Function
 
+    Private Function Get상관계수상태_선물현물통합() As Boolean
+
+        Dim ret As Boolean = False
+
+
+        If 순매수리스트(currentIndex_순매수 - 1).상관계수(4) > 선물상관계수최저 Then
+            ret = True
+        End If
+
+        Return ret
+    End Function
+
 
 
     Public Sub CalcAlgorithm_B() '좀더 짧은 시간에 더 급격한 커블 때 매수하는 로직으로 변경함. 외국인, 기관 모두 20230403
@@ -1114,6 +1127,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_Q(s, 일분옵션데이터_CurrentIndex)
                             Case "S"
                                 ret = 살아있는신호확인하기_S(s, 일분옵션데이터_CurrentIndex)
+                            Case "T"
+                                ret = 살아있는신호확인하기_T(s, 일분옵션데이터_CurrentIndex)
 
                         End Select
                     End If
@@ -3031,7 +3046,7 @@ Module Algorithm_SoonMeSu
 
             For t As Integer = 0 To 4
 
-                If t = 1 Or t = 3 Then
+                If t = 1 Or t = 3 Or t = 4 Then
                     순매수리스트(i).상관계수(t) = O_선물상관계수_계산하기(i, t)
                 End If
 
@@ -3438,5 +3453,146 @@ Module Algorithm_SoonMeSu
 
         End If
     End Sub
+
+
+    'T알고리즘용
+    Public 외국인_현물순매수가중치비율 As Single = 1.0
+
+    Public T_선현물통합발생기준기울기 As Single = 16.0
+    Public T_선현물통합해제기준기울기 As Single = 7.0
+
+    Public T_시작시간 As Integer = 100000
+    Public T_마감시간 As Integer = 123000
+
+    Public 선현물통합상관계수최저 As Double = 0.5
+
+    Public T_다시발생시적용배율 As Single = 2.2
+
+
+    '외국인 선물과 현물을 통합하여 계산하는 알고리즘 O 알고리즘에서 발전
+    Public Sub CalcAlgorithm_T(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+        Dim startTime As Integer = T_시작시간
+        Dim endTime As Integer = T_마감시간
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim offset As Single = 1.0
+
+            Dim 선현물통합순매수기울기 As Single = 틱당기울기계산(4, O_tick_count_기준)
+
+            If 틱당기울기계산(1, O_tick_count_기준) * 틱당기울기계산(3, O_tick_count_기준) <= 0 Then Return  '선물현물 방향이 다르면 리턴
+
+            Dim 선현물통합순매수기울기_절대치 As Single = Math.Abs(선현물통합순매수기울기)
+
+            If Get상관계수상태_선물현물통합() = False Then Return
+
+            If 선현물통합순매수기울기 > 0 Then  '  콜 방향
+
+                If is동일신호가현재살아있나("T", 0) Then Return
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
+                If is동일신호가있나("T", 0) = True Then
+                    offset = T_다시발생시적용배율
+                End If
+
+                If 선현물통합순매수기울기_절대치 > T_선현물통합발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)
+
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
+
+                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
+                            Return
+                        End If
+
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("T", 0)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+                End If
+
+            Else ' 풋 방향
+
+                If is동일신호가현재살아있나("T", 1) Then Return
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
+
+                If is동일신호가있나("T", 1) = True Then
+                    offset = O_다시발생시적용배율
+                End If
+
+                If 선현물통합순매수기울기_절대치 > T_선현물통합발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
+
+
+                    If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
+
+                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then
+                            Return
+                        End If
+
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("T", 1)
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+                End If
+
+            End If
+
+        End If
+
+
+    End Sub
+
+    Private Function 살아있는신호확인하기_T(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+
+            Dim 외국인선물현물통합순매수기울기 As Single = 틱당기울기계산(4, O_해제tick_count_기준)
+
+
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+                If s.A08_콜풋 = 0 Then
+
+                    '선물이 낮아지면
+
+                    If T_선현물통합해제기준기울기 > 외국인선물현물통합순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_1"
+                    End If
+
+
+                Else
+
+                    '선물이 낮아지면
+                    If (T_선현물통합해제기준기울기 * -1) < 외국인선물현물통합순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_O_1"
+                    End If
+
+                End If
+            End If
+
+        End If
+
+
+
+
+
+        Return 매도사유
+    End Function
 
 End Module

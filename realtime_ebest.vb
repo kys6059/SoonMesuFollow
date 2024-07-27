@@ -951,13 +951,17 @@ Module realtime_ebest
 
                 순매수리스트(index).외국인_선물_순매수 = 외
 
+                If 외 <> 0 Then
+                    순매수리스트(index).외국인_현물선물통합_순매수 = 외 + Math.Round(순매수리스트(index).외국인순매수 * 외국인_현물순매수가중치비율)    '외국인 선물순매수와 현물순매수를 통합하는 항목, 선물순매수가 나중에 오기 때문에 이게 0이면 전체를 0으로 한다
+                Else
+                    순매수리스트(index).외국인_현물선물통합_순매수 = 0
+                End If
+
                 insertCount += 1
 
             End If
 
         Next
-
-
 
 
         Console.WriteLine("선물 순매리스리스트 수신 : " & insertCount.ToString() & "건")
@@ -1038,7 +1042,7 @@ Module realtime_ebest
                 순매수리스트(순매수리스트카운트 - 1 - i).연기금순매수 = 연
 
                 순매수리스트(순매수리스트카운트 - 1 - i).외국인_기관_순매수 = 외 + Math.Round(기 * 기관순매수적용비율)
-                순매수리스트(순매수리스트카운트 - 1 - i).외국인_연기금_순매수 = 외 + Math.Round(연 * 기관순매수적용비율)
+
             Next
         Else
             For i As Integer = 0 To 순매수리스트카운트 - 1
@@ -1058,7 +1062,6 @@ Module realtime_ebest
                 순매수리스트(i).연기금순매수 = 연
 
                 순매수리스트(i).외국인_기관_순매수 = 외 + Math.Round(기 * 기관순매수적용비율)
-                순매수리스트(i).외국인_연기금_순매수 = 외 + Math.Round(연 * 기관순매수적용비율)
             Next
         End If
 

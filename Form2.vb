@@ -115,7 +115,7 @@ Public Class Form2
         grid_3.Columns.Clear()
         grid_3.Rows.Clear()
         grid_3.ColumnCount = 6
-        grid_3.RowCount = 5
+        grid_3.RowCount = 6
 
 
 
@@ -134,14 +134,14 @@ Public Class Form2
         grid_3.Columns(3).HeaderText = Format(O_해제tick_count_기준 / 2, "##0.#") & "분(매도)"
         grid_3.Columns(4).HeaderText = Format(O_tick_count_기준 / 2, "##0.#") & "분(O 기준)"
         grid_3.Columns(5).HeaderText = Format(상관계수계산인덱스길이 / 2, "##0.#") & "분(상관기준)"
-
+        grid_3.Columns(0).Width = 120
         grid_3.Columns(1).Width = 70
         grid_3.Columns(2).Width = 70
 
 
         Dim 시간인덱스 = New Integer() {N1_tick_count_기준_선물, O_해제tick_count_기준, O_tick_count_기준, 상관계수계산인덱스길이}
 
-        For i = 0 To 3
+        For i = 0 To 4
 
             Dim 주체 As String
             Dim 금액 As Long
@@ -154,11 +154,14 @@ Public Class Form2
             ElseIf i = 2 Then
                 주체 = " (기관)"
                 금액 = 순매수리스트(currentIndex_순매수).기관순매수
-            Else
+            ElseIf i = 3 Then
                 주체 = " (외국인선물)"
                 금액 = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
-            End If
+            Else
+                주체 = " (외국인선/현물합)"
+                금액 = 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수
 
+            End If
 
             grid_3.Rows(i).Cells(0).Value = i.ToString() & 주체
             grid_3.Rows(i).Cells(1).Value = Format(금액, "###,##0")
@@ -339,9 +342,9 @@ Public Class Form2
         F2_Chart_순매수.Series(str).YAxisType = AxisType.Secondary
 
 
-        For i As Integer = 0 To 3 '0 - 0: 외국인+기관, 1: 외국인, 2: 기관, 3: 외국인선물
+        For i As Integer = 0 To 4 '0 - 0: 외국인+기관, 1: 외국인, 2: 기관, 3: 외국인선물, 4: 외국인 현물(가중치) + 외국인 선물
 
-            If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Then
+            If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
                 str = "For_Kig_" + i.ToString()
                 F2_Chart_순매수.Series.Add(str)
                 F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
@@ -355,6 +358,8 @@ Public Class Form2
                     F2_Chart_순매수.Series(str).Color = Color.Green
                 ElseIf i = 3 Then
                     F2_Chart_순매수.Series(str).Color = Color.Red
+                ElseIf i = 4 Then
+                    F2_Chart_순매수.Series(str).Color = Color.Black
                 End If
 
                 str = "slope_" + i.ToString()
@@ -369,7 +374,7 @@ Public Class Form2
                     F2_Chart_순매수.Series(str).Color = Color.DarkRed
                 ElseIf i = 1 Or i = 2 Then
                     F2_Chart_순매수.Series(str).Color = Color.MediumVioletRed
-                ElseIf i = 3 Then
+                ElseIf i = 3 Or i = 4 Then
                     F2_Chart_순매수.Series(str).Color = Color.DarkBlue
                 End If
 
@@ -412,14 +417,14 @@ Public Class Form2
                 End If
             Next
 
-            For j As Integer = 0 To 3
+            For j As Integer = 0 To 4
                 Dim For_Kig_Series As String = "For_Kig_" + j.ToString()
                 For i As Integer = 0 To currentIndex_순매수                     '각 매수 주체별 순매수 값 그리기 
 
-                    If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then
+                    If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Or j = 4 Then
                         Dim target순매수 As Long = Get순매수(i, j)
 
-                        If j = 3 And target순매수 = 0 And i = currentIndex_순매수 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
+                        If (j = 3 Or j = 4) And target순매수 = 0 And i = currentIndex_순매수 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
 
                         retIndex = F2_Chart_순매수.Series(For_Kig_Series).Points.AddXY(i, target순매수) ' 순매수를 입력한다
                         Dim str As String = String.Format("시간:{0}{1}구분:{2}{3}순매수:{4}{5}코스피:{6}", 순매수리스트(i).sTime, vbCrLf, j, vbCrLf, target순매수, vbCrLf, 순매수리스트(i).코스피지수)
@@ -437,10 +442,10 @@ Public Class Form2
 
             If currentIndex_순매수 >= 0 Then
 
-                For i As Integer = 0 To 3
+                For i As Integer = 0 To 4
 
                     Dim 기울기시리즈 As String = "slope_" + i.ToString()
-                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Then
+                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
                         If currentIndex_순매수 - 기준인덱스 >= 0 Then
 
                             If i = 1 Then
@@ -464,6 +469,11 @@ Public Class Form2
 
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_선물_순매수)
                                 F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
+                            ElseIf i = 4 Then
+                                If i = 4 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
+
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_현물선물통합_순매수)
+                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수)
 
                             End If
 
@@ -478,8 +488,8 @@ Public Class Form2
                     Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
                     Dim Str As String
 
-                    For j As Integer = 0 To 3  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관
-                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or (j = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0) Then
+                    For j As Integer = 0 To 4  '순매수타입 0 = 외국인+ 기관, 1 : 외국인, 2: 기관 , 4: 외국인 현물+선물 통합 순매수
+                        If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or (j = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0) Or (j = 4 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 <> 0) Then
                             '신호를 그리든데 각각의 순매수라인에 그린다
                             Str = "Shinho_" + i.ToString() + j.ToString()
                             F2_Chart_순매수.Series.Add(Str)
@@ -2246,11 +2256,14 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
         '이평선테스트()
+
+
+        fullTest_T()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3879,9 +3892,10 @@ Public Class Form2
                 Cht_상관계수.Series(str).BorderWidth = 2
             ElseIf j = 1 Then
                 Cht_상관계수.Series(str).Color = Color.Blue
-                Cht_상관계수.Series(str).BorderWidth = 2
+                Cht_상관계수.Series(str).BorderWidth = 1
             Else
                 Cht_상관계수.Series(str).Color = Color.Black
+                Cht_상관계수.Series(str).BorderWidth = 2
 
             End If
         Next
@@ -3945,7 +3959,7 @@ Public Class Form2
             For j = 0 To 4
                 메인시리즈(j) = "Line" + "_" + j.ToString()
 
-                If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Then   '합계, 외국인, 기관, 선물, 개인
+                If (j = 0 And chk_F2_DATA_0.Checked = True) Or (j = 1 And chk_F2_DATA_1.Checked = True) Or (j = 2 And chk_F2_DATA_2.Checked = True) Or j = 3 Or j = 4 Then   '합계, 외국인, 기관, 선물, 외국인선물현물통합
 
                     For i = 0 To currentIndex_순매수
 
@@ -3961,7 +3975,7 @@ Public Class Form2
                         ElseIf j = 3 Then
                             주체 = "3-외국인선물"
                         Else
-                            주체 = "4-개인"
+                            주체 = "4-외국인현물선물통합"
                         End If
 
                         Dim str As String = String.Format("주체:{0}{1}인덱스:{2}{3}시간:{4}{5}상관계수:{6}", 주체, vbCrLf, i, vbCrLf, 순매수리스트(i).sTime, vbCrLf, 순매수리스트(i).상관계수(j))
@@ -4091,4 +4105,102 @@ Public Class Form2
         Next
 
     End Sub
+
+
+    '외국인 선물 현물 통합 데이터의 의한 신호 검증
+
+    'T알고리즘용
+    'Public 외국인_현물순매수가중치비율 As Single = 1.0
+
+    'Public T_선현물통합발생기준기울기 As Single = 16.0
+    'Public T_선현물통합해제기준기울기 As Single = 7.0
+
+    'Public T_시작시간 As Integer = 100000
+    'Public T_마감시간 As Integer = 123000
+
+    'Public 선현물통합상관계수최저 As Double = 0.5
+
+    'Public T_다시발생시적용배율 As Single = 2.2
+
+
+    Private Sub fullTest_T()
+
+        Dim 외국인_현물순매수가중치비율_temp() As Single = {1.0, 2.0, 3.0}
+        Dim T_선현물통합발생기준기울기_temp() As Single = {25, 35, 45, 55}
+        Dim T_선현물통합해제기준기울기_temp() As Single = {14, 20}
+        Dim T_시작시간_temp() As String = {"100000"}
+        Dim T_마감시간_temp() As String = {"123000"}           'D
+        Dim 선현물통합상관계수최저_temp() As Single = {0.5, 0.65, 0.75}
+        Dim T_다시발생시적용배율_temp() As Single = {2.2}
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_E2.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_P.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_Q.Checked = False
+
+        chk_Algorithm_T.Checked = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+
+        For a As Integer = 0 To 외국인_현물순매수가중치비율_temp.Length - 1
+            For b As Integer = 0 To T_선현물통합발생기준기울기_temp.Length - 1
+                For c As Integer = 0 To T_선현물통합해제기준기울기_temp.Length - 1
+                    For d As Integer = 0 To T_시작시간_temp.Length - 1
+                        For e As Integer = 0 To T_마감시간_temp.Length - 1
+                            For f As Integer = 0 To 선현물통합상관계수최저_temp.Length - 1
+                                For g As Integer = 0 To T_다시발생시적용배율_temp.Length - 1
+
+                                    외국인_현물순매수가중치비율 = 외국인_현물순매수가중치비율_temp(a)
+                                    T_선현물통합발생기준기울기 = T_선현물통합발생기준기울기_temp(b)
+                                    T_선현물통합해제기준기울기 = T_선현물통합해제기준기울기_temp(c)
+                                    T_시작시간 = T_시작시간_temp(d)
+                                    T_마감시간 = T_마감시간_temp(e)
+                                    선현물통합상관계수최저 = 선현물통합상관계수최저_temp(f)
+                                    T_다시발생시적용배율 = T_다시발생시적용배율_temp(g)
+
+                                    Dim cntstr As String
+                                    If cnt < 10 Then
+                                        cntstr = "00" & cnt.ToString()
+                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                        cntstr = "0" & cnt.ToString()
+                                    Else
+                                        cntstr = cnt.ToString()
+                                    End If
+
+                                    SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
+                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", 외국인_현물순매수가중치비율, T_선현물통합발생기준기울기, T_선현물통합해제기준기울기, T_시작시간, T_마감시간, Math.Round(선현물통합상관계수최저, 2), Math.Round(T_다시발생시적용배율, 1))
+
+                                    Add_Log("", SoonMesuSimulation_조건)
+                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                                    cnt += 1
+                                Next
+                            Next
+                        Next
+                    Next
+                Next
+            Next
+        Next
+
+
+
+    End Sub
+
+
 End Class

@@ -15,7 +15,7 @@ Module Module_For1Min
         Dim 개인순매수 As Long
         Dim 기관순매수 As Long
         Dim 연기금순매수 As Long
-        Dim 외국인_연기금_순매수 As Long
+        Dim 외국인_현물선물통합_순매수 As Long
         Dim 외국인_기관_순매수 As Long
         Dim 코스피지수 As Single
         Dim 코스피지수_이동평균선 As Single
@@ -23,7 +23,7 @@ Module Module_For1Min
         Dim 상관계수() As Double
 
         Public Sub Initialize()
-            ReDim 상관계수(4) '0-외국인기관합, 1-외국인, 2-기관, 3-선물, 4-개인
+            ReDim 상관계수(4) '0-외국인기관합, 1-외국인, 2-기관, 3-선물, 4-외국인선물현물통합
         End Sub
 
     End Structure
@@ -101,6 +101,8 @@ Module Module_For1Min
         Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관
 
     End Structure
+
+
 
     Public selectedJongmokIndex(1) As Integer
 
@@ -369,7 +371,7 @@ Module Module_For1Min
         ElseIf dataSource = 3 Then
             ret = 순매수리스트(index).외국인_선물_순매수
         ElseIf dataSource = 4 Then
-            ret = 순매수리스트(index).개인순매수
+            ret = 순매수리스트(index).외국인_현물선물통합_순매수
         End If
         Return ret
     End Function
@@ -803,6 +805,16 @@ Module Module_For1Min
 
                 If current = 0 And targetIndex + 1 = timeIndex_순매수 And targetIndex > 0 Then
                     current = 순매수리스트(targetIndex - 1).외국인_선물_순매수
+                    tick_count -= 1
+                End If
+
+            ElseIf source = 4 Then
+
+                current = 순매수리스트(targetIndex).외국인_현물선물통합_순매수
+                prev = 순매수리스트(tempIndex).외국인_현물선물통합_순매수
+
+                If current = 0 And targetIndex + 1 = timeIndex_순매수 And targetIndex > 0 Then
+                    current = 순매수리스트(targetIndex - 1).외국인_현물선물통합_순매수
                     tick_count -= 1
                 End If
 
