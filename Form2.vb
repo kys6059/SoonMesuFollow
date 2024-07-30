@@ -2259,11 +2259,11 @@ Public Class Form2
         'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        'fullTest_S()
+        fullTest_S()
         '이평선테스트()
 
 
-        fullTest_T()
+        'fullTest_T()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -3455,16 +3455,22 @@ Public Class Form2
 
     End Sub
 
+    'B240730_S005
+    'S_CNT_006___A_30_B_7_C_20_D_0.75_E_91000_F_92000_G_0.5
+
+
     Private Sub fullTest_S()
 
-        Dim S_선물발생기준기울기_temp() As Single = {50, 70.0, 90.0}
-        Dim S_외국인현물발생기준기울기_temp() As Single = {3}
+        Dim S_선물발생기준기울기_temp() As Single = {50, 40, 43, 47, 37, 34, 30}
+        Dim S_외국인현물발생기준기울기_temp() As Single = {7}
 
-        Dim S_선물해제기준기울기_temp() As Single = {30.0, 40.0, 50.0}
-        Dim S_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
+        Dim S_선물해제기준기울기_temp() As Single = {20.0}
+        Dim S_상관계수최저기준_temp() As Single = {0.75}    'B
 
-        Dim S_시작시간_temp() As String = {"90400", "90600", "90800", "91000", "91200"}
-        Dim S_마감시간_temp() As String = {"91400", "9100", "90800", "90600"}
+        Dim S_시작시간_temp() As String = {"91000"}
+        Dim S_마감시간_temp() As String = {"92000"}
+
+        Dim S_상관계수해제하향돌파기준_temp() As Single = {0.5}
 
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False
@@ -3483,36 +3489,38 @@ Public Class Form2
         For a As Integer = 0 To S_선물발생기준기울기_temp.Length - 1
             For b As Integer = 0 To S_외국인현물발생기준기울기_temp.Length - 1
                 For c As Integer = 0 To S_선물해제기준기울기_temp.Length - 1
-                    For d As Integer = 0 To S_외국인현물해제기준기울기_temp.Length - 1
+                    For d As Integer = 0 To S_상관계수최저기준_temp.Length - 1
                         For e As Integer = 0 To S_시작시간_temp.Length - 1
                             For f As Integer = 0 To S_마감시간_temp.Length - 1
+                                For g As Integer = 0 To S_상관계수해제하향돌파기준_temp.Length - 1
 
-                                S_선물발생기준기울기 = S_선물발생기준기울기_temp(a)
-                                S_외국인현물발생기준기울기 = S_외국인현물발생기준기울기_temp(b)
-                                S_선물해제기준기울기 = S_선물해제기준기울기_temp(c)
-                                S_외국인현물해제기준기울기 = S_외국인현물해제기준기울기_temp(d)
-                                S_시작시간 = S_시작시간_temp(e)
-                                S_마감시간 = S_마감시간_temp(f)
+                                    S_선물발생기준기울기 = S_선물발생기준기울기_temp(a)
+                                    S_외국인현물발생기준기울기 = S_외국인현물발생기준기울기_temp(b)
+                                    S_선물해제기준기울기 = S_선물해제기준기울기_temp(c)
+                                    S_상관계수최저기준 = S_상관계수최저기준_temp(d)
+                                    S_시작시간 = S_시작시간_temp(e)
+                                    S_마감시간 = S_마감시간_temp(f)
+                                    S_상관계수해제하향돌파기준 = S_상관계수해제하향돌파기준_temp(g)
 
-                                Dim cntstr As String
-                                If cnt < 10 Then
-                                    cntstr = "00" & cnt.ToString()
-                                ElseIf cnt >= 10 And cnt < 100 Then
-                                    cntstr = "0" & cnt.ToString()
-                                Else
-                                    cntstr = cnt.ToString()
-                                End If
+                                    Dim cntstr As String
+                                    If cnt < 10 Then
+                                        cntstr = "00" & cnt.ToString()
+                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                        cntstr = "0" & cnt.ToString()
+                                    Else
+                                        cntstr = cnt.ToString()
+                                    End If
 
-                                SoonMesuSimulation_조건 = String.Format("S_CNT_{0}", cntstr)
-                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}", S_선물발생기준기울기, S_외국인현물발생기준기울기, S_선물해제기준기울기, S_외국인현물해제기준기울기, S_시작시간, S_마감시간)
+                                    SoonMesuSimulation_조건 = String.Format("S_CNT_{0}", cntstr)
+                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("___A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", S_선물발생기준기울기, S_외국인현물발생기준기울기, S_선물해제기준기울기, S_상관계수최저기준, S_시작시간, S_마감시간, S_상관계수해제하향돌파기준)
 
-                                Add_Log("", SoonMesuSimulation_조건)
-                                자동반복계산로직(cnt, False, 60) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                    Add_Log("", SoonMesuSimulation_조건)
+                                    자동반복계산로직(cnt, False, 60) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
-                                cnt += 1
+                                    cnt += 1
+                                Next
                             Next
                         Next
-
                     Next
                 Next
             Next
