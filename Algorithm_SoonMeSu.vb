@@ -451,10 +451,10 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
-    Public O_선물발생기준기울기 As Single = 16.0
+    Public O_선물발생기준기울기 As Single = 15.0
     Public O_외국인현물발생기준기울기 As Single = 3.0
 
-    Public O_선물해제기준기울기 As Single = 7.0
+    Public O_선물해제기준기울기 As Single = 3.5
     Public O_외국인현물해제기준기울기 As Single = 1.0
 
     Public O_tick_count_기준 As Integer = 20
@@ -465,7 +465,7 @@ Module Algorithm_SoonMeSu
     Public O_마감시간 As Integer = 123000
 
     Public 선물상관계수최저 As Double = 0.5
-    Public 외국인현물상관계수최저 As Double = 0.5
+    Public 외국인현물상관계수최저 As Double = 0.6
     Public 상관계수계산인덱스길이 As Integer = 80
     Public O_다시발생시적용배율 As Single = 2.2
 
@@ -475,9 +475,10 @@ Module Algorithm_SoonMeSu
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
     'B240524_T102     O_CNT_003_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
-
-
     'B240602_O001    O_CNT_000_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
+
+    'B240731_O003    O_CNT_004_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
+
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
