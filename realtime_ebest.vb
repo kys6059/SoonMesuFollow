@@ -369,7 +369,8 @@ Module realtime_ebest
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
             XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
 
-            Dim adjustPrice As Single = price + 0.1
+            Dim adjustPrice As Single = Math.Min(price + 0.1, price * 1.08)
+            adjustPrice = Math.Round(adjustPrice, 2)
 
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_매수매도.SetFieldData("CFOAT00100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
