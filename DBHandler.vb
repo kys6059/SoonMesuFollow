@@ -749,7 +749,7 @@ Module DBHandler
 
                 Dim iIndex As Integer = FindIndexFormTime_1Min(ctime.ToString()) '해당 시간이 몇번째 인덱스인지 찾아온다
 
-                If iIndex >= 0 Then
+                If iIndex >= 0 And index <= indexCount - 1 Then
                     currentIndex_1MIn = Math.Max(currentIndex_1MIn, iIndex)
                     timeIndex_1Min = Math.Max(timeIndex_1Min, currentIndex_1MIn + 1)
                     DB일간데이터리스트(index, callput).HangSaGa = hangsaga
