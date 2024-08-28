@@ -2235,7 +2235,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2256,7 +2256,7 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
@@ -2524,11 +2524,11 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"11", "10", "9", "8", "7"} 'L
-        Dim 옵션기준손절매() As String = {"-0.28", "-0.24", "-0.20", "-0.16"} 'M
-        Dim 중간청산이익목표() As String = {"0.25"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.25, 0.21}
-        Dim 두세번째매도이익율_temp() As Single = {0.2}
+        Dim 익절차() As String = {"11"} 'L
+        Dim 옵션기준손절매() As String = {"-0.28", "-0.30", "-0.26"} 'M
+        Dim 중간청산이익목표() As String = {"0.25", "0.30"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.25, 0.21, 0.3, 0.35}  '익절 기준에서 빼는 손절기준임
+        Dim 두세번째매도이익율_temp() As Single = {0.2, 0.25, 0.3}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -2572,7 +2572,7 @@ Public Class Form2
 
                             Console.WriteLine(SoonMesuSimulation_조건)
                             Add_Log("", SoonMesuSimulation_조건)
-                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
                             cnt += 1
                         Next
@@ -3220,15 +3220,17 @@ Public Class Form2
     'B240510_T102    O_CNT_005_A_16_B_3_C_6_D_1_E_100000_F_145000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
     'B240517_T005    O_CNT_004_A_16_B_3_C_10_D_1_E_100000_F_145000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
     'B240524_T102     O_CNT_003_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.4_J_0.5_K_80_L_2.2
-
-
     'B240602_O001    O_CNT_000_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
-
-
     'B240731_O003    O_CNT_004_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
+
+
+
+
+    'B240828_O003    O_CNT_000_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
+
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16, 17, 18, 19, 15, 14} ', 14, 16}    'A
+        Dim O_선물발생기준기울기_temp() As Single = {15, 17} ', 14, 16}    'A
         Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {3.5}    'A
@@ -3238,10 +3240,10 @@ Public Class Form2
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
-        Dim O_해제tick_count_기준_temp() As Integer = {20}
+        Dim O_tick_count_기준_temp() As Integer = {20, 22, 24} ', 25, 30} ', 36, 40}
+        Dim O_해제tick_count_기준_temp() As Integer = {20, 22, 24}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5}
+        Dim 선물상관계수최저_temp() As Single = {0.5, 0.65}
         Dim 외국인현물상관계수최저_temp() As Single = {0.6}
         Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
@@ -3260,6 +3262,7 @@ Public Class Form2
         chk_Algorithm_P.Checked = False
         chk_Algorithm_O.Checked = True
         chk_Algorithm_Q.Checked = False
+        chk_Algorithm_S.Checked = False
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -3309,7 +3312,7 @@ Public Class Form2
                                                         SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 1), Math.Round(외국인현물상관계수최저, 1), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 1))
 
                                                         Add_Log("", SoonMesuSimulation_조건)
-                                                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                                        자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
 
                                                         cnt += 1
 

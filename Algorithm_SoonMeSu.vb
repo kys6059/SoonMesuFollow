@@ -148,9 +148,9 @@ Module Algorithm_SoonMeSu
     Public F_두번째종료시간 As Integer = 151000
 
     Public 첫번째중간매도이익율 As Single = 0.25
-    Public 두번째중간매도이익율 As Single = 0.46
-    Public 세번째중간매도이익율 As Single = 0.67
-    Public 중간매도후이익율차이 As Single = 0.25
+    Public 두번째중간매도이익율 As Single = 0.55
+    Public 세번째중간매도이익율 As Single = 0.85
+    Public 중간매도후이익율차이 As Single = 0.3
 
 
     'N알고리즘 용
@@ -478,6 +478,7 @@ Module Algorithm_SoonMeSu
     'B240602_O001    O_CNT_000_A_16_B_3_C_7_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.5_K_80_L_2.2
 
     'B240731_O003    O_CNT_004_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
+    'B240828_O003    O_CNT_000_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
 
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
