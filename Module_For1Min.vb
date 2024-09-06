@@ -764,6 +764,64 @@ Module Module_For1Min
 
     End Function
 
+
+    Public Function GET_매수금액절대치평균계산(ByVal source As Integer) As Single
+
+        Dim ret As Single = 0
+
+        Try
+            Dim 절대치sum As Single = 0
+            Dim cnt As Integer = 0
+
+            Dim minIndex As Integer = 60
+
+            Dim totalCnt As Integer = currentIndex_순매수 - minIndex - 1
+
+            If currentIndex_순매수 < minIndex Then Return 0
+
+            For i As Integer = 0 To totalCnt
+
+                Dim realIndex As Integer = i + minIndex
+
+                If source = 1 Then
+
+                    절대치sum += Math.Abs(순매수리스트(realIndex).외국인순매수 - 순매수리스트(realIndex - 1).외국인순매수)
+
+                ElseIf source = 2 Then
+
+                    절대치sum += Math.Abs(순매수리스트(realIndex).기관순매수 - 순매수리스트(realIndex - 1).기관순매수)
+
+                ElseIf source = 0 Then
+
+                    절대치sum += Math.Abs(순매수리스트(realIndex).외국인_기관_순매수 - 순매수리스트(realIndex - 1).외국인_기관_순매수)
+
+                ElseIf source = 3 Then
+
+                    절대치sum += Math.Abs(순매수리스트(realIndex).외국인_선물_순매수 - 순매수리스트(realIndex - 1).외국인_선물_순매수)
+
+
+                ElseIf source = 4 Then
+
+                    절대치sum += Math.Abs(순매수리스트(realIndex).외국인_현물선물통합_순매수 - 순매수리스트(realIndex).외국인_현물선물통합_순매수)
+                End If
+                cnt += 1
+            Next
+
+            ret = 절대치sum / cnt
+
+
+
+        Catch ex As Exception
+            Add_Log("Exception", "절대치평균계산")
+        End Try
+
+        Return ret
+
+
+    End Function
+
+
+
     Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer) As Single
 
         Dim ret As Single = 0
