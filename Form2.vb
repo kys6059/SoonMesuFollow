@@ -1853,7 +1853,7 @@ Public Class Form2
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.30"
+                켈리지수비율 = "0.33"
             Case 6
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
@@ -2235,7 +2235,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2256,7 +2256,7 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
@@ -3238,8 +3238,8 @@ Public Class Form2
         Dim O_선물해제기준기울기_temp() As Single = {3.5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
-        Dim O_마감시간_temp() As String = {"123000"}           'D
+        Dim O_시작시간_temp() As String = {"100000", "101000", "102000", "103000"} ', "94000", "100000", "103000", "110000"}           'C
+        Dim O_마감시간_temp() As String = {"123000", "120000", "130000", "133000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
@@ -3249,9 +3249,9 @@ Public Class Form2
         Dim 외국인현물상관계수최저_temp() As Single = {0.6}
         Dim 상관계수계산인덱스길이_temp() As Integer = {80} ', 60, 40, 30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {2.2, 2.0, 1.8, 2.4, 2.6, 2.8}
+        Dim O_다시발생시적용배율_temp() As Single = {2.2}
 
-        Dim RSI_Offset_temp() As Single = {1.3, 1.4, 1.5}
+        Dim RSI_Offset_temp() As Single = {1.4}
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
         chk_Algorithm_C.Checked = False

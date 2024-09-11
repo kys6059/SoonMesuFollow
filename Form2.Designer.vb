@@ -1594,7 +1594,7 @@ Partial Class Form2
         Me.txt_F2_켈리지수비율.Name = "txt_F2_켈리지수비율"
         Me.txt_F2_켈리지수비율.Size = New System.Drawing.Size(105, 26)
         Me.txt_F2_켈리지수비율.TabIndex = 9
-        Me.txt_F2_켈리지수비율.Text = "0.22"
+        Me.txt_F2_켈리지수비율.Text = "0.33"
         Me.txt_F2_켈리지수비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label26
@@ -1696,7 +1696,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(105, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.13.3_240619"
+        Me.txt_programversion.Text = "1.14.0_240911"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
