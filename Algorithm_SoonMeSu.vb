@@ -2093,7 +2093,7 @@ Module Algorithm_SoonMeSu
             If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) < 100500 Then   '10시05분 전에는 켈리지수가 않좋아서 10%만 투자한다
                 진짜최종투자금액 = 진짜최종투자금액 * 0.09
             ElseIf Val(순매수리스트(currentIndex_순매수).sTime) >= 100500 And Val(순매수리스트(currentIndex_순매수).sTime) < 101000 Then
-                진짜최종투자금액 = 진짜최종투자금액 * 0.7
+                진짜최종투자금액 = 진짜최종투자금액 * 0.09
             End If
 
             Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
