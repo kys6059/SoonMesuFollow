@@ -637,6 +637,8 @@ Public Class Form2
 
     Private Sub F2_Chart_순매수_PostPaint(sender As Object, e As ChartPaintEventArgs) Handles F2_Chart_순매수.PostPaint
 
+        If chk_display_graph_line.Checked = False Then Return
+
         plotArea = F2_Chart_순매수.ChartAreas(0).Position.ToRectangleF
 
         Dim currentChart As Chart = sender

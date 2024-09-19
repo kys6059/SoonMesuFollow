@@ -516,63 +516,68 @@ Module DBHandler
 
         iDate = iDate Mod 20000000
 
-        For 종목인덱스 As Integer = 0 To TotalCount - 1   '
+        Try
+            For 종목인덱스 As Integer = 0 To TotalCount - 1   '
 
-            For callput = 0 To 1
-                For j = 0 To 479
-                    If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then
-                        영보다큰갯수 += 1
-                    End If
+                For callput = 0 To 1
+                    For j = 0 To 479
+                        If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then
+                            영보다큰갯수 += 1
+                        End If
+                    Next
                 Next
             Next
-        Next
 
-        Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
+            Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
 
-        For 종목인덱스 As Integer = 0 To TotalCount - 1
+            For 종목인덱스 As Integer = 0 To TotalCount - 1
 
-            For callput = 0 To 1
+                For callput = 0 To 1
 
-                Dim hangsaga As Integer = Val(DB일간데이터리스트(종목인덱스, callput).HangSaGa)
+                    Dim hangsaga As Integer = Val(DB일간데이터리스트(종목인덱스, callput).HangSaGa)
 
-                For j = 0 To 479
+                    For j = 0 To 479
 
-                    If callput = 0 Then
-                        iFlag = 1
-                    Else
-                        iFlag = 6
-                    End If
+                        If callput = 0 Then
+                            iFlag = 1
+                        Else
+                            iFlag = 6
+                        End If
 
-                    If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
+                        If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then   '영보다큰갯수와 동일한 로직으로 입력
 
-                        rows(retCount) = New BigQueryInsertRow
-                        rows(retCount).Add("cdate", iDate)
-                        rows(retCount).Add("index", 종목인덱스)
-                        rows(retCount).Add("hangsaga", hangsaga)
-                        rows(retCount).Add("iFlag", iFlag)
-                        rows(retCount).Add("ctime", DB일간데이터리스트(종목인덱스, callput).ctime(j))
-                        rows(retCount).Add("interval", 1)
-                        rows(retCount).Add("si", DB일간데이터리스트(종목인덱스, callput).price(j, 0))
-                        rows(retCount).Add("go", DB일간데이터리스트(종목인덱스, callput).price(j, 1))
-                        rows(retCount).Add("jue", DB일간데이터리스트(종목인덱스, callput).price(j, 2))
-                        rows(retCount).Add("jong", DB일간데이터리스트(종목인덱스, callput).price(j, 3))
-                        rows(retCount).Add("volume", DB일간데이터리스트(종목인덱스, callput).거래량(j))
+                            rows(retCount) = New BigQueryInsertRow
+                            rows(retCount).Add("cdate", iDate)
+                            rows(retCount).Add("index", 종목인덱스)
+                            rows(retCount).Add("hangsaga", hangsaga)
+                            rows(retCount).Add("iFlag", iFlag)
+                            rows(retCount).Add("ctime", DB일간데이터리스트(종목인덱스, callput).ctime(j))
+                            rows(retCount).Add("interval", 1)
+                            rows(retCount).Add("si", DB일간데이터리스트(종목인덱스, callput).price(j, 0))
+                            rows(retCount).Add("go", DB일간데이터리스트(종목인덱스, callput).price(j, 1))
+                            rows(retCount).Add("jue", DB일간데이터리스트(종목인덱스, callput).price(j, 2))
+                            rows(retCount).Add("jong", DB일간데이터리스트(종목인덱스, callput).price(j, 3))
+                            rows(retCount).Add("volume", DB일간데이터리스트(종목인덱스, callput).거래량(j))
 
-                        retCount += 1
-                    End If
+                            retCount += 1
+                        End If
+                    Next
                 Next
             Next
-        Next
 
+            client.InsertRows(dateaset_id, table_id, rows)
 
+            Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+            Console.WriteLine(str)
+            Add_Log("일반", str)
 
-        client.InsertRows(dateaset_id, table_id, rows)
+        Catch ex As Exception
+            Add_Log("error", ex.ToString())
+        End Try
 
-        Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
-        Console.WriteLine(str)
-        Add_Log("일반", str)
 
         Return retCount
+
     End Function
 
 
