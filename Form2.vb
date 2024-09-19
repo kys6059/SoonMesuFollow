@@ -18,8 +18,13 @@ Public Class Form2
         isRealFlag = False
         Add_Log("일반", "전체 Data 취합 Click")
 
-        Dim dateCount As Integer = GetRawData_1min(txt_F2_DB_Date_Limit.Text, txt_F2_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
-        Dim 순매수dateCount As Integer = GetRawData_순매수(txt_F2_DB_Date_Limit.Text, "soonMeSuTable") '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌 - 순매수리스트
+        Dim where_str As String = txt_F2_DB_Date_Limit.Text
+        If Chk_월수만.Checked = True Then
+            where_str = where_str + " and EXTRACT(DAYOFWEEK FROM DATE(CAST(cdate/10000 + 2000 AS int64), MOD(CAST(cdate/100 as int64),100),MOD(cdate, 100)))  in (2,5) "
+        End If
+
+        Dim dateCount As Integer = GetRawData_1min(where_str, txt_F2_TableName.Text) '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌
+        Dim 순매수dateCount As Integer = GetRawData_순매수(where_str, "soonMeSuTable") '이걸하면 딕셔너리에 데이터를 넣고 날짜수를 리턴해줌 - 순매수리스트
 
         If dateCount <> 순매수dateCount Then
             Add_Log("에러", "1분 데이터 카운트와 순매수 DateCount가 다름" & dateCount.ToString() & " : " & 순매수dateCount.ToString())
@@ -2258,9 +2263,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -3237,11 +3242,11 @@ Public Class Form2
         Dim O_선물발생기준기울기_temp() As Single = {15} ', 14, 16}    'A
         Dim O_외국인현물발생기준기울기_temp() As Single = {3} ', 4, 5}    'B
 
-        Dim O_선물해제기준기울기_temp() As Single = {3.5}    'A
+        Dim O_선물해제기준기울기_temp() As Single = {2, 3.5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"100000", "101000", "102000", "103000"} ', "94000", "100000", "103000", "110000"}           'C
-        Dim O_마감시간_temp() As String = {"123000", "120000", "130000", "133000"}           'D
+        Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
+        Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
@@ -3343,52 +3348,48 @@ Public Class Form2
     End Sub
 
 
-    'Public Q_선물발생기준기울기 As Single = 16.0
+    'Public Q_선물발생기준기울기 As Single = 30.0
     'Public Q_외국인현물발생기준기울기 As Single = 3.0
 
     'Public Q_선물해제기준기울기 As Single = 10.0
-    'Public Q_외국인현물해제기준기울기 As Single = 2.0
+    'Public Q_외국인현물해제기준기울기 As Single = 1.0
 
 
-    'Public Q_tick_count_기준 As Integer = 25
-    'Public Q_해제tick_count_기준 As Integer = 10
+    'Public Q_tick_count_기준 As Integer = 20
+    'Public Q_해제tick_count_기준 As Integer = 20
 
 
-    'Public Q_시작시간 As Integer = 91700
-    'Public Q_마감시간 As Integer = 94300
+    'Public Q_시작시간 As Integer = 93000
+    'Public Q_마감시간 As Integer = 94000
 
     'Public Q_선물상관계수최저 As Double = 0.5
     'Public Q_외국인현물상관계수최저 As Double = 0.5
-    'Public Q_상관계수계산인덱스길이 As Integer = 80
+    'Public Q_상관계수계산인덱스길이 As Integer = 30
 
-
-    'Public Q_다시발생시적용배율 As Single = 100.0
+    'Public Q_다시발생시적용배율 As Single = 3.0
 
     'Public O1_짧을때_보정치 As Single = 0.8
 
-    'Q_CNT_011_A_13_B_3_C_6_D_2_E_93500_F_95900_G_25_H_10_I_0.6_J_0.6_K_80_M_0.8
-    'Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
-    'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
+    'Q_CNT_000_A_30_B_5_C_5_D_1_E_93000_F_94000_G_20_H_20_I_0.6_J_0.6_K_30_L_3_M_0.8
 
-    'B240602_Q002  Q_CNT_007_A_30_B_3_C_16_D_1_E_93000_F_94000_G_20_H_20_I_0.5_J_0.5_K_30_L_3_M_0.8
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {30, 45, 60, 75, 90}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {3, 10}
+        Dim Q_선물발생기준기울기_temp() As Single = {30, 35, 38}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {5, 7, 9}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {10, 20, 25}
+        Dim Q_선물해제기준기울기_temp() As Single = {15, 10, 5}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim Q_시작시간_temp() As String = {"92000", "92500", "93000"}
+        Dim Q_시작시간_temp() As String = {"93000"}
         Dim Q_마감시간_temp() As String = {"94000"}
 
 
         Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
         Dim Q_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim Q_선물상관계수최저_temp() As Single = {0.5, 0.35}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.5, 0.35}
+        Dim Q_선물상관계수최저_temp() As Single = {0.6}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.6}
         Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
 
         Dim Q_다시발생시적용배율_temp() As Single = {3.0}
@@ -3398,6 +3399,7 @@ Public Class Form2
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False
         chk_Algorithm_O.Checked = False
+        chk_Algorithm_S.Checked = False
         chk_Algorithm_Q.Checked = True
 
 
@@ -3474,17 +3476,25 @@ Public Class Form2
     'B240730_S005
     'S_CNT_006___A_30_B_7_C_20_D_0.75_E_91000_F_92000_G_0.5
 
+    'Public S_시작시간 As Integer = 91000
+    'Public S_마감시간 As Integer = 92000
+    'Public S_선물발생기준기울기 As Single = 30.0
+    'Public S_외국인현물발생기준기울기 As Single = 7.0
+    'Public S_선물해제기준기울기 As Single = 20.0
+    'Public S_상관계수최저기준 As Single = 0.75
+    'Public S_상관계수해제하향돌파기준 As Single = 0.5
 
+    'S_CNT_123___A_35_B_5_C_20_D_0.75_E_91200_F_92200_G_0.5
     Private Sub fullTest_S()
 
-        Dim S_선물발생기준기울기_temp() As Single = {50, 40, 43, 47, 37, 34, 30}
-        Dim S_외국인현물발생기준기울기_temp() As Single = {7}
+        Dim S_선물발생기준기울기_temp() As Single = {40, 35, 30, 25}
+        Dim S_외국인현물발생기준기울기_temp() As Single = {7, 10, 5}
 
-        Dim S_선물해제기준기울기_temp() As Single = {20.0}
-        Dim S_상관계수최저기준_temp() As Single = {0.75}    'B
+        Dim S_선물해제기준기울기_temp() As Single = {20.0, 15.0, 10.0}
+        Dim S_상관계수최저기준_temp() As Single = {0.75, 0.6}    'B
 
-        Dim S_시작시간_temp() As String = {"91000"}
-        Dim S_마감시간_temp() As String = {"92000"}
+        Dim S_시작시간_temp() As String = {"91000", "91200"}
+        Dim S_마감시간_temp() As String = {"92000", "92200"}
 
         Dim S_상관계수해제하향돌파기준_temp() As Single = {0.5}
 

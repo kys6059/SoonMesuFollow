@@ -822,7 +822,7 @@ Module Module_For1Min
 
 
 
-    Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer) As Single
+    Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer, Optional ByVal before_count As Integer = 0) As Single
 
         Dim ret As Single = 0
 
@@ -831,7 +831,7 @@ Module Module_For1Min
             Dim cnt As Integer = 0
             Dim tick_count_보정치 As Integer = tick_count
 
-            Dim targetIndex As Integer = currentIndex_순매수    '실제와 시뮬레이션 통일
+            Dim targetIndex As Integer = currentIndex_순매수 + before_count    '실제와 시뮬레이션 통일
 
             If targetIndex < tick_count Then
                 tick_count_보정치 = Math.Round(targetIndex * O1_짧을때_보정치, 0)
