@@ -2242,7 +2242,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2265,7 +2265,7 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        fullTest_Q()
+        'fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -2522,7 +2522,8 @@ Public Class Form2
     End Sub
 
 
-    'Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.4
+    '                Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.
+    'B240920_T001    Sell_CNT_002_L_12_M_-0.28_N_0.30_O_0.3_P_0.4
 
     Private Sub 매도조건테스트()
 
@@ -2533,11 +2534,11 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"11", "13", "14", "10", "12", "15"} 'L
-        Dim 옵션기준손절매() As String = {"-0.28"} 'M
-        Dim 중간청산이익목표() As String = {"0.25", "0.28"} 'N
+        Dim 익절차() As String = {"12", "11", "13", "14"} 'L
+        Dim 옵션기준손절매() As String = {"-0.28", "-0.26", "-0.30", "-0.24"} 'M
+        Dim 중간청산이익목표() As String = {"0.25", "0.30"} 'N
         Dim 중간매도후목표이익율_temp() As Single = {0.3}  '익절 기준에서 빼는 손절기준임
-        Dim 두세번째매도이익율_temp() As Single = {0.3, 0.35, 0.4}
+        Dim 두세번째매도이익율_temp() As Single = {0.4, 0.35}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -3375,10 +3376,10 @@ Public Class Form2
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {30, 35, 38}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {5, 7, 9}
+        Dim Q_선물발생기준기울기_temp() As Single = {30, 35}
+        Dim Q_외국인현물발생기준기울기_temp() As Single = {5, 8}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {15, 10, 5}
+        Dim Q_선물해제기준기울기_temp() As Single = {5, 10}
         Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim Q_시작시간_temp() As String = {"93000"}
@@ -3388,8 +3389,8 @@ Public Class Form2
         Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
         Dim Q_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim Q_선물상관계수최저_temp() As Single = {0.6}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.6}
+        Dim Q_선물상관계수최저_temp() As Single = {0.6, 0.4, 0.2, 0.01}
+        Dim Q_외국인현물상관계수최저_temp() As Single = {0.6, 0.4, 0.2, 0.01}
         Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
 
         Dim Q_다시발생시적용배율_temp() As Single = {3.0}
