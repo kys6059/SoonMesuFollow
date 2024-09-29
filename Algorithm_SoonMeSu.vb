@@ -453,10 +453,10 @@ Module Algorithm_SoonMeSu
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
-    Public O_선물발생기준기울기 As Single = 15.0
-    Public O_외국인현물발생기준기울기 As Single = 3.0
+    Public O_선물발생기준기울기 As Single = 18.0
+    Public O_외국인현물발생기준기울기 As Single = 14.0
 
-    Public O_선물해제기준기울기 As Single = 2.0
+    Public O_선물해제기준기울기 As Single = 3.0
     Public O_외국인현물해제기준기울기 As Single = 1.0
 
     Public O_tick_count_기준 As Integer = 20
@@ -466,13 +466,13 @@ Module Algorithm_SoonMeSu
     Public O_시작시간 As Integer = 100000
     Public O_마감시간 As Integer = 123000
 
-    Public 선물상관계수최저 As Double = 0.5
-    Public 외국인현물상관계수최저 As Double = 0.6
-    Public 상관계수계산인덱스길이 As Integer = 80
-    Public O_다시발생시적용배율 As Single = 2.2
-    Public O_외국인현물평균_기준 As Single = 15.0
+    Public 선물상관계수최저 As Double = 0.6
+    Public 외국인현물상관계수최저 As Double = 0.7
+    Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
+    Public O_다시발생시적용배율 As Single = 1.8
+    Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
 
-    Public RSI_Offset As Single = 2.0
+    Public RSI_Offset As Single = 2.0  '사용하지 않음
 
     '외국인 현물이 현저히 낮아 영향을 미치치 않을 때는 외국인 선물만 보고 매매를 수행하는 로직 테스트해 봤으나 효과가 낮음   20240903
     '효과가 없어서 제외 함
@@ -500,9 +500,6 @@ Module Algorithm_SoonMeSu
             Else
                 If Get상관계수상태_선물만() = False Then Return
             End If
-
-
-
 
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
@@ -574,6 +571,8 @@ Module Algorithm_SoonMeSu
 
     'B240731_O003    O_CNT_004_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
     'B240828_O003    O_CNT_000_A_15_B_3_C_3.5_D_1_E_100000_F_123000_G_20_H_20_I_0.5_J_0.6_K_80_L_2.2
+
+    'B240929_T011 O_CNT_000_A_18_B_14_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.7_K_30_L_1.8_M_1.4  신규 적용 20240929 7월전후 둘다 높은 조건으로 확인
 
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
@@ -3467,15 +3466,20 @@ Module Algorithm_SoonMeSu
     End Function
 
     Public S_시작시간 As Integer = 91200
-    Public S_마감시간 As Integer = 92200
+    Public S_마감시간 As Integer = 93000
     Public S_선물발생기준기울기 As Single = 35.0
-    Public S_외국인현물발생기준기울기 As Single = 5.0
+    Public S_외국인현물발생기준기울기 As Single = 30.0
     Public S_선물해제기준기울기 As Single = 20.0
     Public S_상관계수최저기준 As Single = 0.75
-    Public S_상관계수해제하향돌파기준 As Single = 0.5
+    Public S_상관계수해제하향돌파기준 As Single = 0.4
 
     'B240730_S005
     'B240919      S_CNT_123___A_35_B_5_C_20_D_0.75_E_91200_F_92200_G_0.5
+
+    'S_CNT_063___A_35_B_30_C_20_D_0.75_E_91200_F_92200_G_0.4
+
+
+    'B240929_S002 S_CNT_002___A_35_B_30_C_20_D_0.75_E_91200_F_93000_G_0.4
 
     Public Sub CalcAlgorithm_S(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
