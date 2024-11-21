@@ -375,6 +375,14 @@ Public Class Form2
                 F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
                 F2_Chart_순매수.Series(str).BorderWidth = 2
 
+                str = "PIP_" + i.ToString()
+                F2_Chart_순매수.Series.Add(str)
+                F2_Chart_순매수.Series(str).ChartArea = ChartAreaStr
+                F2_Chart_순매수.Series(str).ChartType = DataVisualization.Charting.SeriesChartType.Line
+                F2_Chart_순매수.Series(str).YAxisType = AxisType.Primary
+                F2_Chart_순매수.Series(str).BorderDashStyle = ChartDashStyle.DashDotDot
+                F2_Chart_순매수.Series(str).BorderWidth = 2
+
                 If i = 0 Then
                     F2_Chart_순매수.Series(str).Color = Color.DarkRed
                 ElseIf i = 1 Or i = 2 Then
@@ -449,45 +457,65 @@ Public Class Form2
 
                 For i As Integer = 0 To 4
 
-                    Dim 기울기시리즈 As String = "slope_" + i.ToString()
+                    Dim PIP_Series As String = "PIP_" + i.ToString()
                     If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
-                        If currentIndex_순매수 - 기준인덱스 >= 0 Then
-
-                            If i = 1 Then
-
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인순매수)
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인순매수)
-
-                            ElseIf i = 0 Then
-
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_기관_순매수)
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_기관_순매수)
-
-                            ElseIf i = 2 Then
-
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).기관순매수)
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
-                            ElseIf i = 3 Then
-
-
-                                If i = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
-
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_선물_순매수)
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
-                            ElseIf i = 4 Then
-                                If i = 4 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
-
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_현물선물통합_순매수)
-                                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수)
-
-                            End If
+                        'PIP 시리즈를 표시한다
+                        If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
+                            For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
+                                Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
+                                Dim target순매수 As Long = Get순매수(point, i)
+                                F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
+                            Next
 
                         End If
+
                     End If
+
                 Next
+
+                'For i As Integer = 0 To 4
+
+                '    Dim 기울기시리즈 As String = "slope_" + i.ToString()
+                '    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
+                '        If currentIndex_순매수 - 기준인덱스 >= 0 Then
+
+                '            If i = 1 Then
+
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인순매수)
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인순매수)
+
+                '            ElseIf i = 0 Then
+
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_기관_순매수)
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_기관_순매수)
+
+                '            ElseIf i = 2 Then
+
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).기관순매수)
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).기관순매수)
+                '            ElseIf i = 3 Then
+
+
+                '                If i = 3 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
+
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_선물_순매수)
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_선물_순매수)
+                '            ElseIf i = 4 Then
+                '                If i = 4 And 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수 = 0 Then Continue For '선물 순매수값을 아직 못 받아와서 마지막이 0 일때는 마지막값만 그리기 제외한다
+
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수 - 기준인덱스, 순매수리스트(currentIndex_순매수 - 기준인덱스).외국인_현물선물통합_순매수)
+                '                F2_Chart_순매수.Series(기울기시리즈).Points.AddXY(currentIndex_순매수, 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수)
+
+                '            End If
+
+                '        End If
+                '    End If
+                'Next
+
             End If
 
             If SoonMesuShinhoList IsNot Nothing Then
+
                 For i As Integer = 0 To SoonMesuShinhoList.Count - 1
 
                     Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
@@ -2242,7 +2270,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2254,7 +2282,7 @@ Public Class Form2
 
         'fullTest_C1()
 
-        'fullTest_E()
+        fullTest_E()
         'fullTest_E2()
         'fullTest_F()
         'fullTest_G()
@@ -2865,17 +2893,20 @@ Public Class Form2
 
     '231228 9월이후 데이터로 시험한 결과     'CNT_004_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65
     '240211 9월이하 테이터로 시험한 결과     'CNT_001_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_58_J_2.5
+
+    '241121 테스트 E_CNT_001_A_3_B_30_C_5_D_120_E_101000_F_123000_G_4_H_3_I_60_J_1
+
     Private Sub fullTest_E()
-        Dim 최대포인트수() As String = {"4", "5"}               'A
-        Dim E_신호발생기준기울기_temp() As Single = {7.0, 8.0, 9.0, 10.0}    'B
-        Dim E_신호해제기준기울기_temp() As Single = {2.0}    'C
-        Dim PIP_CALC_MAX_INDEX() As String = {"120"}        'D
-        Dim 매수시작시간() As String = {"105000"}           'E
-        Dim 매수마감시간() As String = {"150000"}           'F
+        Dim 최대포인트수() As String = {"3"}               'A
+        Dim E_신호발생기준기울기_temp() As Single = {30}    'B
+        Dim E_신호해제기준기울기_temp() As Single = {5.0, 8.0, 11.0}    'C
+        Dim PIP_CALC_MAX_INDEX() As String = {"120", "140", "160"}        'D
+        Dim 매수시작시간() As String = {"101000"}           'E
+        Dim 매수마감시간() As String = {"123000"}           'F
         Dim 신호최소유지시간() As Integer = {4}             'G
-        Dim E_DataSource_temp() As Integer = {1}  '외국인 + 기관, 1:외국인, 2: 기관  --------- 기관은 켈리지수가 항상 -로 나와서 완전히 제외함
-        Dim 장기이평선_temp() As Integer = {58, 65, 72}
-        Dim 기관반대순매수_허용크기비율() As Single = {1.5, 2.5, 3.5}
+        Dim E_DataSource_temp() As Integer = {3}  '외국인 + 기관, 1:외국인, 2: 기관, 3: 외국인선물, 4: 외국인선물+현물  --------- 기관은 켈리지수가 항상 -로 나와서 완전히 제외함
+        Dim 장기이평선_temp() As Integer = {60}
+        Dim 기관반대순매수_허용크기비율() As Single = {1.0}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -2883,8 +2914,8 @@ Public Class Form2
         chk_Algorithm_D.Checked = False
         chk_Algorithm_E.Checked = True
         chk_Algorithm_G.Checked = False
-        chk_Algorithm_M.Checked = True
-        chk_Algorithm_N.Checked = True
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
 
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
@@ -2933,7 +2964,7 @@ Public Class Form2
                                                     cntstr = cnt.ToString()
                                                 End If
 
-                                                SoonMesuSimulation_조건 = String.Format("CNT_{0}", cntstr)
+                                                SoonMesuSimulation_조건 = String.Format("E_CNT_{0}", cntstr)
                                                 SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}", 최대포인트수(a), E_신호발생기준기울기_temp(b), E_신호해제기준기울기_temp(c), PIP_CALC_MAX_INDEX(d), 매수시작시간(ee), 매수마감시간(f), 신호최소유지시간(g), E_DataSource_temp(h), 장기이평선_temp(i), 기관반대순매수_허용크기비율(j))
 
                                                 Add_Log("", SoonMesuSimulation_조건)

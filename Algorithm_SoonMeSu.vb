@@ -113,7 +113,7 @@ Module Algorithm_SoonMeSu
     '24년 1월 26일 --- CNT_001_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65_J_2.5
     Public E_신호발생기준기울기 As Single = 6.0
     Public E_신호해제기준기울기 As Single = 2.0
-    Public E_DataSource As Integer = 1 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
+    Public E_DataSource As Integer = 4 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
     Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
     Public E_기관반대순매수_허용크기비율 As Single = 2.5
     Public E2_tick_count_기준 As Integer = 30
@@ -208,7 +208,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_B.Checked = True Then CalcAlgorithm_B()
             If Form2.chk_Algorithm_C.Checked = True Then CalcAlgorithm_C()
             If Form2.chk_Algorithm_D.Checked = True Then CalcAlgorithm_D(일분옵션데이터_CurrentIndex)
-            If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E()
+            If Form2.chk_Algorithm_E.Checked = True Then CalcAlgorithm_E(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_F.Checked = True Then CalcAlgorithm_F(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_G.Checked = True Then CalcAlgorithm_G(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_M.Checked = True Then CalcAlgorithm_M(일분옵션데이터_CurrentIndex)
@@ -292,18 +292,10 @@ Module Algorithm_SoonMeSu
 
     End Sub
 
-    Public Sub CalcAlgorithm_E()  '외국인만의 순매를 기준으로 매수하는 알고리즘으로 변경 - 기관순매수가 0~0.05일 때 최고가 되어 기관순매수는 무시함
+    Public Sub CalcAlgorithm_E(ByVal 일분옵션데이터_CurrentIndex As Integer)  '외국인만의 순매를 기준으로 매수하는 알고리즘으로 변경 - 기관순매수가 0~0.05일 때 최고가 되어 기관순매수는 무시함
 
         Dim startTime As Integer = Val(Form2.txt_F2_매수시작시간.Text)
         Dim endTime As Integer = Val(Form2.txt_F2_매수마감시간.Text)
-
-
-        Dim 일분옵션데이터_CurrentIndex As Integer
-        If EBESTisConntected = True And currentIndex_1MIn >= 0 And 당일반복중_flag = False Then
-            일분옵션데이터_CurrentIndex = currentIndex_1MIn
-        Else
-            일분옵션데이터_CurrentIndex = 순매수시간으로1MIN인덱스찾기(Val(순매수리스트(currentIndex_순매수).sTime))
-        End If
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
 
@@ -312,6 +304,10 @@ Module Algorithm_SoonMeSu
 
             Dim 현재순매수기울기 As Single = PIP_Point_Lists(E_DataSource).마지막선기울기
             Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
+
+            Dim 외국인현물순매수기울기 As Single = PIP_Point_Lists(0).마지막선기울기
+
+            If 현재순매수기울기 * 외국인현물순매수기울기 < 0 Then Return  '선물과 현물의 방향이 다르면 신호가 발생하지 않는다
 
             'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(E_DataSource).마지막점과그앞점간INDEXCOUNT
 
@@ -332,15 +328,10 @@ Module Algorithm_SoonMeSu
 
                 End If
 
-
-
                 If 현재순매수기울기 > 0 Then  '  콜 방향
-
 
                     '직전에 동일한 신호가 해제되었다면 같은 방향으로 또 만들지 않는다 ---------------------------------------------------------------------------- 손절되었다가 다시 사는걸 방지 --- 이렇게 하는게 수익률이 좋음 20231230 확인
                     If is동일신호가있나("E", 0) = True Then Return
-
-                    If is동일신호가현재살아있나("B", 0) = True Then Return 'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex)
 
@@ -353,9 +344,6 @@ Module Algorithm_SoonMeSu
                 Else ' 풋 방향
 
                     If is동일신호가있나("E", 1) = True Then Return
-
-
-                    If is동일신호가현재살아있나("B", 1) = True Then Return   'B 알고리즘이 현재 살아있다면 E 신호를 만들지 않는다
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex)  '풋의 직전 이평선의 +- 값
 
@@ -373,7 +361,6 @@ Module Algorithm_SoonMeSu
     End Sub
 
     '15분(30틱) 기준 순매수 기울기를 기준으로 매매하는 알고리즘 20240212
-
     '20240212 E알고리즘 시험 결과 B240212_E202     E2_CNT_001_A_6_B_2_C_105000_D_150000_E_4_F_2.5_G_30 20승 11패 켈리지수 47.94
 
     Public Sub CalcAlgorithm_E2()
@@ -392,7 +379,7 @@ Module Algorithm_SoonMeSu
         If Val(순매수리스트(currentIndex_순매수).sTime) >= 123000 And Val(순매수리스트(currentIndex_순매수).sTime) <= 143000 Then Return  '12시반부터 14시반까지는 결과가 안좋아서 제외함 231228
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
-            Dim 현재순매수기울기 As Single = 틱당기울기계산(E_DataSource, E2_tick_count_기준)
+            Dim 현재순매수기울기 As Single = 틱당기울기계산(E_DataSource, E2_tick_count_기준)   'E는 PIP 기울기인데 E2는 이부분이 그냥 마지막 기준시간 동안의 기울기임
             Dim 현재순매수기울기_절대치 As Single = Math.Abs(현재순매수기울기)
 
             'Dim 마지막점과그앞점Index차 As Integer = PIP_Point_Lists(E_DataSource).마지막점과그앞점간INDEXCOUNT
@@ -413,8 +400,6 @@ Module Algorithm_SoonMeSu
 
 
                 End If
-
-
 
                 If 현재순매수기울기 > 0 Then  '  콜 방향
 
@@ -1516,54 +1501,26 @@ Module Algorithm_SoonMeSu
 
                 If s.A08_콜풋 = 0 Then
 
-                    If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 1) = True Then  '반대방향 E 신호 발생
+                    If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "E_Occur"
-                    End If
-                    If s.A03_신호ID = "E" Then
-                        If E_신호해제기준기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                            매도사유 = "weak_E"
-                        End If
-                    ElseIf s.A03_신호ID = "B" Then
-                        If B_해제기울기 > 현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                            매도사유 = "weak_B"
-                        End If
+                        매도사유 = "weak_E"
                     End If
 
                 Else
-                    If s.A03_신호ID = "B" And is동일신호가현재살아있나("E", 0) = True Then  '반대방향 E 신호 발생
+
+                    If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "E_Occur"
-                    End If
-                    If s.A03_신호ID = "E" Then
-                        If (E_신호해제기준기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                            매도사유 = "weak_E"
-                        End If
-                    ElseIf s.A03_신호ID = "B" Then
-                        If (B_해제기울기 * -1) < 현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                            s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                            매도사유 = "weak_B"
-                        End If
+                        매도사유 = "weak_E"
                     End If
                 End If
-            End If
 
+            End If
         End If
+
 
         Return 매도사유
     End Function
@@ -1618,45 +1575,23 @@ Module Algorithm_SoonMeSu
 
         If s.A15_현재상태 = 1 Then
 
-
             Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, O_해제tick_count_기준)
             Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, O_해제tick_count_기준)
-
 
             Dim 마지막순매수index As Integer = Get마지막순매수Index()
             If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
 
                 If s.A08_콜풋 = 0 Then
 
-                    '선물이 낮아지면
-
-                    If O_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-
-
-
+                    If O_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도                   
 
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
                         매도사유 = "weak_O_1"
-
-
-
                     End If
-
-                    ''현물이 낮아지면
-                    'If O_외국인현물해제기준기울기 > 외국인현물현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                    '    s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                    '    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    '    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                    '    '매도사유 = "weak_O_2"
-                    'End If
-
-
                 Else
 
-                    '선물이 낮아지면
                     If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
 
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
@@ -1664,23 +1599,10 @@ Module Algorithm_SoonMeSu
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
                         매도사유 = "weak_O_1"
                     End If
-
-                    ''현물이 낮아지면
-                    'If (O_외국인현물해제기준기울기 * -1) < 외국인현물현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                    '    s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                    '    s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                    '    s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                    '    '매도사유 = "weak_O_2"
-                    'End If
-
                 End If
             End If
 
         End If
-
-
-
-
 
         Return 매도사유
     End Function

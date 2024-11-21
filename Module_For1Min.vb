@@ -98,7 +98,7 @@ Module Module_For1Min
         Dim 마지막선거리합 As Double
         Dim PoinIndexList As List(Of Integer)
         Dim 마지막점과그앞점간INDEXCOUNT As Integer
-        Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관
+        Dim dataSource As Integer '0-외국인+기관, 1-외국인, 2-기관, 3 외국인 선물, 4-외국인 선물 + 현물
 
     End Structure
 
@@ -167,7 +167,7 @@ Module Module_For1Min
         Next
 
         'ReDim PIP_Point_Lists(8) 'Point가 2개부터 최대 10개까지 8개만 계산한다 - 2개는 직선1개만 있다는 계산임
-        ReDim PIP_Point_Lists(3) '0 - 외국인 + 기관, 1 - 외국인, 2 - 기관
+        ReDim PIP_Point_Lists(4) '0 - 외국인 + 기관, 1 - 외국인, 2 - 기관
 
         TargetDate = 0
         currentIndex_1MIn = -1
@@ -285,7 +285,7 @@ Module Module_For1Min
             End If
         End If
 
-        For i As Integer = 0 To 3 '0 - 외국인+기관, 1 - 외국인, 2 - 기관
+        For i As Integer = 0 To 4 '0 - 외국인+기관, 1 - 외국인, 2 - 기관
             If currentIndex_순매수 >= 4 Then
 
                 Dim pipIndexList As List(Of Integer) = PIP_PD(currentIndex_순매수, pointCount, i)
