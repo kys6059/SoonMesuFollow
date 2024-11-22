@@ -455,7 +455,12 @@ Module Algorithm_SoonMeSu
     Public 외국인현물상관계수최저 As Double = 0.7
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
     Public O_다시발생시적용배율 As Single = 1.8
+
+    Public O_허용이평선이격도 As Single = 1.5  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
+
     Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
+
+
 
     Public RSI_Offset As Single = 2.0  '사용하지 않음
 
@@ -581,7 +586,6 @@ Module Algorithm_SoonMeSu
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
                 If is동일신호가현재살아있나("O", 0) Then Return
-                If is동일신호가현재살아있나("Q", 0) Then Return
 
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
@@ -602,22 +606,31 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
+                        '이평선 이격도 체크하여 너무 높으면 매수하지 않는 조건
+                        Dim 현재이평선 As Single = 일분옵션데이터(0).MA(1, 일분옵션데이터_CurrentIndex - 1)  '1번은 26일 이평선임
+                        Dim 현재옵션가격 As Single = 일분옵션데이터(0).price(일분옵션데이터_CurrentIndex - 1, 3)
+
+                        If 현재이평선 * O_허용이평선이격도 < 현재옵션가격 Then
                             Return
                         End If
 
+
+                        'If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
+                        'Return ' 이건 안하는게 나은 거 같음 안한 때 승률이 더 좋음
+                        'End If
+
+
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                        SoonMesuShinhoList.Add(shinho)
+                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                            SoonMesuShinhoList.Add(shinho)
+
+                        End If
 
                     End If
-
-                End If
 
             Else ' 풋 방향
 
                 If is동일신호가현재살아있나("O", 1) Then Return
-                If is동일신호가현재살아있나("Q", 1) Then Return
 
                 If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
@@ -638,9 +651,17 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
-                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then
+                        '이평선 이격도 체크하여 너무 높으면 매수하지 않는 조건
+                        Dim 현재이평선 As Single = 일분옵션데이터(1).MA(1, 일분옵션데이터_CurrentIndex - 1)  '1번은 26일 이평선임
+                        Dim 현재옵션가격 As Single = 일분옵션데이터(1).price(일분옵션데이터_CurrentIndex - 1, 3)
+
+                        If 현재이평선 * O_허용이평선이격도 < 현재옵션가격 Then
                             Return
                         End If
+
+                        'If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then 
+                        'Return ' 이건 안하는게 나은 거 같음 안한 때 승률이 더 좋음
+                        'End If
 
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
