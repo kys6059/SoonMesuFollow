@@ -3272,10 +3272,13 @@ Public Class Form2
 
     'O_CNT_017_A_16_B_10_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.6_K_30_L_1.8_M_1.4_N_1.4 20241122
 
+
+    '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {10} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16, 14, 12} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 7, 5} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {3}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
@@ -3287,15 +3290,15 @@ Public Class Form2
         Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.6, 0.5}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.6, 0.5}
+        Dim 선물상관계수최저_temp() As Single = {0.6}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
         Dim O_다시발생시적용배율_temp() As Single = {1.8}
-
         Dim RSI_Offset_temp() As Single = {1.4}
 
-        Dim O_허용이평선이격도_temp() As Single = {1.25, 1.4, 1.5}
+        Dim O_허용이평선이격도_temp() As Single = {1.35, 1.4, 1.45, 1.5}
+        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0, 2, 4, 6}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3335,38 +3338,41 @@ Public Class Form2
                                                     For l As Integer = 0 To O_다시발생시적용배율_temp.Length - 1
                                                         For m As Integer = 0 To RSI_Offset_temp.Length - 1
                                                             For n As Integer = 0 To O_허용이평선이격도_temp.Length - 1
+                                                                For o As Integer = 0 To O_허용이평선이격도유지시간_분_temp.Length - 1
 
-                                                                O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
-                                                                O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
-                                                                O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
-                                                                O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
-                                                                O_시작시간 = O_시작시간_temp(e)
-                                                                O_마감시간 = O_마감시간_temp(f)
-                                                                O_tick_count_기준 = O_tick_count_기준_temp(g)
-                                                                O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
-                                                                선물상관계수최저 = 선물상관계수최저_temp(i)
-                                                                외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
-                                                                상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
-                                                                O_다시발생시적용배율 = O_다시발생시적용배율_temp(l)
-                                                                RSI_Offset = RSI_Offset_temp(m)
-                                                                O_허용이평선이격도 = O_허용이평선이격도_temp(n)
+                                                                    O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
+                                                                    O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
+                                                                    O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
+                                                                    O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
+                                                                    O_시작시간 = O_시작시간_temp(e)
+                                                                    O_마감시간 = O_마감시간_temp(f)
+                                                                    O_tick_count_기준 = O_tick_count_기준_temp(g)
+                                                                    O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
+                                                                    선물상관계수최저 = 선물상관계수최저_temp(i)
+                                                                    외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
+                                                                    상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
+                                                                    O_다시발생시적용배율 = O_다시발생시적용배율_temp(l)
+                                                                    RSI_Offset = RSI_Offset_temp(m)
+                                                                    O_허용이평선이격도 = O_허용이평선이격도_temp(n)
+                                                                    O_허용이평선이격도유지시간_분 = O_허용이평선이격도유지시간_분_temp(o)
 
-                                                                Dim cntstr As String
-                                                                If cnt < 10 Then
-                                                                    cntstr = "00" & cnt.ToString()
-                                                                ElseIf cnt >= 10 And cnt < 100 Then
-                                                                    cntstr = "0" & cnt.ToString()
-                                                                Else
-                                                                    cntstr = cnt.ToString()
-                                                                End If
+                                                                    Dim cntstr As String
+                                                                    If cnt < 10 Then
+                                                                        cntstr = "00" & cnt.ToString()
+                                                                    ElseIf cnt >= 10 And cnt < 100 Then
+                                                                        cntstr = "0" & cnt.ToString()
+                                                                    Else
+                                                                        cntstr = cnt.ToString()
+                                                                    End If
 
-                                                                SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
-                                                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}_N_{13}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), RSI_Offset, O_허용이평선이격도)
+                                                                    SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
+                                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}_N_{13}_O_{14}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), RSI_Offset, O_허용이평선이격도, O_허용이평선이격도유지시간_분)
 
-                                                                Add_Log("", SoonMesuSimulation_조건)
-                                                                자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
+                                                                    Add_Log("", SoonMesuSimulation_조건)
+                                                                    자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
 
-                                                                cnt += 1
+                                                                    cnt += 1
+                                                                Next
                                                             Next
                                                         Next
                                                     Next

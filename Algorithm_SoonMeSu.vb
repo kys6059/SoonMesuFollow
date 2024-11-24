@@ -437,9 +437,11 @@ Module Algorithm_SoonMeSu
     End Sub
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
+    '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+    'O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
 
-    Public O_선물발생기준기울기 As Single = 18.0
-    Public O_외국인현물발생기준기울기 As Single = 14.0
+    Public O_선물발생기준기울기 As Single = 16.0
+    Public O_외국인현물발생기준기울기 As Single = 9.0
 
     Public O_선물해제기준기울기 As Single = 3.0
     Public O_외국인현물해제기준기울기 As Single = 1.0
@@ -447,22 +449,19 @@ Module Algorithm_SoonMeSu
     Public O_tick_count_기준 As Integer = 20
     Public O_해제tick_count_기준 As Integer = 20
 
-
     Public O_시작시간 As Integer = 100000
     Public O_마감시간 As Integer = 123000
 
     Public 선물상관계수최저 As Double = 0.6
-    Public 외국인현물상관계수최저 As Double = 0.7
+    Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
     Public O_다시발생시적용배율 As Single = 1.8
 
-    Public O_허용이평선이격도 As Single = 1.5  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
+    Public O_허용이평선이격도 As Single = 1.35  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
+    Public O_허용이평선이격도유지시간_분 As Integer = 0
 
     Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
-
-
-
-    Public RSI_Offset As Single = 2.0  '사용하지 않음
+    Public RSI_Offset As Single = 1.4  '사용하지 않음
 
     '외국인 현물이 현저히 낮아 영향을 미치치 않을 때는 외국인 선물만 보고 매매를 수행하는 로직 테스트해 봤으나 효과가 낮음   20240903
     '효과가 없어서 제외 함
@@ -564,6 +563,8 @@ Module Algorithm_SoonMeSu
 
     'B240929_T011 O_CNT_000_A_18_B_14_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.7_K_30_L_1.8_M_1.4  신규 적용 20240929 7월전후 둘다 높은 조건으로 확인
 
+    '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = O_시작시간
@@ -593,12 +594,8 @@ Module Algorithm_SoonMeSu
                     offset = O_다시발생시적용배율
                 End If
 
-
-
                 'RSI가 높을 때 기준금액을 올리는 방식의 코드 테스트  -- 결과가 안좋아 취소
                 'offset = offset * 일분옵션데이터(0).RSI(일분옵션데이터_CurrentIndex - 1) * RSI_Offset
-
-
 
                 If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
@@ -606,27 +603,17 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        '이평선 이격도 체크하여 너무 높으면 매수하지 않는 조건
-                        Dim 현재이평선 As Single = 일분옵션데이터(0).MA(1, 일분옵션데이터_CurrentIndex - 1)  '1번은 26일 이평선임
-                        Dim 현재옵션가격 As Single = 일분옵션데이터(0).price(일분옵션데이터_CurrentIndex - 1, 3)
-
-                        If 현재이평선 * O_허용이평선이격도 < 현재옵션가격 Then
+                        If 최근N분동안_최대이평선이격도가범위밖인가(0, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
                             Return
                         End If
 
-
-                        'If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
-                        'Return ' 이건 안하는게 나은 거 같음 안한 때 승률이 더 좋음
-                        'End If
-
-
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
-                            Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
-                            SoonMesuShinhoList.Add(shinho)
-
-                        End If
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                        SoonMesuShinhoList.Add(shinho)
 
                     End If
+
+                End If
 
             Else ' 풋 방향
 
@@ -638,30 +625,18 @@ Module Algorithm_SoonMeSu
                     offset = O_다시발생시적용배율
                 End If
 
-
                 'RSI가 높을 때 기준금액을 올리는 방식의 코드 테스트-- 결과가 안좋아 취소
                 'offset = offset * 일분옵션데이터(1).RSI(일분옵션데이터_CurrentIndex - 1) * RSI_Offset
-
-
 
                 If 선물순매수기울기_절대치 > O_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > O_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
 
-
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
-                        '이평선 이격도 체크하여 너무 높으면 매수하지 않는 조건
-                        Dim 현재이평선 As Single = 일분옵션데이터(1).MA(1, 일분옵션데이터_CurrentIndex - 1)  '1번은 26일 이평선임
-                        Dim 현재옵션가격 As Single = 일분옵션데이터(1).price(일분옵션데이터_CurrentIndex - 1, 3)
-
-                        If 현재이평선 * O_허용이평선이격도 < 현재옵션가격 Then
+                        If 최근N분동안_최대이평선이격도가범위밖인가(1, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
                             Return
                         End If
-
-                        'If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then 
-                        'Return ' 이건 안하는게 나은 거 같음 안한 때 승률이 더 좋음
-                        'End If
 
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
@@ -673,8 +648,24 @@ Module Algorithm_SoonMeSu
 
         End If
 
-
     End Sub
+
+    Private Function 최근N분동안_최대이평선이격도가범위밖인가(ByVal callput As Integer, ByVal index As Integer, ByVal tickcount As Integer) As Single
+
+        For i As Integer = index - tickcount To index
+
+            '이평선 이격도 체크하여 너무 높으면 매수하지 않는 조건
+            Dim 현재이평선 As Single = 일분옵션데이터(callput).MA(1, i)  '1번은 26일 이평선임
+            Dim 현재옵션가격 As Single = 일분옵션데이터(callput).price(i, 3)
+
+            If 현재이평선 * O_허용이평선이격도 < 현재옵션가격 Then
+                Return True
+            End If
+
+        Next
+
+        Return False
+    End Function
 
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직 ----------- 아침일찍 매수하는 로직
 
