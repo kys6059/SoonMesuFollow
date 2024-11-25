@@ -147,9 +147,9 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
-    Public 첫번째중간매도이익율 As Single = 0.28
-    Public 두번째중간매도이익율 As Single = 0.68
-    Public 세번째중간매도이익율 As Single = 1.08
+    Public 첫번째중간매도이익율 As Single = 0.3
+    Public 두번째중간매도이익율 As Single = 0.65
+    Public 세번째중간매도이익율 As Single = 1.0
     Public 중간매도후이익율차이 As Single = 0.3        ' 손절매를 올리는 기준
 
     'Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.4
@@ -2036,9 +2036,7 @@ Module Algorithm_SoonMeSu
 
             'If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
 
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) < 100500 Then   '10시05분 전에는 켈리지수가 않좋아서 10%만 투자한다
-                진짜최종투자금액 = 진짜최종투자금액 * 0.09
-            ElseIf Val(순매수리스트(currentIndex_순매수).sTime) >= 100500 And Val(순매수리스트(currentIndex_순매수).sTime) < 101000 Then
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) < 101000 Then   '10시10분 전에는 켈리지수가 않좋아서 9%만 투자한다
                 진짜최종투자금액 = 진짜최종투자금액 * 0.09
             End If
 
@@ -3402,18 +3400,13 @@ Module Algorithm_SoonMeSu
     Public S_시작시간 As Integer = 91200
     Public S_마감시간 As Integer = 93000
     Public S_선물발생기준기울기 As Single = 35.0
-    Public S_외국인현물발생기준기울기 As Single = 30.0
+    Public S_외국인현물발생기준기울기 As Single = 20.0
     Public S_선물해제기준기울기 As Single = 20.0
     Public S_상관계수최저기준 As Single = 0.75
     Public S_상관계수해제하향돌파기준 As Single = 0.4
 
-    'B240730_S005
-    'B240919      S_CNT_123___A_35_B_5_C_20_D_0.75_E_91200_F_92200_G_0.5
-
-    'S_CNT_063___A_35_B_30_C_20_D_0.75_E_91200_F_92200_G_0.4
-
-
     'B240929_S002 S_CNT_002___A_35_B_30_C_20_D_0.75_E_91200_F_93000_G_0.4
+    'B241125      S_CNT_049___A_35_B_20_C_20_D_0.75_E_91200_F_93000_G_0.4
 
     Public Sub CalcAlgorithm_S(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
@@ -3442,6 +3435,9 @@ Module Algorithm_SoonMeSu
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
                 If 선물순매수기울기_절대치 > S_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+
+
+
                     Dim str As String = String.Format("S 신호 발생 콜풋 : {0} 방향", 0)
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("S", 0)
                     SoonMesuShinhoList.Add(shinho)
@@ -3450,6 +3446,7 @@ Module Algorithm_SoonMeSu
             Else ' 풋 방향
 
                 If 선물순매수기울기_절대치 > S_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
+
 
                     Dim str As String = String.Format("S 신호 발생 콜풋 : {0} 방향", 1)
                     Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("S", 1)

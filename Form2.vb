@@ -1857,10 +1857,6 @@ Public Class Form2
 
         End Select
 
-
-
-
-
         timerCount = timerCount + 1
         If timerCount >= timerMaxInterval Then timerCount = 0
     End Sub
@@ -2270,6 +2266,7 @@ Public Class Form2
         Form1.chk_중간청산.Checked = False
         당일반복중_flag = True
 
+
         '매도조건테스트()
 
         'fullTest_A()
@@ -2291,10 +2288,10 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        'fullTest_S()
+        fullTest_S()
         '이평선테스트()
 
 
@@ -2552,6 +2549,7 @@ Public Class Form2
 
     '                Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.
     'B240920_T001    Sell_CNT_002_L_12_M_-0.28_N_0.30_O_0.3_P_0.4
+    '241125 	     Sell_CNT_001_L_11_M_-0.28_N_0.30_O_0.3_P_0.35
 
     Private Sub 매도조건테스트()
 
@@ -2562,11 +2560,11 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"12", "11", "13", "14"} 'L
-        Dim 옵션기준손절매() As String = {"-0.28", "-0.25"} 'M
+        Dim 익절차() As String = {"11"} 'L
+        Dim 옵션기준손절매() As String = {"-0.28", "-0.26", "-0.24", "-0.22"} 'M
         Dim 중간청산이익목표() As String = {"0.25", "0.30"} 'N
         Dim 중간매도후목표이익율_temp() As Single = {0.3}  '익절 기준에서 빼는 손절기준임
-        Dim 두세번째매도이익율_temp() As Single = {0.4, 0.35}
+        Dim 두세번째매도이익율_temp() As Single = {0.35}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -3273,12 +3271,13 @@ Public Class Form2
     'O_CNT_017_A_16_B_10_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.6_K_30_L_1.8_M_1.4_N_1.4 20241122
 
 
-    '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+    '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.
+    'O_CNT_000_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35_O_0
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16, 14, 12} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 7, 5} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {9} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {3}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
@@ -3287,18 +3286,18 @@ Public Class Form2
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {20} ', 25, 30} ', 36, 40}
-        Dim O_해제tick_count_기준_temp() As Integer = {20}
+        Dim O_tick_count_기준_temp() As Integer = {20, 28, 36} ', 25, 30} ', 36, 40}
+        Dim O_해제tick_count_기준_temp() As Integer = {20, 28, 36}
 
         Dim 선물상관계수최저_temp() As Single = {0.6}
         Dim 외국인현물상관계수최저_temp() As Single = {0.5}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.8}
+        Dim O_다시발생시적용배율_temp() As Single = {1.8, 2.0, 2.2, 2.4}
         Dim RSI_Offset_temp() As Single = {1.4}
 
-        Dim O_허용이평선이격도_temp() As Single = {1.35, 1.4, 1.45, 1.5}
-        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0, 2, 4, 6}
+        Dim O_허용이평선이격도_temp() As Single = {1.35}
+        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0, 1}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3529,16 +3528,17 @@ Public Class Form2
 
 
     'B240929_S002 S_CNT_002___A_35_B_30_C_20_D_0.75_E_91200_F_93000_G_0.4
+    'B241125      S_CNT_049___A_35_B_20_C_20_D_0.75_E_91200_F_93000_G_0.4
     Private Sub fullTest_S()
 
-        Dim S_선물발생기준기울기_temp() As Single = {35}
-        Dim S_외국인현물발생기준기울기_temp() As Single = {30}
+        Dim S_선물발생기준기울기_temp() As Single = {35, 30, 25}
+        Dim S_외국인현물발생기준기울기_temp() As Single = {20, 15, 10}
 
         Dim S_선물해제기준기울기_temp() As Single = {20.0}
-        Dim S_상관계수최저기준_temp() As Single = {0.75}    'B
+        Dim S_상관계수최저기준_temp() As Single = {0.75, 0.65, 0.55}    'B
 
-        Dim S_시작시간_temp() As String = {"91200", "90800", "91500", "91800"}
-        Dim S_마감시간_temp() As String = {"92500", "93000", "93500", "94000", "94500", "95000", "95500", "100000"}
+        Dim S_시작시간_temp() As String = {"91200"}
+        Dim S_마감시간_temp() As String = {"93000", "93500"}
 
         Dim S_상관계수해제하향돌파기준_temp() As Single = {0.4}
 
