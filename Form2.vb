@@ -2288,10 +2288,10 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        fullTest_S()
+        'fullTest_S()
         '이평선테스트()
 
 
@@ -3272,32 +3272,33 @@ Public Class Form2
 
 
     '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.
-    'O_CNT_000_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35_O_0
+
+    '20241127     O_CNT_019_A_15_B_9_C_3_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.6_K_30_L_1.7_M_1.4_N_1.38_O_0
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {16} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {9} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {16, 15, 14, 13} ', 14, 16}    'A
+        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 8, 7, 6} ', 4, 5}    'B
 
         Dim O_선물해제기준기울기_temp() As Single = {3}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"100000"} ', "94000", "100000", "103000", "110000"}           'C
+        Dim O_시작시간_temp() As String = {"95000"} ', "94000", "100000", "103000", "110000"}           'C
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {20, 28, 36} ', 25, 30} ', 36, 40}
-        Dim O_해제tick_count_기준_temp() As Integer = {20, 28, 36}
+        Dim O_tick_count_기준_temp() As Integer = {20}
+        Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.6}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.5}
+        Dim 선물상관계수최저_temp() As Single = {0.6, 0.5}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5, 0.6}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.8, 2.0, 2.2, 2.4}
+        Dim O_다시발생시적용배율_temp() As Single = {1.7}
         Dim RSI_Offset_temp() As Single = {1.4}
 
-        Dim O_허용이평선이격도_temp() As Single = {1.35}
-        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0, 1}
+        Dim O_허용이평선이격도_temp() As Single = {1.38}
+        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False

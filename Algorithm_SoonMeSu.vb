@@ -440,7 +440,7 @@ Module Algorithm_SoonMeSu
     '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
     'O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
 
-    Public O_선물발생기준기울기 As Single = 16.0
+    Public O_선물발생기준기울기 As Single = 15.0
     Public O_외국인현물발생기준기울기 As Single = 9.0
 
     Public O_선물해제기준기울기 As Single = 3.0
@@ -449,15 +449,15 @@ Module Algorithm_SoonMeSu
     Public O_tick_count_기준 As Integer = 20
     Public O_해제tick_count_기준 As Integer = 20
 
-    Public O_시작시간 As Integer = 100000
+    Public O_시작시간 As Integer = 95000
     Public O_마감시간 As Integer = 123000
 
-    Public 선물상관계수최저 As Double = 0.6
-    Public 외국인현물상관계수최저 As Double = 0.5
+    Public 선물상관계수최저 As Double = 0.5
+    Public 외국인현물상관계수최저 As Double = 0.6
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
-    Public O_다시발생시적용배율 As Single = 1.8
+    Public O_다시발생시적용배율 As Single = 1.7
 
-    Public O_허용이평선이격도 As Single = 1.35  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
+    Public O_허용이평선이격도 As Single = 1.38  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
     Public O_허용이평선이격도유지시간_분 As Integer = 0
 
     Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
@@ -564,6 +564,8 @@ Module Algorithm_SoonMeSu
     'B240929_T011 O_CNT_000_A_18_B_14_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.7_K_30_L_1.8_M_1.4  신규 적용 20240929 7월전후 둘다 높은 조건으로 확인
 
     '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+
+    '20241127     O_CNT_019_A_15_B_9_C_3_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.6_K_30_L_1.7_M_1.4_N_1.38_O_0
 
     Public Sub CalcAlgorithm_O(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
@@ -2024,6 +2026,7 @@ Module Algorithm_SoonMeSu
         End If
     End Sub
 
+    '20241127     O_CNT_019_A_15_B_9_C_3_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.6_K_30_L_1.7_M_1.4_N_1.38_O_0
     Private Sub 추가매수실행(ByVal direction As Integer, ByVal 투자그레이드 As Integer)
 
         Dim targetIndex As Integer = 매수종목index찾기(direction)
@@ -2036,8 +2039,9 @@ Module Algorithm_SoonMeSu
 
             'If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
 
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= 100000 And Val(순매수리스트(currentIndex_순매수).sTime) < 101000 Then   '10시10분 전에는 켈리지수가 않좋아서 9%만 투자한다
-                진짜최종투자금액 = 진짜최종투자금액 * 0.09
+            If Val(순매수리스트(currentIndex_순매수).sTime) >= O_시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < 103000 Then   '이때는 켈리지수가 않좋아서 매수하지 않음
+                Return  '신호는 발생하나 매수하지 않음
+                '진짜최종투자금액 = 진짜최종투자금액 * 0.1
             End If
 
             Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
