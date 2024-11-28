@@ -984,8 +984,8 @@ Public Class Form2
             End If
 
             'If 남은날짜 = 0 Or 남은날짜 = 3 Then Continue For   '0,3일 제외
-            If 남은날짜 = 2 Then Continue For   '2일 제외
-            If 남은날짜 = 6 Or 남은날짜 = 1 Then Continue For   '1,6일 제외
+            'If 남은날짜 = 2 Then Continue For   '2일 제외
+            'If 남은날짜 = 6 Or 남은날짜 = 1 Then Continue For   '1,6일 제외
 
 
             '당일 내부에서 변경
