@@ -460,6 +460,9 @@ Module Algorithm_SoonMeSu
     Public O_허용이평선이격도 As Single = 1.38  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
     Public O_허용이평선이격도유지시간_분 As Integer = 0
 
+    Public O_발생시합계기울기 As Single = 0   'weak의 기준을 발생시의 합계 기울기로 하기 위한 변수
+    Public O_합계기울기매도기준비율 As Single = 0.5 'weak의 기준을 발생시의 합계 기울기로 하기 위한 변수 O_발생시합계기울기 * ??% 이하가 되면 weak_2 매도 조건으로 함
+
     Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
     Public RSI_Offset As Single = 1.4  '사용하지 않음
 
