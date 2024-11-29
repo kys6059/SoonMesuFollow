@@ -3277,21 +3277,21 @@ Public Class Form2
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {15} ', 14, 16}    'A
-        Dim O_외국인현물발생기준기울기_temp() As Single = {9} ', 4, 5}    'B
+        Dim O_선물발생기준기울기_temp() As Single = {15, 14, 13, 12}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 8, 7, 6}
 
         Dim O_선물해제기준기울기_temp() As Single = {3}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
         Dim O_시작시간_temp() As String = {"95000"} ', "94000", "100000", "103000", "110000"}           'C
-        Dim O_마감시간_temp() As String = {"123000", "130000", "133000", "140000", "143000", "145000"}           'D
+        Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {20}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
         Dim 선물상관계수최저_temp() As Single = {0.5}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.6}
+        Dim 외국인현물상관계수최저_temp() As Single = {-1.0}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
 

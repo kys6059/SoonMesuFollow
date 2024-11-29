@@ -781,8 +781,8 @@ Module Algorithm_SoonMeSu
         Dim ret As Boolean = False
         Dim 선물상관계수최저옵셋 As Single = 1.0  '10시30분 전에 이걸 올리는 걸 조절해봤더니 선물상관계수최저옵셋 = 1.2~1.4  이건 결과가 안좋아 삭제함 20240616
 
-
-        If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
+        If 순매수리스트(currentIndex_순매수 - 1).상관계수(4) > 선물상관계수최저 Then  '선물현물 합계로 테스트해봄
+            'If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
             ret = True
         End If
 
