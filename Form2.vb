@@ -71,7 +71,7 @@ Public Class Form2
             lbl_ReceiveCounter.Text = "수신횟수 = " & ReceiveCount.ToString()
 
             'CalcColorData()        '최대최소 계산
-            CalcPIPData()          '대표선 계산
+            'CalcPIPData()          '대표선 계산
             Calc이동평균Data() '일분옵션데이터의 값을 루프를 돌면서 이동평균을 계산해서 다시 입력한다
 
             Calc코스피지수이동평균Data()  '코스피의 이평선을 계산한다 -65 *  2 기준
@@ -455,23 +455,23 @@ Public Class Form2
 
             If currentIndex_순매수 >= 0 Then
 
-                For i As Integer = 0 To 4
+                'For i As Integer = 0 To 4
 
-                    Dim PIP_Series As String = "PIP_" + i.ToString()
-                    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
-                        'PIP 시리즈를 표시한다
-                        If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
-                            For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
-                                Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
-                                Dim target순매수 As Long = Get순매수(point, i)
-                                F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
-                            Next
+                '    Dim PIP_Series As String = "PIP_" + i.ToString()
+                '    If (i = 0 And chk_F2_DATA_0.Checked = True) Or (i = 1 And chk_F2_DATA_1.Checked = True) Or (i = 2 And chk_F2_DATA_2.Checked = True) Or i = 3 Or i = 4 Then
+                '        'PIP 시리즈를 표시한다
+                '        If PIP_Point_Lists(i).PoinIndexList IsNot Nothing Then
+                '            For j As Integer = 0 To PIP_Point_Lists(i).PoinIndexList.Count - 1
+                '                Dim point As Integer = PIP_Point_Lists(i).PoinIndexList(j)
+                '                Dim target순매수 As Long = Get순매수(point, i)
+                '                F2_Chart_순매수.Series(PIP_Series).Points.AddXY(point, target순매수)
+                '            Next
 
-                        End If
+                '        End If
 
-                    End If
+                '    End If
 
-                Next
+                'Next
 
                 'For i As Integer = 0 To 4
 
@@ -2560,11 +2560,11 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.28", "-0.26", "-0.24", "-0.22"} 'M
-        Dim 중간청산이익목표() As String = {"0.25", "0.30"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.3}  '익절 기준에서 빼는 손절기준임
-        Dim 두세번째매도이익율_temp() As Single = {0.35}
+        Dim 익절차() As String = {"11", "13", "15", "17", "19"} 'L
+        Dim 옵션기준손절매() As String = {"-0.55", "-0.6", "-0.7", "-0.8", "-0.93"} 'M
+        Dim 중간청산이익목표() As String = {"2.0"} 'N
+        Dim 중간매도후목표이익율_temp() As Single = {0.5}  '익절 기준에서 빼는 손절기준임
+        Dim 두세번째매도이익율_temp() As Single = {0.5}
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -3275,33 +3275,35 @@ Public Class Form2
 
     '20241127     O_CNT_019_A_15_B_9_C_3_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.6_K_30_L_1.7_M_1.4_N_1.38_O_0
 
+    '20250515     O_CNT_000_A_15_B_9_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.7_M_1.4_N_1.38_O_0
+
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {15, 14, 13, 12}
-        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 8, 7, 6}
+        Dim O_선물발생기준기울기_temp() As Single = {15, 18, 21, 24, 27}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 11, 13, 15}
 
-        Dim O_선물해제기준기울기_temp() As Single = {3}    'A
+        Dim O_선물해제기준기울기_temp() As Single = {5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"95000"} ', "94000", "100000", "103000", "110000"}           'C
+        Dim O_시작시간_temp() As String = {"95000"}           'C
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {20}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.5}
-        Dim 외국인현물상관계수최저_temp() As Single = {-1.0}
+        Dim 선물상관계수최저_temp() As Single = {0.65}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.4}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
 
 
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.7}
+        Dim O_다시발생시적용배율_temp() As Single = {1.7, 1.4, 1.2}
         Dim RSI_Offset_temp() As Single = {1.4}
 
-        Dim O_허용이평선이격도_temp() As Single = {1.38}
-        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}
+        Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
+        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}  '사용하지 않음
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False

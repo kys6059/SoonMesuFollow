@@ -439,11 +439,12 @@ Module Algorithm_SoonMeSu
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
     '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
     'O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
+    '20250515     O_CNT_000_A_15_B_9_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.7_M_1.4_N_1.38_O_0
 
     Public O_선물발생기준기울기 As Single = 15.0
     Public O_외국인현물발생기준기울기 As Single = 9.0
 
-    Public O_선물해제기준기울기 As Single = 3.0
+    Public O_선물해제기준기울기 As Single = 5.0
     Public O_외국인현물해제기준기울기 As Single = 1.0
 
     Public O_tick_count_기준 As Integer = 20
@@ -452,8 +453,8 @@ Module Algorithm_SoonMeSu
     Public O_시작시간 As Integer = 95000
     Public O_마감시간 As Integer = 123000
 
-    Public 선물상관계수최저 As Double = 0.5
-    Public 외국인현물상관계수최저 As Double = 0.6
+    Public 선물상관계수최저 As Double = 0.65
+    Public 외국인현물상관계수최저 As Double = 0.4
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
     Public O_다시발생시적용배율 As Single = 1.7
 
@@ -466,7 +467,7 @@ Module Algorithm_SoonMeSu
     Public O_외국인현물평균_기준 As Single = 15.0 '사용하지 않음
     Public RSI_Offset As Single = 1.4  '사용하지 않음
 
-    '외국인 현물이 현저히 낮아 영향을 미치치 않을 때는 외국인 선물만 보고 매매를 수행하는 로직 테스트해 봤으나 효과가 낮음   20240903
+    '외국인 현물이 현저히 낮아 영향을 미치치 않을 때는 외국인 선물만 보고 매매를 수행하는 로직 테스트해 봤으나 효과가 낮음   20240903  -- 다시 회복시킴 20250515
     '효과가 없어서 제외 함
     Public Sub CalcAlgorithm_O_new(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
@@ -608,9 +609,9 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
 
-                        If 최근N분동안_최대이평선이격도가범위밖인가(0, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
-                            Return
-                        End If
+                        'If 최근N분동안_최대이평선이격도가범위밖인가(0, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
+                        'Return
+                        'End If
 
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
@@ -639,9 +640,9 @@ Module Algorithm_SoonMeSu
 
                     If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
 
-                        If 최근N분동안_최대이평선이격도가범위밖인가(1, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
-                            Return
-                        End If
+                        'If 최근N분동안_최대이평선이격도가범위밖인가(1, 일분옵션데이터_CurrentIndex - 1, O_허용이평선이격도유지시간_분) = True Then   '최근 N분동안 최대 이격도
+                        'Return
+                        'End If
 
                         Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
@@ -784,8 +785,8 @@ Module Algorithm_SoonMeSu
         Dim ret As Boolean = False
         Dim 선물상관계수최저옵셋 As Single = 1.0  '10시30분 전에 이걸 올리는 걸 조절해봤더니 선물상관계수최저옵셋 = 1.2~1.4  이건 결과가 안좋아 삭제함 20240616
 
-        If 순매수리스트(currentIndex_순매수 - 1).상관계수(4) > 선물상관계수최저 Then  '선물현물 합계로 테스트해봄
-            'If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
+        'If 순매수리스트(currentIndex_순매수 - 1).상관계수(4) > 선물상관계수최저 Then  '선물현물 합계로 테스트해봄
+        If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) > 외국인현물상관계수최저 And 순매수리스트(currentIndex_순매수 - 1).상관계수(3) > 선물상관계수최저 Then
             ret = True
         End If
 
@@ -1605,7 +1606,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_O_1"
+                        '매도사유 = "weak_O_1"
                     End If
                 Else
 
@@ -1614,7 +1615,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_O_1"
+                        '매도사유 = "weak_O_1"
                     End If
                 End If
             End If
