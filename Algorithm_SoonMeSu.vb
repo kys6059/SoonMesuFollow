@@ -440,12 +440,13 @@ Module Algorithm_SoonMeSu
     '20241124     O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
     'O_CNT_030_A_16_B_9_C_3_D_1_E_100000_F_123000_G_20_H_20_I_0.6_J_0.5_K_30_L_1.8_M_1.4_N_1.35
     '20250515     O_CNT_000_A_15_B_9_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.7_M_1.4_N_1.38_O_0
+    '20250515     O_CNT_029_A_21_B_11_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.2_M_1.4_N_1.38_O_0  -- 안팔고 버티는 테스트
 
-    Public O_선물발생기준기울기 As Single = 15.0
-    Public O_외국인현물발생기준기울기 As Single = 9.0
+    Public O_선물발생기준기울기 As Single = 21.0
+    Public O_외국인현물발생기준기울기 As Single = 11.0
 
-    Public O_선물해제기준기울기 As Single = 5.0
-    Public O_외국인현물해제기준기울기 As Single = 1.0
+    Public O_선물해제기준기울기 As Single = 5.0    '사용하지 않음
+    Public O_외국인현물해제기준기울기 As Single = 1.0 '사용하지 않음
 
     Public O_tick_count_기준 As Integer = 20
     Public O_해제tick_count_기준 As Integer = 20
@@ -456,10 +457,10 @@ Module Algorithm_SoonMeSu
     Public 선물상관계수최저 As Double = 0.65
     Public 외국인현물상관계수최저 As Double = 0.4
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
-    Public O_다시발생시적용배율 As Single = 1.7
+    Public O_다시발생시적용배율 As Single = 1.2
 
-    Public O_허용이평선이격도 As Single = 1.38  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도
-    Public O_허용이평선이격도유지시간_분 As Integer = 0
+    Public O_허용이평선이격도 As Single = 1.38  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도   -- 사용하지 않음
+    Public O_허용이평선이격도유지시간_분 As Integer = 0    '사용하지 않음
 
     Public O_발생시합계기울기 As Single = 0   'weak의 기준을 발생시의 합계 기울기로 하기 위한 변수
     Public O_합계기울기매도기준비율 As Single = 0.5 'weak의 기준을 발생시의 합계 기울기로 하기 위한 변수 O_발생시합계기울기 * ??% 이하가 되면 weak_2 매도 조건으로 함
@@ -3408,13 +3409,14 @@ Module Algorithm_SoonMeSu
     Public S_시작시간 As Integer = 91200
     Public S_마감시간 As Integer = 93000
     Public S_선물발생기준기울기 As Single = 35.0
-    Public S_외국인현물발생기준기울기 As Single = 20.0
+    Public S_외국인현물발생기준기울기 As Single = 30.0
     Public S_선물해제기준기울기 As Single = 20.0
-    Public S_상관계수최저기준 As Single = 0.75
+    Public S_상관계수최저기준 As Single = 0.5
     Public S_상관계수해제하향돌파기준 As Single = 0.4
 
     'B240929_S002 S_CNT_002___A_35_B_30_C_20_D_0.75_E_91200_F_93000_G_0.4
     'B241125      S_CNT_049___A_35_B_20_C_20_D_0.75_E_91200_F_93000_G_0.4
+    '250525       S_CNT_005___A_35_B_30_C_20_D_0.5_E_91200_F_93000_G_0.4  --- 끝까지 버티는 버전
 
     Public Sub CalcAlgorithm_S(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
@@ -3482,7 +3484,7 @@ Module Algorithm_SoonMeSu
                 s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                 s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                 s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                매도사유 = "weak_S_2"
+                '매도사유 = "weak_S_2"
             End If
 
             If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
@@ -3495,7 +3497,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_S_1"
+                        ' 매도사유 = "weak_S_1"
                     End If
 
                 Else
@@ -3505,7 +3507,7 @@ Module Algorithm_SoonMeSu
                         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_S_1"
+                        '매도사유 = "weak_S_1"
                     End If
 
                 End If

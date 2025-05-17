@@ -2267,7 +2267,7 @@ Public Class Form2
         당일반복중_flag = True
 
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2288,7 +2288,7 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
@@ -2560,11 +2560,16 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"11", "13", "15", "17", "19"} 'L
-        Dim 옵션기준손절매() As String = {"-0.55", "-0.6", "-0.7", "-0.8", "-0.93"} 'M
+        Dim 익절차() As String = {"11"} 'L
+        Dim 옵션기준손절매() As String = {"-0.75"} 'M
         Dim 중간청산이익목표() As String = {"2.0"} 'N
         Dim 중간매도후목표이익율_temp() As Single = {0.5}  '익절 기준에서 빼는 손절기준임
         Dim 두세번째매도이익율_temp() As Single = {0.5}
+
+
+
+        'chk_Algorithm_S.Checked = False
+
 
         If SoonMesuSimulationTotalShinhoList Is Nothing Then
             SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
@@ -2608,7 +2613,7 @@ Public Class Form2
 
                             Console.WriteLine(SoonMesuSimulation_조건)
                             Add_Log("", SoonMesuSimulation_조건)
-                            자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
                             cnt += 1
                         Next
@@ -3276,16 +3281,17 @@ Public Class Form2
     '20241127     O_CNT_019_A_15_B_9_C_3_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.6_K_30_L_1.7_M_1.4_N_1.38_O_0
 
     '20250515     O_CNT_000_A_15_B_9_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.7_M_1.4_N_1.38_O_0
+    '20250517     O_CNT_029_A_21_B_11_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.2_M_1.4_N_1.38_O_0  -- 안팔고 버티는 테스트
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {15, 18, 21, 24, 27}
-        Dim O_외국인현물발생기준기울기_temp() As Single = {9, 11, 13, 15}
+        Dim O_선물발생기준기울기_temp() As Single = {21}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {11}
 
         Dim O_선물해제기준기울기_temp() As Single = {5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"95000"}           'C
+        Dim O_시작시간_temp() As String = {"91000", "93000", "95000", "100000", "101000", "102000"}           'C
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
@@ -3299,8 +3305,8 @@ Public Class Form2
 
 
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.7, 1.4, 1.2}
-        Dim RSI_Offset_temp() As Single = {1.4}
+        Dim O_다시발생시적용배율_temp() As Single = {1.2}
+        Dim timeout_temp() As String = {"150000", "143000", "140000", "133000", "130000"}
 
         Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
         Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}  '사용하지 않음
@@ -3341,7 +3347,7 @@ Public Class Form2
                                             For j As Integer = 0 To 외국인현물상관계수최저_temp.Length - 1
                                                 For k As Integer = 0 To 상관계수계산인덱스길이_temp.Length - 1
                                                     For l As Integer = 0 To O_다시발생시적용배율_temp.Length - 1
-                                                        For m As Integer = 0 To RSI_Offset_temp.Length - 1
+                                                        For m As Integer = 0 To timeout_temp.Length - 1
                                                             For n As Integer = 0 To O_허용이평선이격도_temp.Length - 1
                                                                 For o As Integer = 0 To O_허용이평선이격도유지시간_분_temp.Length - 1
 
@@ -3357,7 +3363,8 @@ Public Class Form2
                                                                     외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
                                                                     상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
                                                                     O_다시발생시적용배율 = O_다시발생시적용배율_temp(l)
-                                                                    RSI_Offset = RSI_Offset_temp(m)
+                                                                    txt_F2_TimeoutTime.Text = timeout_temp(m)
+                                                                    txt_F2_TimeoutTime.Refresh()
                                                                     O_허용이평선이격도 = O_허용이평선이격도_temp(n)
                                                                     O_허용이평선이격도유지시간_분 = O_허용이평선이격도유지시간_분_temp(o)
 
@@ -3371,10 +3378,10 @@ Public Class Form2
                                                                     End If
 
                                                                     SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
-                                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}_N_{13}_O_{14}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), RSI_Offset, O_허용이평선이격도, O_허용이평선이격도유지시간_분)
+                                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}_N_{13}_O_{14}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), txt_F2_TimeoutTime.Text, O_허용이평선이격도, O_허용이평선이격도유지시간_분)
 
                                                                     Add_Log("", SoonMesuSimulation_조건)
-                                                                    자동반복계산로직(cnt, False, 540) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
+                                                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
                                                                     '자동반복계산로직(cnt, False)
 
                                                                     cnt += 1
@@ -3536,16 +3543,17 @@ Public Class Form2
 
     'B240929_S002 S_CNT_002___A_35_B_30_C_20_D_0.75_E_91200_F_93000_G_0.4
     'B241125      S_CNT_049___A_35_B_20_C_20_D_0.75_E_91200_F_93000_G_0.4
+    '250517       S_CNT_005___A_35_B_30_C_20_D_0.5_E_91200_F_93000_G_0.4  - 끝까지 버티는 버전
     Private Sub fullTest_S()
 
-        Dim S_선물발생기준기울기_temp() As Single = {35, 30, 25}
-        Dim S_외국인현물발생기준기울기_temp() As Single = {20, 15, 10}
+        Dim S_선물발생기준기울기_temp() As Single = {35, 40, 31, 27}
+        Dim S_외국인현물발생기준기울기_temp() As Single = {26, 22, 30, 35}
 
         Dim S_선물해제기준기울기_temp() As Single = {20.0}
-        Dim S_상관계수최저기준_temp() As Single = {0.75, 0.65, 0.55}    'B
+        Dim S_상관계수최저기준_temp() As Single = {0.5, 0.35}    'B
 
         Dim S_시작시간_temp() As String = {"91200"}
-        Dim S_마감시간_temp() As String = {"93000", "93500"}
+        Dim S_마감시간_temp() As String = {"93000", "94900"}
 
         Dim S_상관계수해제하향돌파기준_temp() As Single = {0.4}
 
@@ -3592,7 +3600,7 @@ Public Class Form2
                                     SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("___A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}", S_선물발생기준기울기, S_외국인현물발생기준기울기, S_선물해제기준기울기, S_상관계수최저기준, S_시작시간, S_마감시간, S_상관계수해제하향돌파기준)
 
                                     Add_Log("", SoonMesuSimulation_조건)
-                                    자동반복계산로직(cnt, False, 60) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
 
                                     cnt += 1
                                 Next
