@@ -674,38 +674,18 @@ Module Algorithm_SoonMeSu
         Return False
     End Function
 
-    '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직 ----------- 아침일찍 매수하는 로직
+    ' Q 알고리즘 변경 20250519
+    ' 시작 후 기울기 뿐만 아니라 시작할 때 크게 매수/매도하는 거 까지 포함하는 케이스 테스트
+    '20250519  Q_CNT_021_A_1500_B_1200_C_90500_D_91200
 
-    Public Q_선물발생기준기울기 As Single = 30.0
-    Public Q_외국인현물발생기준기울기 As Single = 5.0
+    Public Q_선물발생기준 As Long = 1500
+    Public Q_외국인현물발생기준 As Long = 1200
+    Public Q_시작시간 As Integer = 90500
+    Public Q_마감시간 As Integer = 91200
 
-    Public Q_선물해제기준기울기 As Single = 5.0
-    Public Q_외국인현물해제기준기울기 As Single = 1.0
+    Public Q_tick_count_기준 As Integer = 20   'S 알고리즘에서 사용 중임
+    Public O1_짧을때_보정치 As Single = 0.8    'O 알고리즘에서 사용중임
 
-
-    Public Q_tick_count_기준 As Integer = 20
-    Public Q_해제tick_count_기준 As Integer = 20
-
-
-    Public Q_시작시간 As Integer = 93000
-    Public Q_마감시간 As Integer = 94000
-
-    Public Q_선물상관계수최저 As Double = 0.6
-    Public Q_외국인현물상관계수최저 As Double = 0.6
-    Public Q_상관계수계산인덱스길이 As Integer = 30
-
-    Public Q_다시발생시적용배율 As Single = 3.0
-
-    Public O1_짧을때_보정치 As Single = 0.8
-
-    'B240421_Q202                                       Q_CNT_125_A_13_B_3_C_3_D_0.5_E_93500_F_95900_G_25_H_16_I_0.6_J_0.6_K_80_L_3_M_0.8
-    'B240506_Q007  Q_CNT_091_A_14_B_3_C_6_D_1_E_93000_F_95900_G_25_H_15_I_0.6_J_0.6_K_30_L_3_M_0.8
-    'B240520_Q001 Q_CNT_123_A_14_B_3_C_10_D_1_E_93000_F_94700_G_20_H_20_I_0.4_J_0.4_K_40_L_2.2_M_0.8
-    'B240526_T001 Q_CNT_012_A_15_B_3_C_10_D_1_E_93000_F_94000_G_20_H_20_I_0.5_J_0.5_K_30_L_3_M_0.8
-
-
-
-    'Q_CNT_000_A_30_B_5_C_5_D_1_E_93000_F_94000_G_20_H_20_I_0.6_J_0.6_K_30_L_3_M_0.8
     Public Sub CalcAlgorithm_Q(ByVal 일분옵션데이터_CurrentIndex As Integer)
 
         Dim startTime As Integer = Q_시작시간
@@ -713,33 +693,25 @@ Module Algorithm_SoonMeSu
 
         If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
 
-            Dim 선물순매수기울기 As Single = 틱당기울기계산(3, Q_tick_count_기준)
-            Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, Q_tick_count_기준)
+            Dim 선물순매수 As Long = 최종순매수값가져오기(3)
+            Dim 외국인현물순매수 As Long = 최종순매수값가져오기(1)
 
-            Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
-            Dim 외국인현물순매수기울기_절대치 As Single = Math.Abs(외국인현물순매수기울기)
+            Dim 선물순매수_절대치 As Long = Math.Abs(선물순매수)
+            Dim 외국인현물순매수_절대치 As Long = Math.Abs(외국인현물순매수)
 
-            If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
+            If 선물순매수 * 외국인현물순매수 <= 0 Then Return '곱해서 음수이면 빠진다
 
-            If 선물순매수기울기 > 0 Then  '  콜 방향
+            If 선물순매수 > 0 Then  '  콜 방향
 
                 If is동일신호가현재살아있나("Q", 0) Then Return
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
 
                 Dim offset As Single = 1.0
 
-                If is동일신호가있나("Q", 0) = True Then
-                    offset = Q_다시발생시적용배율
-                End If
 
-
-                If 선물순매수기울기_절대치 > Q_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > Q_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+                If 선물순매수_절대치 > Q_선물발생기준 * offset And 외국인현물순매수_절대치 > Q_외국인현물발생기준 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     If Get상관계수상태() Then
-
-                        If 현재RSI의기울기방향(0, 일분옵션데이터_CurrentIndex - 1) = False Then
-                            Return
-                        End If
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 0)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 0)
@@ -755,21 +727,14 @@ Module Algorithm_SoonMeSu
 
                 Dim offset As Single = 1.0
 
-                If is동일신호가있나("Q", 1) = True Then
-                    offset = Q_다시발생시적용배율
-                End If
-
-                If 선물순매수기울기_절대치 > Q_선물발생기준기울기 * offset And 외국인현물순매수기울기_절대치 > Q_외국인현물발생기준기울기 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+                If 선물순매수_절대치 > Q_선물발생기준 * offset And 외국인현물순매수_절대치 > Q_외국인현물발생기준 * offset Then  '선물, 현물 둘다 매도나 매수중이면
 
                     If Get상관계수상태() Then
-
-                        If 현재RSI의기울기방향(1, 일분옵션데이터_CurrentIndex - 1) = False Then
-                            Return
-                        End If
 
                         Dim str As String = String.Format("Q 신호 발생 콜풋 : {0} 방향", 1)
                         Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("Q", 1)
                         SoonMesuShinhoList.Add(shinho)
+
                     End If
 
                 End If
@@ -1020,6 +985,28 @@ Module Algorithm_SoonMeSu
                 ElseIf s.A03_신호ID = 신호id And s.A08_콜풋 <> callput Then
 
                     Return False 'E 신호는 같으나 방향이 다른게 있었다면 false를 리턴
+
+                End If
+
+            Next
+        End If
+
+        Return False
+    End Function
+
+
+    Private Function is동일방향신호가살아있나(ByVal callput As Integer) As Boolean
+
+        If SoonMesuShinhoList IsNot Nothing Then
+            For i As Integer = SoonMesuShinhoList.Count - 1 To 0 Step -1
+                Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
+                If s.A08_콜풋 = callput Then
+
+                    Return True  '방향이 같은게 있었다면 true를 리턴해서 다시 뜨지 않도록 함
+
+                ElseIf s.A08_콜풋 <> callput Then
+
+                    Return False '방향이 다른게 있었다면 false를 리턴
 
                 End If
 
@@ -1592,36 +1579,36 @@ Module Algorithm_SoonMeSu
 
         Dim 매도사유 As String = ""
 
-        If s.A15_현재상태 = 1 Then
+        'If s.A15_현재상태 = 1 Then
 
-            Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, O_해제tick_count_기준)
-            Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, O_해제tick_count_기준)
+        '    Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, O_해제tick_count_기준)
+        '    Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, O_해제tick_count_기준)
 
-            Dim 마지막순매수index As Integer = Get마지막순매수Index()
-            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+        '    Dim 마지막순매수index As Integer = Get마지막순매수Index()
+        '    If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
 
-                If s.A08_콜풋 = 0 Then
+        '        If s.A08_콜풋 = 0 Then
 
-                    If O_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도                   
+        '            If O_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도                   
 
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        '매도사유 = "weak_O_1"
-                    End If
-                Else
+        '                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        '                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+        '                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+        '                '매도사유 = "weak_O_1"
+        '            End If
+        '        Else
 
-                    If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+        '            If (O_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
 
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        '매도사유 = "weak_O_1"
-                    End If
-                End If
-            End If
+        '                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        '                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+        '                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+        '                '매도사유 = "weak_O_1"
+        '            End If
+        '        End If
+        '    End If
 
-        End If
+        'End If
 
         Return 매도사유
     End Function
@@ -1630,63 +1617,8 @@ Module Algorithm_SoonMeSu
 
         Dim 매도사유 As String = ""
 
-        If s.A15_현재상태 = 1 Then
-
-
-            Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, Q_해제tick_count_기준)
-            Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, Q_해제tick_count_기준)
-
-
-            Dim 마지막순매수index As Integer = Get마지막순매수Index()
-            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
-
-                If s.A08_콜풋 = 0 Then
-
-                    '선물이 낮아지면
-
-                    If Q_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_Q_1"
-                    End If
-
-                    '현물이 낮아지면
-                    If Q_외국인현물해제기준기울기 > 외국인현물현재순매수기울기 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        '매도사유 = "weak_Q_2"
-                    End If
-
-
-                Else
-
-                    '선물이 낮아지면
-                    If (Q_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        매도사유 = "weak_Q_1"
-                    End If
-
-                    '현물이 낮아지면
-                    If (O_외국인현물해제기준기울기 * -1) < 외국인현물현재순매수기울기 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        '매도사유 = "weak_Q_2"
-                    End If
-
-                End If
-
-
-
-            End If
-
-        End If
-
         Return 매도사유
+
     End Function
 
 
@@ -3444,6 +3376,8 @@ Module Algorithm_SoonMeSu
 
             If 선물순매수기울기 > 0 Then  '  콜 방향
 
+                If is동일방향신호가살아있나(0) = True Then Return
+
                 If 선물순매수기울기_절대치 > S_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
 
 
@@ -3454,6 +3388,8 @@ Module Algorithm_SoonMeSu
                 End If
 
             Else ' 풋 방향
+
+                If is동일방향신호가살아있나(1) = True Then Return
 
                 If 선물순매수기울기_절대치 > S_선물발생기준기울기 And 외국인현물순매수기울기_절대치 > S_외국인현물발생기준기울기 Then  '선물, 현물 둘다 매도나 매수중이면
 
@@ -3473,48 +3409,48 @@ Module Algorithm_SoonMeSu
 
         Dim 매도사유 As String = ""
 
-        If s.A15_현재상태 = 1 Then
+        'If s.A15_현재상태 = 1 Then
 
-            Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, Q_해제tick_count_기준)
-            Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, Q_해제tick_count_기준)
+        '    Dim 선물현재순매수기울기 As Single = 틱당기울기계산(3, Q_해제tick_count_기준)
+        '    Dim 외국인현물현재순매수기울기 As Single = 틱당기울기계산(1, Q_해제tick_count_기준)
 
-            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+        '    Dim 마지막순매수index As Integer = Get마지막순매수Index()
 
-            If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) < S_상관계수해제하향돌파기준 Or 순매수리스트(currentIndex_순매수 - 1).상관계수(3) < S_상관계수해제하향돌파기준 Then
-                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                '매도사유 = "weak_S_2"
-            End If
+        '    If 순매수리스트(currentIndex_순매수 - 1).상관계수(1) < S_상관계수해제하향돌파기준 Or 순매수리스트(currentIndex_순매수 - 1).상관계수(3) < S_상관계수해제하향돌파기준 Then
+        '        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        '        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+        '        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+        '        '매도사유 = "weak_S_2"
+        '    End If
 
-            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+        '    If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
 
-                If s.A08_콜풋 = 0 Then
+        '        If s.A08_콜풋 = 0 Then
 
-                    '선물이 낮아지면
+        '            '선물이 낮아지면
 
-                    If S_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        ' 매도사유 = "weak_S_1"
-                    End If
+        '            If S_선물해제기준기울기 > 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준보다 현재순매수기울기가 작다면 매도
+        '                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        '                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+        '                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+        '                ' 매도사유 = "weak_S_1"
+        '            End If
 
-                Else
+        '        Else
 
-                    '선물이 낮아지면
-                    If (S_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
-                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
-                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-                        '매도사유 = "weak_S_1"
-                    End If
+        '            '선물이 낮아지면
+        '            If (S_선물해제기준기울기 * -1) < 선물현재순매수기울기 And 순매수리스트(currentIndex_순매수).외국인_선물_순매수 <> 0 Then    '해제기준값보다  현재순매수기울기가 크다면 매도
+        '                s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+        '                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+        '                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+        '                '매도사유 = "weak_S_1"
+        '            End If
 
-                End If
+        '        End If
 
-            End If
+        '    End If
 
-        End If
+        'End If
 
         Return 매도사유
     End Function

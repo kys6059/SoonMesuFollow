@@ -820,6 +820,41 @@ Module Module_For1Min
 
     End Function
 
+    Public Function 최종순매수값가져오기(ByVal source As Integer) As Long
+
+        Dim current As Long
+
+        Try
+
+            If source = 1 Then
+                current = 순매수리스트(currentIndex_순매수).외국인순매수
+            ElseIf source = 2 Then
+                current = 순매수리스트(currentIndex_순매수).기관순매수
+            ElseIf source = 0 Then
+                current = 순매수리스트(currentIndex_순매수).외국인_기관_순매수
+            ElseIf source = 3 Then
+
+                current = 순매수리스트(currentIndex_순매수).외국인_선물_순매수
+                If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 And currentIndex_순매수 > 0 Then
+                    current = 순매수리스트(currentIndex_순매수 - 1).외국인_선물_순매수
+                End If
+
+            ElseIf source = 4 Then
+
+                current = 순매수리스트(currentIndex_순매수).외국인_현물선물통합_순매수
+                If current = 0 And currentIndex_순매수 + 1 = timeIndex_순매수 And currentIndex_순매수 > 0 Then
+                    current = 순매수리스트(currentIndex_순매수 - 1).외국인_현물선물통합_순매수
+                End If
+
+            End If
+
+        Catch ex As Exception
+            Add_Log("Exception", "최종순매수값가져오기")
+        End Try
+
+        Return current
+    End Function
+
 
 
     Public Function 틱당기울기계산(ByVal source As Integer, ByVal tick_count As Integer, Optional ByVal before_count As Integer = 0) As Single

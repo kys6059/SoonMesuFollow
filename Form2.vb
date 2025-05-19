@@ -2267,7 +2267,7 @@ Public Class Form2
         당일반복중_flag = True
 
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2290,7 +2290,7 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -3404,53 +3404,22 @@ Public Class Form2
     End Sub
 
 
-    'Public Q_선물발생기준기울기 As Single = 30.0
-    'Public Q_외국인현물발생기준기울기 As Single = 3.0
-
-    'Public Q_선물해제기준기울기 As Single = 10.0
-    'Public Q_외국인현물해제기준기울기 As Single = 1.0
-
+    'Public Q_선물발생기준 As Long = 1000
+    'Public Q_외국인현물발생기준 As Long = 500
 
     'Public Q_tick_count_기준 As Integer = 20
-    'Public Q_해제tick_count_기준 As Integer = 20
 
-
-    'Public Q_시작시간 As Integer = 93000
-    'Public Q_마감시간 As Integer = 94000
-
-    'Public Q_선물상관계수최저 As Double = 0.5
-    'Public Q_외국인현물상관계수최저 As Double = 0.5
-    'Public Q_상관계수계산인덱스길이 As Integer = 30
-
-    'Public Q_다시발생시적용배율 As Single = 3.0
-
-    'Public O1_짧을때_보정치 As Single = 0.8
-
-    'Q_CNT_000_A_30_B_5_C_5_D_1_E_93000_F_94000_G_20_H_20_I_0.6_J_0.6_K_30_L_3_M_0.8
+    'Public Q_시작시간 As Integer = 90500
+    'Public Q_마감시간 As Integer = 91200
 
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준기울기_temp() As Single = {30, 35, 40, 45, 50}
-        Dim Q_외국인현물발생기준기울기_temp() As Single = {8, 11, 14, 17, 20}
+        Dim Q_선물발생기준_temp() As Single = {100, 500, 1000, 1500, 2000}
+        Dim Q_외국인현물발생기준_temp() As Single = {500, 700, 1000, 1200, 1500, 2000}
 
-        Dim Q_선물해제기준기울기_temp() As Single = {5}
-        Dim Q_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
-
-        Dim Q_시작시간_temp() As String = {"93000"}
-        Dim Q_마감시간_temp() As String = {"94000"}
-
-
-        Dim Q_tick_count_기준_temp() As Integer = {20} ', 36, 40}
-        Dim Q_해제tick_count_기준_temp() As Integer = {20}
-
-        Dim Q_선물상관계수최저_temp() As Single = {0.6}
-        Dim Q_외국인현물상관계수최저_temp() As Single = {0.6}
-        Dim Q_상관계수계산인덱스길이_temp() As Integer = {30}
-
-        Dim Q_다시발생시적용배율_temp() As Single = {3.0, 2.5, 2.0}
-
-
+        Dim Q_시작시간_temp() As Integer = {90500}
+        Dim Q_마감시간_temp() As Integer = {91200}
 
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False
@@ -3468,59 +3437,39 @@ Public Class Form2
         Dim cnt As Integer = 0
 
 
-        For a As Integer = 0 To Q_선물발생기준기울기_temp.Length - 1
-            For b As Integer = 0 To Q_외국인현물발생기준기울기_temp.Length - 1
-                For c As Integer = 0 To Q_선물해제기준기울기_temp.Length - 1
-                    For d As Integer = 0 To Q_외국인현물해제기준기울기_temp.Length - 1
-                        For e As Integer = 0 To Q_시작시간_temp.Length - 1
-                            For f As Integer = 0 To Q_마감시간_temp.Length - 1
-                                For g As Integer = 0 To Q_tick_count_기준_temp.Length - 1
-                                    For h As Integer = 0 To Q_해제tick_count_기준_temp.Length - 1
-                                        For i As Integer = 0 To Q_선물상관계수최저_temp.Length - 1
-                                            For j As Integer = 0 To Q_외국인현물상관계수최저_temp.Length - 1
-                                                For k As Integer = 0 To Q_상관계수계산인덱스길이_temp.Length - 1
-                                                    For l As Integer = 0 To Q_다시발생시적용배율_temp.Length - 1
+        For a As Integer = 0 To Q_선물발생기준_temp.Length - 1
+            For b As Integer = 0 To Q_외국인현물발생기준_temp.Length - 1
+                For c As Integer = 0 To Q_시작시간_temp.Length - 1
+                    For d As Integer = 0 To Q_마감시간_temp.Length - 1
 
 
-                                                        Q_선물발생기준기울기 = Q_선물발생기준기울기_temp(a)
-                                                        Q_외국인현물발생기준기울기 = Q_외국인현물발생기준기울기_temp(b)
-                                                        Q_선물해제기준기울기 = Q_선물해제기준기울기_temp(c)
-                                                        Q_외국인현물해제기준기울기 = Q_외국인현물해제기준기울기_temp(d)
-                                                        Q_시작시간 = Q_시작시간_temp(e)
-                                                        Q_마감시간 = Q_마감시간_temp(f)
-                                                        Q_tick_count_기준 = Q_tick_count_기준_temp(g)
-                                                        Q_해제tick_count_기준 = Q_해제tick_count_기준_temp(h)
-                                                        Q_선물상관계수최저 = Q_선물상관계수최저_temp(i)
-                                                        Q_외국인현물상관계수최저 = Q_외국인현물상관계수최저_temp(j)
-                                                        Q_상관계수계산인덱스길이 = Q_상관계수계산인덱스길이_temp(k)
-                                                        Q_다시발생시적용배율 = Q_다시발생시적용배율_temp(l)
 
-                                                        Dim cntstr As String
-                                                        If cnt < 10 Then
-                                                            cntstr = "00" & cnt.ToString()
-                                                        ElseIf cnt >= 10 And cnt < 100 Then
-                                                            cntstr = "0" & cnt.ToString()
-                                                        Else
-                                                            cntstr = cnt.ToString()
-                                                        End If
+                        Q_선물발생기준 = Q_선물발생기준_temp(a)
 
-                                                        SoonMesuSimulation_조건 = String.Format("Q_CNT_{0}", cntstr)
-                                                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}", Q_선물발생기준기울기, Q_외국인현물발생기준기울기, Q_선물해제기준기울기, Q_외국인현물해제기준기울기, Q_시작시간, Q_마감시간, Q_tick_count_기준, Q_해제tick_count_기준, Math.Round(Q_선물상관계수최저, 1), Math.Round(Q_외국인현물상관계수최저, 1), Q_상관계수계산인덱스길이, Q_다시발생시적용배율)
+                        Q_외국인현물발생기준 = Q_외국인현물발생기준_temp(b)
 
-                                                        Add_Log("", SoonMesuSimulation_조건)
-                                                        자동반복계산로직(cnt, False, 180) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                        Q_시작시간 = Q_시작시간_temp(c)
+                        Q_마감시간 = Q_마감시간_temp(d)
 
-                                                        cnt += 1
-                                                    Next
 
-                                                Next
-                                            Next
-                                        Next
-                                    Next
-                                Next
-                            Next
-                        Next
+
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
+                        SoonMesuSimulation_조건 = String.Format("Q_CNT_{0}", cntstr)
+                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}", Q_선물발생기준, Q_외국인현물발생기준, Q_시작시간, Q_마감시간)
+
+                        Add_Log("", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                        cnt += 1
                     Next
+
                 Next
             Next
         Next
