@@ -757,7 +757,7 @@ Public Class Form2
 
         'strdt = "230903"
         strdt = "240217"  '외국인선물이 저장되기 시작한 날
-        'strdt = "240701"
+        'strdt = "241001"  'O 알고리즘의 결과가 확 바뀌는 날
 
         txt_F2_DB_Date_Limit.Text = "WHERE cdate >= " + strdt
 
@@ -2288,9 +2288,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
-        fullTest_Q()
+        'fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -3283,33 +3283,34 @@ Public Class Form2
     '20250515     O_CNT_000_A_15_B_9_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.7_M_1.4_N_1.38_O_0
     '20250517     O_CNT_029_A_21_B_11_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.65_J_0.4_K_30_L_1.2_M_1.4_N_1.38_O_0  -- 안팔고 버티는 테스트
 
+
+    '20250523    O_CNT_002_A_33_B_8_C_5_D_1_E_95000_F_123000_G_20_H_20_I_0.5_J_0.5_K_30_L_1.4_M_140000    24년10월1일 이후만 따로 해서 나온 결과임
+
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {21}
-        Dim O_외국인현물발생기준기울기_temp() As Single = {11}
+        Dim O_선물발생기준기울기_temp() As Single = {33}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {8}
 
         Dim O_선물해제기준기울기_temp() As Single = {5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
 
-        Dim O_시작시간_temp() As String = {"91000", "93000", "95000", "100000", "101000", "102000"}           'C
+        Dim O_시작시간_temp() As String = {"95000"}           'C
         Dim O_마감시간_temp() As String = {"123000"}           'D
 
 
         Dim O_tick_count_기준_temp() As Integer = {20}
         Dim O_해제tick_count_기준_temp() As Integer = {20}
 
-        Dim 선물상관계수최저_temp() As Single = {0.65}
-        Dim 외국인현물상관계수최저_temp() As Single = {0.4}
+        Dim 선물상관계수최저_temp() As Single = {0.5}
+        Dim 외국인현물상관계수최저_temp() As Single = {0.5}
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
 
+        Dim O_다시발생시적용배율_temp() As Single = {1.4}
+        Dim timeout_temp() As String = {"140000"}
 
-
-        Dim O_다시발생시적용배율_temp() As Single = {1.2}
-        Dim timeout_temp() As String = {"150000", "143000", "140000", "133000", "130000"}
-
-        Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
-        Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}  '사용하지 않음
+        'Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
+        'Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}  '사용하지 않음
 
         chk_Algorithm_A.Checked = False
         chk_Algorithm_B.Checked = False
@@ -3348,45 +3349,44 @@ Public Class Form2
                                                 For k As Integer = 0 To 상관계수계산인덱스길이_temp.Length - 1
                                                     For l As Integer = 0 To O_다시발생시적용배율_temp.Length - 1
                                                         For m As Integer = 0 To timeout_temp.Length - 1
-                                                            For n As Integer = 0 To O_허용이평선이격도_temp.Length - 1
-                                                                For o As Integer = 0 To O_허용이평선이격도유지시간_분_temp.Length - 1
 
-                                                                    O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
-                                                                    O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
-                                                                    O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
-                                                                    O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
-                                                                    O_시작시간 = O_시작시간_temp(e)
-                                                                    O_마감시간 = O_마감시간_temp(f)
-                                                                    O_tick_count_기준 = O_tick_count_기준_temp(g)
-                                                                    O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
-                                                                    선물상관계수최저 = 선물상관계수최저_temp(i)
-                                                                    외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
-                                                                    상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
-                                                                    O_다시발생시적용배율 = O_다시발생시적용배율_temp(l)
-                                                                    txt_F2_TimeoutTime.Text = timeout_temp(m)
-                                                                    txt_F2_TimeoutTime.Refresh()
-                                                                    O_허용이평선이격도 = O_허용이평선이격도_temp(n)
-                                                                    O_허용이평선이격도유지시간_분 = O_허용이평선이격도유지시간_분_temp(o)
 
-                                                                    Dim cntstr As String
-                                                                    If cnt < 10 Then
-                                                                        cntstr = "00" & cnt.ToString()
-                                                                    ElseIf cnt >= 10 And cnt < 100 Then
-                                                                        cntstr = "0" & cnt.ToString()
-                                                                    Else
-                                                                        cntstr = cnt.ToString()
-                                                                    End If
+                                                            O_선물발생기준기울기 = O_선물발생기준기울기_temp(a)
+                                                            O_외국인현물발생기준기울기 = O_외국인현물발생기준기울기_temp(b)
+                                                            O_선물해제기준기울기 = O_선물해제기준기울기_temp(c)
+                                                            O_외국인현물해제기준기울기 = O_외국인현물해제기준기울기_temp(d)
+                                                            O_시작시간 = O_시작시간_temp(e)
+                                                            O_마감시간 = O_마감시간_temp(f)
+                                                            O_tick_count_기준 = O_tick_count_기준_temp(g)
+                                                            O_해제tick_count_기준 = O_해제tick_count_기준_temp(h)
+                                                            선물상관계수최저 = 선물상관계수최저_temp(i)
+                                                            외국인현물상관계수최저 = 외국인현물상관계수최저_temp(j)
+                                                            상관계수계산인덱스길이 = 상관계수계산인덱스길이_temp(k)
+                                                            O_다시발생시적용배율 = O_다시발생시적용배율_temp(l)
+                                                            txt_F2_TimeoutTime.Text = timeout_temp(m)
+                                                            txt_F2_TimeoutTime.Refresh()
 
-                                                                    SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
-                                                                    SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}_N_{13}_O_{14}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), txt_F2_TimeoutTime.Text, O_허용이평선이격도, O_허용이평선이격도유지시간_분)
 
-                                                                    Add_Log("", SoonMesuSimulation_조건)
-                                                                    자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
-                                                                    '자동반복계산로직(cnt, False)
 
-                                                                    cnt += 1
-                                                                Next
-                                                            Next
+                                                            Dim cntstr As String
+                                                            If cnt < 10 Then
+                                                                cntstr = "00" & cnt.ToString()
+                                                            ElseIf cnt >= 10 And cnt < 100 Then
+                                                                cntstr = "0" & cnt.ToString()
+                                                            Else
+                                                                cntstr = cnt.ToString()
+                                                            End If
+
+                                                            SoonMesuSimulation_조건 = String.Format("O_CNT_{0}", cntstr)
+                                                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}_E_{4}_F_{5}_G_{6}_H_{7}_I_{8}_J_{9}_K_{10}_L_{11}_M_{12}", O_선물발생기준기울기, O_외국인현물발생기준기울기, O_선물해제기준기울기, O_외국인현물해제기준기울기, O_시작시간, O_마감시간, O_tick_count_기준, O_해제tick_count_기준, Math.Round(선물상관계수최저, 2), Math.Round(외국인현물상관계수최저, 2), 상관계수계산인덱스길이, Math.Round(O_다시발생시적용배율, 2), txt_F2_TimeoutTime.Text)
+
+                                                            Add_Log("", SoonMesuSimulation_조건)
+                                                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다, 1시30분까지 = 540
+                                                            '자동반복계산로직(cnt, False)
+
+                                                            cnt += 1
+
+
                                                         Next
                                                     Next
                                                 Next
