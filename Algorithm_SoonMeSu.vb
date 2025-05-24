@@ -660,12 +660,12 @@ Module Algorithm_SoonMeSu
 
     ' Q 알고리즘 변경 20250519
     ' 시작 후 기울기 뿐만 아니라 시작할 때 크게 매수/매도하는 거 까지 포함하는 케이스 테스트
-    '20250519  Q_CNT_021_A_1500_B_1200_C_90500_D_91200
+    '20250519  Q_CNT_027_A_1650_B_1300_C_90500_D_93500
 
-    Public Q_선물발생기준 As Long = 1500
-    Public Q_외국인현물발생기준 As Long = 1200
+    Public Q_선물발생기준 As Long = 1650
+    Public Q_외국인현물발생기준 As Long = 1300
     Public Q_시작시간 As Integer = 90500
-    Public Q_마감시간 As Integer = 91200
+    Public Q_마감시간 As Integer = 93500
 
     Public Q_tick_count_기준 As Integer = 20   'S 알고리즘에서 사용 중임
     Public O1_짧을때_보정치 As Single = 0.8    'O 알고리즘에서 사용중임
@@ -687,8 +687,10 @@ Module Algorithm_SoonMeSu
 
             If 선물순매수 > 0 Then  '  콜 방향
 
-                If is동일신호가현재살아있나("Q", 0) Then Return
+
+                If is동일방향신호가살아있나(0) = True Then Return
                 If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
 
                 Dim offset As Single = 1.0
 
@@ -706,7 +708,7 @@ Module Algorithm_SoonMeSu
 
 
             Else ' 풋 방향
-                If is동일신호가현재살아있나("Q", 1) Then Return
+                If is동일방향신호가살아있나(1) = True Then Return
                 If 같은방향같은시간발생신호가있는지(1) = True Then Return
 
                 Dim offset As Single = 1.0

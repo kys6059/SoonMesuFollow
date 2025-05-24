@@ -2288,9 +2288,9 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
-        'fullTest_Q()
+        fullTest_Q()
         'fullTest_S()
         '이평선테스트()
 
@@ -3288,8 +3288,8 @@ Public Class Form2
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {33}
-        Dim O_외국인현물발생기준기울기_temp() As Single = {8}
+        Dim O_선물발생기준기울기_temp() As Single = {33, 35, 37, 39, 41}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {8, 7, 6, 9, 5}
 
         Dim O_선물해제기준기울기_temp() As Single = {5}    'A
         Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
@@ -3306,7 +3306,7 @@ Public Class Form2
         Dim 상관계수계산인덱스길이_temp() As Integer = {30}
 
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.4}
+        Dim O_다시발생시적용배율_temp() As Single = {1.4, 1.5}
         Dim timeout_temp() As String = {"140000"}
 
         'Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
@@ -3404,22 +3404,16 @@ Public Class Form2
     End Sub
 
 
-    'Public Q_선물발생기준 As Long = 1000
-    'Public Q_외국인현물발생기준 As Long = 500
-
-    'Public Q_tick_count_기준 As Integer = 20
-
-    'Public Q_시작시간 As Integer = 90500
-    'Public Q_마감시간 As Integer = 91200
-
+    '20250519  Q_CNT_021_A_1500_B_1200_C_90500_D_91200
+    '20250524  Q_CNT_027_A_1650_B_1300_C_90500_D_93500
 
     Private Sub fullTest_Q()
 
-        Dim Q_선물발생기준_temp() As Single = {100, 500, 1000, 1500, 2000}
-        Dim Q_외국인현물발생기준_temp() As Single = {500, 700, 1000, 1200, 1500, 2000}
+        Dim Q_선물발생기준_temp() As Single = {1500, 1350, 1650, 1800}
+        Dim Q_외국인현물발생기준_temp() As Single = {1200, 1100, 1000, 1300, 1400}
 
         Dim Q_시작시간_temp() As Integer = {90500}
-        Dim Q_마감시간_temp() As Integer = {91200}
+        Dim Q_마감시간_temp() As Integer = {93000, 93500}
 
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False
