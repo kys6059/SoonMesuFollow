@@ -453,7 +453,7 @@ Module Algorithm_SoonMeSu
     Public 선물상관계수최저 As Double = 0.5
     Public 외국인현물상관계수최저 As Double = 0.5
     Public 상관계수계산인덱스길이 As Integer = 30  '30으로 확 줄임 20240929
-    Public O_다시발생시적용배율 As Single = 1.2
+    Public O_다시발생시적용배율 As Single = 1.4
 
     Public O_허용이평선이격도 As Single = 1.38  '이평선보다 너무 높게 튀어 올라있으면 사지 않는데 그 기준 이격도   -- 사용하지 않음
     Public O_허용이평선이격도유지시간_분 As Integer = 0    '사용하지 않음
@@ -3326,7 +3326,7 @@ Module Algorithm_SoonMeSu
 
     Public S_시작시간 As Integer = 91200
     Public S_마감시간 As Integer = 93000
-    Public S_선물발생기준기울기 As Single = 35.0
+    Public S_선물발생기준기울기 As Single = 30.0
     Public S_외국인현물발생기준기울기 As Single = 30.0
     Public S_선물해제기준기울기 As Single = 20.0
     Public S_상관계수최저기준 As Single = 0.5

@@ -1876,7 +1876,7 @@ Public Class Form2
 
         Select Case 남은날짜
             Case 0
-                켈리지수비율 = "0.16"
+                켈리지수비율 = "0.04"
             Case 1
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
@@ -1884,7 +1884,7 @@ Public Class Form2
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
             Case 3
-                켈리지수비율 = "0.16"
+                켈리지수비율 = "0.07"
             Case 6
                 켈리지수비율 = "0.01"
                 chk_실거래실행.Checked = False
@@ -2290,8 +2290,8 @@ Public Class Form2
 
         'fullTest_O()
         'fullTest_P()
-        fullTest_Q()
-        'fullTest_S()
+        'fullTest_Q()
+        fullTest_S()
         '이평선테스트()
 
 
@@ -2549,7 +2549,7 @@ Public Class Form2
 
     '                Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.
     'B240920_T001    Sell_CNT_002_L_12_M_-0.28_N_0.30_O_0.3_P_0.4
-    '241125 	     Sell_CNT_001_L_11_M_-0.28_N_0.30_O_0.3_P_0.35
+    '241125 	     Sell_CNT_011_L_11_M_-0.65_N_2.0_O_0.5_P_0.5_Q_143000
 
     Private Sub 매도조건테스트()
 
@@ -2561,11 +2561,11 @@ Public Class Form2
 
         '0,3일
         Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.75"} 'M
+        Dim 옵션기준손절매() As String = {"-0.65", "-0.6", "-0.55", "-0.5", "-0.45", "-0.4"} 'M
         Dim 중간청산이익목표() As String = {"2.0"} 'N
         Dim 중간매도후목표이익율_temp() As Single = {0.5}  '익절 기준에서 빼는 손절기준임
         Dim 두세번째매도이익율_temp() As Single = {0.5}
-
+        Dim timeout_temp() As String = {"143000"}
 
 
         'chk_Algorithm_S.Checked = False
@@ -2585,40 +2585,45 @@ Public Class Form2
                 For n As Integer = 0 To 중간청산이익목표.Length - 1
                     For o As Integer = 0 To 중간매도후목표이익율_temp.Length - 1
                         For p As Integer = 0 To 두세번째매도이익율_temp.Length - 1
-                            txt_F2_익절차.Text = 익절차(l)
-                            txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
+                            For q As Integer = 0 To timeout_temp.Length - 1
 
-                            첫번째중간매도이익율 = 중간청산이익목표(n)
-                            두번째중간매도이익율 = 첫번째중간매도이익율 + 두세번째매도이익율_temp(p)
-                            세번째중간매도이익율 = 두번째중간매도이익율 + 두세번째매도이익율_temp(p)
+                                txt_F2_익절차.Text = 익절차(l)
+                                txt_F2_옵션가기준손절매.Text = 옵션기준손절매(m)
 
-                            중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
+                                첫번째중간매도이익율 = 중간청산이익목표(n)
+                                두번째중간매도이익율 = 첫번째중간매도이익율 + 두세번째매도이익율_temp(p)
+                                세번째중간매도이익율 = 두번째중간매도이익율 + 두세번째매도이익율_temp(p)
+
+                                중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
 
 
-                            txt_F2_익절차.Refresh()
-                            txt_F2_옵션가기준손절매.Refresh()
+                                txt_F2_익절차.Refresh()
+                                txt_F2_옵션가기준손절매.Refresh()
 
-                            Dim cntstr As String
-                            If cnt < 10 Then
-                                cntstr = "00" & cnt.ToString()
-                            ElseIf cnt >= 10 And cnt < 100 Then
-                                cntstr = "0" & cnt.ToString()
-                            Else
-                                cntstr = cnt.ToString()
-                            End If
+                                txt_F2_TimeoutTime.Text = timeout_temp(q)
+                                txt_F2_TimeoutTime.Refresh()
 
-                            SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
+                                Dim cntstr As String
+                                If cnt < 10 Then
+                                    cntstr = "00" & cnt.ToString()
+                                ElseIf cnt >= 10 And cnt < 100 Then
+                                    cntstr = "0" & cnt.ToString()
+                                Else
+                                    cntstr = cnt.ToString()
+                                End If
 
-                            SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}_P_{4}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o), 두세번째매도이익율_temp(p))
+                                SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
 
-                            Console.WriteLine(SoonMesuSimulation_조건)
-                            Add_Log("", SoonMesuSimulation_조건)
-                            자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}_P_{4}_Q_{5}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o), 두세번째매도이익율_temp(p), txt_F2_TimeoutTime.Text)
 
-                            cnt += 1
+                                Console.WriteLine(SoonMesuSimulation_조건)
+                                Add_Log("", SoonMesuSimulation_조건)
+                                자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                                cnt += 1
+
+                            Next
                         Next
-
-
                     Next
                 Next
             Next
@@ -3489,16 +3494,16 @@ Public Class Form2
     '250517       S_CNT_005___A_35_B_30_C_20_D_0.5_E_91200_F_93000_G_0.4  - 끝까지 버티는 버전
     Private Sub fullTest_S()
 
-        Dim S_선물발생기준기울기_temp() As Single = {35, 40, 31, 27}
-        Dim S_외국인현물발생기준기울기_temp() As Single = {26, 22, 30, 35}
+        Dim S_선물발생기준기울기_temp() As Single = {35, 33, 31, 29, 37}
+        Dim S_외국인현물발생기준기울기_temp() As Single = {30, 32, 34, 28, 26}
 
         Dim S_선물해제기준기울기_temp() As Single = {20.0}
-        Dim S_상관계수최저기준_temp() As Single = {0.5, 0.35}    'B
+        Dim S_상관계수최저기준_temp() As Single = {0.5}    'B
 
         Dim S_시작시간_temp() As String = {"91200"}
-        Dim S_마감시간_temp() As String = {"93000", "94900"}
+        Dim S_마감시간_temp() As String = {"93500", "94500"}
 
-        Dim S_상관계수해제하향돌파기준_temp() As Single = {0.4}
+        Dim S_상관계수해제하향돌파기준_temp() As Single = {0.5}
 
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False

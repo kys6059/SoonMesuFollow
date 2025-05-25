@@ -920,7 +920,7 @@ Partial Class Form2
         Me.txt_F2_옵션가기준손절매.Name = "txt_F2_옵션가기준손절매"
         Me.txt_F2_옵션가기준손절매.Size = New System.Drawing.Size(72, 30)
         Me.txt_F2_옵션가기준손절매.TabIndex = 14
-        Me.txt_F2_옵션가기준손절매.Text = "-0.75"
+        Me.txt_F2_옵션가기준손절매.Text = "-0.65"
         '
         'txt_F2_매수시작시간
         '
@@ -977,7 +977,7 @@ Partial Class Form2
         Me.txt_F2_TimeoutTime.Name = "txt_F2_TimeoutTime"
         Me.txt_F2_TimeoutTime.Size = New System.Drawing.Size(72, 26)
         Me.txt_F2_TimeoutTime.TabIndex = 9
-        Me.txt_F2_TimeoutTime.Text = "140000"
+        Me.txt_F2_TimeoutTime.Text = "143000"
         '
         'Label10
         '
@@ -1618,7 +1618,7 @@ Partial Class Form2
         Me.txt_F2_매수_기준가.Name = "txt_F2_매수_기준가"
         Me.txt_F2_매수_기준가.Size = New System.Drawing.Size(122, 24)
         Me.txt_F2_매수_기준가.TabIndex = 19
-        Me.txt_F2_매수_기준가.Text = "1.0"
+        Me.txt_F2_매수_기준가.Text = "0.9"
         Me.txt_F2_매수_기준가.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label51
@@ -1643,7 +1643,7 @@ Partial Class Form2
         Me.txt_F2_1회최대매매수량.Name = "txt_F2_1회최대매매수량"
         Me.txt_F2_1회최대매매수량.Size = New System.Drawing.Size(122, 25)
         Me.txt_F2_1회최대매매수량.TabIndex = 17
-        Me.txt_F2_1회최대매매수량.Text = "50"
+        Me.txt_F2_1회최대매매수량.Text = "1"
         Me.txt_F2_1회최대매매수량.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label33
@@ -1695,7 +1695,7 @@ Partial Class Form2
         Me.txt_F2_켈리지수비율.Name = "txt_F2_켈리지수비율"
         Me.txt_F2_켈리지수비율.Size = New System.Drawing.Size(122, 26)
         Me.txt_F2_켈리지수비율.TabIndex = 9
-        Me.txt_F2_켈리지수비율.Text = "0.15"
+        Me.txt_F2_켈리지수비율.Text = "0.05"
         Me.txt_F2_켈리지수비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label26
@@ -1806,7 +1806,7 @@ Partial Class Form2
         Me.txt_programversion.Name = "txt_programversion"
         Me.txt_programversion.Size = New System.Drawing.Size(122, 24)
         Me.txt_programversion.TabIndex = 13
-        Me.txt_programversion.Text = "1.15.1_250516"
+        Me.txt_programversion.Text = "1.15.2_250525"
         Me.txt_programversion.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label23
@@ -1999,7 +1999,7 @@ Partial Class Form2
         Me.txt_F2_중간청산비율.Name = "txt_F2_중간청산비율"
         Me.txt_F2_중간청산비율.Size = New System.Drawing.Size(102, 24)
         Me.txt_F2_중간청산비율.TabIndex = 21
-        Me.txt_F2_중간청산비율.Text = "0.30"
+        Me.txt_F2_중간청산비율.Text = "1.0"
         Me.txt_F2_중간청산비율.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label35
@@ -2031,6 +2031,8 @@ Partial Class Form2
         'chk_실거래실행
         '
         Me.chk_실거래실행.AutoSize = True
+        Me.chk_실거래실행.Checked = True
+        Me.chk_실거래실행.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_실거래실행.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_실거래실행.Font = New System.Drawing.Font("굴림", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.chk_실거래실행.Location = New System.Drawing.Point(138, 202)
