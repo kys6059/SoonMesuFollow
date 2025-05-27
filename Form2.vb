@@ -2267,7 +2267,7 @@ Public Class Form2
         당일반복중_flag = True
 
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2291,7 +2291,7 @@ Public Class Form2
         'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
-        fullTest_S()
+        'fullTest_S()
         '이평선테스트()
 
 
@@ -2561,11 +2561,11 @@ Public Class Form2
 
         '0,3일
         Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.65", "-0.6", "-0.55", "-0.5", "-0.45", "-0.4"} 'M
+        Dim 옵션기준손절매() As String = {"-0.65", "-0.6", "-0.55", "-0.7", "-0.75", "-0.8"} 'M
         Dim 중간청산이익목표() As String = {"2.0"} 'N
         Dim 중간매도후목표이익율_temp() As Single = {0.5}  '익절 기준에서 빼는 손절기준임
         Dim 두세번째매도이익율_temp() As Single = {0.5}
-        Dim timeout_temp() As String = {"143000"}
+        Dim timeout_temp() As String = {"143000", "140000"}
 
 
         'chk_Algorithm_S.Checked = False
