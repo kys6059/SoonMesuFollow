@@ -1962,10 +1962,10 @@ Module Algorithm_SoonMeSu
 
             'If Math.Abs(투자그레이드) = 1 Then 진짜최종투자금액 = 진짜최종투자금액 * 0.9
 
-            If Val(순매수리스트(currentIndex_순매수).sTime) >= O_시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < 103000 Then   '이때는 켈리지수가 않좋아서 매수하지 않음
-                Return  '신호는 발생하나 매수하지 않음
-                '진짜최종투자금액 = 진짜최종투자금액 * 0.1
-            End If
+            'If Val(순매수리스트(currentIndex_순매수).sTime) >= O_시작시간 And Val(순매수리스트(currentIndex_순매수).sTime) < 103000 Then   '이때는 켈리지수가 않좋아서 매수하지 않음
+            'Return  '신호는 발생하나 매수하지 않음  20250605 해당 조건 삭제
+
+            'End If
 
             Dim count As Integer = 매수수량계산(price, direction, 진짜최종투자금액)
 
