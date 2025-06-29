@@ -147,10 +147,10 @@ Module Algorithm_SoonMeSu
     Public F_두번째시작시간 As Integer = 140000
     Public F_두번째종료시간 As Integer = 151000
 
-    Public 첫번째중간매도이익율 As Single = 0.3
-    Public 두번째중간매도이익율 As Single = 0.65
-    Public 세번째중간매도이익율 As Single = 1.0
-    Public 중간매도후이익율차이 As Single = 0.3        ' 손절매를 올리는 기준
+    Public 첫번째중간매도이익율 As Single = 1.0
+    Public 두번째중간매도이익율 As Single = 1.4
+    Public 세번째중간매도이익율 As Single = 1.8
+    Public 중간매도후이익율차이 As Single = 0.6        ' 손절매를 올리는 기준
 
     'Sell_CNT_011_L_13_M_-0.28_N_0.28_O_0.3_P_0.4
 

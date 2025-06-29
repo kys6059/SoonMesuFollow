@@ -2561,11 +2561,11 @@ Public Class Form2
 
         '0,3일
         Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.65", "-0.6", "-0.55", "-0.7", "-0.75", "-0.8"} 'M
-        Dim 중간청산이익목표() As String = {"2.0"} 'N
-        Dim 중간매도후목표이익율_temp() As Single = {0.5}  '익절 기준에서 빼는 손절기준임
+        Dim 옵션기준손절매() As String = {"-0.55"} 'M
+        Dim 중간청산이익목표() As String = {"1.0"} 'N
+        Dim txt_F2_매수_기준가_temp() As Single = {"1.2", "1.3"}
         Dim 두세번째매도이익율_temp() As Single = {0.5}
-        Dim timeout_temp() As String = {"143000", "140000"}
+        Dim timeout_temp() As String = {"143000"}
 
 
         'chk_Algorithm_S.Checked = False
@@ -2583,7 +2583,7 @@ Public Class Form2
         For l As Integer = 0 To 익절차.Length - 1
             For m As Integer = 0 To 옵션기준손절매.Length - 1
                 For n As Integer = 0 To 중간청산이익목표.Length - 1
-                    For o As Integer = 0 To 중간매도후목표이익율_temp.Length - 1
+                    For o As Integer = 0 To txt_F2_매수_기준가_temp.Length - 1
                         For p As Integer = 0 To 두세번째매도이익율_temp.Length - 1
                             For q As Integer = 0 To timeout_temp.Length - 1
 
@@ -2594,9 +2594,10 @@ Public Class Form2
                                 두번째중간매도이익율 = 첫번째중간매도이익율 + 두세번째매도이익율_temp(p)
                                 세번째중간매도이익율 = 두번째중간매도이익율 + 두세번째매도이익율_temp(p)
 
-                                중간매도후이익율차이 = 중간매도후목표이익율_temp(o)
 
+                                txt_F2_매수_기준가.Text = txt_F2_매수_기준가_temp(o)
 
+                                txt_F2_매수_기준가.Refresh()
                                 txt_F2_익절차.Refresh()
                                 txt_F2_옵션가기준손절매.Refresh()
 
@@ -2614,7 +2615,7 @@ Public Class Form2
 
                                 SoonMesuSimulation_조건 = String.Format("Sell_CNT_{0}", cntstr)
 
-                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}_P_{4}_Q_{5}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), 중간매도후목표이익율_temp(o), 두세번째매도이익율_temp(p), txt_F2_TimeoutTime.Text)
+                                SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_L_{0}_M_{1}_N_{2}_O_{3}_P_{4}_Q_{5}", 익절차(l), 옵션기준손절매(m), 중간청산이익목표(n), txt_F2_매수_기준가.Text, 두세번째매도이익율_temp(p), txt_F2_TimeoutTime.Text)
 
                                 Console.WriteLine(SoonMesuSimulation_조건)
                                 Add_Log("", SoonMesuSimulation_조건)
