@@ -1616,7 +1616,7 @@ Partial Class Form2
         Me.txt_F2_매수_기준가.Name = "txt_F2_매수_기준가"
         Me.txt_F2_매수_기준가.Size = New System.Drawing.Size(122, 24)
         Me.txt_F2_매수_기준가.TabIndex = 19
-        Me.txt_F2_매수_기준가.Text = "1.05"
+        Me.txt_F2_매수_기준가.Text = "0.9"
         Me.txt_F2_매수_기준가.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label51
