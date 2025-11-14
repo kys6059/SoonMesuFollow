@@ -995,31 +995,39 @@ Public Class Form2
                     chk_F2_화면끄기.Checked = False
                 End If
 
-
-                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
-
-                    Dim 콜종목 As Integer = 적합한종목찾기(0)
-                    Dim 풋종목 As Integer = 적합한종목찾기(1)
-
-                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
-                        selectedJongmokIndex(0) = 콜종목
-                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                'U 알고리즘 테스트만을 위해서 추가함  -- 15분 지나도 신호가 없으면 continue 함
+                If SoonMesuShinhoList IsNot Nothing Then
+                    Dim 신호카운트 = SoonMesuShinhoList.Count
+                    If currentIndex_순매수 > 30 And 신호카운트 < 1 Then '이건 15분임
+                        Exit For
                     End If
-                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
-                        selectedJongmokIndex(1) = 풋종목
-                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
-                    End If
-
                 End If
 
 
-                F2_Clac_DisplayAllGrid()
+                If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
+
+                                Dim 콜종목 As Integer = 적합한종목찾기(0)
+                                Dim 풋종목 As Integer = 적합한종목찾기(1)
+
+                                If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                                    selectedJongmokIndex(0) = 콜종목
+                                    DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                                End If
+                                If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                                    selectedJongmokIndex(1) = 풋종목
+                                    DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                                End If
+
+                            End If
+
+
+                            F2_Clac_DisplayAllGrid()
 
 
             Next
 
-            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-            For j = 0 To SoonMesuShinhoList.Count - 1
+                    '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+                    For j = 0 To SoonMesuShinhoList.Count - 1
                 SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
             Next
 
@@ -2267,7 +2275,7 @@ Public Class Form2
         당일반복중_flag = True
 
 
-        매도조건테스트()
+        '매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2292,6 +2300,9 @@ Public Class Form2
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
+
+        fullTest_U()
+
         '이평선테스트()
 
 
@@ -3476,6 +3487,76 @@ Public Class Form2
 
     End Sub
 
+    'U 알고리즘 
+    '아침에 사서 끝까지 안파는 알고리즘 
+
+
+
+    Private Sub fullTest_U()
+
+        Dim U_선물발생기준_temp() As Single = {700, 1000, 1500, 2000, 2500, 3000}
+        Dim u_외국인현물발생기준_temp() As Single = {400, 700, 1000, 1300, 1600}
+
+        Dim U_시작시간_temp() As Integer = {90500}
+        Dim U_마감시간_temp() As Integer = {90800}
+
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_S.Checked = False
+        chk_Algorithm_Q.Checked = False
+        chk_Algorithm_U.Checked = True
+
+        txt_F2_매수_기준가.Text = "0.35"
+
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+
+        For a As Integer = 0 To U_선물발생기준_temp.Length - 1
+            For b As Integer = 0 To u_외국인현물발생기준_temp.Length - 1
+                For c As Integer = 0 To U_시작시간_temp.Length - 1
+                    For d As Integer = 0 To U_마감시간_temp.Length - 1
+
+                        U_선물발생기준 = U_선물발생기준_temp(a)
+
+                        U_외국인현물발생기준 = u_외국인현물발생기준_temp(b)
+
+                        U_시작시간 = U_시작시간_temp(c)
+                        U_마감시간 = U_마감시간_temp(d)
+
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
+                        SoonMesuSimulation_조건 = String.Format("U_CNT_{0}", cntstr)
+                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}", U_선물발생기준, U_외국인현물발생기준, U_시작시간, U_마감시간)
+
+                        Add_Log("", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt, False) '이걸 true로 하면 남은일자별로 조건을 맞추면서 시험한다
+
+                        cnt += 1
+                    Next
+
+                Next
+            Next
+        Next
+
+    End Sub
+
+
+
+
     'B240730_S005
     'S_CNT_006___A_30_B_7_C_20_D_0.75_E_91000_F_92000_G_0.5
 
@@ -3562,6 +3643,10 @@ Public Class Form2
 
 
     End Sub
+
+
+
+
 
     '    Public RSI_기준일 As Integer = 18
     '   Public RSI_과열기준 As Single = 0.75

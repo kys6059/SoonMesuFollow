@@ -222,6 +222,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_Q.Checked = True Then CalcAlgorithm_Q(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_S.Checked = True Then CalcAlgorithm_S(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_T.Checked = True Then CalcAlgorithm_T(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_U.Checked = True Then CalcAlgorithm_U(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -731,6 +732,73 @@ Module Algorithm_SoonMeSu
     End Sub
 
 
+    'U 알고리즘 : 시작하지마자 약 5분 정도에 외국인 선물 + 현물이 같은 방향으로 미친듯이 나갈 때 해당 방향 옵션을 매우 작은 양을 매수하고 하루종일 버티는 알고리즘 - 즉 베팅하는 것임. 마지막날만 유효할 듯
+    Public U_선물발생기준 As Long = 1000
+    Public U_외국인현물발생기준 As Long = 1000
+    Public U_시작시간 As Integer = 90500
+    Public U_마감시간 As Integer = 90800
+    Public U_매도시간 As Integer = 151500
+
+    'Public Q_tick_count_기준 As Integer = 20   'S 알고리즘에서 사용 중임
+    'Public O1_짧을때_보정치 As Single = 0.8    'O 알고리즘에서 사용중임
+
+    Public Sub CalcAlgorithm_U(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+        Dim startTime As Integer = U_시작시간
+        Dim endTime As Integer = U_마감시간
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim 선물순매수 As Long = 최종순매수값가져오기(3)
+            Dim 외국인현물순매수 As Long = 최종순매수값가져오기(1)
+
+            Dim 선물순매수_절대치 As Long = Math.Abs(선물순매수)
+            Dim 외국인현물순매수_절대치 As Long = Math.Abs(외국인현물순매수)
+
+            If 선물순매수 * 외국인현물순매수 <= 0 Then Return '곱해서 음수이면 빠진다
+
+            If 선물순매수 > 0 Then  '  콜 방향
+
+                If is동일방향신호가살아있나(0) = True Then Return
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
+                Dim offset As Single = 1.0
+
+                If 선물순매수_절대치 > U_선물발생기준 * offset And 외국인현물순매수_절대치 > U_외국인현물발생기준 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    If Get상관계수상태() Then
+
+                        Dim str As String = String.Format("U 신호 발생 콜풋 : {0} 방향", 0)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("U", 0)
+
+                        SoonMesuShinhoList.Add(shinho)
+                    End If
+                End If
+
+            Else ' 풋 방향
+                If is동일방향신호가살아있나(1) = True Then Return
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
+
+                Dim offset As Single = 1.0
+
+                If 선물순매수_절대치 > U_선물발생기준 * offset And 외국인현물순매수_절대치 > U_외국인현물발생기준 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    If Get상관계수상태() Then
+
+                        Dim str As String = String.Format("U 신호 발생 콜풋 : {0} 방향", 1)
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("U", 1)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+                End If
+
+            End If
+
+        End If
+    End Sub
+
+
 
     Private Function Get상관계수상태() As Boolean
 
@@ -1211,6 +1279,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_S(s, 일분옵션데이터_CurrentIndex)
                             Case "T"
                                 ret = 살아있는신호확인하기_T(s, 일분옵션데이터_CurrentIndex)
+                                'Case "U"
+                                'ret = 살아있는신호확인하기_U(s, 일분옵션데이터_CurrentIndex)  -- 굳이 팔지 않음 그냥 그대로 끝까지 홀딩, 마지막 3시45분에만 판다
 
                         End Select
                     End If
@@ -1296,6 +1366,7 @@ Module Algorithm_SoonMeSu
 
 
         Dim 매도사유 As String = ""
+        Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
 
         s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
         If s.A14_현재가격 > 0 Then
@@ -1303,53 +1374,67 @@ Module Algorithm_SoonMeSu
             s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
         End If
 
-        '옵션가격 기준 손절매, 익절
-        Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
-        If s.A17_중간매도Flag = 1 Then
-            옵션가손절매기준 = 첫번째중간매도이익율 - 중간매도후이익율차이   ' 중간매도가 되면 손절매 기준을 올려서 수익을 좋게 만든다
-        ElseIf s.A17_중간매도Flag = 2 Then
-            옵션가손절매기준 = 두번째중간매도이익율 - 중간매도후이익율차이
-        ElseIf s.A17_중간매도Flag = 3 Then
-            옵션가손절매기준 = 세번째중간매도이익율 - 중간매도후이익율차이
-        End If
-        'Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()  -- 이거 지워야 함
+        If s.A03_신호ID <> "U" Then  'U 알고리즘은 손절매, 중간매도 모두 하지 않는다
+
+            '옵션가격 기준 손절매, 익절
+            Dim 옵션가손절매기준 As Single = Val(Form2.txt_F2_옵션가기준손절매.Text)
+            If s.A17_중간매도Flag = 1 Then
+                옵션가손절매기준 = 첫번째중간매도이익율 - 중간매도후이익율차이   ' 중간매도가 되면 손절매 기준을 올려서 수익을 좋게 만든다
+            ElseIf s.A17_중간매도Flag = 2 Then
+                옵션가손절매기준 = 두번째중간매도이익율 - 중간매도후이익율차이
+            ElseIf s.A17_중간매도Flag = 3 Then
+                옵션가손절매기준 = 세번째중간매도이익율 - 중간매도후이익율차이
+            End If
+            'Form2.txt_F2_옵션가기준손절매.Text = 옵션가손절매기준.ToString()  -- 이거 지워야 함
 
 
 
-        If isRealFlag = True And s.A21_환산이익율 < 옵션가손절매기준 Then
+            If isRealFlag = True And s.A21_환산이익율 < 옵션가손절매기준 Then
 
-            매도사유 = "son_" & s.A17_중간매도Flag.ToString()
-
-        End If
-
-        Dim 저가 As Single = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2)
-        Dim 저가기준환산이익율 As Single = Math.Round(((저가 - s.A10_신호발생가격) / s.A10_신호발생가격) - 슬리피지, 3)
-        If 저가 > 0 And 저가기준환산이익율 < 옵션가손절매기준 And isRealFlag = False Then
-
-            매도사유 = "son_" & s.A17_중간매도Flag.ToString()
-
-            s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
-            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-
-        End If
-
-        '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
-        Dim 종합주가지수 As Single = 순매수리스트(currentIndex_순매수).코스피지수
-        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
-
-
-        'RSI에 의한 익절 확인  -- 제외 -- 알 수 없는 오동작 240321으로 제외함
-        If s.A21_환산이익율 > RSI_익절기준 Then  'RSI 익절기준을 넘었고
-
-
-            If 일분옵션데이터(s.A08_콜풋).RSI(일분옵션데이터_CurrentIndex) > RSI_과열기준 Then
-
-                '매도사유 = "RSI_IK"
+                매도사유 = "son_" & s.A17_중간매도Flag.ToString()
 
             End If
 
+            Dim 저가 As Single = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2)
+            Dim 저가기준환산이익율 As Single = Math.Round(((저가 - s.A10_신호발생가격) / s.A10_신호발생가격) - 슬리피지, 3)
+            If 저가 > 0 And 저가기준환산이익율 < 옵션가손절매기준 And isRealFlag = False Then
+
+                매도사유 = "son_" & s.A17_중간매도Flag.ToString()
+
+                s.A14_현재가격 = Math.Round(s.A10_신호발생가격 + (s.A10_신호발생가격 * 옵션가손절매기준), 2)
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+
+            End If
+
+            '익절조건 확인 - 현재매수매도점수 조건 추가 - 익절을 지연 시킴 - 20230126  - 익절지연코드는 삭제 20230526 
+
+            If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+            If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > s.A61_익절기준차 Then 매도사유 = "ik"
+
+            '중간청산 후 50일선 하향돌파 시 청산
+            Dim 현재이평선 As Single = 일분옵션데이터(s.A08_콜풋).이동평균선(일분옵션데이터_CurrentIndex)
+            If s.A17_중간매도Flag > 0 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 현재이평선 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < 현재이평선 Then
+                매도사유 = "below50"
+                s.A14_현재가격 = Math.Round(현재이평선 - 0.01, 2)
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+            End If
+
+
+            Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
+            If 중간청산할지설정FLAG = True Then
+
+                If s.A17_중간매도Flag = 0 And s.A21_환산이익율 > 첫번째중간매도이익율 Then
+                    s.A17_중간매도Flag = 1
+                ElseIf s.A17_중간매도Flag = 1 And s.A21_환산이익율 > 두번째중간매도이익율 Then
+                    s.A17_중간매도Flag = 2
+                ElseIf s.A17_중간매도Flag = 2 And s.A21_환산이익율 > 세번째중간매도이익율 Then
+                    s.A17_중간매도Flag = 3
+
+                End If
+
+            End If
         End If
 
 
@@ -1361,31 +1446,6 @@ Module Algorithm_SoonMeSu
                 s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                 s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
             End If
-        End If
-
-
-        '중간청산 후 50일선 하향돌파 시 청산
-        Dim 현재이평선 As Single = 일분옵션데이터(s.A08_콜풋).이동평균선(일분옵션데이터_CurrentIndex)
-        If s.A17_중간매도Flag > 0 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0) > 현재이평선 And 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3) < 현재이평선 Then
-            매도사유 = "below50"
-            s.A14_현재가격 = Math.Round(현재이평선 - 0.01, 2)
-            s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
-            s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
-        End If
-
-
-        Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
-        If 중간청산할지설정FLAG = True Then
-
-            If s.A17_중간매도Flag = 0 And s.A21_환산이익율 > 첫번째중간매도이익율 Then
-                s.A17_중간매도Flag = 1
-            ElseIf s.A17_중간매도Flag = 1 And s.A21_환산이익율 > 두번째중간매도이익율 Then
-                s.A17_중간매도Flag = 2
-            ElseIf s.A17_중간매도Flag = 2 And s.A21_환산이익율 > 세번째중간매도이익율 Then
-                s.A17_중간매도Flag = 3
-
-            End If
-
         End If
 
         '아래는 그냥 정보를 업데이트하는 코드들

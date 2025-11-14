@@ -227,6 +227,7 @@ Partial Class Form2
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.chk_Algorithm_U = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -975,7 +976,7 @@ Partial Class Form2
         Me.txt_F2_TimeoutTime.Name = "txt_F2_TimeoutTime"
         Me.txt_F2_TimeoutTime.Size = New System.Drawing.Size(72, 26)
         Me.txt_F2_TimeoutTime.TabIndex = 9
-        Me.txt_F2_TimeoutTime.Text = "143000"
+        Me.txt_F2_TimeoutTime.Text = "145500"
         '
         'Label10
         '
@@ -2358,6 +2359,7 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_U, 3, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_T, 1, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_S, 0, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_Q, 5, 0)
@@ -2846,6 +2848,20 @@ Partial Class Form2
         Me.Button2.Text = "자동시작 테스트"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'chk_Algorithm_U
+        '
+        Me.chk_Algorithm_U.AutoSize = True
+        Me.chk_Algorithm_U.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_U.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_U.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_U.Location = New System.Drawing.Point(487, 51)
+        Me.chk_Algorithm_U.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.chk_Algorithm_U.Name = "chk_Algorithm_U"
+        Me.chk_Algorithm_U.Size = New System.Drawing.Size(153, 42)
+        Me.chk_Algorithm_U.TabIndex = 20
+        Me.chk_Algorithm_U.Text = "U(초기 매수 후 홀딩)"
+        Me.chk_Algorithm_U.UseVisualStyleBackColor = False
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -3122,4 +3138,5 @@ Partial Class Form2
     Friend WithEvents chk_Algorithm_T As CheckBox
     Friend WithEvents chk_display_graph_line As CheckBox
     Friend WithEvents Chk_월수만 As CheckBox
+    Friend WithEvents chk_Algorithm_U As CheckBox
 End Class
