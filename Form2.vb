@@ -996,12 +996,12 @@ Public Class Form2
                 End If
 
                 'U 알고리즘 테스트만을 위해서 추가함  -- 15분 지나도 신호가 없으면 continue 함
-                If SoonMesuShinhoList IsNot Nothing Then
-                    Dim 신호카운트 = SoonMesuShinhoList.Count
-                    If currentIndex_순매수 > 30 And 신호카운트 < 1 Then '이건 15분임
-                        Exit For
-                    End If
-                End If
+                'If SoonMesuShinhoList IsNot Nothing Then
+                'Dim 신호카운트 = SoonMesuShinhoList.Count
+                'If currentIndex_순매수 > 62 And 신호카운트 < 1 Then '이건 31분임
+                'Exit For
+                'End If
+                'End If
 
 
                 If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
@@ -3494,11 +3494,11 @@ Public Class Form2
 
     Private Sub fullTest_U()
 
-        Dim U_선물발생기준_temp() As Single = {700, 1000, 1500, 2000, 2500, 3000}
-        Dim u_외국인현물발생기준_temp() As Single = {400, 700, 1000, 1300, 1600}
+        Dim U_선물발생기준_temp() As Single = {1000, 1500, 2000, 2500, 3000}
+        Dim u_외국인현물발생기준_temp() As Single = {400, 900, 1300}
 
-        Dim U_시작시간_temp() As Integer = {90500}
-        Dim U_마감시간_temp() As Integer = {90800}
+        Dim U_시작시간_temp() As Integer = {91200, 91500}
+        Dim U_마감시간_temp() As Integer = {91800, 92500}
 
         chk_Algorithm_N.Checked = False
         chk_Algorithm_N1.Checked = False
