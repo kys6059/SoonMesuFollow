@@ -177,7 +177,7 @@ Module realtime_ebest
     Public Sub 계좌조회()
 
         If XAQuery_계좌조회 Is Nothing Then XAQuery_계좌조회 = New XAQuery
-        XAQuery_계좌조회.ResFileName = "c:\ebest\xingApi\res\CFOBQ10500.res"
+        XAQuery_계좌조회.ResFileName = "c:\LS_SEC\xingApi\res\CFOBQ10500.res"
 
         XAQuery_계좌조회.SetFieldData("CFOBQ10500InBlock1", "RecCnt", 0, 1) '종목번호
         XAQuery_계좌조회.SetFieldData("CFOBQ10500InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
@@ -210,7 +210,7 @@ Module realtime_ebest
 
         If XAQuery_선물옵션_잔고평가_이동평균조회 Is Nothing Then XAQuery_선물옵션_잔고평가_이동평균조회 = New XAQuery
 
-        XAQuery_선물옵션_잔고평가_이동평균조회.ResFileName = "c:\ebest\xingApi\res\t0441.res"
+        XAQuery_선물옵션_잔고평가_이동평균조회.ResFileName = "c:\LS_SEC\xingApi\res\t0441.res"
         XAQuery_선물옵션_잔고평가_이동평균조회.SetFieldData("t0441InBlock", "accno", 0, strAccountNum)      '계좌번호
         XAQuery_선물옵션_잔고평가_이동평균조회.SetFieldData("t0441InBlock", "passwd", 0, 거래비밀번호)                '비밀먼호
         XAQuery_선물옵션_잔고평가_이동평균조회.SetFieldData("t0441InBlock", "cts_expcode", 0, " ")                'cts_expcode
@@ -343,7 +343,7 @@ Module realtime_ebest
     Public Sub 한종목매도(ByVal code As String, ByVal price As Single, ByVal count As Integer, ByVal str As String, ByVal 지정가시장가타입 As String)
 
         If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
-        XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
+        XAQuery_매수매도.ResFileName = "C:\LS_SEC\xingAPI\Res\CFOAT00100.res"
 
         Dim adjustPrice As Single = Math.Max(price - 0.3, 0.1)
 
@@ -367,7 +367,7 @@ Module realtime_ebest
         If count > 0 Then
 
             If XAQuery_매수매도 Is Nothing Then XAQuery_매수매도 = New XAQuery
-            XAQuery_매수매도.ResFileName = "C:\eBEST\xingAPI\Res\CFOAT00100.res"
+            XAQuery_매수매도.ResFileName = "C:\LS_SEC\xingAPI\Res\CFOAT00100.res"
 
             Dim adjustPrice As Single = Math.Min(price + 0.1, price * 1.08)
             adjustPrice = Math.Round(adjustPrice, 2)
@@ -458,7 +458,7 @@ Module realtime_ebest
             Dim code As String = it.Code(callput)
 
             If XAQuery_구매가능수량조회 Is Nothing Then XAQuery_구매가능수량조회 = New XAQuery
-            XAQuery_구매가능수량조회.ResFileName = "C:\eBEST\xingAPI\Res\CFOAQ10100.res"
+            XAQuery_구매가능수량조회.ResFileName = "C:\LS_SEC\xingAPI\Res\CFOAQ10100.res"
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "RecCnt", 0, "1")   '레코드카운트
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "AcntNo", 0, strAccountNum)   '계좌번호
             XAQuery_구매가능수량조회.SetFieldData("CFOAQ10100InBlock1", "Pwd", 0, 거래비밀번호)                '비밀먼호"
@@ -531,7 +531,7 @@ Module realtime_ebest
     Public Sub XAQuery_현재날짜조회함수()
 
         If XAQuery_현재날짜조회 Is Nothing Then XAQuery_현재날짜조회 = New XAQuery
-        XAQuery_현재날짜조회.ResFileName = "c:\ebest\xingApi\res\t0167.res"
+        XAQuery_현재날짜조회.ResFileName = "c:\LS_SEC\xingApi\res\t0167.res"
 
         XAQuery_현재날짜조회.SetFieldData("t0167InBlock", "id", 0, "f92887") 'id
 
@@ -556,7 +556,7 @@ Module realtime_ebest
 
     Public Sub XAQuery_전체종목조회함수()
         If XAQuery_전체종목조회 Is Nothing Then XAQuery_전체종목조회 = New XAQuery
-        XAQuery_전체종목조회.ResFileName = "c:\ebest\xingApi\res\t2301.res"
+        XAQuery_전체종목조회.ResFileName = "c:\LS_SEC\xingApi\res\t2301.res"
 
         Dim 월물 As String = Form2.txt_월물.Text
         Dim 구분 As String = Form2.txt_week_정규.Text 'G" 정규, M:미니, W:위클리
@@ -709,7 +709,7 @@ Module realtime_ebest
     Public Sub XAQuery_EBEST_분봉데이터호출함수(ByVal capplut As Integer)
         't8415 
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
-        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8415.res"
 
         If optionList.Count > 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
@@ -875,7 +875,7 @@ Module realtime_ebest
     Public Sub XAQuery_EBEST_분봉데이터호출함수_1분(ByVal capplut As Integer)
         't8415 
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
-        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\ebest\xingApi\res\t8415.res"
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8415.res"
 
         Dim 이번에선택된인덱스 As Integer = 0
 
@@ -917,7 +917,7 @@ Module realtime_ebest
 
     Public Sub XAQuery_EBEST_외국인선물_순매수현황조회함수()
         If XAQuery_EBEST_외국인선물_순매수현황조회 Is Nothing Then XAQuery_EBEST_외국인선물_순매수현황조회 = New XAQuery
-        XAQuery_EBEST_외국인선물_순매수현황조회.ResFileName = "c:\ebest\xingApi\res\t1664.res"
+        XAQuery_EBEST_외국인선물_순매수현황조회.ResFileName = "c:\LS_SEC\xingApi\res\t1664.res"
 
         XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "mgubun", 0, "3")  '선물 3
         XAQuery_EBEST_외국인선물_순매수현황조회.SetFieldData("t1664InBlock", "vagubun", 0, "2")   '1:수량, 2:금액
@@ -996,7 +996,7 @@ Module realtime_ebest
 
     Public Sub XAQuery_EBEST_순매수현황조회함수()
         If XAQuery_EBEST_순매수현황조회 Is Nothing Then XAQuery_EBEST_순매수현황조회 = New XAQuery
-        XAQuery_EBEST_순매수현황조회.ResFileName = "c:\ebest\xingApi\res\t1621.res"
+        XAQuery_EBEST_순매수현황조회.ResFileName = "c:\LS_SEC\xingApi\res\t1621.res"
 
         XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "upcode", 0, "001") '업종코드 : 코스피 001
         XAQuery_EBEST_순매수현황조회.SetFieldData("t1621InBlock", "nmin", 0, "1")   '분
