@@ -817,7 +817,7 @@ Partial Class Form2
         Me.lbl_F2_매매신호.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_매매신호.Font = New System.Drawing.Font("굴림", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.lbl_F2_매매신호.Location = New System.Drawing.Point(317, 5)
-        Me.lbl_F2_매매신호.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.lbl_F2_매매신호.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_매매신호.Name = "lbl_F2_매매신호"
         Me.lbl_F2_매매신호.Size = New System.Drawing.Size(96, 33)
         Me.lbl_F2_매매신호.TabIndex = 10
@@ -1792,7 +1792,7 @@ Partial Class Form2
         Me.lbl_F2_풋중간청산갯수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_풋중간청산갯수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_F2_풋중간청산갯수.Location = New System.Drawing.Point(117, 112)
-        Me.lbl_F2_풋중간청산갯수.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.lbl_F2_풋중간청산갯수.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_풋중간청산갯수.Name = "lbl_F2_풋중간청산갯수"
         Me.lbl_F2_풋중간청산갯수.Size = New System.Drawing.Size(89, 29)
         Me.lbl_F2_풋중간청산갯수.TabIndex = 30
@@ -1805,7 +1805,7 @@ Partial Class Form2
         Me.lbl_F2_콜중간청산갯수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_콜중간청산갯수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_F2_콜중간청산갯수.Location = New System.Drawing.Point(117, 76)
-        Me.lbl_F2_콜중간청산갯수.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.lbl_F2_콜중간청산갯수.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_콜중간청산갯수.Name = "lbl_F2_콜중간청산갯수"
         Me.lbl_F2_콜중간청산갯수.Size = New System.Drawing.Size(89, 29)
         Me.lbl_F2_콜중간청산갯수.TabIndex = 29
@@ -1857,7 +1857,7 @@ Partial Class Form2
         Me.lbl_F2_풋구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_풋구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_F2_풋구매가능개수.Location = New System.Drawing.Point(117, 184)
-        Me.lbl_F2_풋구매가능개수.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.lbl_F2_풋구매가능개수.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_풋구매가능개수.Name = "lbl_F2_풋구매가능개수"
         Me.lbl_F2_풋구매가능개수.Size = New System.Drawing.Size(89, 29)
         Me.lbl_F2_풋구매가능개수.TabIndex = 25
@@ -1870,7 +1870,7 @@ Partial Class Form2
         Me.lbl_F2_콜구매가능개수.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_F2_콜구매가능개수.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_F2_콜구매가능개수.Location = New System.Drawing.Point(117, 148)
-        Me.lbl_F2_콜구매가능개수.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.lbl_F2_콜구매가능개수.Margin = New System.Windows.Forms.Padding(3)
         Me.lbl_F2_콜구매가능개수.Name = "lbl_F2_콜구매가능개수"
         Me.lbl_F2_콜구매가능개수.Size = New System.Drawing.Size(89, 29)
         Me.lbl_F2_콜구매가능개수.TabIndex = 24
@@ -2314,8 +2314,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_S.AutoSize = True
         Me.chk_Algorithm_S.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_S.Checked = True
-        Me.chk_Algorithm_S.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_S.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_S.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_S.Location = New System.Drawing.Point(3, 55)
@@ -2329,8 +2327,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_Q.AutoSize = True
         Me.chk_Algorithm_Q.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_Q.Checked = True
-        Me.chk_Algorithm_Q.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_Q.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_Q.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_Q.Location = New System.Drawing.Point(693, 3)
@@ -2383,8 +2379,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_O.AutoSize = True
         Me.chk_Algorithm_O.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_O.Checked = True
-        Me.chk_Algorithm_O.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_O.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_O.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_O.Location = New System.Drawing.Point(279, 3)
@@ -2411,6 +2405,8 @@ Partial Class Form2
         '
         Me.chk_Algorithm_E.AutoSize = True
         Me.chk_Algorithm_E.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_E.Checked = True
+        Me.chk_Algorithm_E.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_E.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_E.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_E.Location = New System.Drawing.Point(279, 55)
@@ -2564,7 +2560,7 @@ Partial Class Form2
         Me.TabPage1.Controls.Add(Me.F2_Chart_순매수)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "종합"
@@ -2575,7 +2571,7 @@ Partial Class Form2
         Me.TabPage2.Controls.Add(Me.Chart1)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "옵션"
@@ -2586,7 +2582,7 @@ Partial Class Form2
         Me.TabPage3.Controls.Add(Me.Chart2)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage3.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage3.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "--- MACD ---"
@@ -2597,7 +2593,7 @@ Partial Class Form2
         Me.TabPage6.Controls.Add(Me.Chart_스토캐스틱)
         Me.TabPage6.Location = New System.Drawing.Point(4, 22)
         Me.TabPage6.Name = "TabPage6"
-        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage6.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage6.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage6.TabIndex = 3
         Me.TabPage6.Text = "스토캐스틱"
@@ -2624,7 +2620,7 @@ Partial Class Form2
         Me.TabPage7.Controls.Add(Me.Cht_RSI)
         Me.TabPage7.Location = New System.Drawing.Point(4, 22)
         Me.TabPage7.Name = "TabPage7"
-        Me.TabPage7.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage7.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage7.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage7.TabIndex = 4
         Me.TabPage7.Text = "--- RSI ---"
@@ -2651,7 +2647,7 @@ Partial Class Form2
         Me.TabPage8.Controls.Add(Me.Cht_상관계수)
         Me.TabPage8.Location = New System.Drawing.Point(4, 22)
         Me.TabPage8.Name = "TabPage8"
-        Me.TabPage8.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage8.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage8.Size = New System.Drawing.Size(1100, 731)
         Me.TabPage8.TabIndex = 5
         Me.TabPage8.Text = "상관계수"
@@ -2691,7 +2687,7 @@ Partial Class Form2
         Me.TabPage4.Controls.Add(Me.TableLayoutPanel11)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage4.Size = New System.Drawing.Size(460, 731)
         Me.TabPage4.TabIndex = 0
         Me.TabPage4.Text = "설정"
@@ -2701,7 +2697,7 @@ Partial Class Form2
         '
         Me.TabPage5.Location = New System.Drawing.Point(4, 22)
         Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage5.Size = New System.Drawing.Size(460, 731)
         Me.TabPage5.TabIndex = 1
         Me.TabPage5.Text = "공백"

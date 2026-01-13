@@ -732,11 +732,16 @@ Module realtime_ebest
     Private Sub XAQuery_EBEST_분봉데이터호출_ReceiveData(ByVal szTrCode As String)
 
         Dim callput As Integer
+        Dim shcode As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
+
         Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1)
-        If callputstriong = "2" Then
+
+        If callputstriong = "2" Or callputstriong = "B" Then
             callput = 0
-        Else
+        ElseIf callputstriong = "3" Or callputstriong = "C" Then
             callput = 1
+        Else
+            Add_Log("에러", "종목코드 callput 구분 안됨")
         End If
 
         Dim 종목코드 As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
