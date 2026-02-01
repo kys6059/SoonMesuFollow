@@ -962,7 +962,7 @@ Public Class Form2
 
     End Sub
 
-    Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal 일일조건설정flag As Boolean, Optional 끝나는인덱스 As Integer = 740)  '3시까지 기본값으로 지정
+    Private Sub 자동반복계산로직(ByVal cnt As Integer, ByVal 일일조건설정flag As Boolean, Optional 끝나는인덱스 As Integer = 770)  '3시까지 기본값으로 지정
 
         isRealFlag = False
         당일반복중_flag = True
@@ -1006,28 +1006,28 @@ Public Class Form2
 
                 If isRealFlag = False And TotalCount > 1 Then   'DB에서 가져온 오늘의 index가 2개 이상일 때만 수행한다
 
-                                Dim 콜종목 As Integer = 적합한종목찾기(0)
-                                Dim 풋종목 As Integer = 적합한종목찾기(1)
+                    Dim 콜종목 As Integer = 적합한종목찾기(0)
+                    Dim 풋종목 As Integer = 적합한종목찾기(1)
 
-                                If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
-                                    selectedJongmokIndex(0) = 콜종목
-                                    DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
-                                End If
-                                If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
-                                    selectedJongmokIndex(1) = 풋종목
-                                    DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
-                                End If
+                    If selectedJongmokIndex(0) <> 콜종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(0) = 콜종목
+                        DB에서일분옵션데이터채워넣기(콜종목, timeIndex_1Min, 0)
+                    End If
+                    If selectedJongmokIndex(1) <> 풋종목 And 콜종목 >= 0 Then
+                        selectedJongmokIndex(1) = 풋종목
+                        DB에서일분옵션데이터채워넣기(풋종목, timeIndex_1Min, 1)
+                    End If
 
-                            End If
+                End If
 
 
-                            F2_Clac_DisplayAllGrid()
+                F2_Clac_DisplayAllGrid()
 
 
             Next
 
-                    '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
-                    For j = 0 To SoonMesuShinhoList.Count - 1
+            '매일매일 신호리스트를 시뮬레이션전체신호리스트에 복사한다
+            For j = 0 To SoonMesuShinhoList.Count - 1
                 SoonMesuSimulationTotalShinhoList.Add(SoonMesuShinhoList(j))
             Next
 
@@ -2296,12 +2296,12 @@ Public Class Form2
 
         'fulltest_R()
 
-        'fullTest_O()
+        fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
 
-        fullTest_U()
+        'fullTest_U()
 
         '이평선테스트()
 
@@ -2571,12 +2571,12 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"11"} 'L
-        Dim 옵션기준손절매() As String = {"-0.55"} 'M
-        Dim 중간청산이익목표() As String = {"1.0"} 'N
-        Dim txt_F2_매수_기준가_temp() As Single = {"1.2", "1.3"}
+        Dim 익절차() As String = {"0.005", "0.006", "0.007", "0.004", "0.008", "0.009", "0.01", "0.003"} 'L
+        Dim 옵션기준손절매() As String = {"-0.4"} 'M
+        Dim 중간청산이익목표() As String = {"0.7"} 'N
+        Dim txt_F2_매수_기준가_temp() As Single = {"1.5"}
         Dim 두세번째매도이익율_temp() As Single = {0.5}
-        Dim timeout_temp() As String = {"143000"}
+        Dim timeout_temp() As String = {"151200"}
 
 
         'chk_Algorithm_S.Checked = False
@@ -3305,26 +3305,26 @@ Public Class Form2
 
     Private Sub fullTest_O()
 
-        Dim O_선물발생기준기울기_temp() As Single = {33, 35, 37, 39, 41}
-        Dim O_외국인현물발생기준기울기_temp() As Single = {8, 7, 6, 9, 5}
+        Dim O_선물발생기준기울기_temp() As Single = {0.01}
+        Dim O_외국인현물발생기준기울기_temp() As Single = {0.0006}
 
-        Dim O_선물해제기준기울기_temp() As Single = {5}    'A
-        Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B
+        Dim O_선물해제기준기울기_temp() As Single = {5}    'A   사용하지 않음
+        Dim O_외국인현물해제기준기울기_temp() As Single = {1.0}    'B  사용하지 않음
 
-        Dim O_시작시간_temp() As String = {"95000"}           'C
-        Dim O_마감시간_temp() As String = {"123000"}           'D
+        Dim O_시작시간_temp() As String = {"104000"}           'C
+        Dim O_마감시간_temp() As String = {"130000"}           'D
 
 
-        Dim O_tick_count_기준_temp() As Integer = {20}
-        Dim O_해제tick_count_기준_temp() As Integer = {20}
+        Dim O_tick_count_기준_temp() As Integer = {40}
+        Dim O_해제tick_count_기준_temp() As Integer = {20} '사용하지 않음
 
         Dim 선물상관계수최저_temp() As Single = {0.5}
         Dim 외국인현물상관계수최저_temp() As Single = {0.5}
-        Dim 상관계수계산인덱스길이_temp() As Integer = {30}
+        Dim 상관계수계산인덱스길이_temp() As Integer = {20}
 
 
-        Dim O_다시발생시적용배율_temp() As Single = {1.4, 1.5}
-        Dim timeout_temp() As String = {"140000"}
+        Dim O_다시발생시적용배율_temp() As Single = {1.4}
+        Dim timeout_temp() As String = {"151200"}
 
         'Dim O_허용이평선이격도_temp() As Single = {1.38}    '사용하지 않음
         'Dim O_허용이평선이격도유지시간_분_temp() As Single = {0}  '사용하지 않음
