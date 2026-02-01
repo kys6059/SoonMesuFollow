@@ -1011,7 +1011,7 @@ Partial Class Form2
         Me.txt_F2_익절차.Name = "txt_F2_익절차"
         Me.txt_F2_익절차.Size = New System.Drawing.Size(72, 26)
         Me.txt_F2_익절차.TabIndex = 6
-        Me.txt_F2_익절차.Text = "0.004"
+        Me.txt_F2_익절차.Text = "0.028"
         '
         'Label11
         '

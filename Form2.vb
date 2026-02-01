@@ -2275,7 +2275,7 @@ Public Class Form2
         당일반복중_flag = True
 
 
-        '매도조건테스트()
+        매도조건테스트()
 
         'fullTest_A()
         'fullTest_B()
@@ -2296,7 +2296,7 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
@@ -2571,7 +2571,7 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"0.005", "0.006", "0.007", "0.004", "0.008", "0.009", "0.01", "0.003"} 'L
+        Dim 익절차() As String = {"0.003", "0.0033", "0.0036", "0.0039", "0.0028"} 'L  '이건 0.003 ~0.004 사이로 하면 좋을 듯 0.003 중심
         Dim 옵션기준손절매() As String = {"-0.4"} 'M
         Dim 중간청산이익목표() As String = {"0.7"} 'N
         Dim txt_F2_매수_기준가_temp() As Single = {"1.5"}
