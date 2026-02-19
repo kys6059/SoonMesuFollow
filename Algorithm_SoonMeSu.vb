@@ -113,7 +113,7 @@ Module Algorithm_SoonMeSu
     '24년 1월 26일 --- CNT_001_A_4_B_7_C_2_D_120_E_105000_F_150000_G_4_H_1_I_65_J_2.5
     Public E_신호발생기준기울기 As Single = 6.0
     Public E_신호해제기준기울기 As Single = 2.0
-    Public E_DataSource As Integer = 4 '0 : 외국인 + 기관, 1:외국인, 2 : 기관
+    Public E_DataSource As Integer = 4 '0 : 외국인 + 기관, 1:외국인, 2 : 기관, 3: 외국인선물, 4: 외국인현물 + 외국인선물 합계
     Public 신호최소유지시간index As Integer = 4 '신호가 뜬 후 최소 얼마간 유지할 건지를 판단하는 변수로 만약 4라면 2분 초과 필요하다
     Public E_기관반대순매수_허용크기비율 As Single = 2.5
     Public E2_tick_count_기준 As Integer = 30
@@ -1183,8 +1183,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_D(s, 일분옵션데이터_CurrentIndex)
                             Case "B"
                                 ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
-                            Case "E"
-                                ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
+                                'Case "E"
+                                'ret = 살아있는신호확인하기_E(s, 일분옵션데이터_CurrentIndex)
                             Case "F"
                                 ret = 살아있는신호확인하기_F(s, 일분옵션데이터_CurrentIndex)
                             Case "G"
@@ -1315,7 +1315,8 @@ Module Algorithm_SoonMeSu
         If isRealFlag = True Then
             가상현재가 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
         Else
-            가상현재가 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 1)  '이걸 그냥 고가로 함
+            '가상현재가 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 1)  '매도조건 - 고가로 함
+            가상현재가 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 2)  '매수조건 - 고가로 함
         End If
 
 
@@ -1323,7 +1324,8 @@ Module Algorithm_SoonMeSu
         If 가상현재가 > 0 Then
 
             s.A14_현재가격 = 가상현재가
-            s.A16_이익률 = Math.Round((s.A10_신호발생가격 - 가상현재가) / s.A10_신호발생가격, 3)
+            's.A16_이익률 = Math.Round((s.A10_신호발생가격 - 가상현재가) / s.A10_신호발생가격, 3)  '이건 매도할 때 이익율임
+            s.A16_이익률 = Math.Round((가상현재가 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
             s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
 
             '손절매 계산
@@ -1335,7 +1337,8 @@ Module Algorithm_SoonMeSu
 
                 가상현재가 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
                 s.A14_현재가격 = 가상현재가
-                s.A16_이익률 = Math.Round((s.A10_신호발생가격 - 가상현재가) / s.A10_신호발생가격, 3)
+                's.A16_이익률 = Math.Round((s.A10_신호발생가격 - 가상현재가) / s.A10_신호발생가격, 3)  '이건 매도할 때 이익율임
+                s.A16_이익률 = Math.Round((가상현재가 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                 s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
 
             End If
@@ -1344,8 +1347,13 @@ Module Algorithm_SoonMeSu
 
 
         Dim 익절종합주가지수차이 As Single = s.A06_신호발생종합주가지수 * s.A61_익절기준차
-        If s.A08_콜풋 = 1 And 종합주가지수 - s.A06_신호발생종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"  '매도조건으로 반대로 함  - 이건 오른다 임
-        If s.A08_콜풋 = 0 And s.A06_신호발생종합주가지수 - 종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"
+        'If s.A08_콜풋 = 1 And 종합주가지수 - s.A06_신호발생종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"  '매도조건으로 반대로 함  - 이건 오른다 임
+        'If s.A08_콜풋 = 0 And s.A06_신호발생종합주가지수 - 종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"
+
+        If s.A08_콜풋 = 0 And 종합주가지수 - s.A06_신호발생종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"  '매수조건  - 이건 오른다 임
+        If s.A08_콜풋 = 1 And s.A06_신호발생종합주가지수 - 종합주가지수 > 익절종합주가지수차이 Then 매도사유 = "ik"
+
+
 
         Dim 중간청산할지설정FLAG As Boolean = Form2.chk_중간청산.Checked
         If 중간청산할지설정FLAG = True Then
@@ -1365,14 +1373,21 @@ Module Algorithm_SoonMeSu
             매도사유 = "timeout"
             If isRealFlag = False Then
                 s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 0)
-                s.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)
+                's.A16_이익률 = Math.Round((s.A10_신호발생가격 - s.A14_현재가격) / s.A10_신호발생가격, 3)  '매도조건 이익율
+                s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3) '매수조건 이익율
+
                 s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
             End If
         End If
 
         '아래는 그냥 정보를 업데이트하는 코드들
-        If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '종합주가지수 차이를 계산한다
-        If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+        'If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)                    '매도 시 종합주가지수 차이를 계산한다
+        'If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)
+
+        If s.A08_콜풋 = 1 Then s.A55_메모 = Math.Round(s.A06_신호발생종합주가지수 - 종합주가지수, 2)                    '매수 시 종합주가지수 차이를 계산한다
+        If s.A08_콜풋 = 0 Then s.A55_메모 = Math.Round(종합주가지수 - s.A06_신호발생종합주가지수, 2)
+
+
 
         Return 매도사유
     End Function
@@ -1469,7 +1484,7 @@ Module Algorithm_SoonMeSu
         If s.A15_현재상태 = 1 Then
 
             '순매수가 기준이하로 작아질 때 weak_E로 매도함
-            Dim 현재순매수기울기 As Single = PIP_Point_Lists(1).마지막선기울기
+            Dim 현재순매수기울기 As Single = PIP_Point_Lists(E_DataSource).마지막선기울기
             Dim 마지막순매수index As Integer = Get마지막순매수Index()
             If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
 
