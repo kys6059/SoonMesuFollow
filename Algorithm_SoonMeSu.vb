@@ -440,7 +440,7 @@ Module Algorithm_SoonMeSu
     '삼위일체 - 외국인선물, 외국인현물, 이평선 위 3개가 맞을때만 매수하는 로직
 
     Public O_선물발생기준기울기 As Single = 0.01
-    Public O_외국인현물발생기준기울기 As Single = 0.0006
+    Public O_외국인현물발생기준기울기 As Single = 0.0005
 
     Public O_선물해제기준기울기 As Single = 5.0    '사용하지 않음
     Public O_외국인현물해제기준기울기 As Single = 1.0 '사용하지 않음
@@ -498,8 +498,87 @@ Module Algorithm_SoonMeSu
             Dim 선물발생기준액 As Long = O_선물발생기준기울기 * 순매수리스트(currentIndex_순매수).코스피지수
             Dim 현물발생기준액 As Long = O_외국인현물발생기준기울기 * 순매수리스트(currentIndex_순매수).코스피지수
 
+            If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
+
+            If Get상관계수상태() = False Then Return
+
+            If 선물순매수기울기 > 0 Then  '  콜 방향
+
+                If is동일신호가현재살아있나("O", 0) Then Return
+
+                If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
+                If is동일신호가있나("O", 0) = True Then
+                    offset = O_다시발생시적용배율
+                End If
+
+                'RSI가 높을 때 기준금액을 올리는 방식의 코드 테스트  -- 결과가 안좋아 취소
+                'offset = offset * 일분옵션데이터(0).RSI(일분옵션데이터_CurrentIndex - 1) * RSI_Offset
+
+                If 선물순매수기울기_절대치 > 선물발생기준액 * offset And 외국인현물순매수기울기_절대치 > 현물발생기준액 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(0).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)
+
+                    If 현재이평선상태 > 0 Then  '콜이 이평선 위에 있을때만 매수
+
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 0)   '매수조건
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 0)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+
+                End If
+
+            Else ' 풋 방향
+
+                If is동일신호가현재살아있나("O", 1) Then Return
+
+                If 같은방향같은시간발생신호가있는지(1) = True Then Return
+
+                If is동일신호가있나("O", 1) = True Then
+                    offset = O_다시발생시적용배율
+                End If
+
+                'RSI가 높을 때 기준금액을 올리는 방식의 코드 테스트-- 결과가 안좋아 취소
+                'offset = offset * 일분옵션데이터(1).RSI(일분옵션데이터_CurrentIndex - 1) * RSI_Offset
+
+                If 선물순매수기울기_절대치 > 선물발생기준액 * offset And 외국인현물순매수기울기_절대치 > 현물발생기준액 * offset Then  '선물, 현물 둘다 매도나 매수중이면
+
+                    Dim 현재이평선상태 As Integer = 일분옵션데이터(1).MACD_Result(2, 일분옵션데이터_CurrentIndex - 1)  '풋의 직전 이평선의 +- 값
+
+                    If 현재이평선상태 > 0 Then '풋이 이평선 위에 있을때만 매수
+
+                        Dim str As String = String.Format("OOO 신호 발생 콜풋 : {0} 방향", 1)  '매수조건
+                        Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("O", 1)
+                        SoonMesuShinhoList.Add(shinho)
+
+                    End If
+                End If
+
+            End If
+
+        End If
+
+    End Sub
+
+    Public Sub CalcAlgorithm_O_매도(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+        Dim startTime As Integer = O_시작시간
+        Dim endTime As Integer = O_마감시간
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) >= startTime And Val(순매수리스트(currentIndex_순매수).sTime) <= endTime Then
+
+            Dim offset As Single = 1.0
+
+            Dim 선물순매수기울기 As Single = 틱당기울기계산(3, O_tick_count_기준)
+            Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
+
+            Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
+            Dim 외국인현물순매수기울기_절대치 As Single = Math.Abs(외국인현물순매수기울기)
 
 
+            Dim 선물발생기준액 As Long = O_선물발생기준기울기 * 순매수리스트(currentIndex_순매수).코스피지수
+            Dim 현물발생기준액 As Long = O_외국인현물발생기준기울기 * 순매수리스트(currentIndex_순매수).코스피지수
 
 
             If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
