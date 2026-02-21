@@ -223,6 +223,7 @@ Module Algorithm_SoonMeSu
             If Form2.chk_Algorithm_S.Checked = True Then CalcAlgorithm_S(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_T.Checked = True Then CalcAlgorithm_T(일분옵션데이터_CurrentIndex)
             If Form2.chk_Algorithm_U.Checked = True Then CalcAlgorithm_U(일분옵션데이터_CurrentIndex)
+            If Form2.chk_Algorithm_W.Checked = True Then CalcAlgorithm_W(일분옵션데이터_CurrentIndex)
 
         End If
 
@@ -809,6 +810,75 @@ Module Algorithm_SoonMeSu
 
 
 
+
+    'W 알고리즘 : 주식과 마찬가지로 최근 160봉(?)의 종합주가지수 최고가나 최적가를 돌파하는 경우에 매수하는 알고리즘 돌파에 선물/현물 순매수도 결합하여 분석한다
+    Public W_WindowSize As Long = 160
+    Public W_선물발생기준 As Single = 0.002
+    Public W_마감시간 As Integer = 140000
+
+
+
+    Public Sub CalcAlgorithm_W(ByVal 일분옵션데이터_CurrentIndex As Integer)
+
+
+        calc최고가최저가계산(currentIndex_순매수)
+
+        If Val(순매수리스트(currentIndex_순매수).sTime) <= W_마감시간 And currentIndex_순매수 > W_WindowSize Then
+
+
+            If Get상관계수상태() = False Then Return
+
+            Dim 선물순매수기울기 As Single = 틱당기울기계산(4, O_tick_count_기준)
+            Dim 외국인현물순매수기울기 As Single = 틱당기울기계산(1, O_tick_count_기준)
+
+            Dim 선물순매수기울기_절대치 As Single = Math.Abs(선물순매수기울기)
+            Dim 외국인현물순매수_절대치 As Long = Math.Abs(외국인현물순매수기울기)
+
+            Dim 선물발생기준액 As Long = W_선물발생기준 * 순매수리스트(currentIndex_순매수).코스피지수
+
+
+            'If 선물순매수기울기 * 외국인현물순매수기울기 <= 0 Then Return '곱해서 음수이면 빠진다
+
+            '최고가 돌파
+            If 순매수리스트(currentIndex_순매수).코스피지수 >= 윈도우최고가 And 순매수리스트(currentIndex_순매수).코스피지수 > 0 Then
+
+                If 선물순매수기울기_절대치 > 선물발생기준액 And 선물순매수기울기 > 0 Then  '선물이 + 방향이고 기준을 넘으면
+
+
+                    If is동일방향신호가살아있나(0) = True Then Return
+                    If 같은방향같은시간발생신호가있는지(0) = True Then Return
+
+                    '콜 신호 발생
+
+                    Dim str As String = String.Format("W 신호 발생 콜풋 : {0} 방향", 0)
+                    Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("W", 0)
+
+                    SoonMesuShinhoList.Add(shinho)
+                End If
+
+            ElseIf 순매수리스트(currentIndex_순매수).코스피지수 <= 윈도우최저가 And 순매수리스트(currentIndex_순매수).코스피지수 > 0 Then
+
+                If 선물순매수기울기_절대치 > 선물발생기준액 And 선물순매수기울기 < 0 Then  '선물이 - 방향이고 기준을 넘으면
+                    If is동일방향신호가살아있나(1) = True Then Return
+                    If 같은방향같은시간발생신호가있는지(1) = True Then Return
+
+
+                    '풋 신호 발생
+
+                    Dim str As String = String.Format("W 신호 발생 콜풋 : {0} 방향", 1)
+                    Dim shinho As 순매수신호_탬플릿 = MakeSoonMesuShinho("W", 1)
+                    SoonMesuShinhoList.Add(shinho)
+
+                End If
+
+
+            End If
+
+        End If
+    End Sub
+
+
+
     Private Function Get상관계수상태() As Boolean
 
         Dim ret As Boolean = False
@@ -1063,7 +1133,7 @@ Module Algorithm_SoonMeSu
         If SoonMesuShinhoList IsNot Nothing Then
             For i As Integer = SoonMesuShinhoList.Count - 1 To 0 Step -1
                 Dim s As 순매수신호_탬플릿 = SoonMesuShinhoList(i)
-                If s.A08_콜풋 = callput Then
+                If s.A08_콜풋 = callput And s.A15_현재상태 = 1 Then
 
                     Return True  '방향이 같은게 있었다면 true를 리턴해서 다시 뜨지 않도록 함
 
@@ -1290,6 +1360,8 @@ Module Algorithm_SoonMeSu
                                 ret = 살아있는신호확인하기_T(s, 일분옵션데이터_CurrentIndex)
                                 'Case "U"
                                 'ret = 살아있는신호확인하기_U(s, 일분옵션데이터_CurrentIndex)  -- 굳이 팔지 않음 그냥 그대로 끝까지 홀딩, 마지막 3시45분에만 판다
+                            Case "W"
+                                ret = 살아있는신호확인하기_W(s, 일분옵션데이터_CurrentIndex) ' 코스피지수가 이평선을 하회할 때 매도
 
                         End Select
                     End If
@@ -3646,6 +3718,54 @@ Module Algorithm_SoonMeSu
                         s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
                         s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
                         매도사유 = "weak_O_1"
+                    End If
+
+                End If
+            End If
+
+        End If
+
+
+
+
+
+        Return 매도사유
+    End Function
+
+
+    'W 알고리즘 : 코스피지수가 이평선을 하외하면 매도
+
+    Private Function 살아있는신호확인하기_W(ByRef s As 순매수신호_탬플릿, ByVal 일분옵션데이터_CurrentIndex As Integer) As String
+
+        Dim 매도사유 As String = ""
+
+        If s.A15_현재상태 = 1 Then
+
+
+
+            Dim 마지막순매수index As Integer = Get마지막순매수Index()
+            If 마지막순매수index + 신호최소유지시간index < currentIndex_순매수 Then
+
+                If s.A08_콜풋 = 0 Then
+
+                    '선물이 낮아지면
+
+                    If 순매수리스트(currentIndex_순매수).코스피지수 > 0 And 순매수리스트(currentIndex_순매수).코스피지수_이동평균선 > 순매수리스트(currentIndex_순매수).코스피지수 Then    '코스피지수가 이평선을 하회
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_W"
+                    End If
+
+
+                Else
+
+                    '선물이 낮아지면
+                    If 순매수리스트(currentIndex_순매수).코스피지수 > 0 And 순매수리스트(currentIndex_순매수).코스피지수_이동평균선 < 순매수리스트(currentIndex_순매수).코스피지수 Then '코스피지수가 이평선을 상회
+                        s.A14_현재가격 = 일분옵션데이터(s.A08_콜풋).price(일분옵션데이터_CurrentIndex, 3)
+                        s.A16_이익률 = Math.Round((s.A14_현재가격 - s.A10_신호발생가격) / s.A10_신호발생가격, 3)
+                        s.A21_환산이익율 = Math.Round(s.A16_이익률 - 슬리피지, 3)
+                        매도사유 = "weak_W"
                     End If
 
                 End If

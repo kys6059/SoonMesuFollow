@@ -2304,7 +2304,7 @@ Public Class Form2
 
         'fulltest_R()
 
-        fullTest_O()
+        'fullTest_O()
         'fullTest_P()
         'fullTest_Q()
         'fullTest_S()
@@ -2315,6 +2315,8 @@ Public Class Form2
 
 
         'fullTest_T()
+
+        fullTest_W()
 
         당일반복중_flag = False
         SoonMesuSimulation_조건 = ""
@@ -2579,12 +2581,12 @@ Public Class Form2
         'Dim 중간매도후목표이익율_temp() As Single = {0.15, 0.2}
 
         '0,3일
-        Dim 익절차() As String = {"0.006", "0.007", "0.008", "0.009", "0.01"} 'L  '이건 0.003 ~0.004 사이로 하면 좋을 듯 0.003 중심
-        Dim 옵션기준손절매() As String = {"-0.5", "-0.55", "-0.6", "-0.45"} 'M
-        Dim 중간청산이익목표() As String = {"0.7"} 'N
+        Dim 익절차() As String = {"0.009", "0.008", "0.01", "0.011"} 'L  '이건 0.003 ~0.004 사이로 하면 좋을 듯 0.003 중심
+        Dim 옵션기준손절매() As String = {"-0.55", "-0.5", "-0.6", "-0.65"} 'M
+        Dim 중간청산이익목표() As String = {"1.0"} 'N
         Dim txt_F2_매수_기준가_temp() As Single = {"1.5"}
         Dim 두세번째매도이익율_temp() As Single = {0.5}
-        Dim timeout_temp() As String = {"151200"}
+        Dim timeout_temp() As String = {"145900", "143000"}
 
 
         'chk_Algorithm_S.Checked = False
@@ -3438,6 +3440,81 @@ Public Class Form2
 
     End Sub
 
+
+
+    'Public W_WindowSize As Long = 160
+    'Public W_선물발생기준 As Long = 0.002
+    'Public W_마감시간 As Integer = 130000
+    '이동평균선_기준일자 = 60
+
+    Private Sub fullTest_W()
+
+        Dim W_WindowSize_temp() As Single = {160}
+        Dim W_마감시간_temp() As Single = {140000}
+        Dim W_선물발생기준_temp() As Single = {0.002}
+        Dim 이동평균선_기준일자_temp() As Integer = {60, 80, 40, 20, 10, 5, 100}
+
+
+        chk_Algorithm_A.Checked = False
+        chk_Algorithm_B.Checked = False
+        chk_Algorithm_C.Checked = False
+        chk_Algorithm_D.Checked = False
+        chk_Algorithm_E.Checked = False
+        chk_Algorithm_G.Checked = False
+        chk_Algorithm_M.Checked = False
+        chk_Algorithm_N.Checked = False
+        chk_Algorithm_E2.Checked = False
+        chk_Algorithm_N1.Checked = False
+        chk_Algorithm_P.Checked = False
+        chk_Algorithm_O.Checked = False
+        chk_Algorithm_Q.Checked = False
+        chk_Algorithm_S.Checked = False
+        chk_Algorithm_W.Checked = True
+
+        If SoonMesuSimulationTotalShinhoList Is Nothing Then
+            SoonMesuSimulationTotalShinhoList = New List(Of 순매수신호_탬플릿)
+        Else
+            SoonMesuSimulationTotalShinhoList.Clear()
+        End If
+
+        Dim cnt As Integer = 0
+
+
+        For a As Integer = 0 To W_WindowSize_temp.Length - 1
+            For b As Integer = 0 To W_마감시간_temp.Length - 1
+                For c As Integer = 0 To W_선물발생기준_temp.Length - 1
+                    For d As Integer = 0 To 이동평균선_기준일자_temp.Length - 1
+
+                        W_WindowSize = W_WindowSize_temp(a)
+                        W_마감시간 = W_마감시간_temp(b)
+                        W_선물발생기준 = W_선물발생기준_temp(c)
+                        이동평균선_기준일자 = 이동평균선_기준일자_temp(d)
+
+                        Dim cntstr As String
+                        If cnt < 10 Then
+                            cntstr = "00" & cnt.ToString()
+                        ElseIf cnt >= 10 And cnt < 100 Then
+                            cntstr = "0" & cnt.ToString()
+                        Else
+                            cntstr = cnt.ToString()
+                        End If
+
+                        SoonMesuSimulation_조건 = String.Format("W_CNT_{0}", cntstr)
+                        SoonMesuSimulation_조건 = SoonMesuSimulation_조건 + String.Format("_A_{0}_B_{1}_C_{2}_D_{3}", W_WindowSize, W_마감시간, W_선물발생기준, 이동평균선_기준일자)
+
+                        Add_Log("", SoonMesuSimulation_조건)
+                        자동반복계산로직(cnt, False)
+
+                        cnt += 1
+                    Next
+                Next
+            Next
+        Next
+
+
+
+
+    End Sub
 
     '20250519  Q_CNT_021_A_1500_B_1200_C_90500_D_91200
     '20250524  Q_CNT_027_A_1650_B_1300_C_90500_D_93500

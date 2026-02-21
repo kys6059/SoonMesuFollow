@@ -228,6 +228,7 @@ Partial Class Form2
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.chk_Algorithm_W = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -919,7 +920,7 @@ Partial Class Form2
         Me.txt_F2_옵션가기준손절매.Name = "txt_F2_옵션가기준손절매"
         Me.txt_F2_옵션가기준손절매.Size = New System.Drawing.Size(72, 30)
         Me.txt_F2_옵션가기준손절매.TabIndex = 14
-        Me.txt_F2_옵션가기준손절매.Text = "-0.55"
+        Me.txt_F2_옵션가기준손절매.Text = "-0.6"
         '
         'txt_F2_매수시작시간
         '
@@ -1011,7 +1012,7 @@ Partial Class Form2
         Me.txt_F2_익절차.Name = "txt_F2_익절차"
         Me.txt_F2_익절차.Size = New System.Drawing.Size(72, 26)
         Me.txt_F2_익절차.TabIndex = 6
-        Me.txt_F2_익절차.Text = "0.008"
+        Me.txt_F2_익절차.Text = "0.009"
         '
         'Label11
         '
@@ -2360,6 +2361,7 @@ Partial Class Form2
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
         Me.TableLayoutPanel13.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_W, 4, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_U, 3, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_T, 1, 1)
         Me.TableLayoutPanel13.Controls.Add(Me.chk_Algorithm_S, 0, 1)
@@ -2485,8 +2487,6 @@ Partial Class Form2
         '
         Me.chk_Algorithm_O.AutoSize = True
         Me.chk_Algorithm_O.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_O.Checked = True
-        Me.chk_Algorithm_O.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_Algorithm_O.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Algorithm_O.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chk_Algorithm_O.Location = New System.Drawing.Point(326, 3)
@@ -2859,6 +2859,22 @@ Partial Class Form2
         Me.Button2.Text = "자동시작 테스트"
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'chk_Algorithm_W
+        '
+        Me.chk_Algorithm_W.AutoSize = True
+        Me.chk_Algorithm_W.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_W.Checked = True
+        Me.chk_Algorithm_W.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_W.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_W.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_W.Location = New System.Drawing.Point(648, 51)
+        Me.chk_Algorithm_W.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.chk_Algorithm_W.Name = "chk_Algorithm_W"
+        Me.chk_Algorithm_W.Size = New System.Drawing.Size(153, 42)
+        Me.chk_Algorithm_W.TabIndex = 21
+        Me.chk_Algorithm_W.Text = "W(윈도우 돌파)"
+        Me.chk_Algorithm_W.UseVisualStyleBackColor = False
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 12.0!)
@@ -3136,4 +3152,5 @@ Partial Class Form2
     Friend WithEvents chk_display_graph_line As CheckBox
     Friend WithEvents Chk_월수만 As CheckBox
     Friend WithEvents chk_Algorithm_U As CheckBox
+    Friend WithEvents chk_Algorithm_W As CheckBox
 End Class

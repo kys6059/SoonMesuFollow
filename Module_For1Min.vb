@@ -1,7 +1,8 @@
 ﻿Option Explicit On
 Imports System.Drawing.Text
-Imports System.Net.Security
 Imports System.Math
+Imports System.Net.Security
+Imports System.Reflection
 
 
 Module Module_For1Min
@@ -150,6 +151,9 @@ Module Module_For1Min
 
 
     Public 스토캐스틱_설정() As Integer = {10, 5, 5}  '10,5,5,,,,, 15,7,5,     30,10,10 3ㄱ초기에 이렇게 할 계획임
+
+    Public 윈도우최고가 As Single  '최근 160봉(?)을 돌파할 때 매수하는 루틴을 위해 추가함 20260221
+    Public 윈도우최저가 As Single  '최근 160봉(?)을 돌파할 때 매수하는 루틴을 위해 추가함 20260221
 
 
     Public Sub InitDataStructure_1Min()
@@ -1030,7 +1034,31 @@ Module Module_For1Min
         'Return ret
     End Function ' Correl
 
+    Public Sub calc최고가최저가계산(ByVal index As Integer)
 
+        Dim ret As Single = 0
+        Dim max As Single = Single.MinValue
+        Dim min As Single = Single.MaxValue
+
+        If index <= W_WindowSize Then
+            윈도우최고가 = 0
+            윈도우최저가 = 0
+            Return
+        End If
+
+        For i As Integer = index - W_WindowSize To index - 1
+
+            'For i As Integer = 0 To index - 1  '시작부터 끝까지 해보니 더 낮아져서 원복함
+            If 순매수리스트(i).코스피지수 > 0 And 순매수리스트(i).코스피지수 > max Then max = 순매수리스트(i).코스피지수
+            If 순매수리스트(i).코스피지수 > 0 And 순매수리스트(i).코스피지수 < min Then min = 순매수리스트(i).코스피지수
+
+        Next
+
+        윈도우최고가 = max
+        윈도우최저가 = min
+
+        Return
+    End Sub
 
 
 End Module

@@ -1075,6 +1075,8 @@ Module realtime_ebest
         currentIndex_순매수 = timeIndex_순매수 - 1
         Console.WriteLine("순매리스리스트 수신 : " & 순매수리스트카운트.ToString() & "건")
 
+        '최고가최저가 계산
+        calc최고가최저가계산(currentIndex_순매수)
 
     End Sub
 
