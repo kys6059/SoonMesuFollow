@@ -731,6 +731,9 @@ Module realtime_ebest
 
     Private Sub XAQuery_EBEST_분봉데이터호출_ReceiveData(ByVal szTrCode As String)
 
+        If optionList Is Nothing Then Return
+        If optionList.Count <= 0 Then Return
+
         Dim callput As Integer
         Dim shcode As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
 
@@ -745,8 +748,10 @@ Module realtime_ebest
         End If
 
         Dim 종목코드 As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
-        Dim 행사가 As String = Right(종목코드, 3)
-        Dim 현재인덱스 As Integer = 행사가로부터인덱스찾기(행사가)
+
+        'Dim 현재인덱스 As Integer = 행사가로부터인덱스찾기(행사가)
+        Dim 현재인덱스 As Integer = 종목코드로부터인덱스찾기(종목코드, callput)
+        Dim 행사가 As String = optionList(callput).HangSaGa
 
         Dim targetDatelong As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "date", 0))
 
@@ -760,11 +765,6 @@ Module realtime_ebest
         Data(callput).어제시고저종(3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jiclose", 0))
 
         Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8415OutBlock1")
-
-
-
-        If optionList Is Nothing Then Return
-        If optionList.Count <= 0 Then Return
 
         If Form2.chk_자동저장모드.Checked = True Then  '이건 3시30분 지나서 저장하기 위해서 받는 부분
 
@@ -790,8 +790,6 @@ Module realtime_ebest
 
 
             Next
-
-
 
             모든인덱스수신됨Counter += 1
             Add_Log(현재인덱스.ToString(), 행사가 + " " + callput.ToString() + " 수신횟수 = " + 모든인덱스수신됨Counter.ToString())

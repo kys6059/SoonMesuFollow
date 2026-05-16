@@ -510,29 +510,30 @@ Module DBHandler
         Dim callput As Integer
         Dim iFlag As Integer
         Dim client As BigQueryClient = BigQueryClient.Create(projectID)
-        Dim 영보다큰갯수 As Integer = 0
+
         Dim dateaset_id = "option5"
         Dim table_id = "option_one_minute"   '1분데이터가 저장되는 테이블 이름
 
         iDate = iDate Mod 20000000
 
         Try
-            For 종목인덱스 As Integer = 0 To TotalCount - 1   '
+            For callput = 0 To 1
 
-                For callput = 0 To 1
+                Dim 영보다큰갯수 As Integer = 0
+                retCount = 0
+
+                For 종목인덱스 As Integer = 0 To TotalCount - 1   '
+
                     For j = 0 To 479
                         If DB일간데이터리스트(종목인덱스, callput).price(j, 0) > 0 Then
                             영보다큰갯수 += 1
                         End If
                     Next
                 Next
-            Next
 
-            Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
+                Dim rows(영보다큰갯수 - 1) As BigQueryInsertRow   '배열 갯수 주의해야 함. 1을 빼지 않으면 마지막 열이 nothing이 되어 아래 Insert에서 오류가 남
 
-            For 종목인덱스 As Integer = 0 To TotalCount - 1
-
-                For callput = 0 To 1
+                For 종목인덱스 As Integer = 0 To TotalCount - 1
 
                     Dim hangsaga As Integer = Val(DB일간데이터리스트(종목인덱스, callput).HangSaGa)
 
@@ -563,13 +564,16 @@ Module DBHandler
                         End If
                     Next
                 Next
+
+                client.InsertRows(dateaset_id, table_id, rows)
+
+                rows = Nothing
+
+
+                Dim str As String = iFlag.ToString() & " 1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
+                Console.WriteLine(str)
+                Add_Log("일반", str)
             Next
-
-            client.InsertRows(dateaset_id, table_id, rows)
-
-            Dim str As String = "1분 옵션데이터 저장 : " & iDate.ToString() & " 해당 날짜 " & retCount.ToString() & " 개의 row가 등록"
-            Console.WriteLine(str)
-            Add_Log("일반", str)
 
         Catch ex As Exception
             Add_Log("error", ex.ToString())

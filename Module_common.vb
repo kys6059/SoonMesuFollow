@@ -296,6 +296,19 @@ Module Module_common
 
     End Function
 
+    Public Function 종목코드로부터인덱스찾기(ByVal 종목코드 As String, ByVal callput As Integer) As Integer
+
+        For i As Integer = 0 To optionList.Count - 1
+            Dim it As ListTemplate = optionList(i)
+            If it.Code(callput) = 종목코드 Then
+                Return i
+            End If
+        Next
+
+        Return -1
+
+    End Function
+
     Public Sub CalcSumPrice()
 
         SumDataSet.Initialze()

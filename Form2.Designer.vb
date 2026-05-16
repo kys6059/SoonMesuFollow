@@ -193,6 +193,7 @@ Partial Class Form2
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer_AutoSave111 = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel13 = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_Algorithm_W = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_U = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_T = New System.Windows.Forms.CheckBox()
         Me.chk_Algorithm_S = New System.Windows.Forms.CheckBox()
@@ -228,7 +229,6 @@ Partial Class Form2
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.chk_Algorithm_F = New System.Windows.Forms.CheckBox()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.chk_Algorithm_W = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.F2_Chart_순매수, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -2385,6 +2385,22 @@ Partial Class Form2
         Me.TableLayoutPanel13.Size = New System.Drawing.Size(971, 96)
         Me.TableLayoutPanel13.TabIndex = 38
         '
+        'chk_Algorithm_W
+        '
+        Me.chk_Algorithm_W.AutoSize = True
+        Me.chk_Algorithm_W.BackColor = System.Drawing.SystemColors.Control
+        Me.chk_Algorithm_W.Checked = True
+        Me.chk_Algorithm_W.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chk_Algorithm_W.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Algorithm_W.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chk_Algorithm_W.Location = New System.Drawing.Point(648, 51)
+        Me.chk_Algorithm_W.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
+        Me.chk_Algorithm_W.Name = "chk_Algorithm_W"
+        Me.chk_Algorithm_W.Size = New System.Drawing.Size(153, 42)
+        Me.chk_Algorithm_W.TabIndex = 21
+        Me.chk_Algorithm_W.Text = "W(윈도우 돌파)"
+        Me.chk_Algorithm_W.UseVisualStyleBackColor = False
+        '
         'chk_Algorithm_U
         '
         Me.chk_Algorithm_U.AutoSize = True
@@ -2858,22 +2874,6 @@ Partial Class Form2
         Me.Button2.TabIndex = 45
         Me.Button2.Text = "자동시작 테스트"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'chk_Algorithm_W
-        '
-        Me.chk_Algorithm_W.AutoSize = True
-        Me.chk_Algorithm_W.BackColor = System.Drawing.SystemColors.Control
-        Me.chk_Algorithm_W.Checked = True
-        Me.chk_Algorithm_W.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chk_Algorithm_W.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_Algorithm_W.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chk_Algorithm_W.Location = New System.Drawing.Point(648, 51)
-        Me.chk_Algorithm_W.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
-        Me.chk_Algorithm_W.Name = "chk_Algorithm_W"
-        Me.chk_Algorithm_W.Size = New System.Drawing.Size(153, 42)
-        Me.chk_Algorithm_W.TabIndex = 21
-        Me.chk_Algorithm_W.Text = "W(윈도우 돌파)"
-        Me.chk_Algorithm_W.UseVisualStyleBackColor = False
         '
         'Form2
         '
