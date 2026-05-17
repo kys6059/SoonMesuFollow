@@ -751,7 +751,7 @@ Module realtime_ebest
 
         'Dim 현재인덱스 As Integer = 행사가로부터인덱스찾기(행사가)
         Dim 현재인덱스 As Integer = 종목코드로부터인덱스찾기(종목코드, callput)
-        Dim 행사가 As String = optionList(callput).HangSaGa
+        Dim 행사가 As String = optionList(현재인덱스).HangSaGa
 
         Dim targetDatelong As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "date", 0))
 
