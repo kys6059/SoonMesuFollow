@@ -707,20 +707,20 @@ Module realtime_ebest
 
 
     Public Sub XAQuery_EBEST_분봉데이터호출함수(ByVal capplut As Integer)
-        't8415 
+        't8465로 변경
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
-        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8415.res"
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8465.res"
 
         If optionList.Count > 0 Then
             Dim it As ListTemplate = optionList(selectedJongmokIndex(capplut))
             Dim code As String = it.Code(capplut)
 
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "5")
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "100")
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate)
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "shcode", 0, code) '코드 8자리
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "ncnt", 0, "5")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "qrycnt", 0, "100")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "nday", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "edate", 0, TargetDate)
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "comp_yn", 0, "N")
 
             Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
             If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
@@ -735,9 +735,9 @@ Module realtime_ebest
         If optionList.Count <= 0 Then Return
 
         Dim callput As Integer
-        Dim shcode As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
+        Dim shcode As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "shcode", 0)
 
-        Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0), 1)
+        Dim callputstriong As String = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "shcode", 0), 1)
 
         If callputstriong = "2" Or callputstriong = "B" Then
             callput = 0
@@ -747,24 +747,24 @@ Module realtime_ebest
             Add_Log("에러", "종목코드 callput 구분 안됨")
         End If
 
-        Dim 종목코드 As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "shcode", 0)
+        Dim 종목코드 As String = XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "shcode", 0)
 
         'Dim 현재인덱스 As Integer = 행사가로부터인덱스찾기(행사가)
         Dim 현재인덱스 As Integer = 종목코드로부터인덱스찾기(종목코드, callput)
         Dim 행사가 As String = optionList(현재인덱스).HangSaGa
 
-        Dim targetDatelong As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "date", 0))
+        Dim targetDatelong As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "date", 0))
 
         If targetDatelong <> TargetDate Then
             TargetDate = targetDatelong
         End If
 
-        Data(callput).어제시고저종(0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jisiga", 0))
-        Data(callput).어제시고저종(1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jihigh", 0))
-        Data(callput).어제시고저종(2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jilow", 0))
-        Data(callput).어제시고저종(3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock", "jiclose", 0))
+        Data(callput).어제시고저종(0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "jisiga", 0))
+        Data(callput).어제시고저종(1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "jihigh", 0))
+        Data(callput).어제시고저종(2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "jilow", 0))
+        Data(callput).어제시고저종(3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock", "jiclose", 0))
 
-        Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8415OutBlock1")
+        Dim Count As Long = XAQuery_EBEST_분봉데이터호출.GetBlockCount("t8465OutBlock1")
 
         If Form2.chk_자동저장모드.Checked = True Then  '이건 3시30분 지나서 저장하기 위해서 받는 부분
 
@@ -777,13 +777,13 @@ Module realtime_ebest
 
             For i As Integer = 0 To Count - 1
 
-                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)) > 900 Then
-                    DB일간데이터리스트(현재인덱스, callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-                    DB일간데이터리스트(현재인덱스, callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "time", i), 4)) > 900 Then
+                    DB일간데이터리스트(현재인덱스, callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "time", i), 4)
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "open", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "high", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "low", i))
+                    DB일간데이터리스트(현재인덱스, callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "close", i))
+                    DB일간데이터리스트(현재인덱스, callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "jdiff_vol", i))
 
                     startPoint += 1
                 End If
@@ -801,18 +801,18 @@ Module realtime_ebest
             일분옵션데이터(callput).Code = it.Code(callput)
             일분옵션데이터(callput).HangSaGa = it.HangSaGa
 
-            Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", 0))
+            Dim 거래량AtFirst As Long = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "jdiff_vol", 0))
 
             Dim startPoint As Integer = 0
 
             For i As Integer = 0 To Count - 1
-                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)) > 900 Then
-                    일분옵션데이터(callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "time", i), 4)
-                    일분옵션데이터(callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "open", i))
-                    일분옵션데이터(callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "high", i))
-                    일분옵션데이터(callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "low", i))
-                    일분옵션데이터(callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "close", i))
-                    일분옵션데이터(callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8415OutBlock1", "jdiff_vol", i))
+                If Val(Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "time", i), 4)) > 900 Then
+                    일분옵션데이터(callput).ctime(startPoint) = Left(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "time", i), 4)
+                    일분옵션데이터(callput).price(startPoint, 0) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "open", i))
+                    일분옵션데이터(callput).price(startPoint, 1) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "high", i))
+                    일분옵션데이터(callput).price(startPoint, 2) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "low", i))
+                    일분옵션데이터(callput).price(startPoint, 3) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "close", i))
+                    일분옵션데이터(callput).거래량(startPoint) = Val(XAQuery_EBEST_분봉데이터호출.GetFieldData("t8465OutBlock1", "jdiff_vol", i))
                     startPoint += 1
                 End If
             Next
@@ -876,9 +876,9 @@ Module realtime_ebest
     'End Function
 
     Public Sub XAQuery_EBEST_분봉데이터호출함수_1분(ByVal capplut As Integer)
-        't8415 
+        't8465 
         If XAQuery_EBEST_분봉데이터호출 Is Nothing Then XAQuery_EBEST_분봉데이터호출 = New XAQuery
-        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8415.res"
+        XAQuery_EBEST_분봉데이터호출.ResFileName = "c:\LS_SEC\xingApi\res\t8465.res"
 
         Dim 이번에선택된인덱스 As Integer = 0
 
@@ -904,13 +904,13 @@ Module realtime_ebest
             Dim it As ListTemplate = optionList(이번에선택된인덱스)
             Dim code As String = it.Code(capplut)
 
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "shcode", 0, code) '코드 8자리
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "ncnt", 0, "1")
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "qrycnt", 0, "500") '비압축모델인 경우 최대 500건 - 8.3시간
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "nday", 0, "1")
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "sdate", 0, TargetDate) '종료일자
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "edate", 0, TargetDate) '종료일자
-            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8415InBlock", "comp_yn", 0, "N") '비압축모델 N
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "shcode", 0, code) '코드 8자리
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "ncnt", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "qrycnt", 0, "500") '비압축모델인 경우 최대 500건 - 8.3시간
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "nday", 0, "1")
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "sdate", 0, TargetDate) '종료일자
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "edate", 0, TargetDate) '종료일자
+            XAQuery_EBEST_분봉데이터호출.SetFieldData("t8465InBlock", "comp_yn", 0, "N") '비압축모델 N
 
             Dim nSuccess As Integer = XAQuery_EBEST_분봉데이터호출.Request(False)
             If nSuccess < 0 Then Add_Log("일반", " XAQuery_EBEST_분봉데이터호출 오류: " & nSuccess.ToString())
